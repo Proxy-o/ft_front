@@ -12,6 +12,7 @@ import {
 import { buttonVariants } from "./ui/button";
 import { useEffect, useState } from "react";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
+import { usePathname } from "next/navigation";
 
 interface linksProps {
   title: string;
@@ -53,6 +54,16 @@ export function Nav() {
     },
   ];
   const isCollapsed = useMediaQuery("(max-width: 822px)");
+  const path = usePathname();
+
+  // remove the first slash
+
+  const activeLink = links.findIndex((link) => link.title === path.slice(1));
+  // set the variant of the active link to default
+  links[activeLink] = {
+    ...links[activeLink],
+    variant: "default",
+  };
   return (
     <div
       data-collapsed={isCollapsed}
