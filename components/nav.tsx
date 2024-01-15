@@ -1,6 +1,15 @@
 import Link from "next/link";
 import { LogOut, LucideIcon, UserRoundCog } from "lucide-react";
-import { Archive, ArchiveX, File, Inbox, Send, Trash2 } from "lucide-react";
+import {
+  Archive,
+  ArchiveX,
+  User,
+  Home,
+  GamepadIcon,
+  Send,
+  Trash2,
+  Users,
+} from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import {
@@ -24,12 +33,12 @@ export function Nav() {
   const links: linksProps[] = [
     {
       title: "home",
-      icon: Inbox,
+      icon: Home,
       variant: "ghost",
     },
     {
-      title: "login",
-      icon: File,
+      title: "Play",
+      icon: GamepadIcon,
       variant: "ghost",
     },
     {
@@ -38,18 +47,18 @@ export function Nav() {
       variant: "ghost",
     },
     {
-      title: "Junk",
-      icon: ArchiveX,
-      variant: "ghost",
-    },
-    {
-      title: "Trash",
-      icon: Trash2,
+      title: "Profile",
+      icon: User,
       variant: "ghost",
     },
     {
       title: "Archive",
       icon: Archive,
+      variant: "ghost",
+    },
+    {
+      title: "Friends",
+      icon: Users,
       variant: "ghost",
     },
   ];
@@ -79,12 +88,12 @@ export function Nav() {
                     href={link.title}
                     className={cn(
                       buttonVariants({ variant: link.variant, size: "icon" }),
-                      "h-9 w-9 ",
+                      "h-10 w-10 ",
                       link.variant === "default" &&
                         "dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white"
                     )}
                   >
-                    <link.icon className="h-4 w-4" />
+                    <link.icon className="h-6 w-6" />
                     <span className="sr-only">{link.title}</span>
                   </Link>
                 </TooltipTrigger>
@@ -107,14 +116,14 @@ export function Nav() {
                 "justify-start"
               )}
             >
-              <link.icon className="mr-2 h-4 w-4 " />
+              <link.icon className="mr-2 h-6 w-6 " />
               {link.title}
             </Link>
           )
         )}
       </nav>
       {isCollapsed ? (
-        <>
+        <div className="flex flex-col gap-1 px-2  ">
           <TooltipProvider delayDuration={0}>
             <Tooltip delayDuration={0}>
               <TooltipTrigger asChild>
@@ -125,7 +134,7 @@ export function Nav() {
                     "h-9 w-9"
                   )}
                 >
-                  <UserRoundCog className="h-4 w-4" />
+                  <UserRoundCog className="h-6 w-6" />
                   <span className="sr-only">Sittings</span>
                 </Link>
               </TooltipTrigger>
@@ -144,7 +153,7 @@ export function Nav() {
                     "h-9 w-9"
                   )}
                 >
-                  <LogOut className="h-4 w-4" />
+                  <LogOut className="h-6 w-6" />
                   <span className="sr-only">Logout</span>
                 </Link>
               </TooltipTrigger>
@@ -153,7 +162,7 @@ export function Nav() {
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-        </>
+        </div>
       ) : (
         <div className="flex flex-col">
           <Link
@@ -165,7 +174,7 @@ export function Nav() {
               "justify-start"
             )}
           >
-            <UserRoundCog className="mr-2 h-4 w-4 " />
+            <UserRoundCog className="mr-2 h-6 w-6 " />
             Sittings
           </Link>
           <Link
@@ -177,7 +186,7 @@ export function Nav() {
               "justify-start"
             )}
           >
-            <LogOut className="mr-2 h-4 w-4 " />
+            <LogOut className="mr-2 h-6 w-6 " />
             logout
           </Link>
         </div>
