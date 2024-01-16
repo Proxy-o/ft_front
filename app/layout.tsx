@@ -36,7 +36,9 @@ export default function RootLayout({
             <Suspense fallback={<HomeSkel />}>
               <div className="flex">
                 <Nav />
-                <main className="border-l-[0.04rem] w-full">{children}</main>
+                <main className="border-l-[0.04rem] w-full sm:mx-0">
+                  {children}
+                </main>
               </div>
             </Suspense>
           </ThemeProvider>
