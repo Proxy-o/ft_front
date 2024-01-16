@@ -66,7 +66,7 @@ export default function page() {
             <Separator className="my-4 ml-2" />
           </div>
           <div className="flex w-full">
-            <Link className="w-full" href="/register">
+            <Link className="w-full" href="/login">
               <Button className="w-full" variant="secondary">
                 Login
               </Button>

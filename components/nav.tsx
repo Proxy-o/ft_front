@@ -90,7 +90,7 @@ export default function Nav() {
                     href={link.title}
                     className={cn(
                       buttonVariants({ variant: link.variant, size: "icon" }),
-                      "h-10 w-10 "
+                      "h-10 w-10 mb-2 "
                     )}
                   >
                     <link.icon className="h-6 w-6" />
@@ -112,7 +112,7 @@ export default function Nav() {
               className={cn(
                 buttonVariants({ variant: link.variant, size: "sm" }),
 
-                "justify-start"
+                "justify-start mb-2"
               )}
             >
               <link.icon className="mr-2 h-6 w-6 " />
@@ -130,7 +130,7 @@ export default function Nav() {
                   href="#"
                   className={cn(
                     buttonVariants({ variant: "ghost", size: "icon" }),
-                    "h-9 w-9"
+                    "h-9 w-9 mb-2"
                   )}
                 >
                   <UserRoundCog className="h-6 w-6" />
@@ -149,11 +149,11 @@ export default function Nav() {
                   href="#"
                   className={cn(
                     buttonVariants({ variant: "ghost", size: "icon" }),
-                    "h-9 w-9"
+                    "h-9 w-9 mb-2"
                   )}
                 >
                   <LogOut className="h-6 w-6" />
-                  <span className="sr-only">Logout</span>
+                  <span className="sr-only ">Logout</span>
                 </Link>
               </TooltipTrigger>
               <TooltipContent side="right" className="flex items-center gap-4">
@@ -169,7 +169,7 @@ export default function Nav() {
                     }
                     className={cn(
                       buttonVariants({ variant: "ghost", size: "icon" }),
-                      "h-9 w-9"
+                      "h-9 w-9 mb-2"
                     )}
                   >
                     {theme === "dark" ? (
@@ -198,7 +198,7 @@ export default function Nav() {
             href="#"
             className={cn(
               buttonVariants({ variant: "ghost", size: "sm" }),
-              "justify-start"
+              "justify-start mb-2"
             )}
           >
             <UserRoundCog className="mr-2 h-6 w-6 " />
@@ -208,7 +208,7 @@ export default function Nav() {
             href="#"
             className={cn(
               buttonVariants({ variant: "ghost", size: "sm" }),
-              "justify-start"
+              "justify-start mb-2"
             )}
           >
             <LogOut className="mr-2 h-6 w-6 " />
@@ -219,7 +219,7 @@ export default function Nav() {
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             className={cn(
               buttonVariants({ variant: "ghost", size: "sm" }),
-              "justify-start text-primary"
+              "justify-start text-primary mb-2"
             )}
           >
             {theme === "dark" ? (
