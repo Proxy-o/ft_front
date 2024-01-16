@@ -1,15 +1,15 @@
 "use client";
-import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import TanstackProvider from "@/lib/providers/TanstackProvider";
-import dynamic from "next/dynamic";
 
 const inter = Inter({ subsets: ["latin"] });
 import { Suspense, lazy } from "react";
-import NavSkel from "@/components/skeletons/navSkel";
 import HomeSkel from "@/components/skeletons/homeSkel";
-import { ThemeProvider } from "@/lib/providers/ThemeProvider";
+import dynamic from "next/dynamic";
+const ThemeProvider = dynamic(() => import("@/lib/providers/ThemeProvider"), {
+  ssr: false,
+});
 
 const Nav = lazy(() => import("@/components/nav"));
 
