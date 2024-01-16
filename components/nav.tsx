@@ -2,13 +2,13 @@ import Link from "next/link";
 import { LogOut, LucideIcon, UserRoundCog } from "lucide-react";
 import {
   Archive,
-  ArchiveX,
   User,
   Home,
   GamepadIcon,
   Send,
-  Trash2,
   Users,
+  Sun,
+  Moon,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -19,9 +19,9 @@ import {
   TooltipTrigger,
 } from "./ui/tooltip";
 import { buttonVariants } from "./ui/button";
-import { useEffect, useState } from "react";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
 import { usePathname } from "next/navigation";
+import { useTheme } from "next-themes";
 
 interface linksProps {
   title: string;
@@ -73,6 +73,8 @@ export default function Nav() {
     ...links[activeLink],
     variant: "default",
   };
+  const { theme, setTheme } = useTheme();
+
   return (
     <div
       data-collapsed={isCollapsed}
@@ -158,6 +160,36 @@ export default function Nav() {
                 Logout
               </TooltipContent>
             </Tooltip>
+            <TooltipProvider delayDuration={0}>
+              <Tooltip delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <button
+                    onClick={() =>
+                      setTheme(theme === "dark" ? "light" : "dark")
+                    }
+                    className={cn(
+                      buttonVariants({ variant: "ghost", size: "icon" }),
+                      "h-9 w-9"
+                    )}
+                  >
+                    {theme === "dark" ? (
+                      <Sun className="h-6 w-6" />
+                    ) : (
+                      <Moon className="h-6 w-6" />
+                    )}
+                    <span className="sr-only">
+                      {theme === "dark" ? "Light" : "Dark"}
+                    </span>
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent
+                  side="right"
+                  className="flex items-center gap-4"
+                >
+                  {theme === "dark" ? "Light" : "Dark"}
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </TooltipProvider>
         </div>
       ) : (
@@ -182,6 +214,21 @@ export default function Nav() {
             <LogOut className="mr-2 h-6 w-6 " />
             logout
           </Link>
+          {/* add shose them them */}
+          <button
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            className={cn(
+              buttonVariants({ variant: "ghost", size: "sm" }),
+              "justify-start text-primary"
+            )}
+          >
+            {theme === "dark" ? (
+              <Sun className="mr-2 h-6 w-6 " />
+            ) : (
+              <Moon className="mr-2 h-6 w-6 " />
+            )}
+            {theme === "dark" ? "Light" : "Dark"}
+          </button>
         </div>
       )}
     </div>

@@ -15,11 +15,9 @@ export default function page() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen ">
       <Card className="w-full max-w-md ">
-        <CardHeader>
+        <CardHeader className="text-center">
           <CardTitle className="text-2xl">Login</CardTitle>
-          <CardDescription>
-            Enter your username and password below to login to your account.
-          </CardDescription>
+          <CardDescription>Enter your username and password</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
