@@ -62,7 +62,7 @@ export default function Nav() {
       variant: "ghost",
     },
   ];
-  const isCollapsed = useMediaQuery("(max-width: 822px)");
+  const isCollapsed = useMediaQuery("(max-width: 768px)");
   const path = usePathname();
 
   // remove the first slash
@@ -76,7 +76,7 @@ export default function Nav() {
   return (
     <div
       data-collapsed={isCollapsed}
-      className="group flex flex-col gap-4 py-2 h-screen shadow-lg "
+      className="group flex flex-col gap-4 py-2 h-screen shadow-lg md:w-[8.5rem]"
     >
       <nav className="flex flex-col gap-1 px-2 h-full ">
         {links.map((link, index) =>
@@ -164,13 +164,11 @@ export default function Nav() {
           </TooltipProvider>
         </div>
       ) : (
-        <div className="flex flex-col">
+        <div className="flex flex-col px-2">
           <Link
             href="#"
             className={cn(
               buttonVariants({ variant: "ghost", size: "sm" }),
-
-              "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white",
               "justify-start"
             )}
           >
@@ -181,8 +179,6 @@ export default function Nav() {
             href="#"
             className={cn(
               buttonVariants({ variant: "ghost", size: "sm" }),
-
-              "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white",
               "justify-start"
             )}
           >
