@@ -4,9 +4,13 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import TanstackProvider from "@/lib/providers/TanstackProvider";
 import dynamic from "next/dynamic";
-import { Nav } from "@/components/nav";
 
 const inter = Inter({ subsets: ["latin"] });
+import { Suspense, lazy } from "react";
+import NavSkel from "@/components/skeletons/navSkel";
+import HomeSkel from "@/components/skeletons/homeSkel";
+
+const Nav = lazy(() => import("@/components/nav"));
 
 // export const metadata: Metadata = {
 //   title: "Create Next App",
@@ -22,10 +26,12 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <TanstackProvider>
-          <div className="flex ">
-            <Nav />
-            <main>{children}</main>
-          </div>
+          <Suspense fallback={<HomeSkel />}>
+            <div className="flex ">
+              <Nav />
+              <main>{children}</main>
+            </div>
+          </Suspense>
         </TanstackProvider>
       </body>
     </html>

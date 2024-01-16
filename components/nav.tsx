@@ -29,7 +29,7 @@ interface linksProps {
   variant: "default" | "ghost";
 }
 
-export function Nav() {
+export default function Nav() {
   const links: linksProps[] = [
     {
       title: "home",
