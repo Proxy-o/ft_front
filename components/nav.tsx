@@ -32,7 +32,7 @@ interface linksProps {
 export default function Nav() {
   const links: linksProps[] = [
     {
-      title: "home",
+      title: "login",
       icon: Home,
       variant: "ghost",
     },
@@ -88,9 +88,7 @@ export default function Nav() {
                     href={link.title}
                     className={cn(
                       buttonVariants({ variant: link.variant, size: "icon" }),
-                      "h-10 w-10 ",
-                      link.variant === "default" &&
-                        "dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white"
+                      "h-10 w-10 "
                     )}
                   >
                     <link.icon className="h-6 w-6" />
@@ -111,8 +109,7 @@ export default function Nav() {
               href="#"
               className={cn(
                 buttonVariants({ variant: link.variant, size: "sm" }),
-                link.variant === "default" &&
-                  "dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white",
+
                 "justify-start"
               )}
             >
