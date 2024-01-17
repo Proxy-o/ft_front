@@ -18,8 +18,8 @@ export default function page() {
     <div className="flex flex-col items-center justify-center min-h-screen overflow-hidden">
       <Card className="w-full max-w-md ">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Login</CardTitle>
-          <CardDescription>Enter your username and password</CardDescription>
+          <CardTitle className="text-2xl">Register</CardTitle>
+          <CardDescription>Enter your credentials to register</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
