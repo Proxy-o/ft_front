@@ -2,6 +2,7 @@ import React from "react";
 import UserInfo from "./compononts/userInfo";
 import GamesTable from "./compononts/gamesTable";
 import States from "./compononts/states";
+import Friends from "./compononts/friends";
 
 export default function page() {
   return (
@@ -10,7 +11,10 @@ export default function page() {
         <UserInfo />
         <GamesTable />
       </div>
-      <States />
+      <div className="flex flex-col gap-4">
+        <States />
+        <Friends />
+      </div>
     </div>
   );
 }

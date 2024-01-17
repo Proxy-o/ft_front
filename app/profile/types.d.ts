@@ -13,3 +13,8 @@ export interface Games {
     };
     date: string;
 }
+
+export interface Friend{
+    name: string;
+    avatar: string;
+}
