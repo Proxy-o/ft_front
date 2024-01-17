@@ -34,7 +34,7 @@ export default function UserInfo() {
       </div>
       <div className=" flex-1 px-6">
         <div className="text-2xl font-bold mt-4 sm:mt-0">othmane ait taleb</div>
-        <div className="flex text-zinc-500 mt-4 items-center">
+        <div className="flex text-zinc-300 mt-4 items-center">
           Enter status here{" "}
           <SquarePen
             className="ml-2 hover:cursor-pointer hover:text-zinc-300"
@@ -42,10 +42,10 @@ export default function UserInfo() {
           />
         </div>
         <div className="flex justify-around items-center w-full mt-6">
-          <TooltipProvider>
-            <Tooltip>
+          <TooltipProvider delayDuration={0}>
+            <Tooltip delayDuration={0}>
               <TooltipTrigger asChild>
-                <div className="flex flex-col justify-center items-center text-primary/50 hover:text-primary/70">
+                <div className="flex flex-col justify-center items-center text-zinc-300/50 hover:text-zinc-300/70">
                   <Activity className="mb-2" />
                   <p className="text-sm sm:text-m">Online</p>
                 </div>
@@ -55,10 +55,10 @@ export default function UserInfo() {
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-          <TooltipProvider>
+          <TooltipProvider delayDuration={0}>
             <Tooltip>
               <TooltipTrigger asChild>
-                <div className="flex flex-col justify-center items-center text-primary/50 hover:text-primary/70 ">
+                <div className="flex flex-col justify-center items-center text-zinc-300/50 hover:text-zinc-300/70 ">
                   <Users className="mb-2" />
                   <p className="text-sm sm:text-m">23</p>
                 </div>
@@ -68,10 +68,10 @@ export default function UserInfo() {
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-          <TooltipProvider>
+          <TooltipProvider delayDuration={0}>
             <Tooltip>
               <TooltipTrigger asChild>
-                <div className="flex flex-col justify-center items-center text-primary/50 hover:text-primary/70">
+                <div className="flex flex-col justify-center items-center text-zinc-300/50 hover:text-zinc-300/70">
                   <Clock className="mb-2" />
                   <p className="text-sm sm:text-m">Nov 29, 2020</p>
                 </div>
