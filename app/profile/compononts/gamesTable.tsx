@@ -91,7 +91,7 @@ const games: Games[] = [
 export default function GamesTable() {
   const username = "othmane ait taleb";
   return (
-    <Card className="max-w-4xl overflow-hidden">
+    <Card className=" overflow-hidden ">
       <div className="p-4">Completed games</div>
       <Table>
         <TableHeader className="bg-secondary">

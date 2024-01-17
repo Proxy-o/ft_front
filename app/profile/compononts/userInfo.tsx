@@ -21,7 +21,7 @@ import React from "react";
 
 export default function UserInfo() {
   return (
-    <Card className="relative my-10  rounded-lg shadow-md p-6 md:flex max-w-4xl">
+    <Card className="relative rounded-lg shadow-md p-6 md:flex max-w-7xl">
       <Button className="absolute top-3 right-3" variant="ghost">
         Edit
         <SquarePen className="ml-2" size={15} />

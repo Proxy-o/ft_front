@@ -1,13 +1,19 @@
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Circle, FrownIcon, LineChart, SwordsIcon } from "lucide-react";
+import {
+  Circle,
+  FrownIcon,
+  LineChart,
+  PlusSquare,
+  SwordsIcon,
+} from "lucide-react";
 import React from "react";
 
 export default function States() {
   return (
-    <Card className="p-4 max-w-md">
-      <Tabs defaultValue="Classic" className="w-[400px]">
+    <Card className="p-4   h-[22rem]  flex justify-center lg:w-72">
+      <Tabs defaultValue="Classic" className="w-full">
         <TabsList className="flex ">
           <TabsTrigger value="Classic" className="w-full">
             Classic
@@ -32,16 +38,15 @@ export default function States() {
           <Separator className="my-6" />
           <div className="flex w-full ">
             <FrownIcon className="text-red-600 mr-2" size={24} />
-            defeats
+            Defeats
             <div className="flex justify-end  w-full ">3</div>
           </div>
           <Separator className="my-6" />
           <div className="flex w-full ">
-            <Circle className="text-yellow-400 mr-2" size={24} />
+            <PlusSquare className="text-yellow-400 mr-2" size={24} />
             Total
             <div className="flex justify-end  w-full ">3</div>
           </div>
-          <Separator className="my-6" />
         </TabsContent>
         <TabsContent value="Tournament">
           <div className="flex w-full items-center justify-center mt-5 ">
@@ -54,21 +59,20 @@ export default function States() {
           <div className="flex w-full ">
             <SwordsIcon className="text-green-500 mr-2" size={24} />
             Wins
-            <div className="flex justify-end  w-full ">56</div>
+            <div className="flex justify-end  w-full ">3</div>
           </div>
           <Separator className="my-6" />
           <div className="flex w-full ">
             <FrownIcon className="text-red-600 mr-2" size={24} />
-            defeats
-            <div className="flex justify-end  w-full ">3</div>
+            Defeats
+            <div className="flex justify-end  w-full ">7</div>
           </div>
           <Separator className="my-6" />
           <div className="flex w-full ">
-            <Circle className="text-yellow-400 mr-2" size={24} />
+            <PlusSquare className="text-yellow-400 mr-2" size={24} />
             Total
-            <div className="flex justify-end  w-full ">3</div>
+            <div className="flex justify-end  w-full ">98</div>
           </div>
-          <Separator className="my-6" />
         </TabsContent>
       </Tabs>
     </Card>
