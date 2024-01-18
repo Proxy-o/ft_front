@@ -25,6 +25,7 @@ import { useTheme } from "next-themes";
 
 interface linksProps {
   title: string;
+  link: string;
   icon: LucideIcon;
   variant: "default" | "ghost";
 }
@@ -33,31 +34,37 @@ export default function Nav() {
   const links: linksProps[] = [
     {
       title: "login",
+      link: "/login",
       icon: Home,
       variant: "ghost",
     },
     {
       title: "Play",
+      link: "/play",
       icon: GamepadIcon,
       variant: "ghost",
     },
     {
       title: "Sent",
+      link: "/sent",
       icon: Send,
       variant: "ghost",
     },
     {
       title: "Profile",
+      link: "/profile",
       icon: User,
       variant: "ghost",
     },
     {
       title: "Archive",
+      link: "/archive",
       icon: Archive,
       variant: "ghost",
     },
     {
       title: "Friends",
+      link: "/friends",
       icon: Users,
       variant: "ghost",
     },
@@ -65,9 +72,7 @@ export default function Nav() {
   const isCollapsed = useMediaQuery("(max-width: 768px)");
   const path = usePathname();
 
-  // remove the first slash
-
-  const activeLink = links.findIndex((link) => link.title === path.slice(1));
+  const activeLink = links.findIndex((link) => link.link === path);
   // set the variant of the active link to default
   links[activeLink] = {
     ...links[activeLink],
@@ -87,7 +92,7 @@ export default function Nav() {
               <Tooltip key={index} delayDuration={0}>
                 <TooltipTrigger asChild>
                   <Link
-                    href={link.title}
+                    href={link.link}
                     className={cn(
                       buttonVariants({ variant: link.variant, size: "icon" }),
                       "h-10 w-10 mb-2 "
@@ -108,7 +113,7 @@ export default function Nav() {
           ) : (
             <Link
               key={index}
-              href="#"
+              href={link.link}
               className={cn(
                 buttonVariants({ variant: link.variant, size: "sm" }),
 
