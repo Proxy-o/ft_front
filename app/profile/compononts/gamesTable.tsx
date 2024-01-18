@@ -165,105 +165,14 @@ const games: Games[] = [
     },
     date: "2021-10-10",
   },
-  {
-    player1: {
-      name: "othmane ait taleb",
-      score: "3",
-      status: "lose",
-    },
-    player2: {
-      name: "zbiba hassan",
-      score: "4",
-      status: "win",
-    },
-    date: "2021-10-10",
-  },
-  {
-    player1: {
-      name: "othmane ait taleb",
-      score: "3",
-      status: "lose",
-    },
-    player2: {
-      name: "zbiba hassan",
-      score: "4",
-      status: "win",
-    },
-    date: "2021-10-10",
-  },
-  {
-    player1: {
-      name: "othmane ait taleb",
-      score: "3",
-      status: "lose",
-    },
-    player2: {
-      name: "zbiba hassan",
-      score: "4",
-      status: "win",
-    },
-    date: "2021-10-10",
-  },
-  {
-    player1: {
-      name: "othmane ait taleb",
-      score: "3",
-      status: "lose",
-    },
-    player2: {
-      name: "zbiba hassan",
-      score: "4",
-      status: "win",
-    },
-    date: "2021-10-10",
-  },
-  {
-    player1: {
-      name: "othmane ait taleb",
-      score: "3",
-      status: "lose",
-    },
-    player2: {
-      name: "zbiba hassan",
-      score: "4",
-      status: "win",
-    },
-    date: "2021-10-10",
-  },
-  {
-    player1: {
-      name: "othmane ait taleb",
-      score: "3",
-      status: "lose",
-    },
-    player2: {
-      name: "zbiba hassan",
-      score: "4",
-      status: "win",
-    },
-    date: "2021-10-10",
-  },
-  {
-    player1: {
-      name: "othmane ait taleb",
-      score: "3",
-      status: "lose",
-    },
-    player2: {
-      name: "zbiba hassan",
-      score: "4",
-      status: "win",
-    },
-    date: "2021-10-10",
-  },
 ];
 export default function GamesTable() {
   const username = "othmane ait taleb";
   return (
-    <Card className=" overflow-hidden ">
-      <div className="p-4">Completed games</div>
+    <Card className="">
+      <div className="p-4 relative">Completed games</div>
       <Table>
-        <TableHeader className="bg-secondary">
+        <TableHeader className="bg-secondary ">
           <TableRow>
             <TableHead></TableHead>
             <TableHead>Players</TableHead>
