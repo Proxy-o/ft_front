@@ -13,15 +13,40 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 import { Asterisk, Key, User } from "lucide-react";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { UserContext } from "@/lib/providers/UserContext";
+import useLogin from "../hooks/useLogin";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 
 export default function LoginForm() {
   const userContext = useContext(UserContext);
   const { currentUser, setCurrentUser } = userContext;
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
+  const mutation = useMutation({
+    mutationFn: async (formData: FormData) => {
+      const path = process.env.NEXT_PUBLIC_API_URL + "/login";
+      console.log(path);
+      const response = await axios.post(
+        process.env.NEXT_PUBLIC_API_URL + "/login",
+        formData
+      );
+      console.log(response);
+      return response;
+    },
+  });
+
+  const onSubmit = (event: any) => {
+    event.preventDefault();
+    mutation.mutate(new FormData(event.target));
+  };
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen overflow-hidden">
+    <form
+      className="flex flex-col items-center justify-center min-h-screen overflow-hidden"
+      onSubmit={onSubmit}
+    >
       <Card className="w-full max-w-md ">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl">Login</CardTitle>
@@ -48,7 +73,7 @@ export default function LoginForm() {
               </Link>
             </div>
             <div className="relative">
-              <Input placeholder="Password" type="text" />
+              <Input placeholder="Password" type="password" />
               <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                 <Asterisk className="h-5 w-5 text-secondary" />
               </div>
@@ -66,13 +91,13 @@ export default function LoginForm() {
           </div>
           <div className="flex w-full">
             <Link className="w-full" href="/register">
-              <Button className="w-full" variant="secondary">
+              <Button className="w-full" variant="secondary" type="submit">
                 Register
               </Button>
             </Link>
           </div>
         </CardFooter>
       </Card>
-    </div>
+    </form>
   );
 }
