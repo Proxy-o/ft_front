@@ -1,3 +1,4 @@
+"use client";
 import {
   CardTitle,
   CardDescription,
@@ -12,8 +13,13 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 import { Asterisk, Key, User } from "lucide-react";
+import { useContext } from "react";
+import { UserContext } from "@/lib/providers/UserContext";
 
 export default function LoginForm() {
+  const userContext = useContext(UserContext);
+  const { currentUser, setCurrentUser } = userContext;
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen overflow-hidden">
       <Card className="w-full max-w-md ">

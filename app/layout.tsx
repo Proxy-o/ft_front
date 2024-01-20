@@ -10,6 +10,7 @@ import dynamic from "next/dynamic";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
+import { UserContextProvider } from "@/lib/providers/UserContextProvider";
 const ThemeProvider = dynamic(() => import("@/lib/providers/ThemeProvider"), {
   ssr: false,
 });
@@ -32,27 +33,29 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <Suspense fallback={<HomeSkel />}>
-              <div className="md:flex">
-                {mb ? (
-                  <Nav />
-                ) : (
-                  <div className="pl-1 mt-1 w-full ">
-                    <Sheet>
-                      <SheetTrigger>
-                        <Menu />
-                      </SheetTrigger>
-                      <SheetContent side={"left"} className="w-18 p-0">
-                        <Nav />
-                      </SheetContent>
-                    </Sheet>
-                  </div>
-                )}
-                <main className="border-l-[0.04rem] w-full sm:mx-0 h-screen overflow-auto">
-                  {children}
-                </main>
-              </div>
-            </Suspense>
+            <UserContextProvider>
+              <Suspense fallback={<HomeSkel />}>
+                <div className="md:flex">
+                  {mb ? (
+                    <Nav />
+                  ) : (
+                    <div className="pl-1 mt-1 w-full ">
+                      <Sheet>
+                        <SheetTrigger>
+                          <Menu />
+                        </SheetTrigger>
+                        <SheetContent side={"left"} className="w-18 p-0">
+                          <Nav />
+                        </SheetContent>
+                      </Sheet>
+                    </div>
+                  )}
+                  <main className="border-l-[0.04rem] w-full sm:mx-0 h-screen overflow-auto">
+                    {children}
+                  </main>
+                </div>
+              </Suspense>
+            </UserContextProvider>
           </ThemeProvider>
         </TanstackProvider>
       </body>
