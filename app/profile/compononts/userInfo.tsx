@@ -1,25 +1,20 @@
+"use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {
-  Activity,
-  Clock,
-  MailIcon,
-  PhoneIcon,
-  SquarePen,
-  User2,
-  Users,
-} from "lucide-react";
-import React from "react";
+import { UserContext } from "@/lib/providers/UserContext";
+import { User } from "@/lib/types";
+import { Activity, Clock, SquarePen, Users } from "lucide-react";
+import { useRouter } from "next/navigation";
+import React, { useContext } from "react";
 
-export default function UserInfo() {
+export default function UserInfo({ currentUser }: { currentUser: User }) {
   return (
     <Card className="relative rounded-lg shadow-md p-6 md:flex max-w-7xl">
       <Button className="absolute top-3 right-3 z-50" variant="ghost">
@@ -27,13 +22,15 @@ export default function UserInfo() {
         <SquarePen className="ml-2" size={15} />
       </Button>
       <div className=" sm:w-40 sm:h-40">
-        <Avatar className="rounded-sm w-full h-full ">
+        <Avatar className="rounded-sm w-full h-full">
           <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
           <AvatarFallback className="rounded-sm">AV</AvatarFallback>
         </Avatar>
       </div>
       <div className=" flex-1 px-6">
-        <div className="text-2xl font-bold mt-4 sm:mt-0">othmane ait taleb</div>
+        <div className="text-2xl font-bold mt-4 sm:mt-0">
+          {currentUser.username}
+        </div>
         <div className="flex text-zinc-300 mt-4 items-center">
           Enter status here{" "}
           <SquarePen

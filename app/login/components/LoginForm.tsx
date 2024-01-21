@@ -27,13 +27,12 @@ export default function LoginForm() {
 
   useEffect(() => {
     if (isSuccess) {
-      console.log(data);
       setCurrentUser({
-        id: data.id,
-        username: data.username,
-        email: data.email,
         token: data.token,
-        avatar: data.avatar,
+        id: data.user.id,
+        username: data.user.username,
+        email: data.user.email,
+        avatar: data.user.avatar,
       });
       router.push("/profile");
     }
