@@ -15,8 +15,8 @@ import { Separator } from "@/components/ui/separator";
 import { Asterisk, Key, Loader, User } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "@/lib/providers/UserContext";
-import useLogin from "../hooks/useLogin";
 import { useRouter } from "next/navigation";
+import useLogin from "../hooks/useLogin";
 
 export default function LoginForm() {
   const { currentUser, setCurrentUser } = useContext(UserContext);
