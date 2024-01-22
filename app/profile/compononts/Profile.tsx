@@ -6,26 +6,19 @@ import States from "./states";
 import Friends from "./friends";
 import { useRouter } from "next/navigation";
 import { UserContext } from "@/lib/providers/UserContext";
-import axios from "axios";
-import useGetClient from "../hooks/useGetClient";
+import useGetUser from "../hooks/useGetUser";
 
 export default function Profile() {
   const router = useRouter();
   const { currentUser, setCurrentUser } = useContext(UserContext);
-  const {
-    mutate: getClient,
-    isError,
-    isPending,
-    isSuccess,
-    data,
-  } = useGetClient();
+  const { mutate: getUser, isError, isPending, isSuccess, data } = useGetUser();
 
   useEffect(() => {
     if (!currentUser && !isPending) {
       const token = localStorage.getItem("token");
       const id = localStorage.getItem("user_id");
       if (token && id && !isPending && !isSuccess) {
-        getClient({ id: id.toString(), token });
+        getUser({ id: id.toString(), token });
       }
     }
     if (isSuccess && data && !currentUser) {
@@ -39,7 +32,7 @@ export default function Profile() {
     setCurrentUser,
     currentUser,
     isPending,
-    getClient,
+    getUser,
     isError,
     router,
   ]);
@@ -60,7 +53,4 @@ export default function Profile() {
       </div>
     )
   );
-  // : (
-  //   <div>Loading ..</div>
-  // );
 }

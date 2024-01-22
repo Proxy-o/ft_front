@@ -13,14 +13,12 @@ import { User } from "@/lib/types";
 import { Activity, Clock, SquarePen, Users } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React, { useContext } from "react";
+import EditProfile from "./editProfile";
 
 export default function UserInfo({ currentUser }: { currentUser: User }) {
   return (
     <Card className="relative rounded-lg shadow-md p-6 md:flex max-w-7xl">
-      <Button className="absolute top-3 right-3 z-50" variant="ghost">
-        Edit
-        <SquarePen className="ml-2" size={15} />
-      </Button>
+      <EditProfile />
       <div className=" sm:w-40 sm:h-40">
         <Avatar className="rounded-sm w-full h-full">
           <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
