@@ -1,4 +1,3 @@
-// game type
 export interface Games {
     player1: {
         name: string;

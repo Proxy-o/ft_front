@@ -69,6 +69,7 @@ export default function Nav() {
       variant: "ghost",
     },
   ];
+  const { theme, setTheme } = useTheme();
   const isCollapsed = useMediaQuery("(max-width: 768px)");
   const path = usePathname();
 
@@ -78,7 +79,6 @@ export default function Nav() {
     ...links[activeLink],
     variant: "default",
   };
-  const { theme, setTheme } = useTheme();
 
   return (
     <div

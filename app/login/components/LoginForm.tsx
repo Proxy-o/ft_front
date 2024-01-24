@@ -28,16 +28,22 @@ export default function LoginForm() {
   useEffect(() => {
     if (isSuccess) {
       const user = {
-        token: data.token,
+        access: data.access,
+        refresh: data.refresh,
         id: data.user.id,
         username: data.user.username,
         email: data.user.email,
         avatar: data.user.avatar,
       };
       setCurrentUser(user);
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("logged_in", "yes");
-      localStorage.setItem("user_id", data.user.id);
+      var date = new Date();
+      date.setTime(date.getTime() + 30 * 24 * 60 * 60 * 1000); // 30 days
+      var expires = "; expires=" + date.toUTCString();
+
+      document.cookie = "access=" + data.access + expires + "; path=/";
+      document.cookie = "refresh=" + data.refresh + expires + "; path=/";
+      document.cookie = "logged_in=yes" + expires + "; path=/";
+      document.cookie = "user_id=" + data.user.id + expires + "; path=/";
       router.push("/profile");
     }
   }, [isSuccess, data, setCurrentUser, router]);

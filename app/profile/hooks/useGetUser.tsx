@@ -1,22 +1,21 @@
+import axiosInstance from "@/lib/functions/axiosInstance";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import axios from "axios";
 
-const fetchUser = async ({ id, token }: { id: string; token: string }) => {
-  const response = await axios.get(
-    process.env.NEXT_PUBLIC_API_URL + `/user/${id}`,
-    {
-      headers: {
-        Authorization: `Token ${token}`,
-      },
+const fetchUser = async ({ id }: { id: string }) => {
+  try {
+    const response = await axiosInstance.get(`/user/${id}`);
+    return response.data;
+  } catch (error: any) {
+    if (error.response && error.response.status !== 401) {
+      throw new Error(error.response.data.message);
     }
-  );
-  return response.data;
+  }
 };
 
 export default function useGetUser() {
   const info = useMutation({
-    mutationFn: async ({ id, token }: { id: string; token: string }) => {
-      const data = await fetchUser({ id, token });
+    mutationFn: async ({ id }: { id: string }) => {
+      const data = await fetchUser({ id });
       return data;
     },
   });

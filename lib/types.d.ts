@@ -4,5 +4,6 @@ export type User = {
     username: string;
     email?: string;
     avatar?: string;
-    token: string;
+    access: string;
+    refresh: string;
     };
