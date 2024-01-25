@@ -18,10 +18,11 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "./ui/tooltip";
-import { buttonVariants } from "./ui/button";
+import { Button, buttonVariants } from "./ui/button";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
+import useLogout from "@/app/login/hooks/useLogout";
 
 interface linksProps {
   title: string;
@@ -31,6 +32,8 @@ interface linksProps {
 }
 
 export default function Nav() {
+  const { mutate: logout, isSuccess } = useLogout();
+
   const links: linksProps[] = [
     {
       title: "login",
@@ -79,7 +82,9 @@ export default function Nav() {
     ...links[activeLink],
     variant: "default",
   };
-
+  const handleLogout = () => {
+    logout();
+  };
   return (
     <div
       data-collapsed={isCollapsed}
@@ -209,16 +214,17 @@ export default function Nav() {
             <UserRoundCog className="mr-2 h-6 w-6 " />
             Sittings
           </Link>
-          <Link
-            href="#"
+          <Button
+            variant={"ghost"}
             className={cn(
               buttonVariants({ variant: "ghost", size: "sm" }),
               "justify-start mb-2"
             )}
+            onClick={() => handleLogout()}
           >
             <LogOut className="mr-2 h-6 w-6 " />
             logout
-          </Link>
+          </Button>
           {/* add shose them them */}
           <button
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}

@@ -14,7 +14,6 @@ import { UserContextProvider } from "@/lib/providers/UserContextProvider";
 const ThemeProvider = dynamic(() => import("@/lib/providers/ThemeProvider"), {
   ssr: false,
 });
-
 const Nav = lazy(() => import("@/components/nav"));
 
 export default function RootLayout({
