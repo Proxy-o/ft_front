@@ -15,7 +15,6 @@ export default function useLogout() {
         refresh: getCookie("refresh"),
       };
       const response = await axiosInstance.post(path, data);
-      console.log(response.data);
       // remove cookies
       document.cookie =
         "access=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";

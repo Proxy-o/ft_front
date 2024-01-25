@@ -19,7 +19,6 @@ export default function UserInfo({ currentUser }: { currentUser: User }) {
   const id_cookie = getCookie("user_id");
   const isLogged_in =
     getCookie("logged_in") === "yes" && id === parseInt(id_cookie || "0");
-  console.log(isLogged_in);
   return (
     <Card className="relative rounded-lg shadow-md p-6 md:flex max-w-7xl">
       {isLogged_in && <EditProfile />}
@@ -35,7 +34,7 @@ export default function UserInfo({ currentUser }: { currentUser: User }) {
         </div>
         {isLogged_in && (
           <div className="flex text-zinc-300 mt-4 items-center">
-            Enter status here{" "}
+            Enter status here
             <SquarePen
               className="ml-2 hover:cursor-pointer hover:text-zinc-300"
               size={18}

@@ -1,6 +1,7 @@
-import React from "react";
+import React, { use, useContext, useEffect, useState } from "react";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -9,55 +10,128 @@ import {
 } from "@/components/ui/dialog";
 import { SquarePen } from "lucide-react";
 
-import {
-  CardTitle,
-  CardDescription,
-  CardHeader,
-  CardContent,
-  CardFooter,
-  Card,
-} from "@/components/ui/card";
+import { CardContent, CardFooter, Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
+import useEditUser from "../hooks/useEditUset";
+import { User } from "@/lib/types";
+import { UserContext } from "@/lib/providers/UserContext";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { cn } from "@/lib/utils";
+
 export default function EditProfile() {
+  const { currentUser, setCurrentUser } = useContext(UserContext);
+  const router = useRouter();
+  let id = "0";
+
+  if (!currentUser) {
+    router.push("/login");
+  } else if (currentUser) {
+    id = currentUser.id;
+  }
+
+  const [userInfo, setUserInfo] = useState<User>({ id });
+  const { mutate: editUser, data, isSuccess, isPending } = useEditUser();
+
+  const handleSubmit = () => {
+    editUser(userInfo);
+  };
+  useEffect(() => {
+    if (isSuccess) {
+      toast.success("Profile updated successfully", {
+        duration: 1000,
+      });
+      setCurrentUser(data);
+    }
+  }, [isSuccess, setCurrentUser, data]);
+
   return (
-    <Dialog>
-      <DialogTrigger className="absolute top-3 right-3 z-50 flex items-center hover:bg-secondary p-2 rounded-md text-zinc-400 hover:text-zinc-200">
-        Edit
-        <SquarePen className="ml-2" size={15} />
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle className="text-center">Edit profile</DialogTitle>
-          <DialogDescription className="text-center">
-            Make changes to your profile here. Click save when you&apos;re done.
-          </DialogDescription>
-        </DialogHeader>
-        <div className="bg-none w-full max-w-lg">
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="username">Username</Label>
-              <Input id="username" placeholder="Enter your username" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="first-name">First name</Label>
-              <Input id="first-name" placeholder="Enter your first name" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="last-name">Last name</Label>
-              <Input id="last-name" placeholder="Enter your last name" />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input id="email" placeholder="Enter your email" type="email" />
-            </div>
-          </CardContent>
-          <CardFooter>
-            <Button className="ml-auto">Save</Button>
-          </CardFooter>
-        </div>
-      </DialogContent>
-    </Dialog>
+    currentUser && (
+      <Dialog>
+        <DialogTrigger className="absolute top-3 right-3 z-50 flex items-center hover:bg-secondary p-2 rounded-md text-zinc-400 hover:text-zinc-200">
+          Edit
+          <SquarePen className="ml-2" size={15} />
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="text-center mb-4">Edit profile</DialogTitle>
+          </DialogHeader>
+          <div className="bg-none w-full max-w-lg">
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="username">Username</Label>
+                <Input
+                  defaultValue={currentUser.username}
+                  id="username"
+                  placeholder="Enter your username"
+                  onChange={(e) =>
+                    setUserInfo({
+                      ...userInfo,
+                      username: e.target.value,
+                    })
+                  }
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="first-name">First name</Label>
+                <Input
+                  defaultValue={currentUser.first_name}
+                  id="first-name"
+                  placeholder="Enter your first name"
+                  onChange={(e) =>
+                    setUserInfo({
+                      ...userInfo,
+                      first_name: e.target.value,
+                    })
+                  }
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="last-name">Last name</Label>
+                <Input
+                  defaultValue={currentUser.last_name}
+                  id="last-name"
+                  placeholder="Enter your last name"
+                  onChange={(e) =>
+                    setUserInfo({
+                      ...userInfo,
+                      last_name: e.target.value,
+                    })
+                  }
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  defaultValue={currentUser.email}
+                  id="email"
+                  placeholder="Enter your email"
+                  type="email"
+                  onChange={(e) =>
+                    setUserInfo({
+                      ...userInfo,
+                      email: e.target.value,
+                    })
+                  }
+                />
+              </div>
+            </CardContent>
+            <CardFooter>
+              <DialogClose
+                className={cn(
+                  buttonVariants({ variant: "default", size: "sm" }),
+                  "ml-auto"
+                )}
+                onClick={handleSubmit}
+              >
+                Save
+              </DialogClose>
+            </CardFooter>
+          </div>
+        </DialogContent>
+      </Dialog>
+    )
   );
 }

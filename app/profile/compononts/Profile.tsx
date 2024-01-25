@@ -1,5 +1,5 @@
 "use client";
-import React, { use, useContext, useEffect } from "react";
+import React, { use, useContext, useEffect, useRef } from "react";
 import UserInfo from "./userInfo";
 import GamesTable from "./gamesTable";
 import States from "./states";
@@ -13,6 +13,7 @@ export default function Profile() {
   const router = useRouter();
   const { currentUser, setCurrentUser } = useContext(UserContext);
   const { mutate: getUser, isError, isPending, isSuccess, data } = useGetUser();
+  const didRunOnce = useRef(false);
 
   const token = getCookie("access") || "";
   const id = getCookie("user_id") || "0";
@@ -27,10 +28,11 @@ export default function Profile() {
 
   useEffect(() => {
     // If there is no current user, fetch user information using useGetUser
-    if (isSuccess) {
+    if (isSuccess && !didRunOnce.current) {
       setCurrentUser(data);
+      didRunOnce.current = true;
     }
-  }, [data, isSuccess, setCurrentUser]);
+  }, [data, isSuccess, setCurrentUser, currentUser]);
 
   return (
     <div className="lg:flex justify-center gap-4 p-4 ">

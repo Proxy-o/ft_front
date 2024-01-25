@@ -11,6 +11,7 @@ import useMediaQuery from "@/lib/hooks/useMediaQuery";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import { UserContextProvider } from "@/lib/providers/UserContextProvider";
+import { Toaster } from "@/components/ui/sonner";
 const ThemeProvider = dynamic(() => import("@/lib/providers/ThemeProvider"), {
   ssr: false,
 });
@@ -52,6 +53,7 @@ export default function RootLayout({
                   <main className="border-l-[0.04rem] w-full sm:mx-0 h-screen overflow-auto">
                     {children}
                   </main>
+                  <Toaster />
                 </div>
               </Suspense>
             </UserContextProvider>
