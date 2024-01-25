@@ -8,17 +8,21 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { UserContext } from "@/lib/providers/UserContext";
 import { User } from "@/lib/types";
 import { Activity, Clock, SquarePen, Users } from "lucide-react";
-import { useRouter } from "next/navigation";
 import React, { useContext } from "react";
 import EditProfile from "./editProfile";
+import getCookie from "@/lib/functions/getCookie";
 
 export default function UserInfo({ currentUser }: { currentUser: User }) {
+  const id = currentUser.id;
+  const id_cookie = getCookie("user_id");
+  const isLogged_in =
+    getCookie("logged_in") === "yes" && id === parseInt(id_cookie || "0");
+  console.log(isLogged_in);
   return (
     <Card className="relative rounded-lg shadow-md p-6 md:flex max-w-7xl">
-      <EditProfile />
+      {isLogged_in && <EditProfile />}
       <div className=" sm:w-40 sm:h-40">
         <Avatar className="rounded-sm w-full h-full">
           <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
@@ -29,13 +33,15 @@ export default function UserInfo({ currentUser }: { currentUser: User }) {
         <div className="text-2xl font-bold mt-4 sm:mt-0">
           {currentUser.username}
         </div>
-        <div className="flex text-zinc-300 mt-4 items-center">
-          Enter status here{" "}
-          <SquarePen
-            className="ml-2 hover:cursor-pointer hover:text-zinc-300"
-            size={18}
-          />
-        </div>
+        {isLogged_in && (
+          <div className="flex text-zinc-300 mt-4 items-center">
+            Enter status here{" "}
+            <SquarePen
+              className="ml-2 hover:cursor-pointer hover:text-zinc-300"
+              size={18}
+            />
+          </div>
+        )}
         <div className="flex justify-around items-center w-full mt-6">
           <TooltipProvider delayDuration={0}>
             <Tooltip delayDuration={0}>
@@ -77,16 +83,20 @@ export default function UserInfo({ currentUser }: { currentUser: User }) {
             </Tooltip>
           </TooltipProvider>
         </div>
-        <div className="flex justify-center items-center space-x-3">
-          <Button className="mt-6 w-full" variant="outline">
-            Message
-          </Button>
-          <Button className="mt-6 w-full" variant="outline">
-            Challenge
-          </Button>
-          <Button className="mt-6 w-full" variant="outline">
-            Edit Profile
-          </Button>
+        <div className="flex justify-center items-center space-x-3 ">
+          {isLogged_in && (
+            <>
+              <Button className="mt-6 w-full" variant="outline">
+                Message
+              </Button>
+              <Button className="mt-6 w-full" variant="outline">
+                Challenge
+              </Button>
+              <Button className="mt-6 w-full" variant="outline">
+                Logout
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </Card>

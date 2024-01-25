@@ -16,7 +16,6 @@ export default function Profile() {
 
   const token = getCookie("access") || "";
   const id = getCookie("user_id") || "0";
-  const loggedIn = getCookie("logged_in");
 
   useEffect(() => {
     // If there is no current user, fetch user information using useGetUser
@@ -34,10 +33,10 @@ export default function Profile() {
   }, [data, isSuccess, setCurrentUser]);
 
   return (
-    <div className="lg:flex justify-center gap-4 p-4">
+    <div className="lg:flex justify-center gap-4 p-4 ">
       {currentUser ? (
         // If there is a current user, display user information
-        <div className="flex flex-col gap-4 mb-4">
+        <div className="flex flex-col gap-4 mb-4 sm:min-w-[40rem]">
           <UserInfo currentUser={currentUser} />
           <GamesTable />
         </div>
