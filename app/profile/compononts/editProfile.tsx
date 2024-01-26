@@ -1,9 +1,8 @@
-import React, { use, useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -18,11 +17,10 @@ import useEditUser from "../hooks/useEditUset";
 import { User } from "@/lib/types";
 import { UserContext } from "@/lib/providers/UserContext";
 import { useRouter } from "next/navigation";
-import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
 export default function EditProfile() {
-  const { currentUser, setCurrentUser } = useContext(UserContext);
+  const { currentUser } = useContext(UserContext);
   const router = useRouter();
   let id = "0";
 
@@ -33,30 +31,11 @@ export default function EditProfile() {
   }
 
   const [userInfo, setUserInfo] = useState<User>({ id });
-  const {
-    mutate: editUser,
-    data,
-    isSuccess,
-    isPending,
-    isError,
-  } = useEditUser();
+  const { mutate: editUser } = useEditUser();
 
   const handleSubmit = () => {
     editUser(userInfo);
   };
-  useEffect(() => {
-    if (isSuccess && !isPending) {
-      toast.success("Profile updated successfully", {
-        duration: 1000,
-      });
-      setCurrentUser(data);
-    }
-    if (isError && !isPending) {
-      toast.error("Something went wrong, please try again later", {
-        duration: 1000,
-      });
-    }
-  }, [isSuccess, setCurrentUser, data, isError, isPending]);
 
   return (
     currentUser && (
