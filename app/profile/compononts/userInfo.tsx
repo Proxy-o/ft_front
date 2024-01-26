@@ -51,6 +51,7 @@ export default function UserInfo({ currentUser }: { currentUser: User }) {
             <Input
               className={cn(visible && "hidden relative")}
               onChange={(e) => setStatus(e.target.value)}
+              defaultValue={status}
             />
             <Check
               className={cn(

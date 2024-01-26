@@ -12,57 +12,14 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
-import { Asterisk, Key, Loader, User } from "lucide-react";
-import { useContext, useEffect, useState } from "react";
-import { UserContext } from "@/lib/providers/UserContext";
-import { useRouter } from "next/navigation";
+import { Asterisk, Loader, User } from "lucide-react";
+import { useState } from "react";
 import useLogin from "../hooks/useLogin";
 
 export default function LoginForm() {
-  const { currentUser, setCurrentUser } = useContext(UserContext);
-  const { mutate: login, isError, isPending, isSuccess, data } = useLogin();
+  const { mutate: login, isError, isPending } = useLogin();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const router = useRouter();
-
-  useEffect(() => {
-    if (isSuccess) {
-      const user = {
-        access: data.access,
-        refresh: data.refresh,
-        id: data.user.id,
-        username: data.user.username,
-        email: data.user.email,
-        avatar: data.user.avatar,
-      };
-      setCurrentUser(user);
-      var date = new Date();
-      date.setTime(date.getTime() + 30 * 24 * 60 * 60 * 1000); // 30 days
-      var expires = "; expires=" + date.toUTCString();
-      // add same site and secure
-      document.cookie =
-        "access=" +
-        data.access +
-        expires +
-        "; path=/" +
-        "; samesite=strict; secure";
-      document.cookie =
-        "refresh=" +
-        data.refresh +
-        expires +
-        "; path=/" +
-        "; samesite=strict; secure";
-      document.cookie =
-        "logged_in=yes" + expires + "; path=/" + "; samesite=strict; secure";
-      document.cookie =
-        "user_id=" +
-        data.user.id +
-        expires +
-        "; path=/" +
-        "; samesite=strict; secure";
-      router.push("/profile");
-    }
-  }, [isSuccess, data, setCurrentUser, router]);
 
   const onSubmit = async () => {
     login({ username, password });
