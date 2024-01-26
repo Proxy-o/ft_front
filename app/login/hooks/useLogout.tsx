@@ -10,11 +10,10 @@ export default function useLogout() {
 
   const mutation = useMutation({
     mutationFn: async () => {
-      const path = process.env.NEXT_PUBLIC_BACKEND_URL + "/logout";
       const data = {
         refresh: getCookie("refresh"),
       };
-      const response = await axiosInstance.post(path, data);
+      const response = await axiosInstance.post("/logout", data);
       // remove cookies
       document.cookie =
         "access=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
