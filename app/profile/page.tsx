@@ -1,6 +1,6 @@
 "use client";
 
-import Profile from "./compononts/Profile";
+import Profile from "./compononts/profile";
 
 export default function page() {
   return <Profile />;

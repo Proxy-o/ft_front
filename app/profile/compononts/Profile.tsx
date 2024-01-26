@@ -10,9 +10,9 @@ import useGetUser from "../hooks/useGetUser";
 import getCookie from "@/lib/functions/getCookie";
 import { Button } from "@/components/ui/button";
 import LoginForm from "@/app/login/components/LoginForm";
+import ProfileAvatar from "./profileAvatar";
 
 export default function Profile() {
-  const router = useRouter();
   const { currentUser, setCurrentUser } = useContext(UserContext);
   const { mutate: getUser, isError, isPending, isSuccess, data } = useGetUser();
   const didRunOnce = useRef(false);
@@ -35,6 +35,7 @@ export default function Profile() {
 
   return (
     <div className="lg:flex justify-center gap-4 p-4 ">
+      <ProfileAvatar />
       {currentUser ? (
         <div className="flex flex-col gap-4 mb-4 sm:min-w-[40rem]">
           <UserInfo currentUser={currentUser} />

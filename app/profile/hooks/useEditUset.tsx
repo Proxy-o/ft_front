@@ -5,7 +5,6 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 const editUser = async (data: User) => {
   try {
     const response = await axiosInstance.put(`/user/${data.id}`, data);
-    console.log(response.data);
     return response.data;
   } catch (error: any) {
     if (error.response && error.response.status !== 401) {

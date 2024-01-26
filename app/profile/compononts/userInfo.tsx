@@ -18,7 +18,8 @@ export default function UserInfo({ currentUser }: { currentUser: User }) {
   const id = currentUser.id;
   const id_cookie = getCookie("user_id");
   const isLogged_in =
-    getCookie("logged_in") === "yes" && id === parseInt(id_cookie || "0");
+    (getCookie("logged_in") === "yes" && id === id_cookie) || "0";
+
   return (
     <Card className="relative rounded-lg shadow-md p-6 md:flex max-w-7xl">
       {isLogged_in && <EditProfile />}

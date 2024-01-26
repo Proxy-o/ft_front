@@ -10,7 +10,7 @@ export default function useLogout() {
 
   const mutation = useMutation({
     mutationFn: async () => {
-      const path = process.env.NEXT_PUBLIC_API_URL + "/logout";
+      const path = process.env.NEXT_PUBLIC_BACKEND_URL + "/logout";
       const data = {
         refresh: getCookie("refresh"),
       };
