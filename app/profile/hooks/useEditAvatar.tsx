@@ -5,7 +5,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useContext } from "react";
 import { toast } from "sonner";
 
-const editAvatar = async (data: User) => {
+const editAvatar = async (data: { id: string; avatar: File }) => {
   try {
     const response = await axiosInstance.put(`/user/${data.id}/avatar`, data, {
       headers: {
@@ -23,13 +23,20 @@ const editAvatar = async (data: User) => {
 export default function useEditAvatar() {
   const { currentUser, setCurrentUser } = useContext(UserContext);
   const info = useMutation({
-    mutationFn: async (data: User) => {
+    mutationFn: async (data: { id: string; avatar: File }) => {
+      console.log(data);
       const res = await editAvatar(data);
       return res;
     },
     onSuccess: (data) => {
-      console.log(data);
-      setCurrentUser(data);
+      // console.log(data);
+      if (currentUser) {
+        setCurrentUser({
+          ...currentUser,
+          avatar: data.avatar,
+          id: currentUser.id || "",
+        });
+      }
       toast.success("Avatar updated successfully");
     },
   });
