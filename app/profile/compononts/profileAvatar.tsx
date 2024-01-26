@@ -2,15 +2,19 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import axiosInstance from "@/lib/functions/axiosInstance";
 import { UserContext } from "@/lib/providers/UserContext";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import useEditAvatar from "../hooks/useEditAvatar";
+import { User } from "@/lib/types";
 
-export default function ProfileAvatar() {
-  const { currentUser, setCurrentUser } = useContext(UserContext);
+export default function ProfileAvatar({ currentUser }: { currentUser: User }) {
+  const { setCurrentUser } = useContext(UserContext);
+
+  const { mutate: editAvatar, isSuccess } = useEditAvatar();
   const [data, setData] = useState({
-    title: "",
-    description: "",
+    id: currentUser!.id,
     avatar: "",
   });
+
   const handleImageChange = (e: any) => {
     let newData = { ...data };
     newData["avatar"] = e.target.files[0];
@@ -21,15 +25,9 @@ export default function ProfileAvatar() {
     e.preventDefault();
     let form_data = new FormData();
     if (data.avatar) form_data.append("avatar", data.avatar);
-    const response = await axiosInstance.put("/user/21/avatar", data, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-    if (response.status === 400) {
-    }
+    editAvatar(data);
   };
-  console.log(currentUser);
+
   return (
     currentUser && (
       <form>

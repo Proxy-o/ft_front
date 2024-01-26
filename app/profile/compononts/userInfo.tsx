@@ -13,6 +13,7 @@ import { Activity, Clock, SquarePen, Users } from "lucide-react";
 import React, { useContext } from "react";
 import EditProfile from "./editProfile";
 import getCookie from "@/lib/functions/getCookie";
+import ProfileAvatar from "./profileAvatar";
 
 export default function UserInfo({ currentUser }: { currentUser: User }) {
   const id = currentUser.id;
@@ -24,10 +25,7 @@ export default function UserInfo({ currentUser }: { currentUser: User }) {
     <Card className="relative rounded-lg shadow-md p-6 md:flex max-w-7xl">
       {isLogged_in && <EditProfile />}
       <div className=" sm:w-40 sm:h-40">
-        <Avatar className="rounded-sm w-full h-full">
-          <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-          <AvatarFallback className="rounded-sm">AV</AvatarFallback>
-        </Avatar>
+        <ProfileAvatar currentUser={currentUser} />
       </div>
       <div className=" flex-1 px-6">
         <div className="text-2xl font-bold mt-4 sm:mt-0">
