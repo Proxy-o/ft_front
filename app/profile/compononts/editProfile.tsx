@@ -33,19 +33,30 @@ export default function EditProfile() {
   }
 
   const [userInfo, setUserInfo] = useState<User>({ id });
-  const { mutate: editUser, data, isSuccess, isPending } = useEditUser();
+  const {
+    mutate: editUser,
+    data,
+    isSuccess,
+    isPending,
+    isError,
+  } = useEditUser();
 
   const handleSubmit = () => {
     editUser(userInfo);
   };
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess && !isPending) {
       toast.success("Profile updated successfully", {
         duration: 1000,
       });
       setCurrentUser(data);
     }
-  }, [isSuccess, setCurrentUser, data]);
+    if (isError && !isPending) {
+      toast.error("Something went wrong, please try again later", {
+        duration: 1000,
+      });
+    }
+  }, [isSuccess, setCurrentUser, data, isError, isPending]);
 
   return (
     currentUser && (

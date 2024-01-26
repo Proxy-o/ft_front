@@ -8,6 +8,8 @@ import { useRouter } from "next/navigation";
 import { UserContext } from "@/lib/providers/UserContext";
 import useGetUser from "../hooks/useGetUser";
 import getCookie from "@/lib/functions/getCookie";
+import { Button } from "@/components/ui/button";
+import LoginForm from "@/app/login/components/LoginForm";
 
 export default function Profile() {
   const router = useRouter();
@@ -39,7 +41,11 @@ export default function Profile() {
           <GamesTable />
         </div>
       ) : (
-        <div>Loading...</div>
+        !isPending && (
+          <div className="w-full">
+            <LoginForm />
+          </div>
+        )
       )}
       {currentUser && (
         <div className="flex flex-col gap-4">
