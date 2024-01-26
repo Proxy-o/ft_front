@@ -28,7 +28,9 @@ export default function UserInfo({ currentUser }: { currentUser: User }) {
     (getCookie("logged_in") === "yes" && id === id_cookie) || "0";
 
   const handleSubmit = () => {
-    editUser({ id, status });
+    if (status !== currentUser.status) {
+      editUser({ id, status });
+    }
     setVisible(!visible);
   };
   return (
@@ -62,9 +64,9 @@ export default function UserInfo({ currentUser }: { currentUser: User }) {
               onClick={() => setVisible(!visible)}
               className={cn(
                 !visible && "hidden",
-                "ml-2 hover:cursor-pointer hover:text-zinc-300 "
+                "ml-2 hover:cursor-pointer hover:text-zinc-300 hover:bg-secondary p-1 rounded-sm"
               )}
-              size={18}
+              size={30}
             />
           </div>
         )}
