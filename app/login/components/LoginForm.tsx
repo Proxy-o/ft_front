@@ -39,11 +39,27 @@ export default function LoginForm() {
       var date = new Date();
       date.setTime(date.getTime() + 30 * 24 * 60 * 60 * 1000); // 30 days
       var expires = "; expires=" + date.toUTCString();
-
-      document.cookie = "access=" + data.access + expires + "; path=/";
-      document.cookie = "refresh=" + data.refresh + expires + "; path=/";
-      document.cookie = "logged_in=yes" + expires + "; path=/";
-      document.cookie = "user_id=" + data.user.id + expires + "; path=/";
+      // add same site and secure
+      document.cookie =
+        "access=" +
+        data.access +
+        expires +
+        "; path=/" +
+        "; samesite=strict; secure";
+      document.cookie =
+        "refresh=" +
+        data.refresh +
+        expires +
+        "; path=/" +
+        "; samesite=strict; secure";
+      document.cookie =
+        "logged_in=yes" + expires + "; path=/" + "; samesite=strict; secure";
+      document.cookie =
+        "user_id=" +
+        data.user.id +
+        expires +
+        "; path=/" +
+        "; samesite=strict; secure";
       router.push("/profile");
     }
   }, [isSuccess, data, setCurrentUser, router]);
