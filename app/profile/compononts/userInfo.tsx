@@ -9,18 +9,28 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { User } from "@/lib/types";
-import { Activity, Clock, SquarePen, Users } from "lucide-react";
-import React, { useContext } from "react";
+import { Activity, Check, Clock, SquarePen, Users } from "lucide-react";
+import React, { useContext, useState } from "react";
 import EditProfile from "./editProfile";
 import getCookie from "@/lib/functions/getCookie";
 import ProfileAvatar from "./profileAvatar";
+import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
+import useEditUser from "../hooks/useEditUser";
 
 export default function UserInfo({ currentUser }: { currentUser: User }) {
+  const [visible, setVisible] = useState(true);
+  const [status, setStatus] = useState(currentUser.status);
+  const { mutate: editUser } = useEditUser();
   const id = currentUser.id;
   const id_cookie = getCookie("user_id");
   const isLogged_in =
     (getCookie("logged_in") === "yes" && id === id_cookie) || "0";
 
+  const handleSubmit = () => {
+    editUser({ id, status });
+    setVisible(!visible);
+  };
   return (
     <Card className="relative rounded-lg shadow-md p-6 md:flex max-w-7xl">
       {isLogged_in && <EditProfile />}
@@ -33,9 +43,27 @@ export default function UserInfo({ currentUser }: { currentUser: User }) {
         </div>
         {isLogged_in && (
           <div className="flex text-zinc-300 mt-4 items-center">
-            Enter status here
+            <p className={cn(!visible && "hidden")}>
+              {status || "Enter status"}
+            </p>
+            <Input
+              className={cn(visible && "hidden relative")}
+              onChange={(e) => setStatus(e.target.value)}
+            />
+            <Check
+              className={cn(
+                visible && "hidden",
+                "hover:cursor-pointer hover:bg-primary m-2 bg-secondary p-1 absolute right-12 rounded-sm"
+              )}
+              size={30}
+              onClick={handleSubmit}
+            />
             <SquarePen
-              className="ml-2 hover:cursor-pointer hover:text-zinc-300"
+              onClick={() => setVisible(!visible)}
+              className={cn(
+                !visible && "hidden",
+                "ml-2 hover:cursor-pointer hover:text-zinc-300 "
+              )}
               size={18}
             />
           </div>

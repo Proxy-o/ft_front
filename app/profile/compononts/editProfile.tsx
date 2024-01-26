@@ -13,7 +13,7 @@ import { CardContent, CardFooter, Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button, buttonVariants } from "@/components/ui/button";
-import useEditUser from "../hooks/useEditUset";
+import useEditUser from "../hooks/useEditUser";
 import { User } from "@/lib/types";
 import { UserContext } from "@/lib/providers/UserContext";
 import { useRouter } from "next/navigation";

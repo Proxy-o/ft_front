@@ -20,11 +20,12 @@ export default function useEditUser() {
   const { currentUser, setCurrentUser } = useContext(UserContext);
   const info = useMutation({
     mutationFn: async (data: User) => {
+      console.log("co;ing", data);
       const res = await editUser(data);
       return res;
     },
     onSuccess: (data) => {
-      // console.log(data);
+      console.log(data);
       toast.success("Profile updated successfully");
       setCurrentUser({ ...currentUser, ...data });
     },
