@@ -41,7 +41,7 @@ export default function UserInfo({
     <Card className="relative rounded-lg shadow-md p-6 md:flex max-w-7xl">
       {canEdit && <EditProfile />}
       <div className=" sm:w-40 sm:h-40">
-        <ProfileAvatar currentUser={currentUser} />
+        <ProfileAvatar currentUser={currentUser} canEdit={canEdit} />
       </div>
       <div className=" flex-1 px-6">
         <div className="text-2xl font-bold mt-4 sm:mt-0">

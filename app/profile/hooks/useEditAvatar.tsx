@@ -24,7 +24,6 @@ export default function useEditAvatar() {
   const { currentUser, setCurrentUser } = useContext(UserContext);
   const info = useMutation({
     mutationFn: async (data: { id: string; avatar: File }) => {
-      console.log(data);
       const res = await editAvatar(data);
       return res;
     },
@@ -38,6 +37,9 @@ export default function useEditAvatar() {
         });
       }
       toast.success("Avatar updated successfully");
+    },
+    onError: (error: Error) => {
+      toast.error("Avatar update failed");
     },
   });
   return info;

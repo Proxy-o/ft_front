@@ -7,7 +7,13 @@ import useEditAvatar from "../hooks/useEditAvatar";
 import { User } from "@/lib/types";
 import { PenBox } from "lucide-react";
 
-export default function ProfileAvatar({ currentUser }: { currentUser: User }) {
+export default function ProfileAvatar({
+  currentUser,
+  canEdit,
+}: {
+  currentUser: User;
+  canEdit: boolean;
+}) {
   const { mutate: editAvatar } = useEditAvatar();
 
   const inputFileRef = useRef<HTMLInputElement | null>(null);
@@ -46,12 +52,14 @@ export default function ProfileAvatar({ currentUser }: { currentUser: User }) {
           onChange={handleImageChange}
           style={{ display: "none" }} // Hide the input element
         />
-        <PenBox
-          onClick={handleButtonClick}
-          className="absolute top-0  left-0 hover:cursor-pointer shadow-2xl rounded-full bg-secondary p-1 m-1"
-        >
-          Choose Avatar
-        </PenBox>
+        {canEdit && (
+          <PenBox
+            onClick={handleButtonClick}
+            className="absolute top-0  left-0 hover:cursor-pointer shadow-2xl rounded-full bg-secondary p-1 m-1"
+          >
+            Choose Avatar
+          </PenBox>
+        )}
       </form>
     )
   );

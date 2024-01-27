@@ -27,8 +27,8 @@ export default function useEditUser() {
       toast.success("Profile updated successfully");
       setCurrentUser({ ...currentUser, ...data });
     },
-    onError: (error) => {
-      toast.error(error.message);
+    onError: () => {
+      toast.error("Profile update failed");
     },
   });
   return info;
