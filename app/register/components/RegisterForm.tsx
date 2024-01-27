@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import {
   CardTitle,
   CardDescription,
@@ -13,8 +14,13 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 import { Asterisk, AtSign, User } from "lucide-react";
+import useRegister from "../hooks/useRegister";
 
 export default function RegisterForm() {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { mutate: register, isPending } = useRegister();
   return (
     <div className="flex flex-col items-center justify-center min-h-screen overflow-hidden">
       <Card className="w-full max-w-md ">
@@ -26,7 +32,12 @@ export default function RegisterForm() {
           <div className="space-y-2">
             <Label htmlFor="username">Username</Label>
             <div className="relative">
-              <Input placeholder="Username" type="text" />
+              <Input
+                name="username"
+                placeholder="Username"
+                type="text"
+                onChange={(e) => setUsername(e.target.value)}
+              />
               <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                 <User className="h-5 w-5 text-secondary" />
               </div>
@@ -37,7 +48,12 @@ export default function RegisterForm() {
               <Label htmlFor="password">Email</Label>
             </div>
             <div className="relative">
-              <Input placeholder="Email" type="email" />
+              <Input
+                name="email"
+                placeholder="Email"
+                type="email"
+                onChange={(e) => setEmail(e.target.value)}
+              />
               <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                 <AtSign className="h-5 w-5 text-secondary" />
               </div>
@@ -48,7 +64,12 @@ export default function RegisterForm() {
               <Label htmlFor="password">Password</Label>
             </div>
             <div className="relative">
-              <Input placeholder="Password" type="password" />
+              <Input
+                name="password"
+                placeholder="Password"
+                type="password"
+                onChange={(e) => setPassword(e.target.value)}
+              />
               <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                 <Asterisk className="h-5 w-5 text-secondary" />
               </div>
@@ -57,7 +78,11 @@ export default function RegisterForm() {
         </CardContent>
         <CardFooter className="flex flex-col">
           <Link className="w-full" href="/register">
-            <Button className="w-full" variant="default">
+            <Button
+              className="w-full"
+              variant="default"
+              onClick={() => register({ username, email, password })}
+            >
               Register
             </Button>
           </Link>

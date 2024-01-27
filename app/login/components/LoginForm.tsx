@@ -42,6 +42,7 @@ export default function LoginForm() {
             <Label htmlFor="username">Username</Label>
             <div className="relative">
               <Input
+                name="username"
                 placeholder="Username"
                 type="text"
                 onChange={(ev) => setUsername(ev.target.value)}
@@ -63,6 +64,7 @@ export default function LoginForm() {
             </div>
             <div className="relative">
               <Input
+                name="password"
                 placeholder="Password"
                 type="password"
                 onChange={(ev) => setPassword(ev.target.value)}
