@@ -18,14 +18,18 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import useEditUser from "../hooks/useEditUser";
 
-export default function UserInfo({ currentUser }: { currentUser: User }) {
+export default function UserInfo({
+  currentUser,
+  canEdit,
+}: {
+  currentUser: User;
+  canEdit: boolean;
+}) {
   const [visible, setVisible] = useState(true);
   const [status, setStatus] = useState(currentUser.status);
   const { mutate: editUser } = useEditUser();
   const id = currentUser.id;
   const id_cookie = getCookie("user_id");
-  const isLogged_in =
-    (getCookie("logged_in") === "yes" && id === id_cookie) || "0";
 
   const handleSubmit = () => {
     if (status !== currentUser.status) {
@@ -35,7 +39,7 @@ export default function UserInfo({ currentUser }: { currentUser: User }) {
   };
   return (
     <Card className="relative rounded-lg shadow-md p-6 md:flex max-w-7xl">
-      {isLogged_in && <EditProfile />}
+      {canEdit && <EditProfile />}
       <div className=" sm:w-40 sm:h-40">
         <ProfileAvatar currentUser={currentUser} />
       </div>
@@ -43,7 +47,7 @@ export default function UserInfo({ currentUser }: { currentUser: User }) {
         <div className="text-2xl font-bold mt-4 sm:mt-0">
           {currentUser.username}
         </div>
-        {isLogged_in && (
+        {canEdit && (
           <div className="flex text-zinc-300 mt-4 items-center">
             <p className={cn(!visible && "hidden")}>
               {status || "Enter status"}
@@ -113,7 +117,7 @@ export default function UserInfo({ currentUser }: { currentUser: User }) {
           </TooltipProvider>
         </div>
         <div className="flex justify-center items-center space-x-3 ">
-          {isLogged_in && (
+          {canEdit && (
             <>
               <Button className="mt-6 w-full" variant="outline">
                 Message

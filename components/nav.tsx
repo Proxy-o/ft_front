@@ -32,7 +32,7 @@ interface linksProps {
 }
 
 export default function Nav() {
-  const { mutate: logout, isSuccess } = useLogout();
+  const { mutate: logout } = useLogout();
 
   const links: linksProps[] = [
     {

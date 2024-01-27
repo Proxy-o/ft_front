@@ -4,40 +4,30 @@ import UserInfo from "./userInfo";
 import GamesTable from "./gamesTable";
 import States from "./states";
 import Friends from "./friends";
-import { useRouter } from "next/navigation";
 import { UserContext } from "@/lib/providers/UserContext";
 import useGetUser from "../hooks/useGetUser";
 import getCookie from "@/lib/functions/getCookie";
-import { Button } from "@/components/ui/button";
 import LoginForm from "@/app/login/components/LoginForm";
-import ProfileAvatar from "./profileAvatar";
 
-export default function Profile() {
-  const { currentUser, setCurrentUser } = useContext(UserContext);
-  const { mutate: getUser, isError, isPending, isSuccess, data } = useGetUser();
-  const didRunOnce = useRef(false);
+export default function Profile({ id }: { id: string }) {
+  const { currentUser } = useContext(UserContext);
+  const { mutate: getUser, isPending } = useGetUser();
 
-  const token = getCookie("access") || "";
-  const id = getCookie("user_id") || "0";
+  const isLogedin = getCookie("logged_in") || false;
+  const id_cookie = getCookie("user_id");
 
   useEffect(() => {
-    if (!currentUser && !isSuccess) {
+    if (isLogedin && !currentUser) {
       getUser({ id });
     }
-  }, [currentUser, getUser, isSuccess, id, token]);
-
-  useEffect(() => {
-    if (isSuccess && !didRunOnce.current) {
-      setCurrentUser(data);
-      didRunOnce.current = true;
-    }
-  }, [data, isSuccess, setCurrentUser, currentUser]);
-
+  }, [currentUser, getUser, id, isLogedin]);
+  const canEdit =
+    getCookie("logged_in") === "yes" && id === id_cookie ? true : false;
   return (
     <div className="lg:flex justify-center gap-4 p-4 ">
       {currentUser ? (
         <div className="flex flex-col gap-4 mb-4 sm:min-w-[40rem]">
-          <UserInfo currentUser={currentUser} />
+          <UserInfo currentUser={currentUser} canEdit={canEdit} />
           <GamesTable />
         </div>
       ) : (
