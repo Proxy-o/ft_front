@@ -32,7 +32,6 @@ export default function ChatCard({ senderId, receiverId }: Conversation) {
     console.log("send");
   };
   const { data, isSuccess } = useGetMessages({ senderId, receiverId });
-  console.log(data);
   return (
     <Card className="p-8 relative">
       {lastMessage && <p>Last message: {lastMessage.data}</p>}
@@ -42,14 +41,11 @@ export default function ChatCard({ senderId, receiverId }: Conversation) {
             message: { content: string; receiver: string; user: string },
             index: number
           ) => (
-            console.log(message.user == user_id),
-            (
-              <ChatBubble
-                message={message.content}
-                me={message.user == user_id}
-                key={index}
-              />
-            )
+            <ChatBubble
+              message={message.content}
+              me={message.user == user_id}
+              key={index}
+            />
           )
         )}
       {"status " + connectionStatus}

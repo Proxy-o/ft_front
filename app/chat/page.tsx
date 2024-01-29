@@ -1,5 +1,5 @@
 import ChatCard from "./components/chatCard";
 
 export default function Page() {
-  return <ChatCard senderId={2} receiverId={1} />;
+  return <ChatCard senderId={1} receiverId={2} />;
 }
