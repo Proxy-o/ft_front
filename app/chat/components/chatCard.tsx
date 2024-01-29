@@ -8,6 +8,7 @@ import useGetMessages from "../hooks/useGetMessages";
 import ChatBubble from "./chatBubble";
 import { Conversation } from "../types";
 import { Input } from "@/components/ui/input";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function ChatCard({ senderId, receiverId }: Conversation) {
   const token = getCookie("refresh");
@@ -29,27 +30,38 @@ export default function ChatCard({ senderId, receiverId }: Conversation) {
   const handelSendMessage = () => {
     const toSend = "/pm " + receiverId + " " + message;
     sendJsonMessage({ message: toSend });
-    console.log("send");
   };
-  const { data, isSuccess } = useGetMessages({ senderId, receiverId });
+  const { data, isSuccess, fetchNextPage } = useGetMessages({
+    senderId,
+    receiverId,
+  });
+  const queryClient = useQueryClient();
+  console.log(data);
+  useEffect(() => {
+    if (lastMessage) {
+      queryClient.invalidateQueries({
+        queryKey: [`messages_${senderId}_${receiverId}`],
+      });
+    }
+  }, [lastMessage, queryClient, senderId, receiverId]);
   return (
     <Card className="p-8 relative">
       {lastMessage && <p>Last message: {lastMessage.data}</p>}
       {isSuccess &&
-        data.map(
-          (
-            message: { content: string; receiver: string; user: string },
-            index: number
-          ) => (
-            <ChatBubble
-              message={message.content}
-              me={message.user == user_id}
-              key={index}
-            />
-          )
-        )}
+        data?.pages.map((page) => {
+          return page.results.map((result: any, index: number) => {
+            return (
+              <ChatBubble
+                key={index}
+                message={result.content}
+                me={result.user === user_id}
+              />
+            );
+          });
+        })}
       {"status " + connectionStatus}
       <Input onChange={(e) => setMessage(e.target.value)} />
+      <Button onClick={() => fetchNextPage()}>Load More</Button>
       <Button onClick={handelSendMessage}>Send</Button>
     </Card>
   );

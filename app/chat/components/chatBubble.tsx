@@ -17,7 +17,7 @@ export default function ChatBubble({
     //  message div to the right side
     <div className="flex w-full h-fit">
       <p className="flex flex-col  max-w-[320px] leading-1.5 p-4  rounded-e-xl rounded-es-xl bg-primary/30 mb-2  h-fit  break-words whitespace-normal">
-        d{message}
+        {message}
       </p>
     </div>
   );
