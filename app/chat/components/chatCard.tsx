@@ -9,6 +9,7 @@ import ChatBubble from "./chatBubble";
 import { Conversation } from "../types";
 import { Input } from "@/components/ui/input";
 import { useQueryClient } from "@tanstack/react-query";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 export default function ChatCard({ senderId, receiverId }: Conversation) {
   const token = getCookie("refresh");
@@ -26,7 +27,10 @@ export default function ChatCard({ senderId, receiverId }: Conversation) {
     [ReadyState.UNINSTANTIATED]: "Uninstantiated",
   }[readyState];
 
+  const [hasMore, setHasMore] = useState(true);
   const [message, setMessage] = useState("");
+  const [msgLength, setMsgLength] = useState(0);
+
   const handelSendMessage = () => {
     const toSend = "/pm " + receiverId + " " + message;
     sendJsonMessage({ message: toSend });
@@ -35,8 +39,8 @@ export default function ChatCard({ senderId, receiverId }: Conversation) {
     senderId,
     receiverId,
   });
+
   const queryClient = useQueryClient();
-  console.log(data);
   useEffect(() => {
     if (lastMessage) {
       queryClient.invalidateQueries({
@@ -44,32 +48,67 @@ export default function ChatCard({ senderId, receiverId }: Conversation) {
       });
     }
   }, [lastMessage, queryClient, senderId, receiverId]);
+
+  const handleFetchNextPage = useCallback(() => {
+    if (data?.pages[data.pages.length - 1].next === null) {
+      setHasMore(false);
+      return;
+    }
+    fetchNextPage();
+    setMsgLength(
+      (prev) => prev + data?.pages[data.pages.length - 1].results.length
+    );
+  }, [fetchNextPage, data]);
+
   return (
     <Card className="p-2 relative ">
-      <div className="max-h-72 overflow-auto m-2">
-        {isSuccess &&
-          data?.pages
-            .slice()
-            .reverse()
-            .map((page) => {
-              return page.results
-                .slice()
-                .reverse()
-                .map((result: any, index: number) => {
-                  return (
-                    <ChatBubble
-                      key={index}
-                      message={result.content}
-                      me={result.user == user_id}
-                    />
-                  );
-                });
-            })}
-        {"status " + connectionStatus}
+      <div
+        id="scrollableDiv"
+        style={{
+          height: 300,
+          overflow: "auto",
+          display: "flex",
+          flexDirection: "column-reverse",
+        }}
+      >
+        <InfiniteScroll
+          dataLength={msgLength}
+          next={handleFetchNextPage}
+          style={{ display: "flex", flexDirection: "column-reverse" }} //To put endMessage and loader to the top.
+          inverse={true} //
+          hasMore={hasMore}
+          loader={<h4>Loading...</h4>}
+          scrollableTarget="scrollableDiv"
+        >
+          {isSuccess &&
+            data?.pages
+              // .slice()
+              // .reverse()
+              .map((page) => {
+                return (
+                  page.results
+                    // .slice()
+                    // .reverse()
+                    .map((result: any, index: number) => {
+                      return (
+                        <ChatBubble
+                          key={index}
+                          message={result.content}
+                          me={result.user == user_id}
+                        />
+                      );
+                    })
+                );
+              })}
+        </InfiniteScroll>
       </div>
-      <Input onChange={(e) => setMessage(e.target.value)} />
-      <Button onClick={() => fetchNextPage()}>Load More</Button>
-      <Button onClick={handelSendMessage}>Send</Button>
+      <div className="flex justify-between items-center">
+        <Input
+          className="w-full"
+          onChange={(e) => setMessage(e.target.value)}
+        />
+        <Button onClick={handelSendMessage}>Send</Button>
+      </div>
     </Card>
   );
 }

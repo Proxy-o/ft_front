@@ -5,6 +5,7 @@ import { useContext } from "react";
 import { Conversation } from "../types";
 
 async function getMessages({ pageParam }: { pageParam: string }) {
+  if (!pageParam) return;
   const response = await axiosInstance.get(`chat/${pageParam}`);
   return response.data;
 }
@@ -16,7 +17,8 @@ export default function useGetMessages({ senderId, receiverId }: Conversation) {
     queryFn: ({ pageParam }) => getMessages({ pageParam }),
     initialPageParam: `${senderId}/${receiverId}?page=1`,
     getNextPageParam: (lastPage) => {
-      if (lastPage.next !== null) {
+      console.log(lastPage);
+      if (lastPage && lastPage.next !== null) {
         return lastPage.next.split("/").slice(5).join("/");
       }
       return false;

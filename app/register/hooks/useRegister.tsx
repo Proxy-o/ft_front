@@ -22,7 +22,6 @@ export default function useRegister() {
       router.push("/login");
     },
     onError: (error) => {
-      console.log(error);
       if ((error as any).response.data.username) {
         toast.error((error as any).response.data.username);
       } else if ((error as any).response.data.email) {
