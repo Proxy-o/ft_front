@@ -27,7 +27,7 @@ export default function Profile({ id }: { id: string }) {
     <div className="lg:flex justify-center gap-4 p-4 ">
       {currentUser ? (
         <div className="flex flex-col gap-4 mb-4 sm:min-w-[40rem]">
-          <UserInfo currentUser={currentUser} canEdit={canEdit} />
+          <UserInfo currentUser={currentUser} canEdit={canEdit} userId={id} />
           <GamesTable />
         </div>
       ) : (

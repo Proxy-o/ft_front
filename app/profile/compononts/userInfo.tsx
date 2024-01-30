@@ -17,19 +17,22 @@ import ProfileAvatar from "./profileAvatar";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import useEditUser from "../hooks/useEditUser";
+import useAddFriend from "../hooks/useAddFriend";
 
 export default function UserInfo({
   currentUser,
   canEdit,
+  userId,
 }: {
   currentUser: User;
   canEdit: boolean;
+  userId: string;
 }) {
   const [visible, setVisible] = useState(true);
   const [status, setStatus] = useState(currentUser.status);
   const { mutate: editUser } = useEditUser();
+  const { mutate: addFriend } = useAddFriend();
   const id = currentUser.id;
-  const id_cookie = getCookie("user_id");
 
   const handleSubmit = () => {
     if (status !== currentUser.status) {
@@ -117,7 +120,11 @@ export default function UserInfo({
           </TooltipProvider>
         </div>
         <div className="flex justify-center items-center space-x-3 ">
-          {canEdit && (
+          {canEdit ? (
+            <Button className="mt-6 w-full" variant="outline">
+              Logout
+            </Button>
+          ) : (
             <>
               <Button className="mt-6 w-full" variant="outline">
                 Message
@@ -125,8 +132,12 @@ export default function UserInfo({
               <Button className="mt-6 w-full" variant="outline">
                 Challenge
               </Button>
-              <Button className="mt-6 w-full" variant="outline">
-                Logout
+              <Button
+                className="mt-6 w-full"
+                variant="outline"
+                onClick={() => addFriend(userId)}
+              >
+                Add Friend
               </Button>
             </>
           )}

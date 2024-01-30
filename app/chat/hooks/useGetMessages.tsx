@@ -1,7 +1,5 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
-import { UserContext } from "@/lib/providers/UserContext";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { useContext } from "react";
 import { Conversation } from "../types";
 
 async function getMessages({ pageParam }: { pageParam: string }) {
