@@ -48,17 +48,23 @@ export default function ChatCard({ senderId, receiverId }: Conversation) {
     <Card className="p-8 relative">
       {lastMessage && <p>Last message: {lastMessage.data}</p>}
       {isSuccess &&
-        data?.pages.map((page) => {
-          return page.results.map((result: any, index: number) => {
-            return (
-              <ChatBubble
-                key={index}
-                message={result.content}
-                me={result.user === user_id}
-              />
-            );
-          });
-        })}
+        data?.pages
+          .slice()
+          .reverse()
+          .map((page) => {
+            return page.results
+              .slice()
+              .reverse()
+              .map((result: any, index: number) => {
+                return (
+                  <ChatBubble
+                    key={index}
+                    message={result.content}
+                    me={result.user == user_id}
+                  />
+                );
+              });
+          })}
       {"status " + connectionStatus}
       <Input onChange={(e) => setMessage(e.target.value)} />
       <Button onClick={() => fetchNextPage()}>Load More</Button>
