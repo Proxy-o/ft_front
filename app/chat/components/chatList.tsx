@@ -6,11 +6,13 @@ import ChatFriendCard from "./chatFriendCard";
 import ChatCard from "./chatCard";
 import { UserContext } from "@/lib/providers/UserContext";
 import getCookie from "@/lib/functions/getCookie";
+import useGetFriends from "../hooks/useGetFriends";
 
 export default function ChatList() {
-  const { data, isSuccess } = useGetUsers();
-  const [receiverId, setReceiverId] = React.useState<number>(0);
   const user_id = getCookie("user_id");
+  const { data, isSuccess } = useGetFriends(user_id || "0");
+  console.log(data);
+  const [receiverId, setReceiverId] = React.useState<number>(0);
   const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
   const handleChatOpen = (friend: User) => {
     if (!isChatOpen) {

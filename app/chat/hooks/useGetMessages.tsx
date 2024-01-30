@@ -17,7 +17,6 @@ export default function useGetMessages({ senderId, receiverId }: Conversation) {
     queryFn: ({ pageParam }) => getMessages({ pageParam }),
     initialPageParam: `${senderId}/${receiverId}?page=1`,
     getNextPageParam: (lastPage) => {
-      console.log(lastPage);
       if (lastPage && lastPage.next !== null) {
         return lastPage.next.split("/").slice(5).join("/");
       }
