@@ -45,27 +45,28 @@ export default function ChatCard({ senderId, receiverId }: Conversation) {
     }
   }, [lastMessage, queryClient, senderId, receiverId]);
   return (
-    <Card className="p-8 relative">
-      {lastMessage && <p>Last message: {lastMessage.data}</p>}
-      {isSuccess &&
-        data?.pages
-          .slice()
-          .reverse()
-          .map((page) => {
-            return page.results
-              .slice()
-              .reverse()
-              .map((result: any, index: number) => {
-                return (
-                  <ChatBubble
-                    key={index}
-                    message={result.content}
-                    me={result.user == user_id}
-                  />
-                );
-              });
-          })}
-      {"status " + connectionStatus}
+    <Card className="p-2 relative ">
+      <div className="max-h-72 overflow-auto m-2">
+        {isSuccess &&
+          data?.pages
+            .slice()
+            .reverse()
+            .map((page) => {
+              return page.results
+                .slice()
+                .reverse()
+                .map((result: any, index: number) => {
+                  return (
+                    <ChatBubble
+                      key={index}
+                      message={result.content}
+                      me={result.user == user_id}
+                    />
+                  );
+                });
+            })}
+        {"status " + connectionStatus}
+      </div>
       <Input onChange={(e) => setMessage(e.target.value)} />
       <Button onClick={() => fetchNextPage()}>Load More</Button>
       <Button onClick={handelSendMessage}>Send</Button>

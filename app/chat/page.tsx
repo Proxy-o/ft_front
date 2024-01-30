@@ -1,5 +1,7 @@
+"use client";
 import ChatCard from "./components/chatCard";
+import ChatList from "./components/chatList";
 
 export default function Page() {
-  return <ChatCard senderId={1} receiverId={2} />;
+  return <ChatList />;
 }

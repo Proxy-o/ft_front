@@ -1,19 +1,19 @@
 export interface Games {
-    player1: {
-        name: string;
-        score: string;
-        status: "win" | "lose" | "draw";
-    };
-    player2: {
-        name: string;
-        score: string;
-        status: "win" | "lose" | "draw";
-
-    };
-    date: string;
+  player1: {
+    name: string;
+    score: string;
+    status: "win" | "lose" | "draw";
+  };
+  player2: {
+    name: string;
+    score: string;
+    status: "win" | "lose" | "draw";
+  };
+  date: string;
 }
 
-export interface Friend{
-    name: string;
-    avatar: string;
+export interface Friend {
+  id: string;
+  username: string;
+  avatar: string;
 }

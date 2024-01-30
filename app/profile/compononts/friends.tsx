@@ -14,74 +14,88 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 export default function Friends() {
   const friends: Friend[] = [
     {
-      name: "hmza zbi",
+      username: "hmza zbi",
       avatar:
         "https://images.chesscomfiles.com/uploads/v1/user/100386670.bbb41909.50x50o.d37d58323b79@2x.jpg",
+      id: "1",
     },
     {
-      name: "hmza zbi",
+      username: "hmza zbi",
       avatar:
         "https://images.chesscomfiles.com/uploads/v1/user/240333993.765c3b4d.50x50o.ee7d8f95026d@2x.jpg",
+      id: "1",
     },
     {
-      name: "hmza zbi",
+      username: "hmza zbi",
       avatar:
         "https://images.chesscomfiles.com/uploads/v1/user/100386670.bbb41909.50x50o.d37d58323b79@2x.jpg",
+      id: "1",
     },
     {
-      name: "hmza zbi",
+      username: "hmza zbi",
       avatar:
         "https://images.chesscomfiles.com/uploads/v1/user/240333993.765c3b4d.50x50o.ee7d8f95026d@2x.jpg",
+      id: "1",
     },
     {
-      name: "hmza zbi",
+      username: "hmza zbi",
       avatar:
         "https://images.chesscomfiles.com/uploads/v1/user/240333993.765c3b4d.50x50o.ee7d8f95026d@2x.jpg",
+      id: "1",
     },
     {
-      name: "hmza zbi",
+      username: "hmza zbi",
       avatar:
         "https://images.chesscomfiles.com/uploads/v1/user/240333993.765c3b4d.50x50o.ee7d8f95026d@2x.jpg",
+      id: "1",
     },
     {
-      name: "hmza zbi",
+      username: "hmza zbi",
       avatar:
         "https://images.chesscomfiles.com/uploads/v1/user/240333993.765c3b4d.50x50o.ee7d8f95026d@2x.jpg",
+      id: "1",
     },
     {
-      name: "hmza zbi",
+      username: "hmza zbi",
       avatar:
         "https://images.chesscomfiles.com/uploads/v1/user/240333993.765c3b4d.50x50o.ee7d8f95026d@2x.jpg",
+      id: "1",
     },
     {
-      name: "hmza zbi",
+      username: "hmza zbi",
       avatar:
         "https://images.chesscomfiles.com/uploads/v1/user/100386670.bbb41909.50x50o.d37d58323b79@2x.jpg",
+      id: "1",
     },
     {
-      name: "hmza zbi",
+      username: "hmza zbi",
       avatar:
         "https://images.chesscomfiles.com/uploads/v1/user/100386670.bbb41909.50x50o.d37d58323b79@2x.jpg",
+      id: "1",
     },
     {
-      name: "hmza zbi",
+      username: "hmza zbi",
       avatar:
         "https://images.chesscomfiles.com/uploads/v1/user/100386670.bbb41909.50x50o.d37d58323b79@2x.jpg",
+      id: "1",
     },
     {
-      name: "hmza zbi",
+      username: "hmza zbi",
       avatar:
         "https://images.chesscomfiles.com/uploads/v1/user/240333993.765c3b4d.50x50o.ee7d8f95026d@2x.jpg",
+      id: "1",
     },
     {
-      name: "hmza zbi",
+      username: "hmza zbi",
       avatar:
         "https://images.chesscomfiles.com/uploads/v1/user/240333993.765c3b4d.50x50o.ee7d8f95026d@2x.jpg",
+      id: "1",
     },
     {
-      name: "hmza zbi",
+      username: "hmza zbi",
       avatar:
         "https://images.chesscomfiles.com/uploads/v1/user/100386670.bbb41909.50x50o.d37d58323b79@2x.jpg",
+      id: "1",
     },
   ];
   return (
@@ -105,7 +119,7 @@ export default function Friends() {
                 </Link>
               </TooltipTrigger>
               <TooltipContent className="flex items-center gap-4">
-                {friend.name}
+                {friend.username}
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
