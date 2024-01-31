@@ -19,7 +19,6 @@ const editUser = async (data: User) => {
 };
 
 export default function useEditUser() {
-  // invalidate user cache
   const queryClient = useQueryClient();
 
   const info = useMutation({
@@ -28,7 +27,6 @@ export default function useEditUser() {
       return res;
     },
     onSuccess: (data) => {
-      console.log("data", data.id);
       queryClient.invalidateQueries({
         queryKey: [`user`],
       });

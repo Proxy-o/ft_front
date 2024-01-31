@@ -6,13 +6,16 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import useEditAvatar from "../hooks/useEditAvatar";
 import { User } from "@/lib/types";
 import { PenBox } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export default function ProfileAvatar({
   user,
   canEdit,
+  isBlocked,
 }: {
   user: User;
   canEdit: boolean;
+  isBlocked: boolean;
 }) {
   const { mutate: editAvatar } = useEditAvatar();
 
@@ -41,7 +44,11 @@ export default function ProfileAvatar({
     user && (
       <form onSubmit={handleSubmit} className="relative">
         <Avatar className="rounded-sm w-full h-full">
-          <AvatarImage src={user.avatar} alt="@shadcn" />
+          <AvatarImage
+            src={user.avatar}
+            alt="@shadcn"
+            className={cn(isBlocked && "filter grayscale")}
+          />
           <AvatarFallback className="rounded-sm">AV</AvatarFallback>
         </Avatar>
         <input

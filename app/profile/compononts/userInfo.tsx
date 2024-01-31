@@ -9,7 +9,15 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { User } from "@/lib/types";
-import { Activity, Check, Clock, SquarePen, Users } from "lucide-react";
+import {
+  Activity,
+  BanIcon,
+  BlocksIcon,
+  Check,
+  Clock,
+  SquarePen,
+  Users,
+} from "lucide-react";
 import React, { useContext, useState } from "react";
 import EditProfile from "./editProfile";
 import getCookie from "@/lib/functions/getCookie";
@@ -21,6 +29,9 @@ import useAddFriend from "../../friends/hooks/useAddFriend";
 import useUnfriend from "@/app/friends/hooks/useUnfriend";
 import useGetFriends from "@/app/chat/hooks/useGetFriends";
 import useGetFrdReq from "@/app/friends/hooks/useGetFrReq";
+import useBlock from "@/app/friends/hooks/useBlockUser";
+import useGetBlocked from "@/app/friends/hooks/useGetBlocked";
+import useUnBlock from "@/app/friends/hooks/useUnBlockUser";
 
 export default function UserInfo({
   user,
@@ -36,14 +47,17 @@ export default function UserInfo({
   const { mutate: editUser } = useEditUser();
   const { mutate: addFriend } = useAddFriend();
   const { mutate: unfriend } = useUnfriend();
+  const { mutate: block } = useBlock();
+  const { mutate: unBlock } = useUnBlock();
   const { data: friendReq } = useGetFrdReq();
+  const { data: blocked } = useGetBlocked();
   const { data: friends, isSuccess } = useGetFriends(current_user_id);
   const id = user.id;
   const isFriend =
     isSuccess && friends.some((friend: User) => friend.id === id);
 
-  console.log(friendReq);
   const isReqSent = friendReq?.some((req: any) => req.to_user.id === id);
+  const isBlocked = blocked?.some((user: any) => user.id === id);
 
   const handleSubmit = () => {
     if (status !== user.status) {
@@ -53,9 +67,28 @@ export default function UserInfo({
   };
   return (
     <Card className="relative rounded-lg shadow-md p-6 md:flex max-w-7xl">
+      <div className="absolute top-0 right-0 p-2">
+        {isBlocked ? (
+          <Button
+            className="bg-green-800/25"
+            variant={"outline"}
+            onClick={() => unBlock(id)}
+          >
+            Unblock
+          </Button>
+        ) : (
+          <Button
+            className="bg-red-800/25"
+            variant={"outline"}
+            onClick={() => block(id)}
+          >
+            Block
+          </Button>
+        )}
+      </div>
       {canEdit && <EditProfile user={user} />}
       <div className=" sm:w-40 sm:h-40">
-        <ProfileAvatar user={user} canEdit={canEdit} />
+        <ProfileAvatar user={user} canEdit={canEdit} isBlocked={isBlocked} />
       </div>
       <div className=" flex-1 px-6">
         <div className="text-2xl font-bold mt-4 sm:mt-0">{user.username}</div>
@@ -140,7 +173,7 @@ export default function UserInfo({
                   className="mt-6 w-full"
                   variant="outline"
                   onClick={() => addFriend(id)}
-                  disabled={isReqSent}
+                  disabled={isReqSent || isBlocked}
                 >
                   Add Friend
                 </Button>
