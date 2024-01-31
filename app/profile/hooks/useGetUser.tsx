@@ -15,15 +15,12 @@ const fetchUser = async ({ id }: { id: string }) => {
   }
 };
 
-export default function useGetUser() {
-  const { currentUser, setCurrentUser } = useContext(UserContext);
-  const info = useMutation({
-    mutationFn: async ({ id }: { id: string }) => {
+export default function useGetUser(id: string) {
+  const info = useQuery({
+    queryKey: ["user", id],
+    queryFn: async () => {
       const data = await fetchUser({ id });
       return data;
-    },
-    onSuccess: (data) => {
-      setCurrentUser(data);
     },
   });
   return info;

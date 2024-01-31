@@ -19,18 +19,8 @@ import { UserContext } from "@/lib/providers/UserContext";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 
-export default function EditProfile() {
-  const { currentUser } = useContext(UserContext);
-  const router = useRouter();
-  let id = "0";
-
-  if (!currentUser) {
-    router.push("/login");
-  } else if (currentUser) {
-    id = currentUser.id;
-  }
-
-  const [userInfo, setUserInfo] = useState<User>({ id });
+export default function EditProfile({ currentUser }: { currentUser: User }) {
+  const [userInfo, setUserInfo] = useState<User>(currentUser);
   const { mutate: editUser } = useEditUser();
 
   const handleSubmit = () => {

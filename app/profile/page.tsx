@@ -8,22 +8,11 @@ import useGetUser from "./hooks/useGetUser";
 import { useRouter } from "next/navigation";
 
 export default function Page() {
-  const { currentUser, setCurrentUser } = useContext(UserContext);
-  const { mutate: getUser, isError, isPending, isSuccess, data } = useGetUser();
+  const user_id = getCookie("user_id");
+  const logged_in = getCookie("logged_in");
+
   const router = useRouter();
+  if (logged_in !== "yes") router.push("/login");
 
-  const isLogedin = getCookie("logged_in") || false;
-  const id = getCookie("user_id");
-
-  useEffect(() => {
-    if (isLogedin && !currentUser) {
-      if (!id) {
-        router.push("/login");
-      } else {
-        getUser({ id });
-      }
-    }
-  }, [currentUser, getUser, isLogedin, router, id]);
-  if (id) return <Profile id={id} />;
-  else router.push("/login");
+  return <Profile id={user_id || "0"} />;
 }

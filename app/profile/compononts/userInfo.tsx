@@ -42,7 +42,7 @@ export default function UserInfo({
   };
   return (
     <Card className="relative rounded-lg shadow-md p-6 md:flex max-w-7xl">
-      {canEdit && <EditProfile />}
+      {canEdit && <EditProfile currentUser={currentUser} />}
       <div className=" sm:w-40 sm:h-40">
         <ProfileAvatar currentUser={currentUser} canEdit={canEdit} />
       </div>

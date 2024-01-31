@@ -7,10 +7,8 @@ import { toast } from "sonner";
 const inviteFriend = async (userId: string) => {
   try {
     const response = await axiosInstance.post(`/friend_request/${userId}`);
-    console.log("ok", response);
     return response.data;
   } catch (error: any) {
-    console.log("error", error.response.data.detail);
     if (error.response && error.response.status !== 401) {
       throw new Error(error.response.data.detail);
     }
@@ -18,7 +16,6 @@ const inviteFriend = async (userId: string) => {
 };
 
 export default function useInviteFriend() {
-  const { currentUser, setCurrentUser } = useContext(UserContext);
   const info = useMutation({
     mutationFn: async (userId: string) => {
       const res = await inviteFriend(userId);
