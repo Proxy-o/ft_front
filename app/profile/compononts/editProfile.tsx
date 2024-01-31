@@ -19,8 +19,8 @@ import { UserContext } from "@/lib/providers/UserContext";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 
-export default function EditProfile({ currentUser }: { currentUser: User }) {
-  const [userInfo, setUserInfo] = useState<User>(currentUser);
+export default function EditProfile({ user }: { user: User }) {
+  const [userInfo, setUserInfo] = useState<User>(user);
   const { mutate: editUser } = useEditUser();
 
   const handleSubmit = () => {
@@ -28,7 +28,7 @@ export default function EditProfile({ currentUser }: { currentUser: User }) {
   };
 
   return (
-    currentUser && (
+    user && (
       <Dialog>
         <DialogTrigger className="absolute top-3 right-3 z-50 flex items-center hover:bg-secondary p-2 rounded-md text-zinc-400 hover:text-zinc-200">
           Edit
@@ -43,7 +43,7 @@ export default function EditProfile({ currentUser }: { currentUser: User }) {
               <div className="space-y-2">
                 <Label htmlFor="username">Username</Label>
                 <Input
-                  defaultValue={currentUser.username}
+                  defaultValue={user.username}
                   id="username"
                   placeholder="Enter your username"
                   onChange={(e) =>
@@ -57,7 +57,7 @@ export default function EditProfile({ currentUser }: { currentUser: User }) {
               <div className="space-y-2">
                 <Label htmlFor="first-name">First name</Label>
                 <Input
-                  defaultValue={currentUser.first_name}
+                  defaultValue={user.first_name}
                   id="first-name"
                   placeholder="Enter your first name"
                   onChange={(e) =>
@@ -71,7 +71,7 @@ export default function EditProfile({ currentUser }: { currentUser: User }) {
               <div className="space-y-2">
                 <Label htmlFor="last-name">Last name</Label>
                 <Input
-                  defaultValue={currentUser.last_name}
+                  defaultValue={user.last_name}
                   id="last-name"
                   placeholder="Enter your last name"
                   onChange={(e) =>
@@ -85,7 +85,7 @@ export default function EditProfile({ currentUser }: { currentUser: User }) {
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
                 <Input
-                  defaultValue={currentUser.email}
+                  defaultValue={user.email}
                   id="email"
                   placeholder="Enter your email"
                   type="email"

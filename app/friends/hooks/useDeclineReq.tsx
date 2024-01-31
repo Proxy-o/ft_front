@@ -4,22 +4,22 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { toast } from "sonner";
 
-async function unfriend(to_unfriend_id: string) {
+async function reject(to_reject_id: string) {
   const response = await axiosInstance.post(
-    `/friends/remove/${to_unfriend_id}`
+    `/friend_request/delete/${to_reject_id}`
   );
   return response.data;
 }
 
-export default function useUnfriend() {
+export default function useReject() {
   const queryClient = useQueryClient();
   queryClient.invalidateQueries({
     queryKey: [`friends`],
   });
   const mutation = useMutation({
-    mutationFn: (to_unfriend_id: string) => unfriend(to_unfriend_id),
+    mutationFn: (to_reject_id: string) => reject(to_reject_id),
     onSuccess: () => {
-      toast.success("Unfriended successfully");
+      toast.success("rejected successfully");
     },
     onError: () => {
       toast.error("Something went wrong");

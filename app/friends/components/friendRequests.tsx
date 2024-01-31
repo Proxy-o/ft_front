@@ -8,10 +8,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, XCircle } from "lucide-react";
 import useAcceptFriend from "../hooks/useAcceptFriend";
+import useReject from "../hooks/useDeclineReq";
 
 export default function FriendRequests() {
-  const { data, isLoading, isError, error, isSuccess } = useGetFrdReq();
+  const { data, isSuccess } = useGetFrdReq();
   const { mutate: acceptFriend } = useAcceptFriend();
+  const { mutate: reject } = useReject();
   return (
     isSuccess && (
       <Card className="p-2">
@@ -42,7 +44,10 @@ export default function FriendRequests() {
                 className="text-green-500 hover:text-green-400 hover:scale-[1.1] transition-all mr-2 cursor-pointer"
                 onClick={() => acceptFriend(id)}
               />
-              <XCircle className="text-red-500 hover:text-red-400 hover:scale-[1.1] transition-all  mr-2 cursor-pointer" />
+              <XCircle
+                className="text-red-500 hover:text-red-400 hover:scale-[1.1] transition-all  mr-2 cursor-pointer"
+                onClick={() => reject(id)}
+              />
             </div>
           </div>
         ))}

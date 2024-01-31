@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 
 async function getFrdReq() {
   const response = await axiosInstance.get(`/friend_request`);
+  console.log("response", response);
   return response.data;
 }
 export default function useGetFrdReq() {

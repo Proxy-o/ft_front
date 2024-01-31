@@ -17,39 +17,48 @@ import ProfileAvatar from "./profileAvatar";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import useEditUser from "../hooks/useEditUser";
-import useAddFriend from "../hooks/useAddFriend";
+import useAddFriend from "../../friends/hooks/useAddFriend";
+import useUnfriend from "@/app/friends/hooks/useUnfriend";
+import useGetFriends from "@/app/chat/hooks/useGetFriends";
+import useGetFrdReq from "@/app/friends/hooks/useGetFrReq";
 
 export default function UserInfo({
-  currentUser,
+  user,
   canEdit,
-  userId,
+  current_user_id,
 }: {
-  currentUser: User;
+  user: User;
   canEdit: boolean;
-  userId: string;
+  current_user_id: string;
 }) {
   const [visible, setVisible] = useState(true);
-  const [status, setStatus] = useState(currentUser.status);
+  const [status, setStatus] = useState(user.status);
   const { mutate: editUser } = useEditUser();
   const { mutate: addFriend } = useAddFriend();
-  const id = currentUser.id;
+  const { mutate: unfriend } = useUnfriend();
+  const { data: friendReq } = useGetFrdReq();
+  const { data: friends, isSuccess } = useGetFriends(current_user_id);
+  const id = user.id;
+  const isFriend =
+    isSuccess && friends.some((friend: User) => friend.id === id);
+
+  console.log(friendReq);
+  const isReqSent = friendReq?.some((req: any) => req.to_user.id === id);
 
   const handleSubmit = () => {
-    if (status !== currentUser.status) {
+    if (status !== user.status) {
       editUser({ id, status });
     }
     setVisible(!visible);
   };
   return (
     <Card className="relative rounded-lg shadow-md p-6 md:flex max-w-7xl">
-      {canEdit && <EditProfile currentUser={currentUser} />}
+      {canEdit && <EditProfile user={user} />}
       <div className=" sm:w-40 sm:h-40">
-        <ProfileAvatar currentUser={currentUser} canEdit={canEdit} />
+        <ProfileAvatar user={user} canEdit={canEdit} />
       </div>
       <div className=" flex-1 px-6">
-        <div className="text-2xl font-bold mt-4 sm:mt-0">
-          {currentUser.username}
-        </div>
+        <div className="text-2xl font-bold mt-4 sm:mt-0">{user.username}</div>
         {canEdit && (
           <div className="flex text-zinc-300 mt-4 items-center">
             <p className={cn(!visible && "hidden")}>
@@ -126,19 +135,33 @@ export default function UserInfo({
             </Button>
           ) : (
             <>
-              <Button className="mt-6 w-full" variant="outline">
-                Message
-              </Button>
-              <Button className="mt-6 w-full" variant="outline">
-                Challenge
-              </Button>
-              <Button
-                className="mt-6 w-full"
-                variant="outline"
-                onClick={() => addFriend(userId)}
-              >
-                Add Friend
-              </Button>
+              {!isFriend && (
+                <Button
+                  className="mt-6 w-full"
+                  variant="outline"
+                  onClick={() => addFriend(id)}
+                  disabled={isReqSent}
+                >
+                  Add Friend
+                </Button>
+              )}
+              {isFriend && (
+                <>
+                  <Button className="mt-6 w-full" variant="outline">
+                    Message
+                  </Button>
+                  <Button className="mt-6 w-full" variant="outline">
+                    Challenge
+                  </Button>
+                  <Button
+                    className="mt-6 w-full"
+                    variant="outline"
+                    onClick={() => unfriend(id)}
+                  >
+                    unfriend
+                  </Button>
+                </>
+              )}
             </>
           )}
         </div>

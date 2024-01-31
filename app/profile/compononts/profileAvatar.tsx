@@ -8,10 +8,10 @@ import { User } from "@/lib/types";
 import { PenBox } from "lucide-react";
 
 export default function ProfileAvatar({
-  currentUser,
+  user,
   canEdit,
 }: {
-  currentUser: User;
+  user: User;
   canEdit: boolean;
 }) {
   const { mutate: editAvatar } = useEditAvatar();
@@ -26,7 +26,7 @@ export default function ProfileAvatar({
     if (!file) return;
     formData.append("avatar", file);
 
-    editAvatar({ avatar: file, id: currentUser.id });
+    editAvatar({ avatar: file, id: user.id });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -38,10 +38,10 @@ export default function ProfileAvatar({
   };
 
   return (
-    currentUser && (
+    user && (
       <form onSubmit={handleSubmit} className="relative">
         <Avatar className="rounded-sm w-full h-full">
-          <AvatarImage src={currentUser.avatar} alt="@shadcn" />
+          <AvatarImage src={user.avatar} alt="@shadcn" />
           <AvatarFallback className="rounded-sm">AV</AvatarFallback>
         </Avatar>
         <input
