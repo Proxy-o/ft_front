@@ -37,10 +37,14 @@ export default function UserInfo({
   user,
   canEdit,
   current_user_id,
+  isBlocked,
+  blocked_by_current_user,
 }: {
   user: User;
   canEdit: boolean;
   current_user_id: string;
+  isBlocked: boolean;
+  blocked_by_current_user: boolean;
 }) {
   const [visible, setVisible] = useState(true);
   const [status, setStatus] = useState(user.status);
@@ -50,14 +54,12 @@ export default function UserInfo({
   const { mutate: block } = useBlock();
   const { mutate: unBlock } = useUnBlock();
   const { data: friendReq } = useGetFrdReq();
-  const { data: blocked } = useGetBlocked();
   const { data: friends, isSuccess } = useGetFriends(current_user_id);
   const id = user.id;
   const isFriend =
     isSuccess && friends.some((friend: User) => friend.id === id);
 
   const isReqSent = friendReq?.some((req: any) => req.to_user.id === id);
-  const isBlocked = blocked?.some((user: any) => user.id === id);
 
   const handleSubmit = () => {
     if (status !== user.status) {
@@ -68,7 +70,7 @@ export default function UserInfo({
   return (
     <Card className="relative rounded-lg shadow-md p-6 md:flex max-w-7xl">
       <div className="absolute top-0 right-0 p-2">
-        {isBlocked ? (
+        {isBlocked && blocked_by_current_user ? (
           <Button
             className="bg-green-800/25"
             variant={"outline"}
@@ -77,13 +79,15 @@ export default function UserInfo({
             Unblock
           </Button>
         ) : (
-          <Button
-            className="bg-red-800/25"
-            variant={"outline"}
-            onClick={() => block(id)}
-          >
-            Block
-          </Button>
+          !isBlocked && (
+            <Button
+              className="bg-red-800/25"
+              variant={"outline"}
+              onClick={() => block(id)}
+            >
+              Block
+            </Button>
+          )
         )}
       </div>
       {canEdit && <EditProfile user={user} />}
@@ -168,7 +172,7 @@ export default function UserInfo({
             </Button>
           ) : (
             <>
-              {!isFriend && (
+              {!isFriend && !isBlocked && (
                 <Button
                   className="mt-6 w-full"
                   variant="outline"

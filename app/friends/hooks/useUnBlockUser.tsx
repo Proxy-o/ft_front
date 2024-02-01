@@ -6,7 +6,6 @@ import { toast } from "sonner";
 
 async function unblock(to_unblock_id: string) {
   const response = await axiosInstance.post(`friends/unblock/${to_unblock_id}`);
-  console.log("dd", response);
   return response.data;
 }
 
