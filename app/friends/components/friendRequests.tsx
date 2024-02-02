@@ -42,7 +42,9 @@ export default function FriendRequests() {
             <div className="flex items-center">
               <CheckCircle
                 className="text-green-500 hover:text-green-400 hover:scale-[1.1] transition-all mr-2 cursor-pointer"
-                onClick={() => acceptFriend(id)}
+                onClick={() =>
+                  acceptFriend({ friend: from_user, to_accept_id: id })
+                }
               />
               <XCircle
                 className="text-red-500 hover:text-red-400 hover:scale-[1.1] transition-all  mr-2 cursor-pointer"

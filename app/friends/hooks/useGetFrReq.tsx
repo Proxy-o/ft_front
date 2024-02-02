@@ -6,7 +6,7 @@ async function getFrdReq() {
   return response.data;
 }
 export default function useGetFrdReq() {
-  const queryKey = ["friends", "requests"];
+  const queryKey = ["requests"];
 
   const res = useQuery({
     queryKey: queryKey,

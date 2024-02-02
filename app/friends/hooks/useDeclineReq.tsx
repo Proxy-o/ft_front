@@ -13,12 +13,13 @@ async function reject(to_reject_id: string) {
 
 export default function useReject() {
   const queryClient = useQueryClient();
-  queryClient.invalidateQueries({
-    queryKey: [`friends`],
-  });
+
   const mutation = useMutation({
     mutationFn: (to_reject_id: string) => reject(to_reject_id),
-    onSuccess: () => {
+    onSuccess: (_, to_reject_id) => {
+      queryClient.setQueryData(["requests"], (old: any) => {
+        return old.filter((el: any) => el.id !== to_reject_id);
+      });
       toast.success("rejected successfully");
     },
     onError: () => {
