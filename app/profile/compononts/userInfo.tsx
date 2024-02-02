@@ -32,6 +32,7 @@ import useGetFrdReq from "@/app/friends/hooks/useGetFrReq";
 import useBlock from "@/app/friends/hooks/useBlockUser";
 import useGetBlocked from "@/app/friends/hooks/useGetBlocked";
 import useUnBlock from "@/app/friends/hooks/useUnBlockUser";
+import useAcceptFriend from "@/app/friends/hooks/useAcceptFriend";
 
 export default function UserInfo({
   user,
@@ -54,13 +55,18 @@ export default function UserInfo({
   const { mutate: block } = useBlock();
   const { mutate: unBlock } = useUnBlock();
   const { data: friendReq } = useGetFrdReq();
+  const { mutate: acceptFriend } = useAcceptFriend();
   const { data: friends, isSuccess } = useGetFriends(current_user_id);
   const id = user.id;
   const isFriend =
     isSuccess && friends.some((friend: User) => friend.id === id);
 
   const isReqSent = friendReq?.some((req: any) => req.to_user.id === id);
+  const recReqId = friendReq?.find(
+    (req: any) => req.to_user.id == current_user_id
+  )?.id;
 
+  console.log(friendReq);
   const handleSubmit = () => {
     if (status !== user.status) {
       editUser({ id, status });
@@ -174,7 +180,7 @@ export default function UserInfo({
             </Button>
           ) : (
             <>
-              {!isFriend && !isBlocked && (
+              {!isFriend && !isBlocked && !recReqId ? (
                 <Button
                   className="mt-6 w-full"
                   variant="outline"
@@ -183,6 +189,22 @@ export default function UserInfo({
                 >
                   Add Friend
                 </Button>
+              ) : (
+                recReqId && (
+                  <Button
+                    className="mt-6 w-full"
+                    variant="outline"
+                    onClick={() =>
+                      acceptFriend({
+                        user_id: current_user_id,
+                        friend: user,
+                        to_accept_id: recReqId,
+                      })
+                    }
+                  >
+                    Accept Friend Request
+                  </Button>
+                )
               )}
               {isFriend && (
                 <>

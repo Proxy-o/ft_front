@@ -17,9 +17,11 @@ export default function useAcceptFriend() {
 
   const mutation = useMutation({
     mutationFn: ({
+      user_id,
       friend,
       to_accept_id,
     }: {
+      user_id: string;
       friend: User;
       to_accept_id: string;
     }) => acceptFriend(to_accept_id),
@@ -27,10 +29,13 @@ export default function useAcceptFriend() {
       queryClient.setQueryData(["requests"], (old: any) => {
         return old.filter((el: any) => el.id !== variables.to_accept_id);
       });
-      queryClient.setQueryData(["friends"], (old: any) => {
-        if (!old) return [variables.friend];
-        return [...old, variables.friend];
-      });
+      queryClient.setQueryData(
+        ["friends", variables.user_id.toString()],
+        (old: any) => {
+          if (!old) return [variables.friend];
+          return [...old, variables.friend];
+        }
+      );
       toast.success("Friend request accepted");
     },
     onError: (err) => {

@@ -16,7 +16,7 @@ export default function FriendRequests() {
   const { data, isSuccess } = useGetFrdReq();
   const { mutate: acceptFriend } = useAcceptFriend();
   const { mutate: reject } = useReject();
-  const user_id = getCookie("user_id");
+  const user_id = getCookie("user_id") as string;
 
   const filteredData =
     isSuccess &&
@@ -51,7 +51,11 @@ export default function FriendRequests() {
                 <CheckCircle
                   className="text-green-500 hover:text-green-400 hover:scale-[1.1] transition-all mr-2 cursor-pointer"
                   onClick={() =>
-                    acceptFriend({ friend: from_user, to_accept_id: id })
+                    acceptFriend({
+                      user_id,
+                      friend: from_user,
+                      to_accept_id: id,
+                    })
                   }
                 />
                 <XCircle
