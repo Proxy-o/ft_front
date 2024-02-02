@@ -85,7 +85,8 @@ export default function UserInfo({
             Unblock
           </Button>
         ) : (
-          !isBlocked && (
+          !isBlocked &&
+          current_user_id != id && (
             <Button
               className="bg-red-800/25"
               variant={"outline"}
@@ -192,7 +193,7 @@ export default function UserInfo({
               ) : (
                 recReqId && (
                   <Button
-                    className="mt-6 w-full"
+                    className="mt-6 w-full bg-green-400/20"
                     variant="outline"
                     onClick={() =>
                       acceptFriend({
@@ -202,7 +203,7 @@ export default function UserInfo({
                       })
                     }
                   >
-                    Accept Friend Request
+                    Accept Request
                   </Button>
                 )
               )}

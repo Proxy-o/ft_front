@@ -30,6 +30,12 @@ export default function useUnfriend() {
           return old.filter((el: any) => el.id !== variables.to_unfriend.id);
         }
       );
+      queryClient.setQueryData(
+        ["friends", variables.to_unfriend.id.toString()],
+        (old: any) => {
+          return old.filter((el: any) => el.id !== variables.user_id);
+        }
+      );
       toast.success("Unfriended successfully");
     },
     onError: (err) => {

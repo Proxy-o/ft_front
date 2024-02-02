@@ -14,8 +14,7 @@ import useGetFriends from "@/app/chat/hooks/useGetFriends";
 import getCookie from "@/lib/functions/getCookie";
 import { User } from "@/lib/types";
 
-export default function FriendList() {
-  const user_id = getCookie("user_id");
+export default function FriendList({ user_id }: { user_id: string }) {
   const { data, isSuccess } = useGetFriends(user_id || "0");
   const friends = data;
   return (

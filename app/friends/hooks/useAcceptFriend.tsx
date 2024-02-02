@@ -36,6 +36,7 @@ export default function useAcceptFriend() {
           return [...old, variables.friend];
         }
       );
+
       toast.success("Friend request accepted");
     },
     onError: (err) => {
