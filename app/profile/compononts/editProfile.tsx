@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import {
   Dialog,
   DialogClose,
@@ -12,20 +12,14 @@ import { SquarePen } from "lucide-react";
 import { CardContent, CardFooter, Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import useEditUser from "../hooks/useEditUser";
 import { User } from "@/lib/types";
-import { UserContext } from "@/lib/providers/UserContext";
-import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 export default function EditProfile({ user }: { user: User }) {
   const [userInfo, setUserInfo] = useState<User>(user);
   const { mutate: editUser } = useEditUser();
-
-  const handleSubmit = () => {
-    editUser(userInfo);
-  };
 
   return (
     user && (
@@ -104,7 +98,7 @@ export default function EditProfile({ user }: { user: User }) {
                   buttonVariants({ variant: "default", size: "sm" }),
                   "ml-auto"
                 )}
-                onClick={handleSubmit}
+                onClick={() => editUser(userInfo)}
               >
                 Save
               </DialogClose>

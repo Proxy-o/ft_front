@@ -27,11 +27,7 @@ export default function useEditUser() {
       return res;
     },
     onSuccess: (_, user) => {
-      // id to string
-      const id = user.id.toString();
-
-      // keep the avatar
-      queryClient.setQueryData(["user", id], (old: any) => {
+      queryClient.setQueryData(["user", user.id.toString()], (old: any) => {
         return { ...old, ...user };
       });
       toast.success("Profile updated successfully");
