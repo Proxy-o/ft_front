@@ -4,7 +4,7 @@ import "./globals.css";
 import TanstackProvider from "@/lib/providers/TanstackProvider";
 
 const inter = Inter({ subsets: ["latin"] });
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useState } from "react";
 import HomeSkel from "@/components/skeletons/homeSkel";
 import dynamic from "next/dynamic";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
@@ -23,6 +23,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const mb = useMediaQuery("(min-width: 768px)");
+
   return (
     <html lang="en">
       <body className={inter.className}>

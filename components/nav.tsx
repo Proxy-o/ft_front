@@ -23,6 +23,9 @@ import useMediaQuery from "@/lib/hooks/useMediaQuery";
 import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import useLogout from "@/app/login/hooks/useLogout";
+import { useState } from "react";
+import getCookie from "@/lib/functions/getCookie";
+import useWebSocket from "react-use-websocket";
 
 interface linksProps {
   title: string;
@@ -48,8 +51,8 @@ export default function Nav() {
       variant: "ghost",
     },
     {
-      title: "Sent",
-      link: "/sent",
+      title: "chat",
+      link: "/chat",
       icon: Send,
       variant: "ghost",
     },
@@ -85,6 +88,12 @@ export default function Nav() {
   const handleLogout = () => {
     logout();
   };
+
+  const token = getCookie("refresh");
+  const [socketUrl, setSocketUrl] = useState(
+    process.env.NEXT_PUBLIC_CHAT_URL + "2/?refresh=" + token
+  );
+  const { sendJsonMessage, lastMessage, readyState } = useWebSocket(socketUrl);
   return (
     <div
       data-collapsed={isCollapsed}
@@ -103,7 +112,14 @@ export default function Nav() {
                       "h-10 w-10 mb-2 "
                     )}
                   >
-                    <link.icon className="h-6 w-6" />
+                    {link.title === "chat" && lastMessage ? (
+                      <div className="relative">
+                        <span className="h-2 w-2 bg-primary rounded-full absolute top-0 right-0 "></span>
+                        <link.icon className=" h-6 w-6 " />
+                      </div>
+                    ) : (
+                      <link.icon className=" h-6 w-6 " />
+                    )}
                     <span className="sr-only">{link.title}</span>
                   </Link>
                 </TooltipTrigger>
@@ -122,10 +138,17 @@ export default function Nav() {
               className={cn(
                 buttonVariants({ variant: link.variant, size: "sm" }),
 
-                "justify-start mb-2"
+                "justify-start mb-2 "
               )}
             >
-              <link.icon className="mr-2 h-6 w-6 " />
+              {link.title === "chat" && lastMessage ? (
+                <div className="relative">
+                  <span className="h-2 w-2 bg-primary rounded-full absolute top-0 right-0 "></span>
+                  <link.icon className="mr-2 h-6 w-6 " />
+                </div>
+              ) : (
+                <link.icon className="mr-2 h-6 w-6 " />
+              )}
               {link.title}
             </Link>
           )
