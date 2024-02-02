@@ -7,7 +7,6 @@ import { toast } from "sonner";
 // login hook
 export default function useRegister() {
   const router = useRouter();
-  const { setCurrentUser } = useContext(UserContext);
   const mutation = useMutation({
     mutationFn: async (data: {
       username: string;

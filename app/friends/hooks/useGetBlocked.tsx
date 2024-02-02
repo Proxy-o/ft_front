@@ -6,7 +6,7 @@ async function getBlockedUsers() {
   return response.data;
 }
 export default function useGetBlocked() {
-  const queryKey = ["friends", "blocked"];
+  const queryKey = ["blocked"];
 
   const res = useQuery({
     queryKey: queryKey,

@@ -11,12 +11,13 @@ async function unblock(to_unblock_id: string) {
 
 export default function useUnBlock() {
   const queryClient = useQueryClient();
-  queryClient.invalidateQueries({
-    queryKey: [`friends`],
-  });
+
   const mutation = useMutation({
     mutationFn: (to_unblock_id: string) => unblock(to_unblock_id),
-    onSuccess: () => {
+    onSuccess: (_, to_unblock_id) => {
+      queryClient.setQueryData(["blocked"], (old: any) => {
+        return old.filter((el: any) => el.id !== to_unblock_id);
+      });
       toast.success("unblocked successfully");
     },
     onError: (err) => {

@@ -5,11 +5,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useContext } from "react";
 import { toast } from "sonner";
 
-const editUser = async (data: User) => {
+const editUser = async (user: User) => {
   try {
     // remove avatar from user object
-    delete data.avatar;
-    const response = await axiosInstance.put(`/user/${data.id}`, data);
+    delete user.avatar;
+    const response = await axiosInstance.put(`/user/${user.id}`, user);
     return response.data;
   } catch (error: any) {
     if (error.response && error.response.status !== 401) {
@@ -22,13 +22,17 @@ export default function useEditUser() {
   const queryClient = useQueryClient();
 
   const info = useMutation({
-    mutationFn: async (data: User) => {
-      const res = await editUser(data);
+    mutationFn: async (user: User) => {
+      const res = await editUser(user);
       return res;
     },
-    onSuccess: (data) => {
-      queryClient.invalidateQueries({
-        queryKey: [`user`],
+    onSuccess: (_, user) => {
+      // id to string
+      const id = user.id.toString();
+
+      // keep the avatar
+      queryClient.setQueryData(["user", id], (old: any) => {
+        return { ...old, ...user };
       });
       toast.success("Profile updated successfully");
     },

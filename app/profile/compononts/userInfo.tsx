@@ -83,7 +83,9 @@ export default function UserInfo({
             <Button
               className="bg-red-800/25"
               variant={"outline"}
-              onClick={() => block(id)}
+              onClick={() =>
+                block({ to_block: user, user_id: current_user_id })
+              }
             >
               Block
             </Button>

@@ -13,12 +13,13 @@ async function unfriend(to_unfriend_id: string) {
 
 export default function useUnfriend() {
   const queryClient = useQueryClient();
-  queryClient.invalidateQueries({
-    queryKey: [`friends`],
-  });
+
   const mutation = useMutation({
     mutationFn: (to_unfriend_id: string) => unfriend(to_unfriend_id),
-    onSuccess: () => {
+    onSuccess: (_, to_unfriend_id) => {
+      queryClient.setQueryData(["friends"], (old: any) => {
+        return old.filter((el: any) => el.id !== to_unfriend_id);
+      });
       toast.success("Unfriended successfully");
     },
     onError: () => {

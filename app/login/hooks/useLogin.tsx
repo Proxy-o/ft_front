@@ -8,14 +8,12 @@ import { toast } from "sonner";
 // login hook
 export default function useLogin() {
   const router = useRouter();
-  const { setCurrentUser } = useContext(UserContext);
   const mutation = useMutation({
     mutationFn: async (data: { username: string; password: string }) => {
       const response = await axiosInstance.post("/login", data);
       return response.data;
     },
     onSuccess: (data) => {
-      setCurrentUser(data.user);
       var date = new Date();
       date.setTime(date.getTime() + 30 * 24 * 60 * 60 * 1000); // 30 days
       var expires = "; expires=" + date.toUTCString();
