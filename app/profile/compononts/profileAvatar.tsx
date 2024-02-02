@@ -43,7 +43,7 @@ export default function ProfileAvatar({
   return (
     user && (
       <form onSubmit={handleSubmit} className="relative">
-        <Avatar className="rounded-sm w-full h-full">
+        <Avatar className="rounded-sm w-full h-full ">
           <AvatarImage
             src={user.avatar}
             alt="@shadcn"

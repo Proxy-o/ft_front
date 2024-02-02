@@ -91,8 +91,8 @@ export default function UserInfo({
           !isBlocked &&
           current_user_id != id && (
             <Button
-              className="bg-red-800/25"
-              variant={"outline"}
+              className="bg-red-800/85 relative z-50"
+              variant={"default"}
               onClick={() =>
                 block({ to_block: user, user_id: current_user_id })
               }
