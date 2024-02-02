@@ -1,5 +1,5 @@
 "use client";
-import React, { use, useContext, useEffect, useRef } from "react";
+import React, { use, useContext, useEffect, useRef, useState } from "react";
 import UserInfo from "./userInfo";
 import GamesTable from "./gamesTable";
 import States from "./states";
@@ -8,9 +8,12 @@ import getCookie from "@/lib/functions/getCookie";
 import FriendList from "@/app/friends/components/friendList";
 import useGetBlocked from "@/app/friends/hooks/useGetBlocked";
 import useGetFriends from "@/app/chat/hooks/useGetFriends";
+import ChatCard from "@/app/chat/components/chatCard";
+import { Cross, MessageCircle, XCircle } from "lucide-react";
 
 export default function Profile({ id }: { id: string }) {
   const id_cookie = getCookie("user_id") as string;
+  const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
 
   const { data, isSuccess } = useGetUser(id);
   const { data: blocked } = useGetBlocked();
@@ -21,12 +24,11 @@ export default function Profile({ id }: { id: string }) {
     if (user.id == id && user.blocked_by_user == true) return true;
   });
 
-  console.log(isFriend);
   const logged_in = getCookie("logged_in");
 
   const canEdit = logged_in === "yes" && id === id_cookie ? true : false;
   return (
-    <div className="lg:flex justify-center gap-4 p-4 ">
+    <div className="relative lg:flex justify-center gap-4 p-4 ">
       {isSuccess && (
         <>
           <div className="flex flex-col gap-4 mb-4 sm:min-w-[40rem]">
@@ -36,8 +38,21 @@ export default function Profile({ id }: { id: string }) {
               current_user_id={id_cookie || "0"}
               isBlocked={isBlocked}
               blocked_by_current_user={blocked_by_current_user}
+              setChatOpen={setIsChatOpen}
             />
-
+            {isChatOpen && (
+              // get the high of the screen and put it in the bottom
+              <div className="relative">
+                <XCircle
+                  className="absolute z-50 -top-3 -left-2 text-red-600 hover:cursor-pointer hover:scale-[1.05] transition duration-300 ease-in-out"
+                  onClick={() => setIsChatOpen(false)}
+                />
+                <ChatCard
+                  senderId={parseInt(id_cookie)}
+                  receiverId={parseInt(id)}
+                />
+              </div>
+            )}
             {!isBlocked && <GamesTable />}
           </div>
           <div className="flex flex-col gap-4">

@@ -33,6 +33,7 @@ import useBlock from "@/app/friends/hooks/useBlockUser";
 import useGetBlocked from "@/app/friends/hooks/useGetBlocked";
 import useUnBlock from "@/app/friends/hooks/useUnBlockUser";
 import useAcceptFriend from "@/app/friends/hooks/useAcceptFriend";
+import ChatCard from "@/app/chat/components/chatCard";
 
 export default function UserInfo({
   user,
@@ -40,12 +41,14 @@ export default function UserInfo({
   current_user_id,
   isBlocked,
   blocked_by_current_user,
+  setChatOpen,
 }: {
   user: User;
   canEdit: boolean;
   current_user_id: string;
   isBlocked: boolean;
   blocked_by_current_user: boolean;
+  setChatOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const [visible, setVisible] = useState(true);
   const [status, setStatus] = useState(user.status);
@@ -209,7 +212,11 @@ export default function UserInfo({
               )}
               {isFriend && (
                 <>
-                  <Button className="mt-6 w-full" variant="outline">
+                  <Button
+                    className="mt-6 w-full"
+                    variant="outline"
+                    onClick={() => setChatOpen((val) => !val)}
+                  >
                     Message
                   </Button>
                   <Button className="mt-6 w-full" variant="outline">

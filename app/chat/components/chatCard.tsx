@@ -57,7 +57,7 @@ export default function ChatCard({ senderId, receiverId }: Conversation) {
   return (
     <Card className="relative ">
       <div
-        className="no-scrollbar h-[30rem] overflow-auto flex flex-col-reverse mx-2"
+        className=" h-[30rem] overflow-auto flex flex-col-reverse mx-2 p-4 scrollbar scrollbar-thumb-primary/10 scrollbar-track-secondary scrollbar-w-2  scrollbar-rounded-sm"
         id="scrollableDiv"
       >
         <InfiniteScroll
