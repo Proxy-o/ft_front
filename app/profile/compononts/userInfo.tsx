@@ -195,7 +195,9 @@ export default function UserInfo({
                   <Button
                     className="mt-6 w-full"
                     variant="outline"
-                    onClick={() => unfriend(id)}
+                    onClick={() =>
+                      unfriend({ to_unfriend: user, user_id: current_user_id })
+                    }
                   >
                     unfriend
                   </Button>

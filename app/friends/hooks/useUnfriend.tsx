@@ -1,4 +1,5 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
+import { User } from "@/lib/types";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
@@ -15,14 +16,24 @@ export default function useUnfriend() {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: (to_unfriend_id: string) => unfriend(to_unfriend_id),
-    onSuccess: (_, to_unfriend_id) => {
-      queryClient.setQueryData(["friends"], (old: any) => {
-        return old.filter((el: any) => el.id !== to_unfriend_id);
-      });
+    mutationFn: ({
+      to_unfriend,
+      user_id,
+    }: {
+      to_unfriend: User;
+      user_id: string;
+    }) => unfriend(to_unfriend.id),
+    onSuccess: (_, variables) => {
+      queryClient.setQueryData(
+        ["friends", variables.user_id.toString()],
+        (old: any) => {
+          return old.filter((el: any) => el.id !== variables.to_unfriend.id);
+        }
+      );
       toast.success("Unfriended successfully");
     },
-    onError: () => {
+    onError: (err) => {
+      console.log(err);
       toast.error("Something went wrong");
     },
   });
