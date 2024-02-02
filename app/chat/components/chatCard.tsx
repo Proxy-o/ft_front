@@ -28,6 +28,7 @@ export default function ChatCard({ senderId, receiverId }: Conversation) {
     receiverId,
   });
 
+  const hasNoMessages = data?.pages[0].results.length === 0;
   const handelSendMessage = () => {
     const toSend = "/pm " + receiverId + " " + message;
     sendJsonMessage({ message: toSend });
@@ -55,21 +56,21 @@ export default function ChatCard({ senderId, receiverId }: Conversation) {
   }, [fetchNextPage, data]);
 
   return (
-    <Card className="relative ">
+    <div className="relative flex flex-col h-full border-r">
       <div
-        className=" h-[30rem] overflow-auto flex flex-col-reverse mx-2 p-4 scrollbar scrollbar-thumb-primary/10 scrollbar-track-secondary scrollbar-w-2  scrollbar-rounded-sm"
+        className="flex-1 overflow-auto  flex-col-reverse mx-2 pt-2  scrollbar scrollbar-thumb-primary/10 scrollbar-track-secondary scrollbar-w-2  scrollbar-rounded-sm"
         id="scrollableDiv"
       >
         <InfiniteScroll
-          className="flex flex-col-reverse"
+          className="flex flex-col-reverse "
           dataLength={msgLength}
           next={handleFetchNextPage}
           inverse={true}
           hasMore={hasMore}
-          loader={<h4>Loading...</h4>}
+          loader={""}
           scrollableTarget="scrollableDiv"
         >
-          {isSuccess &&
+          {isSuccess && !hasNoMessages ? (
             data?.pages.map((page) => {
               return page.results.map((result: any, index: number) => {
                 return (
@@ -80,11 +81,17 @@ export default function ChatCard({ senderId, receiverId }: Conversation) {
                   />
                 );
               });
-            })}
+            })
+          ) : (
+            <div className="flex justify-center items-center  bg-secondary/30 rounded-sm mt-24 h-12">
+              <p>No Messages yet</p>
+            </div>
+          )}
         </InfiniteScroll>
       </div>
-      <div className="flex justify-between items-center bg-secondary/30 w-full p-2 relative">
+      <div className="flex  justify-between items-center bg-secondary/30 w-full p-2 relative">
         <Input
+          placeholder="Type a message"
           value={message}
           className="w-full mr-2 h-12"
           onChange={(e) => setMessage(e.target.value)}
@@ -96,12 +103,12 @@ export default function ChatCard({ senderId, receiverId }: Conversation) {
         />
         <Button
           onClick={handelSendMessage}
-          className="absolute right-6 h-15 w-13"
+          className="absolute right-6 border-none "
           variant={"outline"}
         >
-          <SendHorizonal className="text-primary" size={15} />
+          <SendHorizonal className="text-primary" size={20} />
         </Button>
       </div>
-    </Card>
+    </div>
   );
 }
