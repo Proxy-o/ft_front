@@ -16,6 +16,7 @@ export default function Profile({ id }: { id: string }) {
   const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
 
   const { data, isSuccess } = useGetUser(id);
+  const { data: sender, isSuccess: isSender } = useGetUser(id_cookie);
   const { data: blocked } = useGetBlocked();
   const { data: friends } = useGetFriends(id_cookie);
   const isBlocked = blocked?.some((user: any) => user.id == id);
@@ -27,6 +28,19 @@ export default function Profile({ id }: { id: string }) {
   const logged_in = getCookie("logged_in");
 
   const canEdit = logged_in === "yes" && id === id_cookie ? true : false;
+  const chatRef = useRef<HTMLDivElement>(null); // Specify the type as React.RefObject<HTMLDivElement>
+
+  useEffect(() => {
+    if (isChatOpen && isSender && isSuccess) {
+      if (chatRef.current) {
+        chatRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "end",
+          inline: "nearest",
+        });
+      }
+    }
+  }, [isChatOpen, isSender, isSuccess]);
   return (
     <div className="relative lg:flex justify-center gap-4 p-4 ">
       {isSuccess && (
@@ -40,17 +54,14 @@ export default function Profile({ id }: { id: string }) {
               blocked_by_current_user={blocked_by_current_user}
               setChatOpen={setIsChatOpen}
             />
-            {isChatOpen && (
+            {isChatOpen && isSender && isSuccess && (
               // get the high of the screen and put it in the bottom
-              <div className="relative">
+              <div className="relative  " ref={chatRef}>
                 <XCircle
                   className="absolute z-50 -top-3 -left-2 text-red-600 hover:cursor-pointer hover:scale-[1.05] transition duration-300 ease-in-out"
                   onClick={() => setIsChatOpen(false)}
                 />
-                <ChatCard
-                  senderId={parseInt(id_cookie)}
-                  receiverId={parseInt(id)}
-                />
+                <ChatCard sender={sender} receiver={data} />
               </div>
             )}
             {!isBlocked && <GamesTable />}

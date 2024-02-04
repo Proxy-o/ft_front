@@ -1,4 +1,4 @@
 export interface Conversation {
-  senderId: number;
-  receiverId: number;
+  senderId: string;
+  receiverId: string;
 }

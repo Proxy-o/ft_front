@@ -14,28 +14,31 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { Users } from "lucide-react";
+import useGetUser from "@/app/profile/hooks/useGetUser";
 
 export default function ChatList() {
   const user_id = getCookie("user_id");
   const { data, isSuccess } = useGetFriends(user_id || "0");
-  const [receiverId, setReceiverId] = React.useState<number>(0);
+  const { data: sender, isSuccess: isSender } = useGetUser(user_id || "0");
+
+  const [receiver, setReceiver] = React.useState<User>();
   const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
   const handleChatOpen = (friend: User) => {
     if (!isChatOpen) {
       setIsChatOpen(true);
     }
     setReceiverId(parseInt(friend.id));
+    setReceiver(friend);
   };
   const mb = useMediaQuery("(min-width: 768px)");
+  const [receiverId, setReceiverId] = useState<number>(0);
 
   return (
     <>
       <div className="relative flex">
-        {receiverId ? (
-          <ChatCard senderId={parseInt(user_id!)} receiverId={receiverId} />
-        ) : (
-          <></>
-        )}
+        {receiverId && isSender ? (
+          <ChatCard receiver={receiver!} sender={sender} />
+        ) : null}
         {mb || !receiverId ? (
           <div
             className={cn(
@@ -81,7 +84,7 @@ export default function ChatList() {
                     );
                   })}
               </DrawerContent>
-              <div className="flex w-full justify-center   absolute top-6">
+              <div className="flex   justify-center   absolute  left-10 z-50">
                 <DrawerTrigger className="    w-14 h-9 items-center rounded-full  transition-transform flex justify-center  ">
                   <Users className="w-full h-30  " />
                 </DrawerTrigger>

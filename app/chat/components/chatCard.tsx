@@ -10,10 +10,22 @@ import { Input } from "@/components/ui/input";
 import { useQueryClient } from "@tanstack/react-query";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { SendHorizonal } from "lucide-react";
+import { User } from "@/lib/types";
+import useGetUser from "@/app/profile/hooks/useGetUser";
+import { Avatar } from "@radix-ui/react-avatar";
+import { AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-export default function ChatCard({ senderId, receiverId }: Conversation) {
-  const token = getCookie("refresh");
+export default function ChatCard({
+  receiver,
+  sender,
+}: {
+  receiver: User;
+  sender: User;
+}) {
   const user_id = getCookie("user_id");
+  const senderId = sender.id;
+  const receiverId = receiver.id;
+  const token = getCookie("refresh");
   const [socketUrl, setSocketUrl] = useState(
     process.env.NEXT_PUBLIC_CHAT_URL + "2/?refresh=" + token
   );
@@ -60,6 +72,19 @@ export default function ChatCard({ senderId, receiverId }: Conversation) {
 
   return (
     <div className=" flex flex-col h-screen border-r w-full  relative">
+      <div className=" flex justify-end md:justify-start ml-2 p-1 shadow-sm border-b-2">
+        <Avatar className=" mr-2">
+          <AvatarImage
+            src={receiver.avatar}
+            alt="profile image"
+            className="rounded-full h-8 w-8"
+          />
+          <AvatarFallback className="rounded-sm">PF</AvatarFallback>
+        </Avatar>
+        <p className="text-center flex items-center mr-2 w-5 overflow-clip ">
+          {receiver.username}
+        </p>
+      </div>
       <div
         className="  overflow-auto flex flex-col-reverse mx-2  scrollbar scrollbar-thumb-primary/10 scrollbar-track-secondary scrollbar-w-2 p-2 pt-4"
         id="scrollableDiv"
