@@ -62,7 +62,7 @@ export default function ChatList() {
         ) : (
           <>
             <Drawer>
-              <DrawerContent className=" ">
+              <DrawerContent className="overflow-auto ">
                 {isSuccess &&
                   data.map((friend: User) => {
                     return (
@@ -81,9 +81,9 @@ export default function ChatList() {
                     );
                   })}
               </DrawerContent>
-              <div className="flex w-full justify-center mt-4 absolute">
-                <DrawerTrigger className="bg-primary/10    w-14 h-9 items-center rounded-full hover:bg-primary/20 hover:scale-105 transition-transform flex justify-center  ">
-                  <Users className="w-6 h-6  " />
+              <div className="flex w-full justify-center   absolute top-6">
+                <DrawerTrigger className="    w-14 h-9 items-center rounded-full  transition-transform flex justify-center  ">
+                  <Users className="w-full h-30  " />
                 </DrawerTrigger>
               </div>
             </Drawer>

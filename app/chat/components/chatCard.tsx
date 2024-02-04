@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import getCookie from "@/lib/functions/getCookie";
 import React, { useState, useCallback, useEffect } from "react";
 import useWebSocket from "react-use-websocket";
-import { Card } from "@/components/ui/card";
 import useGetMessages from "../hooks/useGetMessages";
 import ChatBubble from "./chatBubble";
 import { Conversation } from "../types";
@@ -28,7 +27,6 @@ export default function ChatCard({ senderId, receiverId }: Conversation) {
     receiverId,
   });
 
-  console.log(data);
   const hasNoMessages = data?.pages[0].results.length === 0;
   const handelSendMessage = () => {
     const toSend = "/pm " + receiverId + " " + message;
