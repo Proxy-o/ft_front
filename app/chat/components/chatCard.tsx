@@ -28,10 +28,15 @@ export default function ChatCard({ senderId, receiverId }: Conversation) {
     receiverId,
   });
 
+  console.log(data);
   const hasNoMessages = data?.pages[0].results.length === 0;
   const handelSendMessage = () => {
     const toSend = "/pm " + receiverId + " " + message;
     sendJsonMessage({ message: toSend });
+    queryClient.invalidateQueries({
+      queryKey: [`messages_${senderId}_${receiverId}`],
+    });
+
     setMessage("");
   };
 
@@ -56,9 +61,9 @@ export default function ChatCard({ senderId, receiverId }: Conversation) {
   }, [fetchNextPage, data]);
 
   return (
-    <div className="relative flex flex-col h-full border-r">
+    <div className=" flex flex-col h-screen border-r w-full  relative">
       <div
-        className="  overflow-auto flex flex-col-reverse mx-2 p-4 scrollbar scrollbar-thumb-primary/10 scrollbar-track-secondary scrollbar-w-2  scrollbar-rounded-sm"
+        className="  overflow-auto flex flex-col-reverse mx-2  scrollbar scrollbar-thumb-primary/10 scrollbar-track-secondary scrollbar-w-2 p-2 pt-4"
         id="scrollableDiv"
       >
         <InfiniteScroll
@@ -89,11 +94,11 @@ export default function ChatCard({ senderId, receiverId }: Conversation) {
           )}
         </InfiniteScroll>
       </div>
-      <div className="flex  justify-between items-center bg-secondary/30 w-full p-2 relative">
+      <div className="flex  justify-between items-center bg-secondary/90 w-full p-2 absolute bottom-0 ">
         <Input
           placeholder="Type a message"
           value={message}
-          className="w-full mr-2 h-12"
+          className="w-full mr-2 h-14"
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter") {

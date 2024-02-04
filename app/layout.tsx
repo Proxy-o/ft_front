@@ -36,11 +36,11 @@ export default function RootLayout({
           >
             <UserContextProvider>
               <Suspense fallback={<HomeSkel />}>
-                <div className="md:flex">
+                <div className="md:flex relative">
                   {mb ? (
                     <Nav />
                   ) : (
-                    <div className="pl-1 mt-1 w-full ">
+                    <div className="pl-1 mt-1 w-full  absolute z-50">
                       <Sheet>
                         <SheetTrigger>
                           <Menu />
@@ -51,7 +51,7 @@ export default function RootLayout({
                       </Sheet>
                     </div>
                   )}
-                  <main className="border-l-[0.04rem] w-full sm:mx-0 h-screen overflow-auto">
+                  <main className="border-l-[0.04rem] w-full sm:mx-0 h-screen overflow-auto ">
                     {children}
                   </main>
                   <Toaster />

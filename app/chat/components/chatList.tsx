@@ -1,17 +1,10 @@
-import { Card } from "@/components/ui/card";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { User } from "@/lib/types";
 import ChatFriendCard from "./chatFriendCard";
 import ChatCard from "./chatCard";
 import getCookie from "@/lib/functions/getCookie";
 import useGetFriends from "../hooks/useGetFriends";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetHeader,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
 import {
@@ -39,12 +32,7 @@ export default function ChatList() {
     <>
       <div className="relative flex">
         {receiverId ? (
-          <div
-            className=" w-full absolute md:relative -top-8 md:top-0 h-screen "
-            hidden={!isChatOpen}
-          >
-            <ChatCard senderId={parseInt(user_id!)} receiverId={receiverId} />
-          </div>
+          <ChatCard senderId={parseInt(user_id!)} receiverId={receiverId} />
         ) : (
           <></>
         )}
