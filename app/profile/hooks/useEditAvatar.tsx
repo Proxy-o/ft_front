@@ -28,7 +28,6 @@ export default function useEditAvatar() {
       return res;
     },
     onSuccess: (data, variables) => {
-      console.log(data);
       queryClient.setQueryData(
         ["user", variables.id.toString()],
         (old: any) => {

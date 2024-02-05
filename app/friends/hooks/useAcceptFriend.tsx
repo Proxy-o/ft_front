@@ -40,7 +40,6 @@ export default function useAcceptFriend() {
       toast.success("Friend request accepted");
     },
     onError: (err) => {
-      console.log(err);
       toast.error("Something went wrong");
     },
   });

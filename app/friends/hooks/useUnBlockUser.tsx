@@ -21,7 +21,6 @@ export default function useUnBlock() {
       toast.success("unblocked successfully");
     },
     onError: (err) => {
-      console.log(err);
       toast.error("Something went wrong");
     },
   });

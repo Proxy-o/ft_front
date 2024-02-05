@@ -39,7 +39,6 @@ export default function useUnfriend() {
       toast.success("Unfriended successfully");
     },
     onError: (err) => {
-      console.log(err);
       toast.error("Something went wrong");
     },
   });

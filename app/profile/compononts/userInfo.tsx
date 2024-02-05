@@ -69,7 +69,6 @@ export default function UserInfo({
     (req: any) => req.to_user.id == current_user_id
   )?.id;
 
-  console.log(friendReq);
   const handleSubmit = () => {
     if (status !== user.status) {
       editUser({ id, status });
