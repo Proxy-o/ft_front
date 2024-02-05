@@ -5,7 +5,7 @@ import { useContext } from "react";
 
 const fetchUser = async ({ id }: { id: string }) => {
   try {
-    if (id === "0") throw new Error("User not found");
+    if (id === "0") return null;
     const response = await axiosInstance.get(`/user/${id}`);
     return response.data;
   } catch (error: any) {

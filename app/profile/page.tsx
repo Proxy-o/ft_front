@@ -6,13 +6,13 @@ import { useContext, useEffect } from "react";
 import getCookie from "@/lib/functions/getCookie";
 import useGetUser from "./hooks/useGetUser";
 import { useRouter } from "next/navigation";
+import LoginForm from "../login/components/LoginForm";
 
 export default function Page() {
   const user_id = getCookie("user_id");
-  const logged_in = getCookie("logged_in");
+  const { data: user, error, isSuccess } = useGetUser(user_id || "0");
 
-  const router = useRouter();
-  if (logged_in !== "yes") router.push("/login");
+  if (!user && isSuccess) return <LoginForm />;
 
-  return <Profile id={user_id || "0"} />;
+  return isSuccess && <Profile id={user_id || "0"} />;
 }

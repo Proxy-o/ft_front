@@ -38,7 +38,7 @@ export default function useLogin() {
         expires +
         "; path=/" +
         "; samesite=strict; secure";
-      router.push("/profile");
+      router.push("/");
     },
   });
   return mutation;

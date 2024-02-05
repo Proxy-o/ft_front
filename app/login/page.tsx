@@ -2,14 +2,17 @@
 import { useRouter } from "next/navigation";
 import LoginForm from "./components/LoginForm";
 import getCookie from "@/lib/functions/getCookie";
+import { use, useEffect } from "react";
 
 export default function Page() {
-  const logedIn = getCookie("logged_in");
+  const loggedIn = getCookie("logged_in");
   const router = useRouter();
 
-  if (logedIn) {
-    router.push("/");
-  }
+  useEffect(() => {
+    if (loggedIn === "yes") {
+      router.push("/");
+    }
+  }, [loggedIn, router]);
 
   return <LoginForm />;
 }
