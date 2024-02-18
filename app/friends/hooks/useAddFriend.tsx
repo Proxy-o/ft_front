@@ -15,7 +15,7 @@ const inviteFriend = async (userId: string) => {
   }
 };
 
-export default function useInviteFriend() {
+export default function useAddFriend() {
   const queryClient = useQueryClient();
 
   const info = useMutation({
@@ -35,3 +35,4 @@ export default function useInviteFriend() {
   });
   return info;
 }
+  

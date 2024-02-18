@@ -1,6 +1,6 @@
 "use client";
 
-import Profile from "./compononts/Profile";
+import Profile from "./components/Profile";
 import { useContext, useEffect } from "react";
 import getCookie from "@/lib/functions/getCookie";
 import useGetUser from "./hooks/useGetUser";

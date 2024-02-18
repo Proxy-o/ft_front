@@ -1,4 +1,4 @@
-import axiosInstance from "@/lib/functions/axiosInstance";
+ import axiosInstance from "@/lib/functions/axiosInstance";
 import { User } from "@/lib/types";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
