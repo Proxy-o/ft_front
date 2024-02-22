@@ -6,6 +6,8 @@ import useGetUser from "../profile/hooks/useGetUser";
 import { useEffect } from "react";
 import Game from "./components/game";
 import Invitations from "./components/invitations";
+import InviteFriend from "./components/inviteFriend";
+import { Separator } from "@/components/ui/separator";
 
 export default function Page() {
     const user_id = getCookie("user_id");
@@ -18,8 +20,12 @@ export default function Page() {
         }
     }, [user, isSuccess, router]);
     return (
-        <div className="w-full h-full flex flex-row justify-center items-center">
-            <Invitations />
+        <div className="w-fit h-fit flex flex-row justify-start items-start dark:text-white">
+            <div className="w-fit h-fit flex flex-col justify-start items-start dark:text-white">
+                <Invitations />
+                <Separator className="w-full mt-4" />
+                <InviteFriend />
+            </div>
             <Game />
         </div>
     );

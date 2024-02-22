@@ -116,7 +116,7 @@ const Game = () => {
     }
     return (
         <div
-            className="w-full h-full  flex justify-center items-center text-white"
+            className="w-full h-full flex flex-col justify-center items-center text-white"
         >
             <h1 className="text-4xl">Ping Pong</h1><br/>
             {/* <canvas id="myCanvas" width="480" height="320"></canvas> */}

@@ -46,7 +46,7 @@ export default function Nav() {
     },
     {
       title: "Play",
-      link: "/play",
+      link: "/game",
       icon: GamepadIcon,
       variant: "ghost",
     },
