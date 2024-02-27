@@ -1,16 +1,51 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
 
 const getInvitations = async () => {
-        const response = await axiosInstance.get(`/game/invitations`);
-        return response.data;
+    const response = await axiosInstance.get(`/game/invitations`);
+    return response.data;
+}
+
+async function accept(invitationId: string) {
+    const res = await axiosInstance.post("game/accept_invitation", {
+        invitationId,
+    });
+    if (res.status === 200) {
+        // go to game page
+    }
+}
+
+async function decline(invitationId: string) {
+    // remove invitation from db
+    const res = await axiosInstance.post("game/decline_invitation", {
+        invitationId,
+    });
+    if (res.status === 200) {
+        // remove invitation from state
+        
+    }
 }
 
 export default function useGetInvitations(userId: string) {
+    const queryClient = useQueryClient();
     const { data } = useQuery({
             queryKey: ["invitations", userId],
             queryFn: () => getInvitations(),
         },
     );
-    return data;
+    const { mutateAsync: acceptMutation } = useMutation({
+        mutationFn: accept,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["invitations"] });
+        }
+    });
+
+    const { mutateAsync: declineMutation } = useMutation({
+        mutationFn: decline,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["invitations"] });
+        }
+    });
+    return { data, acceptMutation, declineMutation };
 }

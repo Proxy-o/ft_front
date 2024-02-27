@@ -26,7 +26,7 @@ export default function Page() {
                 <Separator className="w-full mt-4" />
                 <InviteFriend />
             </div>
-            <Game />
+            {/* <Game /> */}
         </div>
     );
 }
