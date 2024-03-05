@@ -1,5 +1,4 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { User } from "@/lib/types";
 import { MessageCircle, User2 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -33,11 +32,11 @@ export default function ChatFriendCard({
         </p>
       </div>
       <div className="flex justify-center items-center">
-        <User2 onClick={handleViewProfile} className=" text-green-600/70 mr-2">
+        <User2 onClick={handleViewProfile} className="text-green-600/70 mr-2">
           Profile
         </User2>
         <MessageCircle
-          className="   text-primary"
+          className="text-primary"
           onClick={() => setReceiverId(parseInt(friend.id))}
         >
           Chat
