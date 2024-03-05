@@ -23,9 +23,10 @@ import useMediaQuery from "@/lib/hooks/useMediaQuery";
 import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import useLogout from "@/app/login/hooks/useLogout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import getCookie from "@/lib/functions/getCookie";
 import useWebSocket from "react-use-websocket";
+import useInvitationSocket from "@/lib/hooks/InvitationSocket";
 
 interface linksProps {
   title: string;
@@ -36,7 +37,9 @@ interface linksProps {
 
 export default function Nav() {
   const { mutate: logout } = useLogout();
-
+  
+  const {newNotif} = useInvitationSocket();
+  const [notification, setNotification] = useState(false);
   const links: linksProps[] = [
     {
       title: "login",
@@ -94,6 +97,17 @@ export default function Nav() {
     process.env.NEXT_PUBLIC_CHAT_URL + "2/?refresh=" + token
   );
   const { sendJsonMessage, lastMessage, readyState } = useWebSocket(socketUrl);
+
+  useEffect(() => {
+    if (newNotif()) {
+      setNotification(true);
+    }
+  }
+  , [newNotif]);
+
+  // if there is a new message console.log new message
+  // console.log("notification", notification);
+  // console.log("notification", notification);
   return (
     <div
       data-collapsed={isCollapsed}
@@ -147,7 +161,15 @@ export default function Nav() {
                   <link.icon className="mr-2 h-6 w-6 " />
                 </div>
               ) : (
-                <link.icon className="mr-2 h-6 w-6 " />
+                (link.title === "Play" && notification) ? (
+                  <div className="relative">
+                    <link.icon className=" h-6 w-6 " />
+                    <span className="h-3 w-3 bg-white rounded-full absolute top-0 right-0 "></span>
+                    <span className="h-1 w-1 bg-primary rounded-full absolute top-1 right-1 "></span>
+                  </div>
+                  ) : (
+                    <link.icon className=" h-6 w-6 " />
+                  )
               )}
               {link.title}
             </Link>

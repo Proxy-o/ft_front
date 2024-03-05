@@ -1,23 +1,30 @@
-import React, { use, useEffect, useState } from "react";
-import { Separator } from "@/components/ui/separator";
-import { User, UserPlus, Sword } from "lucide-react";
+import { Sword } from "lucide-react";
 import axiosInstance from "@/lib/functions/axiosInstance";
-
 import getCookie from "@/lib/functions/getCookie";
 import useGetFriends from "@/app/chat/hooks/useGetFriends";
+import useInvitationSocket from "@/lib/hooks/InvitationSocket";
 
 
 const inviteFriends = () => {
-    
+    const { handelSendMessage } = useInvitationSocket();
+
     const user_id = getCookie("user_id");
     
     const friends = useGetFriends(user_id || "0");
 
     const invite = async (userid: string) => {
-        const res = await axiosInstance.post("game/send_invitation", {
-            sender: user_id,
-            receiver: userid,
-        });
+        try
+        {
+            const res = await axiosInstance.post("game/send_invitation", {
+                sender: user_id,
+                receiver: userid,
+            });
+            handelSendMessage(userid);
+        }
+        catch (error)
+        {
+            console.log(error);
+        }
     }
 
     return (

@@ -47,5 +47,8 @@ export default function useGetInvitations(userId: string) {
             queryClient.invalidateQueries({ queryKey: ["invitations"] });
         }
     });
-    return { data, acceptMutation, declineMutation };
+    const refetch = () => {
+        queryClient.invalidateQueries({ queryKey: ["invitations"] });
+    }
+    return { data, acceptMutation, declineMutation, refetch };
 }
