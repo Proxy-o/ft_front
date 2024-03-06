@@ -27,6 +27,7 @@ import { useEffect, useState } from "react";
 import getCookie from "@/lib/functions/getCookie";
 import useWebSocket from "react-use-websocket";
 import useInvitationSocket from "@/lib/hooks/InvitationSocket";
+import { toast } from "sonner";
 
 interface linksProps {
   title: string;
@@ -35,6 +36,7 @@ interface linksProps {
   variant: "default" | "ghost";
 }
 
+let lastInvitation:MessageEvent<any> | null = null;
 export default function Nav() {
   const { mutate: logout } = useLogout();
   
@@ -99,6 +101,11 @@ export default function Nav() {
   useEffect(() => {
     if (newNotif()) {
       setNotification(true);
+      let notif = newNotif();
+      if (newNotif() !== null && notif !== lastInvitation) {
+        toast.info("you have a new invitation");
+        lastInvitation = newNotif();
+      }
     }
   }
   , [newNotif]);

@@ -4,10 +4,7 @@ import { Swords } from 'lucide-react';
 import { CircleOff } from 'lucide-react';
 import useInvitationSocket from "@/lib/hooks/InvitationSocket";
 import { useEffect } from "react";
-import { toast } from "sonner";
 
-
-let lastInvitation:MessageEvent<any> | null = null;
 const Invitations = () => {
 
     const user_id = getCookie("user_id");
@@ -31,12 +28,7 @@ const Invitations = () => {
     const {newNotif} = useInvitationSocket();
 
     useEffect(() => {
-        let notif = newNotif();
-        if (newNotif() !== null && notif !== lastInvitation) {
-            toast.info("you have a new invitation");
-            lastInvitation = newNotif();
-            refetch();
-        }
+        refetch();
     }, [newNotif]);
 
 
