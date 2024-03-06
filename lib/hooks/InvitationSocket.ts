@@ -11,16 +11,22 @@ export default function useInvitationSocket() {
     
     const { sendJsonMessage, lastMessage } = useWebSocket(socketUrl);
 
-    const handelSendMessage = (reciever: string) => {
+    const handelSendInvitation = (reciever: string) => {
       const toSend = "/notif " + user_id + " " + reciever;
       sendJsonMessage({ message: toSend });
     };
+
     const newNotif = () => {
       return lastMessage;
     }
 
+    const handleAcceptInvitation = (invitationId: string) => {
+      const toSend = "/accept " + invitationId;
+      sendJsonMessage({ message: toSend });
+    }
 
-    return { handelSendMessage, newNotif };
+
+    return { handelSendInvitation, newNotif, handleAcceptInvitation };
   }
 
   

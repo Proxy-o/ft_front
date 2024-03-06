@@ -1,5 +1,7 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
+import useInvitationSocket from "@/lib/hooks/InvitationSocket";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 
 const getInvitations = async () => {
@@ -8,12 +10,18 @@ const getInvitations = async () => {
 }
 
 async function accept(invitationId: string) {
+    const { handleAcceptInvitation } = useInvitationSocket();
     const res = await axiosInstance.post("game/accept_invitation", {
         invitationId,
     });
     if (res.status === 200) {
-        // go to game page
+        handleAcceptInvitation(invitationId);
     }
+    toast.success("Invitation accepted");
+    setTimeout(() => {
+        toast.info("You will be redirected to the game page");
+    }
+    , 2000);
 }
 
 async function decline(invitationId: string) {
@@ -45,6 +53,7 @@ export default function useGetInvitations(userId: string) {
         mutationFn: decline,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ["invitations"] });
+            toast.warning("Invitation declined");
         }
     });
     const refetch = () => {

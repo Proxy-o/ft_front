@@ -6,7 +6,7 @@ import useInvitationSocket from "@/lib/hooks/InvitationSocket";
 
 
 const inviteFriends = () => {
-    const { handelSendMessage } = useInvitationSocket();
+    const { handelSendInvitation } = useInvitationSocket();
 
     const user_id = getCookie("user_id");
     
@@ -19,7 +19,7 @@ const inviteFriends = () => {
                 sender: user_id,
                 receiver: userid,
             });
-            handelSendMessage(userid);
+            handelSendInvitation(userid);
         }
         catch (error)
         {
