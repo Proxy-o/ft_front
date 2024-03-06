@@ -12,6 +12,8 @@ async function accept(invitationId: string) {
     const res = await axiosInstance.post("game/accept_invitation", {
         invitationId,
     });
+    const gameId = res.data.gameId;
+    console.log(gameId)
     if (res.status === 200) {
         toast.success("Invitation accepted");
         setTimeout(() => {
@@ -19,6 +21,7 @@ async function accept(invitationId: string) {
         }
         , 2000);
     }
+    return gameId;
 }
 
 async function decline(invitationId: string) {

@@ -1,3 +1,5 @@
+"use client";
+
 import getCookie from "@/lib/functions/getCookie";
 import useGetInvitations from "../hooks/useGetInvitations";
 import { Swords } from 'lucide-react';
@@ -5,39 +7,55 @@ import { CircleOff } from 'lucide-react';
 import useInvitationSocket from "@/lib/hooks/InvitationSocket";
 import { useEffect } from "react";
 
-const Invitations = () => {
 
-    const user_id = getCookie("user_id");
-
-    let { data: invitations, acceptMutation, declineMutation, refetch } = useGetInvitations(user_id || "0");
-
-    const { handleAcceptInvitation } = useInvitationSocket();
-    
-    async function acceptInvitation(invitationId: string) {
-        try
-        {
-            await acceptMutation(invitationId);
-            handleAcceptInvitation(invitationId);
-        }
-        catch (error)
-        {
-            console.log(error);
-        }
+// Define an interface for the props
+interface InvitationsProps {
+    invitations: {
+        id: string;
+        sender: {
+            id: string;
+            username: string;
+            avatar: string;
+        };
+    acceptInvitation: (invitationId: string) => Promise<string>;
+    declineMutation: (invitationId: string) => Promise<void>;
+    refetch: () => void; // Specify the type for refetch
     }
+}
 
+const Invitations = (props: {invitations: {
+            id: string,
+            sender: {
+                id: string,
+                username: string,
+                avatar: string,
+            },
+            reciever: {
+                id: string,
+                username: string,
+                avatar: string,
+            },
+            timestamp: string,
+            is_accepted: boolean,
+        }[],
+        acceptInvitation: (invitationId: string) => Promise<string>,
+        declineMutation: (invitationId: string) => Promise<void>,
+        refetch: () => void}
+    ) => {
+    const {invitations, acceptInvitation, declineMutation, refetch} = props;
+    const user_id = getCookie("user_id");
     const {newNotif} = useInvitationSocket();
 
     useEffect(() => {
         refetch();
     }, [newNotif]);
 
-
     return (
         <div className="w-full flex flex-col justify-start items-start dark:text-white">
             <h1 className="text-4xl mt-10 ml-10">Challenges</h1>
             {
                 (invitations && invitations.length !== 0) ? 
-                    invitations.map((invitation: { id: string; sender: { username: string; avatar: string;}; timestamp: string; is_accepted: boolean;}) => {
+                    invitations.map((invitation) => {
                         const date = new Date(invitation.timestamp);
                         return (
                             <div key={invitation.id} className={invitation.is_accepted === false ? "hidden" : "" }>
@@ -54,7 +72,7 @@ const Invitations = () => {
                                     </button>
                                     <button 
                                     className="ml-2 bg-secondary hover:bg-black text-white px-2 py-1 rounded-md"
-                                    onClick={() => declineMutation(invitation.id)}>
+                                    onClick={async () => await declineMutation(invitation.id)}>
                                         <CircleOff size={20}/>
                                     </button>
                                 </div>
