@@ -2,9 +2,7 @@ import React from "react";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -14,8 +12,6 @@ import { Games } from "../types";
 import {
   Flame,
   MinusSquare,
-  Plus,
-  PlusCircle,
   PlusSquare,
   Square,
 } from "lucide-react";

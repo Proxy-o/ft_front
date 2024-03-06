@@ -5,13 +5,11 @@ import React, { useState, useCallback, useEffect } from "react";
 import useWebSocket from "react-use-websocket";
 import useGetMessages from "../hooks/useGetMessages";
 import ChatBubble from "./chatBubble";
-import { Conversation } from "../types";
 import { Input } from "@/components/ui/input";
 import { useQueryClient } from "@tanstack/react-query";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { SendHorizonal } from "lucide-react";
 import { User } from "@/lib/types";
-import useGetUser from "@/app/profile/hooks/useGetUser";
 import { Avatar } from "@radix-ui/react-avatar";
 import { AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
@@ -26,10 +24,8 @@ export default function ChatCard({
   const senderId = sender.id;
   const receiverId = receiver.id;
   const token = getCookie("refresh");
-  const [socketUrl, setSocketUrl] = useState(
-    process.env.NEXT_PUBLIC_CHAT_URL + "2/?refresh=" + token
-  );
-  const { sendJsonMessage, lastMessage, readyState } = useWebSocket(socketUrl);
+  const socketUrl = process.env.NEXT_PUBLIC_CHAT_URL + "2/?refresh=" + token;
+  const { sendJsonMessage, lastMessage } = useWebSocket(socketUrl);
 
   const [hasMore, setHasMore] = useState(true);
   const [message, setMessage] = useState("");

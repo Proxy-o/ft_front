@@ -12,7 +12,7 @@ import { Separator } from "@/components/ui/separator";
 export default function Page() {
     const user_id = getCookie("user_id");
     const router = useRouter();
-    const { data: user, error, isSuccess } = useGetUser(user_id || "0");
+    const { data: user, isSuccess } = useGetUser(user_id || "0");
 
     useEffect(() => {
         if (!user && isSuccess) {
@@ -26,7 +26,7 @@ export default function Page() {
                 <Separator className="w-full mt-4" />
                 <InviteFriend />
             </div>
-            {/* <Game /> */}
+            <Game />
         </div>
     );
 }

@@ -1,3 +1,5 @@
+"use client";
+
 const Game = () => {
     let canvas:HTMLCanvasElement = document.getElementById("myCanvas") as HTMLCanvasElement;
     let ctx:CanvasRenderingContext2D;    
@@ -119,7 +121,7 @@ const Game = () => {
             className="w-full h-full flex flex-col justify-center items-center text-white"
         >
             <h1 className="text-4xl">Ping Pong</h1><br/>
-            {/* <canvas id="myCanvas" width="480" height="320"></canvas> */}
+            <canvas id="myCanvas" width="480" height="320"></canvas>
             
         </div>
     );

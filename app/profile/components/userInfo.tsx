@@ -1,5 +1,4 @@
 "use client";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -11,16 +10,13 @@ import {
 import { User } from "@/lib/types";
 import {
   Activity,
-  BanIcon,
-  BlocksIcon,
   Check,
   Clock,
   SquarePen,
   Users,
 } from "lucide-react";
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import EditProfile from "./editProfile";
-import getCookie from "@/lib/functions/getCookie";
 import ProfileAvatar from "./profileAvatar";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -30,10 +26,8 @@ import useUnfriend from "@/app/friends/hooks/useUnfriend";
 import useGetFriends from "@/app/chat/hooks/useGetFriends";
 import useGetFrdReq from "@/app/friends/hooks/useGetFrReq";
 import useBlock from "@/app/friends/hooks/useBlockUser";
-import useGetBlocked from "@/app/friends/hooks/useGetBlocked";
 import useUnBlock from "@/app/friends/hooks/useUnBlockUser";
 import useAcceptFriend from "@/app/friends/hooks/useAcceptFriend";
-import ChatCard from "@/app/chat/components/chatCard";
 
 export default function UserInfo({
   user,

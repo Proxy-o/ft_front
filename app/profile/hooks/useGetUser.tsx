@@ -1,7 +1,5 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
-import { UserContext } from "@/lib/providers/UserContext";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useContext } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 const fetchUser = async ({ id }: { id: string }) => {
   try {

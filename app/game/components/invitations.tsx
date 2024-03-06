@@ -3,16 +3,30 @@ import useGetInvitations from "../hooks/useGetInvitations";
 import { Swords } from 'lucide-react';
 import { CircleOff } from 'lucide-react';
 import useInvitationSocket from "@/lib/hooks/InvitationSocket";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { toast } from "sonner";
 
 
 let lastInvitation:MessageEvent<any> | null = null;
-const invitations = () => {
+const Invitations = () => {
 
     const user_id = getCookie("user_id");
 
     let { data: invitations, acceptMutation, declineMutation, refetch } = useGetInvitations(user_id || "0");
+
+    const { handleAcceptInvitation } = useInvitationSocket();
+    
+    async function acceptInvitation(invitationId: string) {
+        try
+        {
+            await acceptMutation(invitationId);
+            handleAcceptInvitation(invitationId);
+        }
+        catch (error)
+        {
+            console.log(error);
+        }
+    }
 
     const {newNotif} = useInvitationSocket();
 
@@ -43,13 +57,7 @@ const invitations = () => {
                                     </div>
                                     <button 
                                     className="ml-2 bg-primary hover:bg-pink-500 text-white px-2 py-1 rounded-md"
-                                    onClick={async () => {
-                                        try {
-                                            await acceptMutation(invitation.id);
-                                        } catch (error) {
-                                            console.error(error);
-                                        }
-                                    }}>
+                                    onClick={async () => await acceptInvitation(invitation.id)}>
                                         <Swords size={20}/>
                                     </button>
                                     <button 
@@ -67,4 +75,4 @@ const invitations = () => {
     ); 
 }
 
-export default invitations;
+export default Invitations;

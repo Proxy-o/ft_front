@@ -5,11 +5,9 @@ import { User } from "@/lib/types";
 import { Card } from "@/components/ui/card";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { CheckCircle, XCircle } from "lucide-react";
 import useAcceptFriend from "../hooks/useAcceptFriend";
 import useReject from "../hooks/useDeclineReq";
-import useGetUser from "@/app/profile/hooks/useGetUser";
 import getCookie from "@/lib/functions/getCookie";
 
 export default function FriendRequests() {

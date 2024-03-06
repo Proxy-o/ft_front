@@ -20,7 +20,7 @@ import {
 } from "./ui/tooltip";
 import { Button, buttonVariants } from "./ui/button";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import useLogout from "@/app/login/hooks/useLogout";
 import { useEffect, useState } from "react";
@@ -93,10 +93,8 @@ export default function Nav() {
   };
 
   const token = getCookie("refresh");
-  const [socketUrl, setSocketUrl] = useState(
-    process.env.NEXT_PUBLIC_CHAT_URL + "2/?refresh=" + token
-  );
-  const { sendJsonMessage, lastMessage, readyState } = useWebSocket(socketUrl);
+  const socketUrl = process.env.NEXT_PUBLIC_CHAT_URL + "2/?refresh=" + token;
+  const { lastMessage } = useWebSocket(socketUrl);
 
   useEffect(() => {
     if (newNotif()) {

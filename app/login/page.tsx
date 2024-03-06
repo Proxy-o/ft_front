@@ -2,7 +2,7 @@
 import { useRouter } from "next/navigation";
 import LoginForm from "./components/LoginForm";
 import getCookie from "@/lib/functions/getCookie";
-import { use, useEffect } from "react";
+import { useEffect } from "react";
 
 export default function Page() {
   const loggedIn = getCookie("logged_in");

@@ -1,5 +1,5 @@
 "use client";
-import React, { use, useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import UserInfo from "./userInfo";
 import GamesTable from "./gamesTable";
 import States from "./states";
@@ -9,7 +9,7 @@ import FriendList from "@/app/friends/components/friendList";
 import useGetBlocked from "@/app/friends/hooks/useGetBlocked";
 import useGetFriends from "@/app/chat/hooks/useGetFriends";
 import ChatCard from "@/app/chat/components/chatCard";
-import { Cross, MessageCircle, XCircle } from "lucide-react";
+import { XCircle } from "lucide-react";
 
 export default function Profile({ id }: { id: string }) {
   const id_cookie = getCookie("user_id") as string;

@@ -1,8 +1,5 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
-import { UserContext } from "@/lib/providers/UserContext";
-import { User } from "@/lib/types";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useContext } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 const editAvatar = async (data: { id: string; avatar: File }) => {

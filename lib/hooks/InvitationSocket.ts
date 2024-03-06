@@ -1,5 +1,4 @@
 import getCookie from "@/lib/functions/getCookie";
-import { useEffect } from "react";
 import useWebSocket from "react-use-websocket";
 
 

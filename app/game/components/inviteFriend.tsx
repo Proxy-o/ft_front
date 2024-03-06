@@ -5,7 +5,7 @@ import useGetFriends from "@/app/chat/hooks/useGetFriends";
 import useInvitationSocket from "@/lib/hooks/InvitationSocket";
 
 
-const inviteFriends = () => {
+const InviteFriends = () => {
     const { handelSendInvitation } = useInvitationSocket();
 
     const user_id = getCookie("user_id");
@@ -19,7 +19,9 @@ const inviteFriends = () => {
                 sender: user_id,
                 receiver: userid,
             });
+            if (res.status === 201) {
             handelSendInvitation(userid);
+            }
         }
         catch (error)
         {
@@ -47,4 +49,4 @@ const inviteFriends = () => {
     );
 }
 
-export default inviteFriends;
+export default InviteFriends;

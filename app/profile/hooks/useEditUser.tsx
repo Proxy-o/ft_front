@@ -1,8 +1,6 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
-import { UserContext } from "@/lib/providers/UserContext";
 import { User } from "@/lib/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useContext } from "react";
 import { toast } from "sonner";
 
 const editUser = async (user: User) => {

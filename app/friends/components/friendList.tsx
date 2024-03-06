@@ -11,7 +11,6 @@ import {
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import useGetFriends from "@/app/chat/hooks/useGetFriends";
-import getCookie from "@/lib/functions/getCookie";
 import { User } from "@/lib/types";
 
 export default function FriendList({ user_id }: { user_id: string }) {
