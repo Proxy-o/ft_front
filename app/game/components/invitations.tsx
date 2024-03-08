@@ -8,21 +8,6 @@ import useInvitationSocket from "@/lib/hooks/InvitationSocket";
 import { useEffect } from "react";
 
 
-// Define an interface for the props
-interface InvitationsProps {
-    invitations: {
-        id: string;
-        sender: {
-            id: string;
-            username: string;
-            avatar: string;
-        };
-    acceptInvitation: (invitationId: string) => Promise<string>;
-    declineMutation: (invitationId: string) => Promise<void>;
-    refetch: () => void; // Specify the type for refetch
-    }
-}
-
 const Invitations = (props: {invitations: {
             id: string,
             sender: {

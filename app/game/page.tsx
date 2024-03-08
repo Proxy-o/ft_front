@@ -10,11 +10,14 @@ import { Separator } from "@/components/ui/separator";
 import useInvitationSocket from "@/lib/hooks/InvitationSocket";
 import useGetInvitations from "./hooks/useGetInvitations";
 import { useRouter } from "next/navigation";
+import useGetGame from "./hooks/useGetGames";
 
 export default function Page() {
-    const user_id = getCookie("user_id");
+    const user_id = getCookie("user_id") || "";
     const router = useRouter();
     const { data: user, isSuccess } = useGetUser(user_id || "0");
+
+    const game = useGetGame(user_id);
 
     const { handleAcceptInvitation } = useInvitationSocket();
 
