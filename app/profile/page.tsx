@@ -7,7 +7,7 @@ import useGetUser from "./hooks/useGetUser";
 import { useRouter } from "next/navigation";
 
 export default function Page() {
-  const user_id = getCookie("userç_id");
+  const user_id = getCookie("user_id");
   const router = useRouter();
   const { data: user, error, isSuccess } = useGetUser(user_id || "0");
 
