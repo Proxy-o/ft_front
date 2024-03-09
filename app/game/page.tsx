@@ -2,7 +2,7 @@
 import getCookie from "@/lib/functions/getCookie";
 
 import useGetUser from "../profile/hooks/useGetUser";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Game from "./components/game";
 import Invitations from "./components/invitations";
 import InviteFriend from "./components/inviteFriend";
@@ -14,12 +14,19 @@ import useGetGame from "./hooks/useGetGames";
 
 export default function Page() {
     const user_id = getCookie("user_id") || "";
+    const [game, setGame] = useState(false);
     const router = useRouter();
     const { data: user, isSuccess } = useGetUser(user_id || "0");
-
-    const game = useGetGame(user_id);
-
     const { handleAcceptInvitation } = useInvitationSocket();
+    const { onGoingGame, refetchOnGoingGame, surrenderGame } = useGetGame(user_id || "0");
+
+    useEffect(() => {
+        if (onGoingGame && onGoingGame.game === null)
+            setGame(false);
+        else
+            setGame(true);
+    }, [onGoingGame]);
+
 
     let { data: invitations, acceptMutation, declineMutation, refetch } = useGetInvitations(user_id || "0");
 
@@ -38,11 +45,13 @@ export default function Page() {
         timestamp: string,
         is_accepted: boolean,
     }[] = invitations || [];
+
     const acceptInvitation = async (invitationId: string) => {
         let gameId = "";
         try {
             gameId = await acceptMutation(invitationId);
             handleAcceptInvitation(invitationId);
+            refetchOnGoingGame();
         } catch (error) {
             console.log(error);
         }
@@ -75,7 +84,7 @@ export default function Page() {
                 <Separator className="w-full mt-4" />
                 <InviteFriend />
             </div>
-            <Game />
+            {game && <Game onGoingGame={onGoingGame} surrenderGame={surrenderGame} />}
         </div>
     );
 }

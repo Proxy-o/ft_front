@@ -1,6 +1,10 @@
 "use client";
 
-const Game = () => {
+import { Button } from "@/components/ui/button";
+
+const Game = (props: any) => {
+    const { surrenderGame } = props;
+
     let canvas:HTMLCanvasElement = document.getElementById("myCanvas") as HTMLCanvasElement;
     let ctx:CanvasRenderingContext2D;    
     if (canvas !== null) {
@@ -122,7 +126,14 @@ const Game = () => {
         >
             <h1 className="text-4xl">Ping Pong</h1><br/>
             <canvas id="myCanvas" width="480" height="320"></canvas>
-            
+            <Button
+                onClick={() => {
+                    surrenderGame();
+                }}
+                className="w-1/2 mt-4"
+            >
+                Surrender
+            </Button>
         </div>
     );
 }
