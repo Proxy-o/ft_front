@@ -2,11 +2,11 @@ import { Sword } from "lucide-react";
 import axiosInstance from "@/lib/functions/axiosInstance";
 import getCookie from "@/lib/functions/getCookie";
 import useGetFriends from "@/app/chat/hooks/useGetFriends";
-import useInvitationSocket from "@/lib/hooks/InvitationSocket";
+import useGameSocket from "@/lib/hooks/useGameSocket";
 
 
 const InviteFriends = () => {
-    const { handelSendInvitation } = useInvitationSocket();
+    const { handelSendInvitation } = useGameSocket();
 
     const user_id = getCookie("user_id");
     

@@ -7,55 +7,55 @@ import Game from "./components/game";
 import Invitations from "./components/invitations";
 import InviteFriend from "./components/inviteFriend";
 import { Separator } from "@/components/ui/separator";
-import useInvitationSocket from "@/lib/hooks/InvitationSocket";
+import useGameSocket from "@/lib/hooks/useGameSocket";
 import useGetInvitations from "./hooks/useGetInvitations";
 import { useRouter } from "next/navigation";
 import useGetGame from "./hooks/useGetGames";
+import { Invitation } from "@/lib/types";
 
 export default function Page() {
     const user_id = getCookie("user_id") || "";
     const [game, setGame] = useState(false);
     const router = useRouter();
     const { data: user, isSuccess } = useGetUser(user_id || "0");
-    const { handleAcceptInvitation } = useInvitationSocket();
+    const { handleAcceptInvitation, newNotif } = useGameSocket();
     const { onGoingGame, refetchOnGoingGame, surrenderGame } = useGetGame(user_id || "0");
+    let { data: invitations, acceptMutation, declineMutation, refetch } = useGetInvitations(user_id || "0");
+    const [gameId, setGameId] = useState("");
 
+    let myinvitations: Invitation[] = invitations || [];
+
+    
     useEffect(() => {
         if (onGoingGame && onGoingGame.game === null)
             setGame(false);
         else
+        {
             setGame(true);
-    }, [onGoingGame]);
+        }
+    }
+    , [gameId, onGoingGame]);
 
+    useEffect(() => {
+        const notif = newNotif();
+        const message = notif && JSON.parse(notif?.data) || "";
+        if (message && message.message?.split(" ")[0] === "/start") {
+            refetchOnGoingGame();
+        }
 
-    let { data: invitations, acceptMutation, declineMutation, refetch } = useGetInvitations(user_id || "0");
+    }
+    , [newNotif()]);
 
-    let myinvitations: {
-        id: string,
-        sender: {
-            id: string,
-            username: string,
-            avatar: string,
-        },
-        reciever: {
-            id: string,
-            username: string,
-            avatar: string,
-        },
-        timestamp: string,
-        is_accepted: boolean,
-    }[] = invitations || [];
 
     const acceptInvitation = async (invitationId: string) => {
-        let gameId = "";
         try {
-            gameId = await acceptMutation(invitationId);
+            const newGameId = await acceptMutation(invitationId);
+            setGameId(newGameId);
             handleAcceptInvitation(invitationId);
             refetchOnGoingGame();
         } catch (error) {
             console.log(error);
         }
-        return gameId;
     }
 
     const declineInvitation = async (invitationId: string) => {
@@ -84,7 +84,9 @@ export default function Page() {
                 <Separator className="w-full mt-4" />
                 <InviteFriend />
             </div>
-            {game && <Game onGoingGame={onGoingGame} surrenderGame={surrenderGame} />}
+            {game && <Game gameId={gameId} surrenderGame={surrenderGame} /> }
         </div>
     );
+
+
 }

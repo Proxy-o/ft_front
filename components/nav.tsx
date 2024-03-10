@@ -26,7 +26,7 @@ import useLogout from "@/app/login/hooks/useLogout";
 import { useEffect, useState } from "react";
 import getCookie from "@/lib/functions/getCookie";
 import useWebSocket from "react-use-websocket";
-import useInvitationSocket from "@/lib/hooks/InvitationSocket";
+import useGameSocket from "@/lib/hooks/useGameSocket";
 import { toast } from "sonner";
 
 interface linksProps {
@@ -40,7 +40,7 @@ let lastInvitation:MessageEvent<any> | null = null;
 export default function Nav() {
   const { mutate: logout } = useLogout();
   
-  const {newNotif} = useInvitationSocket();
+  const {newNotif} = useGameSocket();
   const [notification, setNotification] = useState(false);
   const links: linksProps[] = [
     {

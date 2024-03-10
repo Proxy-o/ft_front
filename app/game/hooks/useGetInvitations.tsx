@@ -13,7 +13,6 @@ async function accept(invitationId: string) {
         invitationId,
     });
     const gameId = res.data.gameId;
-    console.log(gameId)
     if (res.status === 200) {
         toast.success("Invitation accepted");
         setTimeout(() => {

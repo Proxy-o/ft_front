@@ -1,10 +1,8 @@
 "use client";
 
-import getCookie from "@/lib/functions/getCookie";
-import useGetInvitations from "../hooks/useGetInvitations";
 import { Swords } from 'lucide-react';
 import { CircleOff } from 'lucide-react';
-import useInvitationSocket from "@/lib/hooks/InvitationSocket";
+import useGameSocket from "@/lib/hooks/useGameSocket";
 import { useEffect } from "react";
 
 
@@ -15,7 +13,7 @@ const Invitations = (props: {invitations: {
                 username: string,
                 avatar: string,
             },
-            reciever: {
+            receiver: {
                 id: string,
                 username: string,
                 avatar: string,
@@ -23,13 +21,12 @@ const Invitations = (props: {invitations: {
             timestamp: string,
             is_accepted: boolean,
         }[],
-        acceptInvitation: (invitationId: string) => Promise<string>,
+        acceptInvitation: (invitationId: string) => Promise<void>,
         declineMutation: (invitationId: string) => Promise<void>,
         refetch: () => void}
     ) => {
     const {invitations, acceptInvitation, declineMutation, refetch} = props;
-    const user_id = getCookie("user_id");
-    const {newNotif} = useInvitationSocket();
+    const {newNotif} = useGameSocket();
 
     useEffect(() => {
         refetch();
