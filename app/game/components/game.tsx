@@ -1,8 +1,14 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
 
 const Game = (props: any) => {
+    const [renderCanvas, setRenderCanvas] = useState(false);
+    setTimeout(() => {
+        setRenderCanvas(true);
+    }
+    , 500);
     const { surrenderGame } = props;
 
     let canvas:HTMLCanvasElement = document.getElementById("myCanvas") as HTMLCanvasElement;
@@ -125,7 +131,9 @@ const Game = (props: any) => {
             className="w-full h-full flex flex-col justify-center items-center text-white"
         >
             <h1 className="text-4xl">Ping Pong</h1><br/>
-            <canvas id="myCanvas" width="480" height="320"></canvas>
+            {
+                renderCanvas && <canvas id="myCanvas" width="480" height="320"></canvas>
+            }
             <Button
                 onClick={() => {
                     surrenderGame();
