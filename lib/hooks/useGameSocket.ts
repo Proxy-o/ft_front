@@ -23,8 +23,13 @@ export default function useGameSocket() {
       const toSend = "/accept " + invitationId;
       sendJsonMessage({ message: toSend });
     }
+
+    const handleStartGame = (user1: string, user2: string) => {
+      const toSend = "/debut " + user1 + " " + user2
+      sendJsonMessage({ message: toSend });
+    }
   
-    return { handelSendInvitation, newNotif, handleAcceptInvitation };
+    return { handelSendInvitation, newNotif, handleAcceptInvitation, handleStartGame };
   }
 
   

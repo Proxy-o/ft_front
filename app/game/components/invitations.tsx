@@ -4,32 +4,33 @@ import { Swords } from 'lucide-react';
 import { CircleOff } from 'lucide-react';
 import useGameSocket from "@/lib/hooks/useGameSocket";
 import { useEffect } from "react";
+import useGetInvitations from '../hooks/useGetInvitations';
+import useDeclineInvitation from '../hooks/useDeclineMutation';
+import useAcceptInvitation from '../hooks/useAccepteInvitation';
+import getCookie from '@/lib/functions/getCookie';
+import { Invitation } from '@/lib/types';
 
 
-const Invitations = (props: {invitations: {
-            id: string,
-            sender: {
-                id: string,
-                username: string,
-                avatar: string,
-            },
-            receiver: {
-                id: string,
-                username: string,
-                avatar: string,
-            },
-            timestamp: string,
-            is_accepted: boolean,
-        }[],
-        acceptInvitation: (invitationId: string) => Promise<void>,
-        declineMutation: (invitationId: string) => Promise<void>,
-        refetch: () => void}
-    ) => {
-    const {invitations, acceptInvitation, declineMutation, refetch} = props;
-    const {newNotif} = useGameSocket();
+const Invitations = () => {
+    const { newNotif, handleAcceptInvitation } = useGameSocket();
+    const user_id = getCookie("user_id") || "";
+
+    let invitaionsData = useGetInvitations(user_id || "0");
+    const { mutate: declineMutation } = useDeclineInvitation();
+    const { mutate: acceptInvitationMutation } = useAcceptInvitation();
+    const invitations: Invitation[] = (invitaionsData.data) ? invitaionsData.data : [];
+
+    const acceptInvitation = async (invitationId: string) => {
+        try {
+            acceptInvitationMutation(invitationId);
+            handleAcceptInvitation(invitationId);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     useEffect(() => {
-        refetch();
+        invitaionsData.refetch();
     }, [newNotif]);
 
     return (

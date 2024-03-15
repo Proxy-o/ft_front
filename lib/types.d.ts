@@ -9,10 +9,11 @@ export type User = {
 };
 
 export type t_Game = {
-  player1: User;
-  player1Score: number;
-  player2: User;
-  player2Score: number;
+  id: string;
+  user1: User;
+  user1Score: number;
+  user2: User;
+  user2Score: number;
   winner: User;
   timestamp: string;
 };
