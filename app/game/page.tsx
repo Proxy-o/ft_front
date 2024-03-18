@@ -11,7 +11,6 @@ import useGameSocket from "@/lib/hooks/useGameSocket";
 import { useRouter } from "next/navigation";
 import useGetGame from "./hooks/useGetGames";
 
-let counter = 0;
 export default function Page() {
     const user_id = getCookie("user_id") || "";
     const { data: user, isSuccess } = useGetUser(user_id || "0");
@@ -42,8 +41,6 @@ export default function Page() {
     , [newNotif()]);
 
     useEffect(() => {
-        console.log("onGoingGame");
-        console.log(onGoingGame.data);
         if (onGoingGame.isSuccess && onGoingGame.data.game?.user1)
         {
             setStartGame(true);
@@ -52,8 +49,6 @@ export default function Page() {
         {
             setStartGame(false);
         }
-        counter++;
-        console.log("counter", counter);
     }
     , [onGoingGame]);
 

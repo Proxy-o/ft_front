@@ -101,8 +101,9 @@ export default function Nav() {
   useEffect(() => {
     if (newNotif()) {
       setNotification(true);
-      let notif = newNotif();
-      if (newNotif() !== null && notif !== lastInvitation) {
+      const notif = newNotif();
+        const message = notif && JSON.parse(notif?.data) || "";
+        if (message && message.message?.split(" ")[0] === "/notif") {
         toast.info("you have a new invitation");
         lastInvitation = newNotif();
       }

@@ -3,7 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 import type { t_Game } from "@/lib/types";
 
 const getOnGoingGame = async () => {
-    console.log("getOnGoingGame");
     try {
         const response = await axiosInstance.get('/game/onGoingGame')
         if (response.data.status === 204) {

@@ -28,8 +28,13 @@ export default function useGameSocket() {
       const toSend = "/debut " + user1 + " " + user2
       sendJsonMessage({ message: toSend });
     }
+
+    const handleSurrender = (surrenderer: string, winner: string) => {
+      const toSend = "/surrender " + surrenderer + " " + winner;
+      sendJsonMessage({ message: toSend });
+    }
   
-    return { handelSendInvitation, newNotif, handleAcceptInvitation, handleStartGame };
+    return { handelSendInvitation, newNotif, handleAcceptInvitation, handleStartGame, handleSurrender };
   }
 
   

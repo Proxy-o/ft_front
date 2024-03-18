@@ -1,15 +1,24 @@
-import React, { useRef, useEffect, useState, use } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import useSurrenderGame from "../hooks/useSurrender";
 import useGameSocket from '@/lib/hooks/useGameSocket';
 import useGetGame from '../hooks/useGetGames';
 import getCookie from '@/lib/functions/getCookie';
+import { toast } from 'sonner';
+import useGetUser from '@/app/profile/hooks/useGetUser';
+import CountDown from './contDown';
 
 const Game = () => {
+    let username = "";
     const user_id = getCookie("user_id") || "";
+    const { data: user, isSuccess } = useGetUser(user_id || "0");
+    if ( isSuccess && user) {
+        username = user.username || "";
+    }
     const [gameStarted, setGameStarted] = useState(false);
+    const [startCountdown, setStartCountdown] = useState(false);
     const { mutate: surrenderGame } = useSurrenderGame();
-    const {handelSendInvitation, newNotif, handleAcceptInvitation, handleStartGame} = useGameSocket();
+    const { newNotif, handleStartGame, handleSurrender } = useGameSocket();
     const { onGoingGame } = useGetGame(user_id || "0");
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -90,17 +99,27 @@ const Game = () => {
             ctx.closePath();
         };
 
-        let countdown = 3;
-        const startCountdown = () => {
-            if (countdown === 0) return;
-            ctx.font = "30px Arial";
-            ctx.fillText(countdown.toString(), canvas.width / 2, canvas.height / 2);
-            countdown--;
-        };
+        // const startCountdown = () => {
+        //     let countdown = 3;
+        //     while (countdown > 0) {
+        //         ctx.font = "30px Arial";
+        //         ctx.fillText(countdown.toString(), canvas.width / 2, canvas.height / 2);
+        //         setTimeout(() => {
+        //             ctx.clearRect(0, 0, canvas.width, canvas.height);
+        //         }
+        //         , 1000);
+        //         countdown--;
+        //     }
+        // };
         
         const draw = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            setTimeout(startCountdown, 1000);
+            // startCountdown();
+            // sleep for 3 seconds
+            // setTimeout(() => {
+            //     ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // }
+            // , 3000);
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             drawBall();
             drawRightPaddle();
@@ -138,7 +157,7 @@ const Game = () => {
             // Game over condition if ball touches either vertical edge
             if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
                 clearInterval(interval);
-                alert("Game Over");
+                // alert("Game Over");
                 // Optionally, reset the game state here
                 return;
             }
@@ -159,19 +178,35 @@ const Game = () => {
         const message = notif && JSON.parse(notif?.data) || "";
         if (message && message.message?.split(" ")[0] === "/show") {
             // invitaionsData.refetch();
-            setGameStarted(true)
+            setStartCountdown(true)
             // onGoingGame.refetch();
+        } else if (message && message.message?.split(" ")[0] === "/end") { // end surrenderer winner
+            // invitaionsData.refetch();
+            setGameStarted(false)
+            onGoingGame.refetch();
+            if (message.message?.split(" ")[1] === username) {
+                toast.success("You have won the game");
+            }
+            if (message.message?.split(" ")[2] === username) {
+                toast.error("You have lost the game");
+            }
+                // onGoingGame.refetch();
         }
+        console.log("notif", notif);
     }
     , [newNotif()]);
     return (
         <div className="w-full h-full flex flex-col justify-center items-center text-white">
             <h1 className="text-4xl">Ping Pong</h1><br/>
-
-            {gameStarted ? (
-                <div className="border-2 border-white w-fit h-fit">
-                    <canvas ref={canvasRef} width="480" height="320"></canvas>
-                </div>
+            {startCountdown ? 
+            (
+                (gameStarted) ? (
+                    <div className="border-2 border-white w-fit h-fit">
+                        <canvas ref={canvasRef} width="480" height="320"></canvas>
+                    </div>
+                ) : (
+                    <CountDown setGameStarted={setGameStarted} setStartCountdown={setStartCountdown} />
+                )
             ) : (
                 <Button
                     onClick={() => {
@@ -185,6 +220,8 @@ const Game = () => {
             <Button
                 onClick={() => {
                     surrenderGame();
+                    handleSurrender(onGoingGame.data?.game?.user1.username || "", onGoingGame.data?.game?.user2.username || "");
+                    onGoingGame.refetch();
                     setGameStarted(false);
                 }}
                 className="w-1/2 mt-4"
