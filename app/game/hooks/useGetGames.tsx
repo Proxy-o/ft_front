@@ -16,7 +16,6 @@ const getOnGoingGame = async () => {
     }
 }
 
-
 export default function useGetGame(userId: string) {
     const data = useQuery({
         queryKey: ["game", userId],

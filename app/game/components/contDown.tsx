@@ -1,19 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const CountDown = (props: any) => {
     const { setStartCountdown, setGameStarted } = props;
     const [count, setCount] = useState(3);
-    
-    setTimeout(() => {
+
+    useEffect(() => {
+        // let var = count > 0 ;
         if (count > 0) {
-        setCount(count - 1);
+            const timer = setTimeout(() => setCount(count - 1), 1000);
+            return () => clearTimeout(timer);
         }
-    }, 1000);
-    if (count === 0) {
-        setStartCountdown(true);
-        setGameStarted(true);
-    }
+        if (count === 0) {
+            setStartCountdown(true);
+            setGameStarted(true);
+        }
+    }, [count]);
+
     return <div>{count}</div>;
-    };
+};
 
 export default CountDown;

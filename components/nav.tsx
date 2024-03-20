@@ -111,9 +111,6 @@ export default function Nav() {
   }
   , [newNotif]);
 
-  // if there is a new message console.log new message
-  // console.log("notification", notification);
-  // console.log("notification", notification);
   return (
     <div
       data-collapsed={isCollapsed}
