@@ -10,11 +10,12 @@ import { Separator } from "@/components/ui/separator";
 import useGameSocket from "@/lib/hooks/useGameSocket";
 import { useRouter } from "next/navigation";
 import useGetGame from "./hooks/useGetGames";
-
+import GameNav from "./components/gameNav";
 export default function Page() {
     const user_id = getCookie("user_id") || "";
     const { data: user, isSuccess } = useGetUser(user_id || "0");
     const router = useRouter();
+    const [tab, setTab] = useState("online");
     
     //socket
     const { newNotif } = useGameSocket();
@@ -52,16 +53,21 @@ export default function Page() {
     , [onGoingGame]);
 
     return (
-        <div className="w-fit h-fit flex flex-row justify-start items-start dark:text-white">
-            <div className="w-fit h-fit flex flex-col justify-start items-start dark:text-white">
-                <Invitations />
-                <Separator className="w-full mt-4" />
-                <InviteFriend />
+        <>
+            <GameNav setTab={setTab} tab={tab} />
+            <div className="w-fit h-fit flex flex-row justify-start items-start dark:text-white">
+                {(tab === "online") && (
+                    <div className="w-fit h-fit flex flex-col justify-start items-start dark:text-white">
+                        <Invitations />
+                        <Separator className="w-full mt-4" />
+                        <InviteFriend />
+                    </div>
+                )}
+                {startGame && onGoingGame.isSuccess && onGoingGame.data !== null && (
+                    <Game />
+                    )}
             </div>
-            {startGame && onGoingGame.isSuccess && onGoingGame.data !== null && (
-                <Game />
-            )}
-        </div>
+        </>
     );
 
 

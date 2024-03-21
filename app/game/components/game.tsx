@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, use } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import useSurrenderGame from "../hooks/useSurrender";
 import useGameSocket from '@/lib/hooks/useGameSocket'; // Make sure this is the correct path
@@ -11,7 +11,7 @@ import { User } from '@/lib/types';
 
 const Game = () => {
     const user_id = getCookie("user_id") || "";
-    const { data: user, isSuccess } = useGetUser(user_id || "0");
+    const { data: user } = useGetUser(user_id || "0");
     const username = user?.username || "";
     const [gameStarted, setGameStarted] = useState(false);
     const [startCountdown, setStartCountdown] = useState(false);
