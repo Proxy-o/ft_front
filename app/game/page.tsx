@@ -37,8 +37,7 @@ export default function Page() {
             // invitaionsData.refetch();
             onGoingGame.refetch();
         }
-    }
-    , [newNotif()]);
+    }, [newNotif()?.data]);
 
     useEffect(() => {
         if (onGoingGame.isSuccess && onGoingGame.data.game?.user1)

@@ -31,7 +31,7 @@ const Invitations = () => {
 
     useEffect(() => {
         invitaionsData.refetch();
-    }, [newNotif]);
+    }, [newNotif()?.data]);
 
     return (
         <div className="w-full flex flex-col justify-start items-start dark:text-white">

@@ -108,8 +108,7 @@ export default function Nav() {
         lastInvitation = newNotif();
       }
     }
-  }
-  , [newNotif]);
+  }, [newNotif()?.data]);
 
   return (
     <div

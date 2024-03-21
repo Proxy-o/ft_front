@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, use } from 'react';
 import { Button } from "@/components/ui/button";
 import useSurrenderGame from "../hooks/useSurrender";
 import useGameSocket from '@/lib/hooks/useGameSocket'; // Make sure this is the correct path
@@ -16,9 +16,10 @@ const Game = () => {
     const [gameStarted, setGameStarted] = useState(false);
     const [startCountdown, setStartCountdown] = useState(false);
     const newPaddleRightYRef = useRef(0); // Use a ref to store the current state
-    
+    const newBallPositionRef = useRef({ x: 0, y: 0 }); // Use a ref to store the current state
+    const newAngleRef = useRef(0); // Use a ref to store the current state
     const { mutate: surrenderGame } = useSurrenderGame();
-    const { newNotif, handleStartGame, handleSurrender, handleMovePaddle } = useGameSocket();
+    const { newNotif, handleStartGame, handleSurrender, handleMovePaddle, handleChangeBallDirection } = useGameSocket();
     const { onGoingGame } = useGetGame(user_id || "0");
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const rightUser: User | undefined = (onGoingGame.data?.game?.user1?.username === username) ? onGoingGame.data?.game?.user2 : onGoingGame.data?.game?.user1;
@@ -32,13 +33,20 @@ const Game = () => {
         const ctx = canvas.getContext('2d');
         if (!ctx) return; // Exit if context is not available
         
+        let ballInLeftPaddle = false;
+
         let x = canvas.width / 2;
         let y = canvas.height / 2;
+        newBallPositionRef.current = { x, y }; // Initialize the ref
+        let angle = Math.PI / 6;
+        newAngleRef.current = angle; // Initialize the ref
+        // newBallPositionRef.current = { x, y }; // Initialize the ref
         let dx: number;
         if (leftUser?.username === onGoingGame.data?.game?.user1?.username) {
             dx = 2;
         } else {
             dx = -2;
+            newAngleRef.current = Math.PI * 5 / 6;
         }
         let dy = -2;
         let ballRadius = 10;
@@ -52,39 +60,20 @@ const Game = () => {
 
         let upPressed = false;
         let downPressed = false;
-//      let zPressed = false;
-//         let sPressed = false;
 
         const keyDownHandler = (e: KeyboardEvent) => {
             if (e.key === "ArrowUp") {
                 upPressed = true;
             } else if (e.key === "ArrowDown") {
                 downPressed = true;
-            // } else if (e.key === "w") {
-            //     zPressed = true;
-            // } else if (e.key === "s") {
-            //     sPressed = true;
-            }
-        };
-
-        const keyUpHandler = (e: KeyboardEvent) => {
-            if (e.key === "ArrowUp") {
-                upPressed = false;
-            } else if (e.key === "ArrowDown") {
-                downPressed = false;
-            // } else if (e.key === "w") {
-            //     zPressed = false;
-            // } else if (e.key === "s") {
-            //     sPressed = false;
             }
         };
 
         document.addEventListener("keydown", keyDownHandler, false);
-        document.addEventListener("keyup", keyUpHandler, false);
 
         const drawBall = () => {
             ctx.beginPath();
-            ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
+            ctx.arc(newBallPositionRef.current.x, newBallPositionRef.current.y, ballRadius, 0, Math.PI * 2);
             ctx.fillStyle = "#0095DD";
             ctx.fill();
             ctx.closePath();
@@ -115,42 +104,45 @@ const Game = () => {
             if (upPressed && paddleLeftY > 0) {
                 paddleLeftY -= 14;
                 handleMovePaddle(paddleLeftY, rightUser?.username || "");
+                upPressed = false;
             } else if (downPressed && paddleLeftY < canvas.height - paddleHeight) {
                 paddleLeftY += 14;
                 handleMovePaddle(paddleLeftY, rightUser?.username || "");
+                downPressed = false;
             }
-
-            // Check for collision with right paddle
-            if (x + dx > canvas.width - ballRadius - paddleWidth && y > newPaddleRightYRef.current && y < newPaddleRightYRef.current + paddleHeight) {
-                dx = -dx;
-            }
-
+            
             // Check for collision with left paddle
-            if (x + dx < ballRadius + paddleWidth && y > paddleLeftY && y < paddleLeftY + paddleHeight) {
-                dx = -dx;
+            if (newBallPositionRef.current.x < paddleWidth + ballRadius 
+                && newBallPositionRef.current.y > paddleLeftY 
+                && newBallPositionRef.current.y < paddleLeftY + paddleHeight) {
+                    // dx = -dx;
+                    if (!ballInLeftPaddle) {
+                        newAngleRef.current = Math.PI - newAngleRef.current;
+                        let enemyX = canvas.width - newBallPositionRef.current.x;
+                        let enemyY = newBallPositionRef.current.y;
+                        let enemyAngle = Math.PI - newAngleRef.current;
+                        handleChangeBallDirection(enemyX, enemyY, enemyAngle, rightUser?.username || "");
+                        ballInLeftPaddle = true;
+                    }
+            } else {
+                ballInLeftPaddle = false;
             }
 
-            if (y + dy > canvas.height - ballRadius || y + dy < ballRadius) {
-                dy = -dy;
+            // Check for collision with the horizontal walls            
+            if (newBallPositionRef.current.y > canvas.height - ballRadius 
+                || newBallPositionRef.current.y < ballRadius) {
+                newAngleRef.current = -newAngleRef.current;
             }
 
-            if (x > canvas.width / 2) {
-                x += dx;
-                y += dy;
-            }
-
-            // Update the ball's position on the server
+            // Move the ball
+            if (user?.username === leftUser?.username)
+                newBallPositionRef.current.x += Math.cos(newAngleRef.current);
+            else
+                newBallPositionRef.current.x -= Math.cos(newAngleRef.current);
+            newBallPositionRef.current.y += Math.sin(newAngleRef.current);
         };
-        
-        let notif; 
+
         const animate = () => {
-            notif = newNotif();
-            if (notif) {
-                const message = JSON.parse(notif.data);
-                if (message.message?.split(" ")[0] === "/move") {
-                    newPaddleRightYRef.current = parseInt(message.message.split(" ")[1]); // Update the ref
-                }
-            }
             draw(); // Call draw without passing newPaddleRightY
             requestAnimationFrame(animate);
         };
@@ -159,7 +151,6 @@ const Game = () => {
 
         return () => {
             document.removeEventListener("keydown", keyDownHandler);
-            document.removeEventListener("keyup", keyUpHandler);
         };
     }, [gameStarted]);
 
@@ -180,9 +171,12 @@ const Game = () => {
                 }
             } else if (message.message?.split(" ")[0] === "/move") {
                 newPaddleRightYRef.current = parseInt(message.message.split(" ")[1]); // Update the ref
+            } else if (message.message?.split(" ")[0] === "/ballDirection") {
+                newBallPositionRef.current = { x: parseInt(message.message.split(" ")[1]), y: parseInt(message.message.split(" ")[2]) }; // Update the ref
+                newAngleRef.current = parseFloat(message.message.split(" ")[3]); // Update the ref
             }
         }
-    }, [newNotif]);
+    }, [newNotif()?.data]);
 
 
     return (
