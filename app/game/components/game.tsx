@@ -38,14 +38,13 @@ const Game = () => {
         let x = canvas.width / 2;
         let y = canvas.height / 2;
         newBallPositionRef.current = { x, y }; // Initialize the ref
-        let angle = Math.random() * Math.PI * 2 * (Math.random() > 0.5 ? 1 : -1);
-        newAngleRef.current = angle; // Initialize the ref
-        if (leftUser?.username !== onGoingGame.data?.game?.user1?.username) {
-            newAngleRef.current = Math.PI - angle;
+        if (leftUser?.username === onGoingGame.data?.game?.user1?.username) {
+            newAngleRef.current = Math.random() * Math.PI * 2 * (Math.random() > 0.5 ? 1 : -1);
+            handleChangeBallDirection(x, y, Math.PI - newAngleRef.current, rightUser?.username || "");
         }
         let ballRadius = 10;
         
-        const paddleHeight = 75;
+        const paddleHeight = 50;
         const paddleWidth = 10;
         let paddleRightY = (canvas.height - paddleHeight) / 2;
         let paddleLeftY = (canvas.height - paddleHeight) / 2;
@@ -84,7 +83,7 @@ const Game = () => {
         const drawLeftPaddle = () => {
             ctx.beginPath();
             ctx.rect(0, paddleLeftY, paddleWidth, paddleHeight);
-            ctx.fillStyle = "#0095DD";
+            ctx.fillStyle = "#ee95DD";
             ctx.fill();
             ctx.closePath();
         };
@@ -96,11 +95,21 @@ const Game = () => {
             drawLeftPaddle();
 
             if (upPressed && paddleLeftY > 0) {
-                paddleLeftY -= 14;
+                if (paddleLeftY - 20 < 0) {
+                    paddleLeftY = 0;
+                }
+                else {
+                    paddleLeftY -= 20;
+                }
                 handleMovePaddle(paddleLeftY, rightUser?.username || "");
                 upPressed = false;
             } else if (downPressed && paddleLeftY < canvas.height - paddleHeight) {
-                paddleLeftY += 14;
+                if (paddleLeftY + 20 > canvas.height - paddleHeight) {
+                    paddleLeftY = canvas.height - paddleHeight;
+                }
+                else {
+                    paddleLeftY += 20;
+                }
                 handleMovePaddle(paddleLeftY, rightUser?.username || "");
                 downPressed = false;
             }
