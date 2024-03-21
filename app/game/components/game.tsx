@@ -38,17 +38,11 @@ const Game = () => {
         let x = canvas.width / 2;
         let y = canvas.height / 2;
         newBallPositionRef.current = { x, y }; // Initialize the ref
-        let angle = Math.PI / 6;
+        let angle = Math.random() * Math.PI * 2 * (Math.random() > 0.5 ? 1 : -1);
         newAngleRef.current = angle; // Initialize the ref
-        // newBallPositionRef.current = { x, y }; // Initialize the ref
-        let dx: number;
-        if (leftUser?.username === onGoingGame.data?.game?.user1?.username) {
-            dx = 2;
-        } else {
-            dx = -2;
-            newAngleRef.current = Math.PI * 5 / 6;
+        if (leftUser?.username !== onGoingGame.data?.game?.user1?.username) {
+            newAngleRef.current = Math.PI - angle;
         }
-        let dy = -2;
         let ballRadius = 10;
         
         const paddleHeight = 75;
