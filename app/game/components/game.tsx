@@ -9,18 +9,16 @@ import useGetUser from '@/app/profile/hooks/useGetUser';
 import CountDown from './contDown';
 import { User } from '@/lib/types';
 
-const Game = () => {
+const Game = ({ gameStarted, setGameStarted, gameType, onGoingGame }: { gameStarted: boolean, setGameStarted: (value: boolean) => void, gameType: string, onGoingGame: any }) => {
     const user_id = getCookie("user_id") || "";
     const { data: user } = useGetUser(user_id || "0");
     const username = user?.username || "";
-    const [gameStarted, setGameStarted] = useState(false);
     const [startCountdown, setStartCountdown] = useState(false);
     const newPaddleRightYRef = useRef(0); // Use a ref to store the current state
     const newBallPositionRef = useRef({ x: 0, y: 0 }); // Use a ref to store the current state
     const newAngleRef = useRef(0); // Use a ref to store the current state
     const { mutate: surrenderGame } = useSurrenderGame();
     const { newNotif, handleStartGame, handleSurrender, handleMovePaddle, handleChangeBallDirection } = useGameSocket();
-    const { onGoingGame } = useGetGame(user_id || "0");
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const rightUser: User | undefined = (onGoingGame.data?.game?.user1?.username === username) ? onGoingGame.data?.game?.user2 : onGoingGame.data?.game?.user1;
     const leftUser: User | undefined = (onGoingGame.data?.game?.user1?.username === username) ? onGoingGame.data?.game?.user1 : onGoingGame.data?.game?.user2;
@@ -39,7 +37,7 @@ const Game = () => {
         let y = canvas.height / 2;
         newBallPositionRef.current = { x, y }; // Initialize the ref
         if (leftUser?.username === onGoingGame.data?.game?.user1?.username) {
-            newAngleRef.current = Math.random() * Math.PI * 2 * (Math.random() > 0.5 ? 1 : -1);
+            newAngleRef.current = Math.random() * Math.PI * (Math.random() > 0.5 ? 1/2 : -1/2) + Math.PI / 4;
             handleChangeBallDirection(x, y, Math.PI - newAngleRef.current, rightUser?.username || "");
         }
         let ballRadius = 10;
@@ -120,7 +118,13 @@ const Game = () => {
                 && newBallPositionRef.current.y < paddleLeftY + paddleHeight) {
                     // dx = -dx;
                     if (!ballInLeftPaddle) {
-                        newAngleRef.current = Math.PI - newAngleRef.current;
+                        let ballPositionOnPaddle = newBallPositionRef.current.y - paddleLeftY;
+                        let ballPercentageOnPaddle = ballPositionOnPaddle / paddleHeight;
+                        if (newBallPositionRef.current.y < paddleLeftY + paddleHeight / 2) {
+                            newAngleRef.current = -Math.PI * 5 / 6 * (0.5 - ballPercentageOnPaddle);
+                        } else {
+                            newAngleRef.current = Math.PI * 5 / 6 * (ballPercentageOnPaddle - 0.5);
+                        }
                         let enemyX = canvas.width - newBallPositionRef.current.x;
                         let enemyY = newBallPositionRef.current.y;
                         let enemyAngle = Math.PI - newAngleRef.current;
@@ -139,10 +143,10 @@ const Game = () => {
 
             // Move the ball
             if (user?.username === leftUser?.username)
-                newBallPositionRef.current.x += Math.cos(newAngleRef.current);
+                newBallPositionRef.current.x += Math.cos(newAngleRef.current) * 3;
             else
-                newBallPositionRef.current.x -= Math.cos(newAngleRef.current);
-            newBallPositionRef.current.y += Math.sin(newAngleRef.current);
+                newBallPositionRef.current.x -= Math.cos(newAngleRef.current) * 3;
+            newBallPositionRef.current.y += Math.sin(newAngleRef.current) * 3;
         };
 
         const animate = () => {
@@ -183,13 +187,13 @@ const Game = () => {
 
 
     return (
-        <div className="w-full h-full flex flex-col justify-center items-center text-white">
+        <div className="w-fit h-fit flex flex-col justify-center items-center text-white">
             <h1 className="text-4xl">Ping Pong</h1><br/>
             {startCountdown ? 
             (
                 (gameStarted) ? (
                     <div className="border-2 border-white w-fit h-fit">
-                        <canvas ref={canvasRef} width="480" height="320"></canvas>
+                        <canvas ref={canvasRef} width="512" height="400"></canvas>
                     </div>
                 ) : (
                     <CountDown setGameStarted={setGameStarted} setStartCountdown={setStartCountdown} />

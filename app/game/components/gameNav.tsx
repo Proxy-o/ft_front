@@ -1,7 +1,7 @@
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
-import Link from "next/link";
+
 import { Dispatch, SetStateAction } from "react";
 
 const GameNav = ({ setTab, tab }: { setTab: Dispatch<SetStateAction<string>>, tab: string }) => {
@@ -17,7 +17,6 @@ const GameNav = ({ setTab, tab }: { setTab: Dispatch<SetStateAction<string>>, ta
                     
                     Play Online
                 </Button>
-
                 <Button className={cn(
                     buttonVariants({ variant: "ghost", size: "sm" }),
                     "justify-start mb-2 hover:bg-primary",

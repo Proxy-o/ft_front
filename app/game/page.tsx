@@ -21,6 +21,7 @@ export default function Page() {
     const { newNotif } = useGameSocket();
     
     //game logic
+    const [gameStarted, setGameStarted] = useState(false);
     const [startGame, setStartGame] = useState(false);
     const { onGoingGame } = useGetGame(user_id || "0");
 
@@ -55,8 +56,8 @@ export default function Page() {
     return (
         <>
             <GameNav setTab={setTab} tab={tab} />
-            <div className="w-fit h-fit flex flex-row justify-start items-start dark:text-white">
-                {(tab === "online") && (
+            <div className="w-fit h-fit flex flex-row justify-start items-start dark:text-white mx-auto mt-10">
+                {(tab === "online" && !startGame) && (
                     <div className="w-fit h-fit flex flex-col justify-start items-start dark:text-white">
                         <Invitations />
                         <Separator className="w-full mt-4" />
@@ -64,7 +65,7 @@ export default function Page() {
                     </div>
                 )}
                 {startGame && onGoingGame.isSuccess && onGoingGame.data !== null && (
-                    <Game />
+                    <Game gameStarted={gameStarted} setGameStarted={setGameStarted} gameType={tab} onGoingGame={onGoingGame} />
                     )}
             </div>
         </>
