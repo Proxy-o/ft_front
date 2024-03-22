@@ -2,7 +2,6 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Button } from "@/components/ui/button";
 import useSurrenderGame from "../hooks/useSurrender";
 import useGameSocket from '@/lib/hooks/useGameSocket'; // Make sure this is the correct path
-import useGetGame from '../hooks/useGetGames';
 import getCookie from '@/lib/functions/getCookie';
 import { toast } from 'sonner';
 import useGetUser from '@/app/profile/hooks/useGetUser';
@@ -32,17 +31,22 @@ const Game = ({ gameStarted, setGameStarted, gameType, onGoingGame }: { gameStar
         if (!ctx) return; // Exit if context is not available
         
         let ballInLeftPaddle = false;
+        let ballInRightPaddle = false;
 
         let x = canvas.width / 2;
         let y = canvas.height / 2;
+        newAngleRef.current = Math.random() * Math.PI * (Math.random() > 0.5 ? 1 : -1);
         newBallPositionRef.current = { x, y }; // Initialize the ref
         if (leftUser?.username === onGoingGame.data?.game?.user1?.username) {
-            newAngleRef.current = Math.random() * Math.PI * (Math.random() > 0.5 ? 1/2 : -1/2) + Math.PI / 4;
+            while ((newAngleRef.current > Math.PI * 1 / 4 && newAngleRef.current < Math.PI * 3 / 4)
+                || (newAngleRef.current > Math.PI * 5 / 4 && newAngleRef.current < Math.PI * 7 / 4)) {
+                newAngleRef.current = Math.random() * Math.PI * (Math.random() > 0.5 ? 1 : -1);
+            }
             handleChangeBallDirection(x, y, Math.PI - newAngleRef.current, rightUser?.username || "");
         }
-        let ballRadius = 10;
-        
-        const paddleHeight = 50;
+        let ballRadius = 5;
+
+        const paddleHeight = 40;
         const paddleWidth = 10;
         let paddleRightY = (canvas.height - paddleHeight) / 2;
         let paddleLeftY = (canvas.height - paddleHeight) / 2;
@@ -51,12 +55,18 @@ const Game = ({ gameStarted, setGameStarted, gameType, onGoingGame }: { gameStar
 
         let upPressed = false;
         let downPressed = false;
+        let wPressed = false;
+        let sPressed = false;
 
         const keyDownHandler = (e: KeyboardEvent) => {
             if (e.key === "ArrowUp") {
                 upPressed = true;
             } else if (e.key === "ArrowDown") {
                 downPressed = true;
+            } else if (e.key === "w") {
+                wPressed = true;
+            } else if (e.key === "s") {
+                sPressed = true;
             }
         };
 
@@ -85,13 +95,50 @@ const Game = ({ gameStarted, setGameStarted, gameType, onGoingGame }: { gameStar
             ctx.fill();
             ctx.closePath();
         };
+        
+        function checkCollisionWithHorizontalWalls() {
+            if (canvas === null) return;
+            if (newBallPositionRef.current.y > canvas.height - ballRadius 
+                || newBallPositionRef.current.y < ballRadius) {
+                newAngleRef.current = -newAngleRef.current;
+            }
+        }
 
-        const draw = () => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            drawBall();
-            drawRightPaddle();
-            drawLeftPaddle();
+        function moveBall() {
+            if (user?.username === leftUser?.username)
+                newBallPositionRef.current.x += Math.cos(newAngleRef.current) * 3;
+            else
+                newBallPositionRef.current.x -= Math.cos(newAngleRef.current) * 3;
+            newBallPositionRef.current.y += Math.sin(newAngleRef.current) * 3;
+        }
 
+        // 1 vs 1 online -------------------------------------------------------------------------------------
+        function changeBallDirectionOnline() {
+            if (canvas === null) return;
+            if (newBallPositionRef.current.x < paddleWidth + ballRadius 
+                && newBallPositionRef.current.y > paddleLeftY 
+                && newBallPositionRef.current.y < paddleLeftY + paddleHeight) {
+                    if (!ballInLeftPaddle) {
+                        let ballPositionOnPaddle = newBallPositionRef.current.y - paddleLeftY;
+                        let ballPercentageOnPaddle = ballPositionOnPaddle / paddleHeight;
+                        if (newBallPositionRef.current.y < paddleLeftY + paddleHeight / 2) {
+                            newAngleRef.current = -Math.PI * 5 / 6 * (0.5 - ballPercentageOnPaddle);
+                        } else {
+                            newAngleRef.current = Math.PI * 5 / 6 * (ballPercentageOnPaddle - 0.5);
+                        }
+                        let enemyX = canvas.width - newBallPositionRef.current.x;
+                        let enemyY = newBallPositionRef.current.y;
+                        let enemyAngle = Math.PI - newAngleRef.current;
+                        handleChangeBallDirection(enemyX, enemyY, enemyAngle, rightUser?.username || "");
+                        ballInLeftPaddle = true;
+                    }
+            } else {
+                ballInLeftPaddle = false;
+            }
+        }
+        
+        function movePaddlesOnline() {
+            if (canvas === null) return;
             if (upPressed && paddleLeftY > 0) {
                 if (paddleLeftY - 20 < 0) {
                     paddleLeftY = 0;
@@ -111,46 +158,128 @@ const Game = ({ gameStarted, setGameStarted, gameType, onGoingGame }: { gameStar
                 handleMovePaddle(paddleLeftY, rightUser?.username || "");
                 downPressed = false;
             }
+        }
+
+        const drawOnlineOne = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawBall();
+            drawRightPaddle();
+            drawLeftPaddle();
+
+            // move paddles
+            movePaddlesOnline();
             
             // Check for collision with left paddle
+            changeBallDirectionOnline();
+
+            // Check for collision with the horizontal walls            
+            checkCollisionWithHorizontalWalls();
+
+            // Move the ball
+            moveBall();
+        };
+
+        // 1 vs 1 offline -------------------------------------------------------------------------------------
+        function changeBallDirectionOffline() {
+            if (canvas === null) return;
             if (newBallPositionRef.current.x < paddleWidth + ballRadius 
                 && newBallPositionRef.current.y > paddleLeftY 
                 && newBallPositionRef.current.y < paddleLeftY + paddleHeight) {
-                    // dx = -dx;
                     if (!ballInLeftPaddle) {
                         let ballPositionOnPaddle = newBallPositionRef.current.y - paddleLeftY;
                         let ballPercentageOnPaddle = ballPositionOnPaddle / paddleHeight;
                         if (newBallPositionRef.current.y < paddleLeftY + paddleHeight / 2) {
-                            newAngleRef.current = -Math.PI * 5 / 6 * (0.5 - ballPercentageOnPaddle);
-                        } else {
-                            newAngleRef.current = Math.PI * 5 / 6 * (ballPercentageOnPaddle - 0.5);
+                            newAngleRef.current = -Math.PI + Math.PI * 2 / 6 * (0.5 - ballPercentageOnPaddle);
                         }
-                        let enemyX = canvas.width - newBallPositionRef.current.x;
-                        let enemyY = newBallPositionRef.current.y;
-                        let enemyAngle = Math.PI - newAngleRef.current;
-                        handleChangeBallDirection(enemyX, enemyY, enemyAngle, rightUser?.username || "");
+                        else {
+                            newAngleRef.current = Math.PI - Math.PI * 2 / 6 * (ballPercentageOnPaddle - 0.5);
+                        }
                         ballInLeftPaddle = true;
                     }
+                } else {
+                    ballInLeftPaddle = false;
+                }
+                
+                if (newBallPositionRef.current.x > canvas.width - paddleWidth - ballRadius
+                    && newBallPositionRef.current.y > newPaddleRightYRef.current
+                    && newBallPositionRef.current.y < newPaddleRightYRef.current + paddleHeight) {
+                        if (!ballInRightPaddle) {
+                            let ballPositionOnPaddle = newBallPositionRef.current.y - newPaddleRightYRef.current;
+                            let ballPercentageOnPaddle = ballPositionOnPaddle / paddleHeight;
+                            if (newBallPositionRef.current.y < newPaddleRightYRef.current + paddleHeight / 2) {
+                                newAngleRef.current = -Math.PI * 2 / 6 * (0.5 - ballPercentageOnPaddle);
+                            } else {
+                                newAngleRef.current = Math.PI * 2 / 6 * (ballPercentageOnPaddle - 0.5);
+                            }
+                        ballInRightPaddle = true;
+                    }
             } else {
-                ballInLeftPaddle = false;
+                ballInRightPaddle = false;
             }
+        }
 
-            // Check for collision with the horizontal walls            
-            if (newBallPositionRef.current.y > canvas.height - ballRadius 
-                || newBallPositionRef.current.y < ballRadius) {
-                newAngleRef.current = -newAngleRef.current;
+        function movePaddlesOffline() {
+            if (canvas === null) return;
+            if (upPressed && newPaddleRightYRef.current > 0) {
+                if (newPaddleRightYRef.current - 20 < 0) {
+                    newPaddleRightYRef.current = 0;
+                }
+                else {
+                    newPaddleRightYRef.current -= 20;
+                }
+                upPressed = false;
             }
+            if (downPressed && newPaddleRightYRef.current < canvas.height - paddleHeight) {
+                if (newPaddleRightYRef.current + 20 > canvas.height - paddleHeight) {
+                    newPaddleRightYRef.current = canvas.height - paddleHeight;
+                }
+                else {
+                    newPaddleRightYRef.current += 20;
+                }
+                downPressed = false;
+            }
+            if (wPressed && paddleLeftY > 0) {
+                if (paddleLeftY - 20 < 0) {
+                    paddleLeftY = 0;
+                }
+                else {
+                    paddleLeftY -= 20;
+                }
+                wPressed = false;
+            }
+            if (sPressed && paddleLeftY < canvas.height - paddleHeight) {
+                if (paddleLeftY + 20 > canvas.height - paddleHeight) {
+                    paddleLeftY = canvas.height - paddleHeight;
+                }
+                else {
+                    paddleLeftY += 20;
+                }
+                sPressed = false;
+            }
+        }
+        const drawOfflineOne = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawBall();
+            drawRightPaddle();
+            drawLeftPaddle();
+
+            //move paddles
+            movePaddlesOffline();
+
+            // Check for collision with left paddle
+            changeBallDirectionOffline();
+
+            // Check for collision with the horizontal walls
+            checkCollisionWithHorizontalWalls();
 
             // Move the ball
-            if (user?.username === leftUser?.username)
-                newBallPositionRef.current.x += Math.cos(newAngleRef.current) * 3;
-            else
-                newBallPositionRef.current.x -= Math.cos(newAngleRef.current) * 3;
-            newBallPositionRef.current.y += Math.sin(newAngleRef.current) * 3;
-        };
+            moveBall();
+        }
 
         const animate = () => {
-            draw(); // Call draw without passing newPaddleRightY
+            if (canvas === null) return;
+            // drawOnlineOne();
+            drawOfflineOne();
             requestAnimationFrame(animate);
         };
 
@@ -163,7 +292,7 @@ const Game = ({ gameStarted, setGameStarted, gameType, onGoingGame }: { gameStar
 
     useEffect(() => {
         const notif = newNotif();
-        if (notif) {
+        if (notif && gameType === "online") {
             const message = JSON.parse(notif.data);
             if (message.message?.split(" ")[0] === "/show") {
                 setStartCountdown(true);
@@ -200,9 +329,13 @@ const Game = ({ gameStarted, setGameStarted, gameType, onGoingGame }: { gameStar
                 )
             ) : (
                 <Button
-                    onClick={() => {
+                onClick={() => {
+                    if (gameType === "online") {
                         handleStartGame(onGoingGame.data?.game?.user1.username || "", onGoingGame.data?.game?.user2.username || "");
-                    }}
+                    } else {
+                        setStartCountdown(true);
+                    }
+                }}
                     className="w-1/2 mt-4"
                 >
                     Start Game

@@ -64,7 +64,10 @@ export default function Page() {
                         <InviteFriend />
                     </div>
                 )}
-                {startGame && onGoingGame.isSuccess && onGoingGame.data !== null && (
+                {
+                ((tab == "four" || tab == "online") && startGame && onGoingGame.isSuccess && onGoingGame.data !== null ||
+                tab == "local"
+                    ) && (
                     <Game gameStarted={gameStarted} setGameStarted={setGameStarted} gameType={tab} onGoingGame={onGoingGame} />
                     )}
             </div>
