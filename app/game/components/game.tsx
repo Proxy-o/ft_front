@@ -14,6 +14,7 @@ const Game = ({ gameStarted, setGameStarted, gameType, onGoingGame }: { gameStar
     const username = user?.username || "";
     const [startCountdown, setStartCountdown] = useState(false);
     const newPaddleRightYRef = useRef(0); // Use a ref to store the current state
+    const newPaddleRightYRefTwo = useRef(0); // Use a ref to store the current state
     const newBallPositionRef = useRef({ x: 0, y: 0 }); // Use a ref to store the current state
     const newAngleRef = useRef(0); // Use a ref to store the current state
     const { mutate: surrenderGame } = useSurrenderGame();
@@ -48,15 +49,21 @@ const Game = ({ gameStarted, setGameStarted, gameType, onGoingGame }: { gameStar
 
         const paddleHeight = 40;
         const paddleWidth = 10;
-        let paddleRightY = (canvas.height - paddleHeight) / 2;
-        let paddleLeftY = (canvas.height - paddleHeight) / 2;
+        let paddleRightY = (canvas.height - paddleHeight) / 4;
+        let paddleRightYTwo = (canvas.height - paddleHeight) * 3 / 4;
+        let paddleLeftY = (canvas.height - paddleHeight) / 4;
+        let paddleLeftYTwo = (canvas.height - paddleHeight) * 3 / 4;
         
         newPaddleRightYRef.current = paddleRightY; // Initialize the ref
-
+        newPaddleRightYRefTwo.current = paddleRightYTwo; // Initialize the ref
         let upPressed = false;
+        let offPressed = false;
         let downPressed = false;
+        let lPressed = false;
         let wPressed = false;
+        let tPressed = false;
         let sPressed = false;
+        let gPressed = false;
 
         const keyDownHandler = (e: KeyboardEvent) => {
             if (e.key === "ArrowUp") {
@@ -67,6 +74,14 @@ const Game = ({ gameStarted, setGameStarted, gameType, onGoingGame }: { gameStar
                 wPressed = true;
             } else if (e.key === "s") {
                 sPressed = true;
+            } else if (e.key === "t") {
+                tPressed = true;
+            } else if (e.key === "g") {
+                gPressed = true;
+            } else if (e.key === "o") {
+                offPressed = true;
+            } else if (e.key === "l") {
+                lPressed = true;
             }
         };
 
@@ -92,6 +107,22 @@ const Game = ({ gameStarted, setGameStarted, gameType, onGoingGame }: { gameStar
             ctx.beginPath();
             ctx.rect(0, paddleLeftY, paddleWidth, paddleHeight);
             ctx.fillStyle = "#ee95DD";
+            ctx.fill();
+            ctx.closePath();
+        };
+
+        const drawLeftPaddleTwo = () => {
+            ctx.beginPath();
+            ctx.rect(0, paddleLeftYTwo, paddleWidth, paddleHeight);
+            ctx.fillStyle = "#ee95DD";
+            ctx.fill();
+            ctx.closePath();
+        };
+
+        const drawRightPaddleTwo = () => {
+            ctx.beginPath();
+            ctx.rect(canvas.width - paddleWidth, newPaddleRightYRefTwo.current, paddleWidth, paddleHeight);
+            ctx.fillStyle = "#0095DD";
             ctx.fill();
             ctx.closePath();
         };
@@ -147,7 +178,6 @@ const Game = ({ gameStarted, setGameStarted, gameType, onGoingGame }: { gameStar
                     paddleLeftY -= 20;
                 }
                 handleMovePaddle(paddleLeftY, rightUser?.username || "");
-                upPressed = false;
             } else if (downPressed && paddleLeftY < canvas.height - paddleHeight) {
                 if (paddleLeftY + 20 > canvas.height - paddleHeight) {
                     paddleLeftY = canvas.height - paddleHeight;
@@ -156,8 +186,9 @@ const Game = ({ gameStarted, setGameStarted, gameType, onGoingGame }: { gameStar
                     paddleLeftY += 20;
                 }
                 handleMovePaddle(paddleLeftY, rightUser?.username || "");
-                downPressed = false;
             }
+            upPressed = false;
+            downPressed = false;
         }
 
         const drawOnlineOne = () => {
@@ -219,6 +250,7 @@ const Game = ({ gameStarted, setGameStarted, gameType, onGoingGame }: { gameStar
         }
 
         function movePaddlesOffline() {
+            console.log("movePaddlesOffline")
             if (canvas === null) return;
             if (upPressed && newPaddleRightYRef.current > 0) {
                 if (newPaddleRightYRef.current - 20 < 0) {
@@ -227,17 +259,14 @@ const Game = ({ gameStarted, setGameStarted, gameType, onGoingGame }: { gameStar
                 else {
                     newPaddleRightYRef.current -= 20;
                 }
-                upPressed = false;
-            }
-            if (downPressed && newPaddleRightYRef.current < canvas.height - paddleHeight) {
+            } else if (downPressed && newPaddleRightYRef.current < canvas.height - paddleHeight) {
                 if (newPaddleRightYRef.current + 20 > canvas.height - paddleHeight) {
                     newPaddleRightYRef.current = canvas.height - paddleHeight;
                 }
                 else {
                     newPaddleRightYRef.current += 20;
                 }
-                downPressed = false;
-            }
+            } else
             if (wPressed && paddleLeftY > 0) {
                 if (paddleLeftY - 20 < 0) {
                     paddleLeftY = 0;
@@ -245,8 +274,7 @@ const Game = ({ gameStarted, setGameStarted, gameType, onGoingGame }: { gameStar
                 else {
                     paddleLeftY -= 20;
                 }
-                wPressed = false;
-            }
+            } else
             if (sPressed && paddleLeftY < canvas.height - paddleHeight) {
                 if (paddleLeftY + 20 > canvas.height - paddleHeight) {
                     paddleLeftY = canvas.height - paddleHeight;
@@ -254,9 +282,14 @@ const Game = ({ gameStarted, setGameStarted, gameType, onGoingGame }: { gameStar
                 else {
                     paddleLeftY += 20;
                 }
-                sPressed = false;
             }
+            wPressed = false;
+            sPressed = false;
+            downPressed = false;
+            upPressed = false;
+            console.log(newPaddleRightYRef.current);
         }
+
         const drawOfflineOne = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             drawBall();
@@ -276,10 +309,175 @@ const Game = ({ gameStarted, setGameStarted, gameType, onGoingGame }: { gameStar
             moveBall();
         }
 
+
+        // 2 vs 2 online -------------------------------------------------------------------------------------
+        function movePaddlesOfflineTwo() {
+            if (canvas === null) return;
+            if (wPressed && paddleLeftY > 0) {
+                if (paddleLeftY - 20 < 0) {
+                    paddleLeftY = 0;
+                }
+                else {
+                    paddleLeftY -= 20;
+                }
+            } else if (sPressed && paddleLeftY < canvas.height / 2 - paddleHeight) {
+                if (paddleLeftY + 20 > canvas.height / 2 - paddleHeight) {
+                    paddleLeftY = canvas.height - paddleHeight;
+                }
+                else {
+                    paddleLeftY += 20;
+                }
+            } else if (tPressed && paddleLeftYTwo > canvas.height / 2) {
+                if (paddleLeftYTwo - 20 < canvas.height / 2) {
+                    paddleLeftYTwo = canvas.height / 2;
+                }
+                else {
+                    paddleLeftYTwo -= 20;
+                }
+            } else if (gPressed && paddleLeftYTwo < canvas.height - paddleHeight) {
+                if (paddleLeftYTwo + 20 > canvas.height - paddleHeight) {
+                    paddleLeftYTwo = canvas.height - paddleHeight;
+                }
+                else {
+                    paddleLeftYTwo += 20;
+                }
+            } else if (upPressed && newPaddleRightYRef.current > 0) {
+                if (newPaddleRightYRef.current - 20 < 0) {
+                    newPaddleRightYRef.current = 0;
+                }
+                else {
+                    newPaddleRightYRef.current -= 20;
+                }
+            } else if (downPressed && newPaddleRightYRef.current < canvas.height / 2 - paddleHeight) {
+                if (newPaddleRightYRef.current + 20 > canvas.height / 2 - paddleHeight) {
+                    newPaddleRightYRef.current = canvas.height / 2 - paddleHeight;
+                }
+                else {
+                    newPaddleRightYRef.current += 20;
+                }
+            } else if (offPressed && newPaddleRightYRefTwo.current > canvas.height / 2) {
+                if (newPaddleRightYRefTwo.current - 20 < canvas.height / 2) {
+                    newPaddleRightYRefTwo.current = canvas.height / 2;
+                }
+                else {
+                    newPaddleRightYRefTwo.current -= 20;
+                }
+            } else if (lPressed && newPaddleRightYRefTwo.current < canvas.height - paddleHeight) {
+                if (newPaddleRightYRefTwo.current + 20 > canvas.height - paddleHeight) {
+                    newPaddleRightYRefTwo.current = canvas.height - paddleHeight;
+                }
+                else {
+                    newPaddleRightYRefTwo.current += 20;
+                }
+            }
+            wPressed = false;
+            sPressed = false;
+            tPressed = false;
+            gPressed = false;
+            upPressed = false;
+            downPressed = false;
+            lPressed = false;
+            offPressed = false;
+        }
+
+        function changeBallDirectionOfflineTwo() {
+            if (canvas === null) return;
+            if (newBallPositionRef.current.x < paddleWidth + ballRadius 
+                && newBallPositionRef.current.y > paddleLeftY 
+                && newBallPositionRef.current.y < paddleLeftY + paddleHeight) {
+                    if (!ballInLeftPaddle) {
+                        let ballPositionOnPaddle = newBallPositionRef.current.y - paddleLeftY;
+                        let ballPercentageOnPaddle = ballPositionOnPaddle / paddleHeight;
+                        if (newBallPositionRef.current.y < paddleLeftY + paddleHeight / 2) {
+                            newAngleRef.current = -Math.PI + Math.PI * 2 / 6 * (0.5 - ballPercentageOnPaddle);
+                        }
+                        else {
+                            newAngleRef.current = Math.PI - Math.PI * 2 / 6 * (ballPercentageOnPaddle - 0.5);
+                        }
+                        ballInLeftPaddle = true;
+                    }
+                } else {
+                    ballInLeftPaddle = false;
+                }
+            if (newBallPositionRef.current.x < paddleWidth + ballRadius
+                && newBallPositionRef.current.y > paddleLeftYTwo
+                && newBallPositionRef.current.y < paddleLeftYTwo + paddleHeight) {
+                    if (!ballInLeftPaddle) {
+                        let ballPositionOnPaddle = newBallPositionRef.current.y - paddleLeftYTwo;
+                        let ballPercentageOnPaddle = ballPositionOnPaddle / paddleHeight;
+                        if (newBallPositionRef.current.y < paddleLeftYTwo + paddleHeight / 2) {
+                            newAngleRef.current = -Math.PI + Math.PI * 2 / 6 * (0.5 - ballPercentageOnPaddle);
+                        }
+                        else {
+                            newAngleRef.current = Math.PI - Math.PI * 2 / 6 * (ballPercentageOnPaddle - 0.5);
+                        }
+                        ballInLeftPaddle = true;
+                    }
+                }
+                
+                if (newBallPositionRef.current.x > canvas.width - paddleWidth - ballRadius
+                    && newBallPositionRef.current.y > newPaddleRightYRef.current
+                    && newBallPositionRef.current.y < newPaddleRightYRef.current + paddleHeight) {
+                        if (!ballInRightPaddle) {
+                            let ballPositionOnPaddle = newBallPositionRef.current.y - newPaddleRightYRef.current;
+                            let ballPercentageOnPaddle = ballPositionOnPaddle / paddleHeight;
+                            if (newBallPositionRef.current.y < newPaddleRightYRef.current + paddleHeight / 2) {
+                                newAngleRef.current = -Math.PI * 2 / 6 * (0.5 - ballPercentageOnPaddle);
+                            } else {
+                                newAngleRef.current = Math.PI * 2 / 6 * (ballPercentageOnPaddle - 0.5);
+                            }
+                        ballInRightPaddle = true;
+                    }
+            } else {
+                ballInRightPaddle = false;
+            }
+
+            if (newBallPositionRef.current.x > canvas.width - paddleWidth - ballRadius
+                && newBallPositionRef.current.y > newPaddleRightYRefTwo.current
+                && newBallPositionRef.current.y < newPaddleRightYRefTwo.current + paddleHeight) {
+                    if (!ballInRightPaddle) {
+                        let ballPositionOnPaddle = newBallPositionRef.current.y - newPaddleRightYRefTwo.current;
+                        let ballPercentageOnPaddle = ballPositionOnPaddle / paddleHeight;
+                        if (newBallPositionRef.current.y < newPaddleRightYRefTwo.current + paddleHeight / 2) {
+                            newAngleRef.current = -Math.PI * 2 / 6 * (0.5 - ballPercentageOnPaddle);
+                        } else {
+                            newAngleRef.current = Math.PI * 2 / 6 * (ballPercentageOnPaddle - 0.5);
+                        }
+                    ballInRightPaddle = true;
+                }
+            }
+            else {
+                ballInRightPaddle = false;
+            }
+        }
+
+        const drawOfflineTwo = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawBall();
+            drawRightPaddle();
+            drawLeftPaddle();
+            drawRightPaddleTwo();
+            drawLeftPaddleTwo();
+
+
+            //move paddles
+            movePaddlesOfflineTwo();
+
+            // Check for collision with left paddle
+            changeBallDirectionOfflineTwo();
+
+            // Check for collision with the horizontal walls
+            checkCollisionWithHorizontalWalls();
+
+            // Move the ball
+            moveBall();
+        }
+
         const animate = () => {
             if (canvas === null) return;
             // drawOnlineOne();
             drawOfflineOne();
+            // drawOfflineTwo();
             requestAnimationFrame(animate);
         };
 
