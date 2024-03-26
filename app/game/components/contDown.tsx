@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 const CountDown = (props: any) => {
-    const { setStartCountdown, setGameStarted } = props;
+    const { setGameStarted, setStartCountdown } = props;
     const [count, setCount] = useState(3);
 
     useEffect(() => {
