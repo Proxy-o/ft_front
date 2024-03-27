@@ -28,20 +28,30 @@ const OneOffline = () => {
         setLeftScore(0);
         setRightScore(0);
 
+        let firstTime = true;
+
         let ballInLeftPaddle = false;
         let ballInRightPaddle = false;
 
-        let x = canvas.width / 2;
-        let y = canvas.height - canvas.height * Math.random();
-        newBallPositionRef.current = { x, y }; // Initialize the ref
-        newAngleRef.current = Math.PI;
-        
         let ballRadius = 10;
+        let x = canvas.width / 2;
+        let y = Math.random() * (canvas.height - ballRadius * 2) + ballRadius;
+        newBallPositionRef.current = { x, y }; // Initialize the ref
+        newAngleRef.current = Math.random() * Math.PI;
+        
+        while ((newAngleRef.current > Math.PI / 6 && newAngleRef.current < Math.PI * 5 / 6) ||
+            (newAngleRef.current > Math.PI * 7 / 6 && newAngleRef.current < Math.PI * 11 / 6)) {
+            newAngleRef.current = Math.random() * 2 * Math.PI;
+        }
+
 
         const paddleHeight = 60;
         const paddleWidth = 10;
-        let paddleRightY = (canvas.height - paddleHeight) / 4;
-        let paddleLeftY = (canvas.height - paddleHeight) / 4;
+        let paddleRightY = (canvas.height - paddleHeight) / 2;
+        let paddleLeftY = (canvas.height - paddleHeight) / 2;
+
+        const paddleLeftX = 20;
+        const paddleRightX = canvas.width - 15 - paddleWidth;
         
         let upPressed = false;
         let downPressed = false;
@@ -87,7 +97,7 @@ const OneOffline = () => {
 
         const drawRightPaddle = () => {
             ctx.beginPath();
-            ctx.rect(canvas.width - paddleWidth, paddleRightY, paddleWidth, paddleHeight);
+            ctx.rect(paddleRightX, paddleRightY, paddleWidth, paddleHeight);
             ctx.fillStyle = "#0095DD";
             ctx.fill();
             ctx.closePath();
@@ -95,7 +105,7 @@ const OneOffline = () => {
 
         const drawLeftPaddle = () => {
             ctx.beginPath();
-            ctx.rect(0, paddleLeftY, paddleWidth, paddleHeight);
+            ctx.rect(paddleLeftX, paddleLeftY, paddleWidth, paddleHeight);
             ctx.fillStyle = "#ee95DD";
             ctx.fill();
             ctx.closePath();
@@ -110,16 +120,23 @@ const OneOffline = () => {
         }
 
         function moveBall() {
-            newBallPositionRef.current.x += Math.cos(newAngleRef.current) * 5;
-            newBallPositionRef.current.y += Math.sin(newAngleRef.current) * 5;
+            if (firstTime) {
+                newBallPositionRef.current.x += Math.cos(newAngleRef.current) * 3;
+                newBallPositionRef.current.y += Math.sin(newAngleRef.current) * 3;
+            } else {
+                newBallPositionRef.current.x += Math.cos(newAngleRef.current) * 8;
+                newBallPositionRef.current.y += Math.sin(newAngleRef.current) * 8;
+            }
         }
 
         // 1 vs 1 offline -------------------------------------------------------------------------------------
         function changeBallDirectionOffline() {
             if (canvas === null) return;
-            if (newBallPositionRef.current.x < paddleWidth + ballRadius 
-                && newBallPositionRef.current.y > paddleLeftY 
-                && newBallPositionRef.current.y < paddleLeftY + paddleHeight) {
+            if (newBallPositionRef.current.x < paddleLeftX + paddleWidth + ballRadius
+                && newBallPositionRef.current.x > paddleLeftX + ballRadius
+                && newBallPositionRef.current.y + ballRadius / 2 > paddleLeftY
+                && newBallPositionRef.current.y - ballRadius / 2 < paddleLeftY + paddleHeight) {
+                    firstTime = false;
                     if (!ballInLeftPaddle) {
                         let ballPositionOnPaddle = newBallPositionRef.current.y - paddleLeftY;
                         let ballPercentageOnPaddle = ballPositionOnPaddle / paddleHeight;
@@ -135,9 +152,11 @@ const OneOffline = () => {
                     ballInLeftPaddle = false;
                 }
                 
-                if (newBallPositionRef.current.x > canvas.width - paddleWidth - ballRadius
-                    && newBallPositionRef.current.y > paddleRightY
-                    && newBallPositionRef.current.y < paddleRightY + paddleHeight) {
+                if (newBallPositionRef.current.x > paddleRightX - ballRadius
+                    && newBallPositionRef.current.x < paddleRightX + paddleWidth + ballRadius
+                    && newBallPositionRef.current.y + ballRadius / 2 > paddleRightY
+                    && newBallPositionRef.current.y - ballRadius / 2 < paddleRightY + paddleHeight) {
+                        firstTime = false;
                         if (!ballInRightPaddle) {
                             let ballPositionOnPaddle = newBallPositionRef.current.y - paddleRightY;
                             let ballPercentageOnPaddle = ballPositionOnPaddle / paddleHeight;
@@ -155,49 +174,79 @@ const OneOffline = () => {
 
         function movePaddlesOffline() {
             if (canvas === null) return;
-            if (upPressed && paddleRightY > 0) {
-                paddleRightY -= 7; // Move right paddle up
+            if (upPressed){
+                if (paddleRightY - 12 > 0) {
+                    paddleRightY -= 12; // Move right paddle up
+                } else {
+                    paddleRightY = 0;
+                }
             }
-            if (downPressed && paddleRightY < canvas.height - paddleHeight) {
-                paddleRightY += 7; // Move right paddle down
+            if (downPressed){
+                if (paddleRightY + paddleHeight + 12 < canvas.height) {
+                    paddleRightY += 12; // Move right paddle down
+                } else {
+                    paddleRightY = canvas.height - paddleHeight;
+                }
             }
-            if (wPressed && paddleLeftY > 0) {
-                paddleLeftY -= 7; // Move left paddle down
+            if (wPressed) {
+                if (paddleLeftY - 12 > 0) {
+                    paddleLeftY -= 12; // Move left paddle down
+                } else {
+                    paddleLeftY = 0;
+                }
             }
-            if (sPressed && paddleLeftY < canvas.height - paddleHeight) {
-                paddleLeftY += 7; // Move left paddle up
+            if (sPressed) {
+                if (paddleLeftY + paddleHeight + 12 < canvas.height) {
+                    paddleLeftY += 12; // Move left paddle up
+                } else {
+                    paddleLeftY = canvas.height - paddleHeight;
+                }
             }
         }
 
         function changeScoreOffline() {
             if (canvas === null) return;
-            if (newBallPositionRef.current.x < paddleWidth) {
-                rightScoreRef.current = rightScoreRef.current + 1;
-                setRightScore(rightScoreRef.current);
-                x = canvas.width / 2;
-                y = canvas.height / 2;
-                newBallPositionRef.current = { x, y };
-                newAngleRef.current = Math.random() * Math.PI * (Math.random() > 0.5 ? 1 : -1);
-            } else if (newBallPositionRef.current.x > canvas.width - paddleWidth) {
-                leftScoreRef.current = leftScoreRef.current + 1;
-                setLeftScore(leftScoreRef.current);
-                x = canvas.width / 2;
-                y = canvas.height / 2;
-                newBallPositionRef.current = { x, y };
-                newAngleRef.current = Math.random() * Math.PI * (Math.random() > 0.5 ? 1 : -1);
+            if (newBallPositionRef.current.x < 0) {
+                if (newBallPositionRef.current.x < -50) {
+                    rightScoreRef.current = rightScoreRef.current + 1;
+                    setRightScore(rightScoreRef.current);
+                    x = canvas.width / 2;
+                    y = Math.random() * (canvas.height - ballRadius * 2) + ballRadius;
+                    firstTime = true;
+                    newBallPositionRef.current = { x, y };
+                    newAngleRef.current = Math.random() * 2 * Math.PI;
+                    while ((newAngleRef.current > Math.PI / 6 && newAngleRef.current < Math.PI * 5 / 6)||
+                        (newAngleRef.current > Math.PI * 7 / 6 && newAngleRef.current < Math.PI * 11 / 6)) {
+                        newAngleRef.current = Math.random() * 2 * Math.PI;
+                    }
+                }
+            } else if (newBallPositionRef.current.x > canvas.width) {
+                if (newBallPositionRef.current.x > canvas.width + 50) {
+                    leftScoreRef.current = leftScoreRef.current + 1;
+                    setLeftScore(leftScoreRef.current);
+                    x = canvas.width / 2;
+                    y = Math.random() * (canvas.height - ballRadius * 2) + ballRadius;
+                    firstTime = true;
+                    newBallPositionRef.current = { x, y };
+                    newAngleRef.current = Math.random() * 2 * Math.PI;
+                    while ((newAngleRef.current > Math.PI / 6 && newAngleRef.current < Math.PI * 5 / 6)||
+                        (newAngleRef.current > Math.PI * 7 / 6 && newAngleRef.current < Math.PI * 11 / 6)) {
+                        newAngleRef.current = Math.random() * 2 * Math.PI;
+                    }
+                }
             }
         }
         function checkLoseConditionOffline() {
             if (canvas === null) return;
-            if (leftScoreRef.current === 3 || rightScoreRef.current === 3)
+            if (leftScoreRef.current === 10 || rightScoreRef.current === 10)
             {
                 rightScoreRef.current = 0;
                 leftScoreRef.current = 0;
                 setGameStarted(false);
                 setStartCountdown(false);
-                if (leftScoreRef.current === 3) {
+                if (leftScoreRef.current === 10) {
                     // alert("Left player wins!");
-                } else if (rightScoreRef.current === 3) {
+                } else if (rightScoreRef.current === 10) {
                     // alert("Right player wins!");
                 }
             }
