@@ -2,5 +2,6 @@
 import ChatList from "./components/chatList";
 
 export default function Page() {
+  // send
   return <ChatList />;
 }

@@ -69,16 +69,20 @@ export default function ChatCard({
   return (
     <div className=" flex flex-col h-screen border-r w-full  relative ">
       <div className="  flex justify-end md:justify-start ml-2 p-2 shadow-2xl ">
-        <Avatar className=" mr-2">
+        <Avatar className=" mr-2 relative">
+          {receiver.status === "offline" && (
+            <div className="bg-green-500 size-2 rounded-full absolute bottom-[8px] right-1 z-50"></div>
+          )}
           <AvatarImage
             src={receiver.avatar}
             alt="profile image"
             className="rounded-full h-8 w-8"
           />
-          <AvatarFallback className="rounded-sm">PF</AvatarFallback>
+          <AvatarFallback className="rounded-full h-8 w-8">PF</AvatarFallback>
         </Avatar>
-        <p className="text-center flex items-center mr-2 w-fit overflow-clip ">
+        <p className="text-center flex flex-col justify-center items-center mr-2 w-fit overflow-clip ">
           {receiver.username}
+          <p className="text-xs text-gray-600">{receiver.status}</p>
         </p>
       </div>
       <div
@@ -109,7 +113,7 @@ export default function ChatCard({
               });
             })
           ) : (
-            <div className="flex justify-center items-center  bg-secondary/30 rounded-sm mt-24 h-12">
+            <div className="flex justify-center items-center  bg-secondary/30 rounded-full mt-24 h-12">
               <p>No Messages yet</p>
             </div>
           )}

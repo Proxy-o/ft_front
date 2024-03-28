@@ -18,7 +18,7 @@ import useGetUser from "@/app/profile/hooks/useGetUser";
 
 export default function ChatList() {
   const user_id = getCookie("user_id");
-  const { data, isSuccess } = useGetFriends(user_id || "0");
+  const { data: friends, isSuccess } = useGetFriends(user_id || "0");
   const { data: sender, isSuccess: isSender } = useGetUser(user_id || "0");
 
   const [receiver, setReceiver] = React.useState<User>();
@@ -42,12 +42,12 @@ export default function ChatList() {
         {mb || !receiverId ? (
           <div
             className={cn(
-              "flex flex-col    h-screen  overflow-y-auto  ",
+              "flex flex-col    h-screen  overflow-y-auto  p-2",
               !isChatOpen ? "w-full" : "w-[40rem]"
             )}
           >
             {isSuccess &&
-              data.map((friend: User) => {
+              friends.map((friend: User) => {
                 return (
                   <div
                     key={friend.id}
@@ -67,7 +67,7 @@ export default function ChatList() {
             <Drawer>
               <DrawerContent className="overflow-auto ">
                 {isSuccess &&
-                  data.map((friend: User) => {
+                  friends.map((friend: User) => {
                     return (
                       <div
                         key={friend.id}

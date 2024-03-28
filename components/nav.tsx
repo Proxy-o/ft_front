@@ -12,12 +12,7 @@ import {
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "./ui/tooltip";
+
 import { Button, buttonVariants } from "./ui/button";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
 import { usePathname } from "next/navigation";
@@ -28,6 +23,7 @@ import getCookie from "@/lib/functions/getCookie";
 import useWebSocket from "react-use-websocket";
 import useGameSocket from "@/lib/hooks/useGameSocket";
 import { toast } from "sonner";
+import useGetUser from "@/app/profile/hooks/useGetUser";
 
 interface linksProps {
   title: string;
@@ -95,8 +91,10 @@ export default function Nav() {
   };
 
   const token = getCookie("refresh");
+  const id = getCookie("user_id");
   const socketUrl = process.env.NEXT_PUBLIC_CHAT_URL + "2/?refresh=" + token;
   const { lastMessage } = useWebSocket(socketUrl);
+  const { data: user, isSuccess } = useGetUser(id ? id : "0");
 
   useEffect(() => {
     if (newNotif()) {
@@ -126,10 +124,11 @@ export default function Nav() {
               "justify-start mb-2"
             )}
           >
-            {link.title === "chat" && lastMessage ? (
+            {link.title === "chat" && isSuccess && user.unread_messages ? (
               <div className="relative">
-                <span className="h-2 w-2 bg-primary rounded-full absolute top-0 right-0 "></span>
-                <link.icon className="mr-2 h-6 w-6 " />
+                <link.icon className=" h-6 w-6 " />
+                <span className="h-3 w-3 bg-white rounded-full absolute top-0 right-0 "></span>
+                <span className="h-1 w-1 bg-primary rounded-full absolute top-1 right-1 "></span>
               </div>
             ) : link.title === "Play" && notification ? (
               <div className="relative">
