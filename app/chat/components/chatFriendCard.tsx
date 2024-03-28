@@ -27,7 +27,7 @@ export default function ChatFriendCard({
           />
           <AvatarFallback className="rounded-sm">PF</AvatarFallback>
         </Avatar>
-        <p className="text-center flex items-center mr-2 w-5 overflow-clip ">
+        <p className="text-center flex items-center mr-2 w-fit overflow-clip ">
           {friend.username}
         </p>
       </div>

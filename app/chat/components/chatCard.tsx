@@ -68,7 +68,7 @@ export default function ChatCard({
 
   return (
     <div className=" flex flex-col h-screen border-r w-full  relative">
-      <div className=" flex justify-end md:justify-start ml-2 p-1 shadow-sm border-b-2">
+      <div className=" flex justify-end md:justify-start ml-2 p-1 shadow-sm border-b-2 ">
         <Avatar className=" mr-2">
           <AvatarImage
             src={receiver.avatar}
@@ -77,7 +77,7 @@ export default function ChatCard({
           />
           <AvatarFallback className="rounded-sm">PF</AvatarFallback>
         </Avatar>
-        <p className="text-center flex items-center mr-2 w-5 overflow-clip ">
+        <p className="text-center flex items-center mr-2 w-fit overflow-clip ">
           {receiver.username}
         </p>
       </div>
