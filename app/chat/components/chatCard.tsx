@@ -68,7 +68,7 @@ export default function ChatCard({
 
   return (
     <div className=" flex flex-col h-screen border-r w-full  relative ">
-      <div className="h-12 flex justify-end md:justify-start ml-2 p-1 shadow-sm border-b-2 ">
+      <div className="  flex justify-end md:justify-start ml-2 p-2 shadow-2xl ">
         <Avatar className=" mr-2">
           <AvatarImage
             src={receiver.avatar}

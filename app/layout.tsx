@@ -40,10 +40,10 @@ export default function RootLayout({
                   {mb ? (
                     <Nav />
                   ) : (
-                    <div className="pl-1 mt-1 w-full  absolute z-50">
+                    <div className="pl-1  w-fit   absolute z-50  h-6">
                       <Sheet>
                         <SheetTrigger>
-                          <Menu />
+                          <Menu size={20} />
                         </SheetTrigger>
                         <SheetContent side={"left"} className="w-18 p-0">
                           <Nav />
@@ -51,7 +51,7 @@ export default function RootLayout({
                       </Sheet>
                     </div>
                   )}
-                  <main className="border-l-[0.04rem] w-full sm:mx-0 h-screen overflow-auto ">
+                  <main className="border-l-[0.04rem] w-full sm:mx-0 h-screen overflow-auto p-4 md:p-0">
                     {children}
                   </main>
                   <Toaster />

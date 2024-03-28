@@ -15,12 +15,11 @@ export default function ChatBubble({
 }) {
   return me ? (
     <div className="flex flex-col w-full items-end h-fit">
-      <p className="flex flex-col  max-w-[320px] p-4 rounded-2xl bg-primary/80 mb-2  h-fit break-words whitespace-normal mr-2">
+      <p className="flex flex-col  max-w-[320px] p-4 rounded-2xl bg-primary mb-2  h-fit break-words whitespace-normal mr-2 text-white">
         {message}
       </p>
     </div>
   ) : (
-    //  message div to the right side
     <div className="flex w-full h-fit items-center">
       <Avatar className=" mr-2 size-4">
         <AvatarImage
@@ -28,9 +27,7 @@ export default function ChatBubble({
           alt="profile image"
           className="rounded-full size-1"
         />
-        <AvatarFallback className="rounded-sm size-4 text-xs">
-          RCV
-        </AvatarFallback>
+        <AvatarFallback className="rounded-sm size-4 text-xs">R</AvatarFallback>
       </Avatar>
       <p className="flex flex-col  max-w-[320px] leading-1.5 p-3  rounded-2xl bg-secondary mb-2  h-fit  break-words whitespace-normal">
         {message}
