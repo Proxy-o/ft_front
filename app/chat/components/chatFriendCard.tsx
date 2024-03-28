@@ -23,7 +23,7 @@ export default function ChatFriendCard({
           <AvatarImage
             src={friend.avatar}
             alt="profile image"
-            className="rounded-sm"
+            className="rounded-sm  hover:scale-110"
           />
           <AvatarFallback className="rounded-sm">PF</AvatarFallback>
         </Avatar>
@@ -31,12 +31,15 @@ export default function ChatFriendCard({
           {friend.username}
         </p>
       </div>
-      <div className="flex justify-center items-center">
-        <User2 onClick={handleViewProfile} className="text-green-600/70 mr-2">
+      <div className="flex justify-center items-center ">
+        <User2
+          onClick={handleViewProfile}
+          className="text-green-600/70 mr-2 hover:scale-110"
+        >
           Profile
         </User2>
         <MessageCircle
-          className="text-primary"
+          className="text-primary hover:scale-110"
           onClick={() => setReceiverId(parseInt(friend.id))}
         >
           Chat

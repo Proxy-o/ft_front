@@ -67,8 +67,8 @@ export default function ChatCard({
   }, [fetchNextPage, data]);
 
   return (
-    <div className=" flex flex-col h-screen border-r w-full  relative">
-      <div className=" flex justify-end md:justify-start ml-2 p-1 shadow-sm border-b-2 ">
+    <div className=" flex flex-col h-screen border-r w-full  relative ">
+      <div className="h-12 flex justify-end md:justify-start ml-2 p-1 shadow-sm border-b-2 ">
         <Avatar className=" mr-2">
           <AvatarImage
             src={receiver.avatar}
@@ -82,7 +82,7 @@ export default function ChatCard({
         </p>
       </div>
       <div
-        className="  overflow-auto flex flex-col-reverse mx-2  scrollbar scrollbar-thumb-primary/10 scrollbar-track-secondary scrollbar-w-2 p-2 pt-4"
+        className="  overflow-auto flex flex-col-reverse   scrollbar scrollbar-thumb-primary/10 scrollbar-track-secondary scrollbar-w-2 p-2 pt-4 mb-[72px]"
         id="scrollableDiv"
       >
         <InfiniteScroll
@@ -102,6 +102,8 @@ export default function ChatCard({
                     key={index}
                     message={result.content}
                     me={result.user == user_id}
+                    sender={sender}
+                    receiver={receiver}
                   />
                 );
               });
@@ -113,7 +115,7 @@ export default function ChatCard({
           )}
         </InfiniteScroll>
       </div>
-      <div className="flex  justify-between items-center bg-secondary/90 w-full p-2 absolute bottom-0 ">
+      <div className="flex justify-between items-center bg-secondary/90 w-full p-2 absolute bottom-0 ">
         <Input
           placeholder="Type a message"
           value={message}
