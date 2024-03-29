@@ -28,6 +28,8 @@ export default function useEditUser() {
       queryClient.setQueryData(["user", user.id.toString()], (old: any) => {
         return { ...old, ...user };
       });
+      if (!_)
+        return toast.error("An error occurred while updating your profile");
       toast.success("Profile updated successfully");
     },
     onError: (err) => {

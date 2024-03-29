@@ -4,7 +4,7 @@ import "./globals.css";
 import TanstackProvider from "@/lib/providers/TanstackProvider";
 
 const inter = Inter({ subsets: ["latin"] });
-import { Suspense, lazy, use, useEffect, useRef } from "react";
+import { Suspense, lazy, useEffect, useRef, useState } from "react";
 import HomeSkel from "@/components/skeletons/homeSkel";
 import dynamic from "next/dynamic";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
@@ -12,13 +12,11 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import { UserContextProvider } from "@/lib/providers/UserContextProvider";
 import { Toaster } from "@/components/ui/sonner";
-import getCookie from "@/lib/functions/getCookie";
-import LoginForm from "./login/components/LoginForm";
-import { redirect } from "next/navigation";
+
 const ThemeProvider = dynamic(() => import("@/lib/providers/ThemeProvider"), {
   ssr: false,
 });
-const Nav = lazy(() => import("@/components/nav"));
+const Nav = lazy(() => import("@/components/navBar/nav"));
 
 export default function RootLayout({
   children,
@@ -26,13 +24,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const mb = useMediaQuery("(min-width: 768px)");
-  let is_logged_in = useRef<boolean | null>(null);
-  useEffect(() => {
-    is_logged_in.current = getCookie("logged_in") ? true : false;
-    if (!is_logged_in) {
-      redirect("/login");
-    }
-  });
 
   return (
     <html lang="en">
@@ -47,21 +38,20 @@ export default function RootLayout({
             <UserContextProvider>
               <Suspense fallback={<HomeSkel />}>
                 <div className="md:flex relative">
-                  {is_logged_in.current &&
-                    (mb ? (
-                      <Nav />
-                    ) : (
-                      <div className="pl-1  w-fit   absolute z-50  h-6">
-                        <Sheet>
-                          <SheetTrigger>
-                            <Menu size={20} />
-                          </SheetTrigger>
-                          <SheetContent side={"left"} className="w-18 p-0">
-                            <Nav />
-                          </SheetContent>
-                        </Sheet>
-                      </div>
-                    ))}
+                  {mb ? (
+                    <Nav />
+                  ) : (
+                    <div className="pl-1  w-fit   absolute z-50  h-6">
+                      <Sheet>
+                        <SheetTrigger>
+                          <Menu size={20} />
+                        </SheetTrigger>
+                        <SheetContent side={"left"} className="w-18 p-0">
+                          <Nav />
+                        </SheetContent>
+                      </Sheet>
+                    </div>
+                  )}
                   <main className="border-l-[0.04rem] w-full sm:mx-0 h-screen overflow-auto p-4 md:p-0">
                     {children}
                   </main>

@@ -11,3 +11,16 @@ export default function getCookie(name: string) {
   }
   return null;
 }
+
+export function checkCookie(name: string) {
+  return new Promise((resolve, reject) => {
+    let cookie = getCookie(name);
+    if (cookie) {
+      resolve(cookie);
+    } else {
+      setTimeout(() => {
+        checkCookie(name).then(resolve).catch(reject);
+      }, 100); // Check every 100ms
+    }
+  });
+}
