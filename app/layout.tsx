@@ -4,7 +4,7 @@ import "./globals.css";
 import TanstackProvider from "@/lib/providers/TanstackProvider";
 
 const inter = Inter({ subsets: ["latin"] });
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, use, useEffect, useRef } from "react";
 import HomeSkel from "@/components/skeletons/homeSkel";
 import dynamic from "next/dynamic";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
@@ -13,8 +13,8 @@ import { Menu } from "lucide-react";
 import { UserContextProvider } from "@/lib/providers/UserContextProvider";
 import { Toaster } from "@/components/ui/sonner";
 import getCookie from "@/lib/functions/getCookie";
-import { redirect } from "next/dist/server/api-utils";
 import LoginForm from "./login/components/LoginForm";
+import { redirect } from "next/navigation";
 const ThemeProvider = dynamic(() => import("@/lib/providers/ThemeProvider"), {
   ssr: false,
 });
@@ -26,7 +26,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const mb = useMediaQuery("(min-width: 768px)");
-  const is_logged_in = getCookie("logged_in");
+  let is_logged_in = useRef<boolean | null>(null);
+  useEffect(() => {
+    is_logged_in.current = getCookie("logged_in") ? true : false;
+    if (!is_logged_in) {
+      redirect("/login");
+    }
+  });
 
   return (
     <html lang="en">
@@ -41,7 +47,7 @@ export default function RootLayout({
             <UserContextProvider>
               <Suspense fallback={<HomeSkel />}>
                 <div className="md:flex relative">
-                  {is_logged_in &&
+                  {is_logged_in.current &&
                     (mb ? (
                       <Nav />
                     ) : (

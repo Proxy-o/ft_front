@@ -1,11 +1,10 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
 import getCookie from "@/lib/functions/getCookie";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 
 // login hook
 export default function useLogout() {
-  const router = useRouter();
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
@@ -31,7 +30,7 @@ export default function useLogout() {
       queryClient.removeQueries({
         queryKey: ["user"],
       });
-      router.push("/login");
+      redirect("/login");
     },
   });
   return mutation;
