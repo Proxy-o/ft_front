@@ -12,6 +12,9 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import { UserContextProvider } from "@/lib/providers/UserContextProvider";
 import { Toaster } from "@/components/ui/sonner";
+import getCookie from "@/lib/functions/getCookie";
+import { redirect } from "next/dist/server/api-utils";
+import LoginForm from "./login/components/LoginForm";
 const ThemeProvider = dynamic(() => import("@/lib/providers/ThemeProvider"), {
   ssr: false,
 });
@@ -23,6 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const mb = useMediaQuery("(min-width: 768px)");
+  const is_logged_in = getCookie("logged_in");
 
   return (
     <html lang="en">
@@ -37,20 +41,21 @@ export default function RootLayout({
             <UserContextProvider>
               <Suspense fallback={<HomeSkel />}>
                 <div className="md:flex relative">
-                  {mb ? (
-                    <Nav />
-                  ) : (
-                    <div className="pl-1  w-fit   absolute z-50  h-6">
-                      <Sheet>
-                        <SheetTrigger>
-                          <Menu size={20} />
-                        </SheetTrigger>
-                        <SheetContent side={"left"} className="w-18 p-0">
-                          <Nav />
-                        </SheetContent>
-                      </Sheet>
-                    </div>
-                  )}
+                  {is_logged_in &&
+                    (mb ? (
+                      <Nav />
+                    ) : (
+                      <div className="pl-1  w-fit   absolute z-50  h-6">
+                        <Sheet>
+                          <SheetTrigger>
+                            <Menu size={20} />
+                          </SheetTrigger>
+                          <SheetContent side={"left"} className="w-18 p-0">
+                            <Nav />
+                          </SheetContent>
+                        </Sheet>
+                      </div>
+                    ))}
                   <main className="border-l-[0.04rem] w-full sm:mx-0 h-screen overflow-auto p-4 md:p-0">
                     {children}
                   </main>
