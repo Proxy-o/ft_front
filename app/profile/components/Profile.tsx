@@ -58,7 +58,7 @@ export default function Profile({ id }: { id: string }) {
               // get the high of the screen and put it in the bottom
               <div className="relative  " ref={chatRef}>
                 <XCircle
-                  className="absolute z-50 -top-3 -left-2 text-red-600 hover:cursor-pointer hover:scale-[1.05] transition duration-300 ease-in-out"
+                  className="absolute z-50 top-2 right-2 text-red-600 hover:cursor-pointer hover:scale-[1.05] transition duration-300 ease-in-out"
                   onClick={() => setIsChatOpen(false)}
                 />
                 <ChatCard sender={sender} receiver={data} />
