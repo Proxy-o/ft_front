@@ -142,9 +142,7 @@ export default function UserInfo({
               <TooltipTrigger asChild>
                 <div className="flex flex-col justify-center items-center text-zinc-300/50 hover:text-zinc-300/70 ">
                   <Users className="mb-2" />
-                  <p className="text-sm sm:text-m">
-                    {friends?.filter((friend: User) => friend.id === id).length}
-                  </p>
+                  <p className="text-sm sm:text-m">{friends?.length}</p>
                 </div>
               </TooltipTrigger>
               <TooltipContent>

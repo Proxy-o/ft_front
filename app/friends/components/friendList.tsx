@@ -34,6 +34,9 @@ export default function FriendList({ user_id }: { user_id: string }) {
                         className="rounded-sm"
                       />
                       <AvatarFallback className="rounded-sm">PF</AvatarFallback>
+                      {friend.status === "offline" && (
+                        <div className="bg-green-500 size-2 rounded-full absolute bottom-[4px] right-1 z-50"></div>
+                      )}
                     </Avatar>
                   </Link>
                 </TooltipTrigger>
