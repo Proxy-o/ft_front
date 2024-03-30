@@ -43,10 +43,10 @@ export default function ProfileAvatar({
         <Avatar className="rounded-sm w-full h-full ">
           <AvatarImage
             src={user.avatar}
-            alt="@shadcn"
+            alt="@profile"
             className={cn(isBlocked && "filter grayscale")}
           />
-          <AvatarFallback className="rounded-sm">AV</AvatarFallback>
+          <AvatarFallback className="rounded-sm h-40">AV</AvatarFallback>
         </Avatar>
         <input
           ref={inputFileRef}
