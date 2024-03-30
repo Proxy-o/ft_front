@@ -1,6 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User } from "@/lib/types";
-import { cn } from "@/lib/utils";
 import { MessageCircle, User2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -18,7 +17,7 @@ export default function ChatFriendCard({
     router.push(`/profile/${friend.id}`);
   };
   return (
-    <div className="flex p-2  rounded-sm  bg-secondary/20 hover:bg-secondary my-1 w-full ">
+    <div className="flex p-2  rounded-sm  bg-secondary/60 hover:bg-secondary my-1 w-full ">
       <div className="flex flex-1 ">
         <Avatar className="rounded-full mr-2 relative">
           {friend.status === "offline" && (
