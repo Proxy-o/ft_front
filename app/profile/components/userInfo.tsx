@@ -8,13 +8,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { User } from "@/lib/types";
-import {
-  Activity,
-  Check,
-  Clock,
-  SquarePen,
-  Users,
-} from "lucide-react";
+import { Activity, Check, Clock, SquarePen, Users } from "lucide-react";
 import React, { useState } from "react";
 import EditProfile from "./editProfile";
 import ProfileAvatar from "./profileAvatar";
@@ -135,11 +129,11 @@ export default function UserInfo({
               <TooltipTrigger asChild>
                 <div className="flex flex-col justify-center items-center text-zinc-300/50 hover:text-zinc-300/70">
                   <Activity className="mb-2" />
-                  <p className="text-sm sm:text-m">Online</p>
+                  <p className="text-sm sm:text-m">{user.status}</p>
                 </div>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Online</p>
+                <p>{user.status}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -148,7 +142,9 @@ export default function UserInfo({
               <TooltipTrigger asChild>
                 <div className="flex flex-col justify-center items-center text-zinc-300/50 hover:text-zinc-300/70 ">
                   <Users className="mb-2" />
-                  <p className="text-sm sm:text-m">23</p>
+                  <p className="text-sm sm:text-m">
+                    {friends?.filter((friend: User) => friend.id === id).length}
+                  </p>
                 </div>
               </TooltipTrigger>
               <TooltipContent>
@@ -161,11 +157,13 @@ export default function UserInfo({
               <TooltipTrigger asChild>
                 <div className="flex flex-col justify-center items-center text-zinc-300/50 hover:text-zinc-300/70">
                   <Clock className="mb-2" />
-                  <p className="text-sm sm:text-m">Nov 29, 2020</p>
+                  <p className="text-sm sm:text-m">
+                    {user.date_joined?.split("T")[0]}
+                  </p>
                 </div>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Nov 29, 2020</p>
+                <p>Member since</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>

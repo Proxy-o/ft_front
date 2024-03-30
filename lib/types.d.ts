@@ -6,6 +6,7 @@ export type User = {
   email?: string;
   avatar?: string;
   status?: string;
+  date_joined?: string;
 };
 
 export type t_Game = {
@@ -19,17 +20,17 @@ export type t_Game = {
 };
 
 export type Invitation = {
-  id: string,
+  id: string;
   sender: {
-      id: string,
-      username: string,
-      avatar: string,
-  },
+    id: string;
+    username: string;
+    avatar: string;
+  };
   receiver: {
-      id: string,
-      username: string,
-      avatar: string,
-  },
-  timestamp: string,
-  is_accepted: boolean,
+    id: string;
+    username: string;
+    avatar: string;
+  };
+  timestamp: string;
+  is_accepted: boolean;
 };
