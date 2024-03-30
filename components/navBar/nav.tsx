@@ -1,9 +1,18 @@
 import Link from "next/link";
-import { LogOut, UserRoundCog, Sun, Moon } from "lucide-react";
+import {
+  LogOut,
+  UserRoundCog,
+  Sun,
+  Moon,
+  User,
+  GamepadIcon,
+  Send,
+  Users,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "../ui/button";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
-import { redirect, usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import useLogout from "@/app/login/hooks/useLogout";
 import { useEffect, useState } from "react";
@@ -12,7 +21,7 @@ import useWebSocket from "react-use-websocket";
 import useGameSocket from "@/lib/hooks/useGameSocket";
 import { toast } from "sonner";
 import useGetUser from "@/app/profile/hooks/useGetUser";
-import { links } from "./links";
+import { linksProps } from "./types";
 
 export default function Nav() {
   const { mutate: logout } = useLogout();
@@ -22,7 +31,33 @@ export default function Nav() {
   const [notification, setNotification] = useState(false);
   const isCollapsed = useMediaQuery("(max-width: 768px)");
   const path = usePathname();
+  const links: linksProps[] = [
+    {
+      title: "Play",
+      link: "/game",
+      icon: GamepadIcon,
+      variant: "ghost",
+    },
+    {
+      title: "chat",
+      link: "/chat",
+      icon: Send,
+      variant: "ghost",
+    },
+    {
+      title: "Profile",
+      link: "/profile",
+      icon: User,
+      variant: "ghost",
+    },
 
+    {
+      title: "Friends",
+      link: "/friends",
+      icon: Users,
+      variant: "ghost",
+    },
+  ];
   const activeLink = links.findIndex((link) => link.link === path);
   links[activeLink] = {
     ...links[activeLink],
