@@ -13,10 +13,12 @@ const Game = ({ gameStarted, setGameStarted, gameType, onGoingGame }: { gameStar
     const { data: user } = useGetUser(user_id || "0");
     const username = user?.username || "";
     const [startCountdown, setStartCountdown] = useState(false);
-    const newPaddleRightYRef = useRef(0); // Use a ref to store the current state
-    const newPaddleRightYRefTwo = useRef(0); // Use a ref to store the current state
+    const PaddleRightYRef = useRef(0); // Use a ref to store the current state
+    const PaddleRightYRefTwo = useRef(0); // Use a ref to store the current state
     const newBallPositionRef = useRef({ x: 0, y: 0 }); // Use a ref to store the current state
     const newAngleRef = useRef(0); // Use a ref to store the current state
+    const leftPaddleOldY = useRef(0);
+    const rightPaddleOldY = useRef(0);
     const { mutate: surrenderGame } = useSurrenderGame();
     const { newNotif, handleStartGame, handleSurrender, handleMovePaddle, handleChangeBallDirection } = useGameSocket();
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -54,8 +56,10 @@ const Game = ({ gameStarted, setGameStarted, gameType, onGoingGame }: { gameStar
         let paddleLeftY = (canvas.height - paddleHeight) / 4;
         let paddleLeftYTwo = (canvas.height - paddleHeight) * 3 / 4;
         
-        newPaddleRightYRef.current = paddleRightY; // Initialize the ref
-        newPaddleRightYRefTwo.current = paddleRightYTwo; // Initialize the ref
+        PaddleRightYRef.current = paddleRightY; // Initialize the ref
+        PaddleRightYRefTwo.current = paddleRightYTwo; // Initialize the ref
+        leftPaddleOldY.current = paddleLeftY;
+        rightPaddleOldY.current = paddleRightY;
         let upPressed = false;
         let offPressed = false;
         let downPressed = false;
@@ -97,7 +101,7 @@ const Game = ({ gameStarted, setGameStarted, gameType, onGoingGame }: { gameStar
 
         const drawRightPaddle = () => {
             ctx.beginPath();
-            ctx.rect(canvas.width - paddleWidth, newPaddleRightYRef.current, paddleWidth, paddleHeight);
+            ctx.rect(canvas.width - paddleWidth, PaddleRightYRef.current, paddleWidth, paddleHeight);
             ctx.fillStyle = "#0095DD";
             ctx.fill();
             ctx.closePath();
@@ -121,7 +125,7 @@ const Game = ({ gameStarted, setGameStarted, gameType, onGoingGame }: { gameStar
 
         const drawRightPaddleTwo = () => {
             ctx.beginPath();
-            ctx.rect(canvas.width - paddleWidth, newPaddleRightYRefTwo.current, paddleWidth, paddleHeight);
+            ctx.rect(canvas.width - paddleWidth, PaddleRightYRefTwo.current, paddleWidth, paddleHeight);
             ctx.fillStyle = "#0095DD";
             ctx.fill();
             ctx.closePath();
@@ -232,12 +236,12 @@ const Game = ({ gameStarted, setGameStarted, gameType, onGoingGame }: { gameStar
                 }
                 
                 if (newBallPositionRef.current.x > canvas.width - paddleWidth - ballRadius
-                    && newBallPositionRef.current.y > newPaddleRightYRef.current
-                    && newBallPositionRef.current.y < newPaddleRightYRef.current + paddleHeight) {
+                    && newBallPositionRef.current.y > PaddleRightYRef.current
+                    && newBallPositionRef.current.y < PaddleRightYRef.current + paddleHeight) {
                         if (!ballInRightPaddle) {
-                            let ballPositionOnPaddle = newBallPositionRef.current.y - newPaddleRightYRef.current;
+                            let ballPositionOnPaddle = newBallPositionRef.current.y - PaddleRightYRef.current;
                             let ballPercentageOnPaddle = ballPositionOnPaddle / paddleHeight;
-                            if (newBallPositionRef.current.y < newPaddleRightYRef.current + paddleHeight / 2) {
+                            if (newBallPositionRef.current.y < PaddleRightYRef.current + paddleHeight / 2) {
                                 newAngleRef.current = -Math.PI * 2 / 6 * (0.5 - ballPercentageOnPaddle);
                             } else {
                                 newAngleRef.current = Math.PI * 2 / 6 * (ballPercentageOnPaddle - 0.5);
@@ -250,21 +254,20 @@ const Game = ({ gameStarted, setGameStarted, gameType, onGoingGame }: { gameStar
         }
 
         function movePaddlesOffline() {
-            console.log("movePaddlesOffline")
             if (canvas === null) return;
-            if (upPressed && newPaddleRightYRef.current > 0) {
-                if (newPaddleRightYRef.current - 20 < 0) {
-                    newPaddleRightYRef.current = 0;
+            if (upPressed && PaddleRightYRef.current > 0) {
+                if (PaddleRightYRef.current - 20 < 0) {
+                    PaddleRightYRef.current = 0;
                 }
                 else {
-                    newPaddleRightYRef.current -= 20;
+                    PaddleRightYRef.current -= 20;
                 }
-            } else if (downPressed && newPaddleRightYRef.current < canvas.height - paddleHeight) {
-                if (newPaddleRightYRef.current + 20 > canvas.height - paddleHeight) {
-                    newPaddleRightYRef.current = canvas.height - paddleHeight;
+            } else if (downPressed && PaddleRightYRef.current < canvas.height - paddleHeight) {
+                if (PaddleRightYRef.current + 20 > canvas.height - paddleHeight) {
+                    PaddleRightYRef.current = canvas.height - paddleHeight;
                 }
                 else {
-                    newPaddleRightYRef.current += 20;
+                    PaddleRightYRef.current += 20;
                 }
             } else
             if (wPressed && paddleLeftY > 0) {
@@ -287,7 +290,6 @@ const Game = ({ gameStarted, setGameStarted, gameType, onGoingGame }: { gameStar
             sPressed = false;
             downPressed = false;
             upPressed = false;
-            console.log(newPaddleRightYRef.current);
         }
 
         const drawOfflineOne = () => {
@@ -341,33 +343,33 @@ const Game = ({ gameStarted, setGameStarted, gameType, onGoingGame }: { gameStar
                 else {
                     paddleLeftYTwo += 20;
                 }
-            } else if (upPressed && newPaddleRightYRef.current > 0) {
-                if (newPaddleRightYRef.current - 20 < 0) {
-                    newPaddleRightYRef.current = 0;
+            } else if (upPressed && PaddleRightYRef.current > 0) {
+                if (PaddleRightYRef.current - 20 < 0) {
+                    PaddleRightYRef.current = 0;
                 }
                 else {
-                    newPaddleRightYRef.current -= 20;
+                    PaddleRightYRef.current -= 20;
                 }
-            } else if (downPressed && newPaddleRightYRef.current < canvas.height / 2 - paddleHeight) {
-                if (newPaddleRightYRef.current + 20 > canvas.height / 2 - paddleHeight) {
-                    newPaddleRightYRef.current = canvas.height / 2 - paddleHeight;
-                }
-                else {
-                    newPaddleRightYRef.current += 20;
-                }
-            } else if (offPressed && newPaddleRightYRefTwo.current > canvas.height / 2) {
-                if (newPaddleRightYRefTwo.current - 20 < canvas.height / 2) {
-                    newPaddleRightYRefTwo.current = canvas.height / 2;
+            } else if (downPressed && PaddleRightYRef.current < canvas.height / 2 - paddleHeight) {
+                if (PaddleRightYRef.current + 20 > canvas.height / 2 - paddleHeight) {
+                    PaddleRightYRef.current = canvas.height / 2 - paddleHeight;
                 }
                 else {
-                    newPaddleRightYRefTwo.current -= 20;
+                    PaddleRightYRef.current += 20;
                 }
-            } else if (lPressed && newPaddleRightYRefTwo.current < canvas.height - paddleHeight) {
-                if (newPaddleRightYRefTwo.current + 20 > canvas.height - paddleHeight) {
-                    newPaddleRightYRefTwo.current = canvas.height - paddleHeight;
+            } else if (offPressed && PaddleRightYRefTwo.current > canvas.height / 2) {
+                if (PaddleRightYRefTwo.current - 20 < canvas.height / 2) {
+                    PaddleRightYRefTwo.current = canvas.height / 2;
                 }
                 else {
-                    newPaddleRightYRefTwo.current += 20;
+                    PaddleRightYRefTwo.current -= 20;
+                }
+            } else if (lPressed && PaddleRightYRefTwo.current < canvas.height - paddleHeight) {
+                if (PaddleRightYRefTwo.current + 20 > canvas.height - paddleHeight) {
+                    PaddleRightYRefTwo.current = canvas.height - paddleHeight;
+                }
+                else {
+                    PaddleRightYRefTwo.current += 20;
                 }
             }
             wPressed = false;
@@ -416,12 +418,12 @@ const Game = ({ gameStarted, setGameStarted, gameType, onGoingGame }: { gameStar
                 }
                 
                 if (newBallPositionRef.current.x > canvas.width - paddleWidth - ballRadius
-                    && newBallPositionRef.current.y > newPaddleRightYRef.current
-                    && newBallPositionRef.current.y < newPaddleRightYRef.current + paddleHeight) {
+                    && newBallPositionRef.current.y > PaddleRightYRef.current
+                    && newBallPositionRef.current.y < PaddleRightYRef.current + paddleHeight) {
                         if (!ballInRightPaddle) {
-                            let ballPositionOnPaddle = newBallPositionRef.current.y - newPaddleRightYRef.current;
+                            let ballPositionOnPaddle = newBallPositionRef.current.y - PaddleRightYRef.current;
                             let ballPercentageOnPaddle = ballPositionOnPaddle / paddleHeight;
-                            if (newBallPositionRef.current.y < newPaddleRightYRef.current + paddleHeight / 2) {
+                            if (newBallPositionRef.current.y < PaddleRightYRef.current + paddleHeight / 2) {
                                 newAngleRef.current = -Math.PI * 2 / 6 * (0.5 - ballPercentageOnPaddle);
                             } else {
                                 newAngleRef.current = Math.PI * 2 / 6 * (ballPercentageOnPaddle - 0.5);
@@ -433,12 +435,12 @@ const Game = ({ gameStarted, setGameStarted, gameType, onGoingGame }: { gameStar
             }
 
             if (newBallPositionRef.current.x > canvas.width - paddleWidth - ballRadius
-                && newBallPositionRef.current.y > newPaddleRightYRefTwo.current
-                && newBallPositionRef.current.y < newPaddleRightYRefTwo.current + paddleHeight) {
+                && newBallPositionRef.current.y > PaddleRightYRefTwo.current
+                && newBallPositionRef.current.y < PaddleRightYRefTwo.current + paddleHeight) {
                     if (!ballInRightPaddle) {
-                        let ballPositionOnPaddle = newBallPositionRef.current.y - newPaddleRightYRefTwo.current;
+                        let ballPositionOnPaddle = newBallPositionRef.current.y - PaddleRightYRefTwo.current;
                         let ballPercentageOnPaddle = ballPositionOnPaddle / paddleHeight;
-                        if (newBallPositionRef.current.y < newPaddleRightYRefTwo.current + paddleHeight / 2) {
+                        if (newBallPositionRef.current.y < PaddleRightYRefTwo.current + paddleHeight / 2) {
                             newAngleRef.current = -Math.PI * 2 / 6 * (0.5 - ballPercentageOnPaddle);
                         } else {
                             newAngleRef.current = Math.PI * 2 / 6 * (ballPercentageOnPaddle - 0.5);
@@ -504,7 +506,7 @@ const Game = ({ gameStarted, setGameStarted, gameType, onGoingGame }: { gameStar
                     toast.error("You have lost the game");
                 }
             } else if (message.message?.split(" ")[0] === "/move") {
-                newPaddleRightYRef.current = parseInt(message.message.split(" ")[1]); // Update the ref
+                PaddleRightYRef.current = parseInt(message.message.split(" ")[1]); // Update the ref
             } else if (message.message?.split(" ")[0] === "/ballDirection") {
                 newBallPositionRef.current = { x: parseInt(message.message.split(" ")[1]), y: parseInt(message.message.split(" ")[2]) }; // Update the ref
                 newAngleRef.current = parseFloat(message.message.split(" ")[3]); // Update the ref
