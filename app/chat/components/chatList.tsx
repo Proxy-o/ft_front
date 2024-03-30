@@ -35,7 +35,7 @@ export default function ChatList() {
 
   return (
     <>
-      <div className="relative flex">
+      <div className="relative flex ">
         {receiverId && isSender ? (
           <ChatCard receiver={receiver!} sender={sender} />
         ) : null}

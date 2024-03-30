@@ -52,7 +52,7 @@ export default function RootLayout({
                       </Sheet>
                     </div>
                   )}
-                  <main className="border-l-[0.04rem] w-full sm:mx-0 h-screen overflow-auto p-4 md:p-0">
+                  <main className="border-l-[0.04rem] w-full sm:mx-0 h-screen overflow-auto  md:p-0">
                     {children}
                   </main>
                   <Toaster />
