@@ -15,13 +15,14 @@ import useMediaQuery from "@/lib/hooks/useMediaQuery";
 import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import useLogout from "@/app/login/hooks/useLogout";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import getCookie from "@/lib/functions/getCookie";
 import useWebSocket from "react-use-websocket";
 import useGameSocket from "@/lib/hooks/useGameSocket";
 import { toast } from "sonner";
 import useGetUser from "@/app/profile/hooks/useGetUser";
 import { linksProps } from "./types";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function Nav() {
   const { mutate: logout } = useLogout();
@@ -74,6 +75,7 @@ export default function Nav() {
   const socketUrl = process.env.NEXT_PUBLIC_CHAT_URL + "2/?refresh=" + token;
   const { lastMessage } = useWebSocket(socketUrl);
   const { data: user, isSuccess } = useGetUser(id ? id : "0");
+  const oldMessage = useRef();
 
   useEffect(() => {
     if (newNotif()) {
@@ -85,6 +87,16 @@ export default function Nav() {
       }
     }
   }, [newNotif()?.data]);
+
+  const queryClien = useQueryClient();
+
+  useEffect(() => {
+    console.log(lastMessage?.data);
+    oldMessage.current = lastMessage?.data;
+    queryClien.invalidateQueries({
+      queryKey: ["user", id],
+    });
+  }, [user?.unread_messages, lastMessage, id, queryClien]);
 
   if (token)
     return (
@@ -103,8 +115,7 @@ export default function Nav() {
                 "justify-start mb-2"
               )}
             >
-              {link.title === "chat" &&
-              ((isSuccess && user?.unread_messages) || lastMessage) ? (
+              {link.title === "chat" && isSuccess && user?.unread_messages ? (
                 <div className="relative">
                   <link.icon className=" h-6 w-6 " />
                   <span className="h-3 w-3 bg-white rounded-full absolute top-0 right-0 "></span>
