@@ -1,3 +1,4 @@
+"use client";
 import Link from "next/link";
 import {
   LogOut,
@@ -23,7 +24,7 @@ import { toast } from "sonner";
 import useGetUser from "@/app/profile/hooks/useGetUser";
 import { linksProps } from "./types";
 import { useQueryClient } from "@tanstack/react-query";
-import NotificationSound from "@/public/notification.mp3";
+import NotificationSound from "@/music/notification-sound.mp3";
 
 export default function Nav() {
   const { mutate: logout } = useLogout();
@@ -76,7 +77,6 @@ export default function Nav() {
   const socketUrl = process.env.NEXT_PUBLIC_CHAT_URL + "2/?refresh=" + token;
   const { lastMessage } = useWebSocket(socketUrl);
   const { data: user, isSuccess } = useGetUser(id ? id : "0");
-  const oldMessage = useRef();
 
   useEffect(() => {
     if (newNotif()) {
@@ -92,26 +92,24 @@ export default function Nav() {
   const queryClien = useQueryClient();
 
   useEffect(() => {
-    console.log(lastMessage?.data);
-    oldMessage.current = lastMessage?.data;
-    queryClien.invalidateQueries({
-      queryKey: ["user", id],
-    });
-  }, [user?.unread_messages, lastMessage, id, queryClien]);
+    queryClien
+      .invalidateQueries({
+        queryKey: ["user", id],
+      })
+      .then(() => {
+        if (lastMessage && user?.unread_messages && path !== "/chat") {
+          const audio = new Audio(NotificationSound);
+          audio.play();
+        }
+      });
+  }, [user?.unread_messages, lastMessage, id, queryClien, path]);
 
-  const audioPlayer = useRef<HTMLAudioElement>(null);
-
-  function playAudio() {
-    audioPlayer.current?.play();
-  }
   if (token)
     return (
       <div
         data-collapsed={isCollapsed}
         className="group flex flex-col gap-4 py-2 h-screen shadow-lg md:w-[8.5rem] "
       >
-        <audio ref={audioPlayer} src={NotificationSound} />
-
         <nav className="flex flex-col gap-1 px-2 h-full ">
           {links.map((link, index) => (
             <Link
