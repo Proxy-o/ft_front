@@ -8,7 +8,7 @@ export default function Score({
   rightPlayerScore: number;
 }) {
   return (
-    <div className="flex flex-row justify-between items-center w-5/6 h-16 mx-auto">
+    <div className="flex flex-row justify-between items-center w-5/6 h-16 max-w-[800px] mx-auto">
       <div className="flex flex-row justify-start items-center w-1/2">
         <div className="w-6 h-6 bg-white rounded-full flex justify-center items-center text-black font-bold">
           {leftPlayerScore}
