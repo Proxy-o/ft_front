@@ -54,8 +54,8 @@ const OneOffline = () => {
     let paddleRightY = (canvas.height - paddleHeight) / 2;
     let paddleLeftY = (canvas.height - paddleHeight) / 2;
 
-    const paddleLeftX = 20;
-    const paddleRightX = canvas.width - 15 - paddleWidth;
+    const paddleLeftX = 25;
+    const paddleRightX = canvas.width - 25 - paddleWidth;
 
     let upPressed = false;
     let downPressed = false;
@@ -334,7 +334,7 @@ const OneOffline = () => {
   }, [gameStarted]);
 
   return (
-    <div className="w-full h-fit flex flex-col justify-center items-center text-white">
+    <div className="w-full h-fit flex flex-col justify-center items-center dark:text-white bg-green-500">
       <h1 className="text-4xl">Ping Pong</h1>
       <br />
       <Score leftPlayerScore={leftScore} rightPlayerScore={rightScore} />
@@ -342,8 +342,13 @@ const OneOffline = () => {
       {startCountdown ? (
         gameStarted ? (
           <>
-            <div className="border-2 border-white w-fit h-fit">
-              <canvas ref={canvasRef} width="512" height="400"></canvas>
+            <div className="w-[800px] h-fit">
+              <canvas
+                ref={canvasRef}
+                height="400"
+                width="812"
+                className="w-full md:w-5/6 h-[400px] bg-black border-2 border-white mx-auto"
+              ></canvas>
             </div>
           </>
         ) : (

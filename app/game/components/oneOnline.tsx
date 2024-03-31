@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, use } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import useSurrenderGame from "../hooks/useSurrender";
 import useGameSocket from "@/lib/hooks/useGameSocket"; // Make sure this is the correct path
@@ -15,11 +15,14 @@ const OneOnline = () => {
   const { data: user } = useGetUser(user_id || "0");
   const username = user?.username || "";
   const [startCountdown, setStartCountdown] = useState(false);
+  const [gameStarted, setGameStarted] = useState(false);
+  const [gameAccepted, setGameAccepted] = useState(false);
   const PaddleRightYRef = useRef(0); // Use a ref to store the current state
   const newBallPositionRef = useRef({ x: 0, y: 0 }); // Use a ref to store the current state
   const newAngleRef = useRef(0); // Use a ref to store the current state
   const leftPaddleOldY = useRef(0);
   const { mutate: surrenderGame } = useSurrenderGame();
+  const isFirstTime = useRef(true);
   const {
     newNotif,
     handleStartGame,
@@ -33,8 +36,6 @@ const OneOnline = () => {
   const [rightScore, setRightScore] = useState(0);
   const rightScoreRef = useRef(0);
   //game logic
-  const [gameStarted, setGameStarted] = useState(false);
-  const [startGame, setStartGame] = useState(false);
   const { onGoingGame } = useGetGame(user_id || "0");
 
   // if (onGoingGame.isSuccess && onGoingGame.data !== null) {
@@ -61,8 +62,6 @@ const OneOnline = () => {
     leftScoreRef.current = 0;
     setLeftScore(0);
     setRightScore(0);
-
-    let firstTime = true;
 
     let ballInLeftPaddle = false;
 
@@ -100,7 +99,8 @@ const OneOnline = () => {
     PaddleRightYRef.current = paddleRightY; // Initialize the ref
     leftPaddleOldY.current = paddleLeftY;
 
-    const paddleLeftX = 20;
+    const paddleLeftX = 25;
+    const paddleRightX = canvas.width - 25 - paddleWidth;
     let upPressed = false;
     let downPressed = false;
 
@@ -140,7 +140,7 @@ const OneOnline = () => {
     const drawRightPaddle = () => {
       ctx.beginPath();
       ctx.rect(
-        canvas.width - paddleWidth,
+        paddleRightX,
         PaddleRightYRef.current,
         paddleWidth,
         paddleHeight
@@ -152,7 +152,7 @@ const OneOnline = () => {
 
     const drawLeftPaddle = () => {
       ctx.beginPath();
-      ctx.rect(0, paddleLeftY, paddleWidth, paddleHeight);
+      ctx.rect(paddleLeftX, paddleLeftY, paddleWidth, paddleHeight);
       ctx.fillStyle = "#ee95DD";
       ctx.fill();
       ctx.closePath();
@@ -169,7 +169,7 @@ const OneOnline = () => {
     }
 
     function moveBall() {
-      if (firstTime) {
+      if (isFirstTime.current) {
         if (user?.username === leftUser?.username)
           newBallPositionRef.current.x += Math.cos(newAngleRef.current) * 3;
         else newBallPositionRef.current.x -= Math.cos(newAngleRef.current) * 3;
@@ -192,7 +192,7 @@ const OneOnline = () => {
         newBallPositionRef.current.y - ballRadius / 2 <
           paddleLeftY + paddleHeight
       ) {
-        firstTime = false;
+        isFirstTime.current = false;
         if (!ballInLeftPaddle) {
           let ballPositionOnPaddle = newBallPositionRef.current.y - paddleLeftY;
           let ballPercentageOnPaddle = ballPositionOnPaddle / paddleHeight;
@@ -222,28 +222,25 @@ const OneOnline = () => {
     function movePaddlesOnline() {
       if (canvas === null) return;
       if (upPressed && paddleLeftY > 0) {
-        if (paddleLeftY - 20 < 0) {
+        if (paddleLeftY - 12 < 0) {
           paddleLeftY = 0;
         } else {
-          paddleLeftY -= 20;
+          paddleLeftY -= 12;
         }
         handleMovePaddle(paddleLeftY, rightUser?.username || "");
       } else if (downPressed && paddleLeftY < canvas.height - paddleHeight) {
-        if (paddleLeftY + 20 > canvas.height - paddleHeight) {
+        if (paddleLeftY + 12 > canvas.height - paddleHeight) {
           paddleLeftY = canvas.height - paddleHeight;
         } else {
-          paddleLeftY += 20;
+          paddleLeftY += 12;
         }
         handleMovePaddle(paddleLeftY, rightUser?.username || "");
       }
-      upPressed = false;
-      downPressed = false;
     }
 
     const drawOnlineOne = () => {
-      console.log("drawOnlineOne");
       if (canvas === null) return;
-      console.log("is not null");
+      if (!gameAccepted) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       drawBall();
       drawRightPaddle();
@@ -285,9 +282,10 @@ const OneOnline = () => {
       } else if (message.message?.split(" ")[0] === "/start") {
         // invitaionsData.refetch();
         onGoingGame.refetch();
+        setGameAccepted(true);
         // setStartCountdown(true);
       } else if (message.message?.split(" ")[0] === "/end") {
-        setStartGame(false);
+        setGameAccepted(false);
         setGameStarted(false);
         setStartCountdown(false);
         onGoingGame.refetch();
@@ -304,9 +302,9 @@ const OneOnline = () => {
           x: parseInt(message.message.split(" ")[1]),
           y: parseInt(message.message.split(" ")[2]),
         }; // Update the ref
+        isFirstTime.current = false;
         newAngleRef.current = parseFloat(message.message.split(" ")[3]); // Update the ref
       }
-      console.log("message", message);
     }
   }, [newNotif()?.data]);
 
@@ -316,15 +314,15 @@ const OneOnline = () => {
       onGoingGame.data !== null &&
       leftUser?.username === username
     ) {
-      setStartGame(true);
+      setGameAccepted(true);
     } else {
-      setStartGame(false);
+      setGameAccepted(false);
     }
   }, [onGoingGame.isSuccess]);
 
   return (
-    <div className="w-fit h-fit flex flex-col justify-center items-center text-white">
-      {startGame && (
+    <div className="w-full h-fit flex flex-col justify-center items-center dark:text-white bg-green-500">
+      {gameAccepted && (
         <>
           <h1 className="text-4xl">Ping Pong</h1>
           <br />
@@ -338,8 +336,13 @@ const OneOnline = () => {
             />
           )}
           {onGoingGame.isSuccess && gameStarted && (
-            <div className="border-2 border-white w-fit h-fit">
-              <canvas ref={canvasRef} width="512" height="400"></canvas>
+            <div className="w-full h-fit">
+              <canvas
+                ref={canvasRef}
+                height="400"
+                width="800"
+                className="w-full md:w-5/6 h-[400px] bg-black border-2 border-white mx-auto"
+              ></canvas>
             </div>
           )}
           {onGoingGame.isSuccess && !gameStarted && (
