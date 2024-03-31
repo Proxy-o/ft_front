@@ -346,8 +346,8 @@ const OneOffline = () => {
               <canvas
                 ref={canvasRef}
                 height="400"
-                width="812"
-                className="w-full md:w-5/6 h-[400px] bg-black border-2 border-white mx-auto"
+                width="800"
+                className="w-full md:w-5/6 h-[400px] lg:h-[500px] max-w-[800px] bg-black border-2 border-white mx-auto"
               ></canvas>
             </div>
           </>
