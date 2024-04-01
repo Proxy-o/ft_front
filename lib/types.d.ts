@@ -7,6 +7,7 @@ export type User = {
   avatar?: string;
   status?: string;
   date_joined?: string;
+  has_unread_messages?: boolean;
 };
 
 export type t_Game = {

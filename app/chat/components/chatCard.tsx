@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import getCookie from "@/lib/functions/getCookie";
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, use } from "react";
 import useWebSocket from "react-use-websocket";
 import useGetMessages from "../hooks/useGetMessages";
 import ChatBubble from "./chatBubble";
@@ -12,6 +12,7 @@ import { SendHorizonal } from "lucide-react";
 import { User } from "@/lib/types";
 import { Avatar } from "@radix-ui/react-avatar";
 import { AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import readMessages from "../hooks/useReadMessages";
 
 export default function ChatCard({
   receiver,
@@ -55,6 +56,14 @@ export default function ChatCard({
     }
   }, [lastMessage, queryClient, senderId, receiverId]);
 
+  useEffect(() => {
+    readMessages(receiverId).then(() => {
+      queryClient.invalidateQueries({
+        queryKey: ["friends", user_id],
+      });
+    });
+  }, [lastMessage, receiverId, queryClient, user_id]);
+
   const handleFetchNextPage = useCallback(() => {
     if (data?.pages[data.pages.length - 1].next === null) {
       setHasMore(false);
@@ -80,10 +89,10 @@ export default function ChatCard({
           />
           <AvatarFallback className="rounded-full h-8 w-8">PF</AvatarFallback>
         </Avatar>
-        <p className="text-center flex flex-col justify-center items-center mr-2 w-fit overflow-clip ">
+        <div className="text-center flex flex-col justify-center items-center mr-2 w-fit overflow-clip ">
           {receiver.username}
           <p className="text-xs text-gray-600">{receiver.status}</p>
-        </p>
+        </div>
       </div>
       <div
         className="  overflow-auto flex flex-col-reverse   scrollbar scrollbar-thumb-primary/10 scrollbar-track-secondary scrollbar-w-2 p-2 pt-4 mb-[72px]"
