@@ -4,7 +4,7 @@ import "./globals.css";
 import TanstackProvider from "@/lib/providers/TanstackProvider";
 
 const inter = Inter({ subsets: ["latin"] });
-import { Suspense, lazy, useState } from "react";
+import { Suspense, lazy, useEffect, useRef, useState } from "react";
 import HomeSkel from "@/components/skeletons/homeSkel";
 import dynamic from "next/dynamic";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
@@ -12,10 +12,11 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import { UserContextProvider } from "@/lib/providers/UserContextProvider";
 import { Toaster } from "@/components/ui/sonner";
+
 const ThemeProvider = dynamic(() => import("@/lib/providers/ThemeProvider"), {
   ssr: false,
 });
-const Nav = lazy(() => import("@/components/nav"));
+const Nav = lazy(() => import("@/components/navBar/nav"));
 
 export default function RootLayout({
   children,
@@ -40,10 +41,10 @@ export default function RootLayout({
                   {mb ? (
                     <Nav />
                   ) : (
-                    <div className="pl-1 mt-1 w-full  absolute z-50">
+                    <div className="pl-1  w-fit   absolute z-50  h-6">
                       <Sheet>
                         <SheetTrigger>
-                          <Menu />
+                          <Menu size={20} />
                         </SheetTrigger>
                         <SheetContent side={"left"} className="w-18 p-0">
                           <Nav />
@@ -51,7 +52,7 @@ export default function RootLayout({
                       </Sheet>
                     </div>
                   )}
-                  <main className="border-l-[0.04rem] w-full sm:mx-0 h-screen overflow-auto ">
+                  <main className="border-l-[0.04rem] w-full sm:mx-0 h-screen overflow-auto  md:p-0">
                     {children}
                   </main>
                   <Toaster />

@@ -1,11 +1,10 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
-import getCookie from "@/lib/functions/getCookie";
+import getCookie, { checkCookie } from "@/lib/functions/getCookie";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 
 // login hook
 export default function useLogout() {
-  const router = useRouter();
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
@@ -14,16 +13,14 @@ export default function useLogout() {
         refresh: getCookie("refresh"),
       };
       const response = await axiosInstance.post("/logout", data);
-      // remove cookies
       document.cookie =
-        "access=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        "access=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=None; Secure;";
       document.cookie =
-        "refresh=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-      // change logged_in state
+        "refresh=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;SameSite=None; Secure;";
       document.cookie =
-        "logged_in=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        "logged_in=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;SameSite=None; Secure;";
       document.cookie =
-        "user_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        "user_id=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;SameSite=None; Secure;";
 
       return response.data;
     },
@@ -31,7 +28,6 @@ export default function useLogout() {
       queryClient.removeQueries({
         queryKey: ["user"],
       });
-      router.push("/login");
     },
   });
   return mutation;

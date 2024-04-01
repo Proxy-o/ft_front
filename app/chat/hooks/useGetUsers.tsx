@@ -6,8 +6,6 @@ async function getUsers() {
   return response.data;
 }
 export default function useGetUsers() {
-  const queryKey = ["users"];
-
   const res = useQuery({
     queryKey: ["users"],
     queryFn: getUsers,

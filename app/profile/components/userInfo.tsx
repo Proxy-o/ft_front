@@ -1,5 +1,4 @@
 "use client";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -9,18 +8,9 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { User } from "@/lib/types";
-import {
-  Activity,
-  BanIcon,
-  BlocksIcon,
-  Check,
-  Clock,
-  SquarePen,
-  Users,
-} from "lucide-react";
-import React, { useContext, useState } from "react";
+import { Activity, Check, Clock, SquarePen, Users } from "lucide-react";
+import React, { useState } from "react";
 import EditProfile from "./editProfile";
-import getCookie from "@/lib/functions/getCookie";
 import ProfileAvatar from "./profileAvatar";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -30,10 +20,8 @@ import useUnfriend from "@/app/friends/hooks/useUnfriend";
 import useGetFriends from "@/app/chat/hooks/useGetFriends";
 import useGetFrdReq from "@/app/friends/hooks/useGetFrReq";
 import useBlock from "@/app/friends/hooks/useBlockUser";
-import useGetBlocked from "@/app/friends/hooks/useGetBlocked";
 import useUnBlock from "@/app/friends/hooks/useUnBlockUser";
 import useAcceptFriend from "@/app/friends/hooks/useAcceptFriend";
-import ChatCard from "@/app/chat/components/chatCard";
 
 export default function UserInfo({
   user,
@@ -141,11 +129,11 @@ export default function UserInfo({
               <TooltipTrigger asChild>
                 <div className="flex flex-col justify-center items-center text-zinc-300/50 hover:text-zinc-300/70">
                   <Activity className="mb-2" />
-                  <p className="text-sm sm:text-m">Online</p>
+                  <p className="text-sm sm:text-m">{user.status}</p>
                 </div>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Online</p>
+                <p>{user.status}</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -154,7 +142,7 @@ export default function UserInfo({
               <TooltipTrigger asChild>
                 <div className="flex flex-col justify-center items-center text-zinc-300/50 hover:text-zinc-300/70 ">
                   <Users className="mb-2" />
-                  <p className="text-sm sm:text-m">23</p>
+                  <p className="text-sm sm:text-m">{friends?.length}</p>
                 </div>
               </TooltipTrigger>
               <TooltipContent>
@@ -167,11 +155,13 @@ export default function UserInfo({
               <TooltipTrigger asChild>
                 <div className="flex flex-col justify-center items-center text-zinc-300/50 hover:text-zinc-300/70">
                   <Clock className="mb-2" />
-                  <p className="text-sm sm:text-m">Nov 29, 2020</p>
+                  <p className="text-sm sm:text-m">
+                    {user.date_joined?.split("T")[0]}
+                  </p>
                 </div>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Nov 29, 2020</p>
+                <p>Member since</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>

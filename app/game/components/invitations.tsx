@@ -1,77 +1,71 @@
-import React, { use, useEffect, useState } from "react";
-import { Separator } from "@/components/ui/separator";
-import { User, UserPlus } from "lucide-react";
-import axiosInstance from "@/lib/functions/axiosInstance";
+"use client";
 
-import getCookie from "@/lib/functions/getCookie";
-import useGetFriends from "@/app/chat/hooks/useGetFriends";
+import { Swords } from 'lucide-react';
+import { CircleOff } from 'lucide-react';
+import useGameSocket from "@/lib/hooks/useGameSocket";
+import { useEffect } from "react";
+import useGetInvitations from '../hooks/useGetInvitations';
+import useDeclineInvitation from '../hooks/useDeclineMutation';
+import useAcceptInvitation from '../hooks/useAccepteInvitation';
+import getCookie from '@/lib/functions/getCookie';
+import { Invitation } from '@/lib/types';
 
 
-const invitations = () => {
-    const [sentInvitations, setSentInvitations] = useState([]);
-    
-    const user_id = getCookie("user_id");
-    
-    const friends = useGetFriends(user_id || "0");
-    
-    const invite = async (userid: string) => {
-        const res = await axiosInstance.post("game/send_invitation", {
+const Invitations = () => {
+    const { newNotif, handleAcceptInvitation } = useGameSocket();
+    const user_id = getCookie("user_id") || "";
 
-            sender: user_id,
-            receiver: userid,
-        });
-        console.log(res);
+    let invitaionsData = useGetInvitations(user_id || "0");
+    const { mutate: declineMutation } = useDeclineInvitation();
+    const { mutate: acceptInvitationMutation } = useAcceptInvitation();
+    const invitations: Invitation[] = (invitaionsData.data) ? invitaionsData.data : [];
+
+    const acceptInvitation = async (invitationId: string) => {
+        try {
+            acceptInvitationMutation(invitationId);
+            handleAcceptInvitation(invitationId);
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     useEffect(() => {
-        const fetchData = async () => {
-            const res = await axiosInstance.get("game/sent_invitations", {
-                params: {
-                    user_id: user_id,
-                }
-            });
-            console.log(res.data);
-            setSentInvitations(res.data);
-        };
-        
-        fetchData();
-    }, []);
+        invitaionsData.refetch();
+    }, [newNotif()?.data]);
+
     return (
-        <div className="w-1/5 h-full flex flex-col justify-start items-start dark:text-white">
-            <h1 className="text-4xl mt-10 ml-10">Invitations</h1>
+        <div className="w-full flex flex-col justify-start items-start dark:text-white">
+            <h1 className="text-4xl mt-10 ml-10">Challenges</h1>
             {
-                sentInvitations.map((invitation: { sender: { id: string, username: string; avatar: string; }; receiver: { id: string, username: string; avatar: string; }; time: string; is_accepted: boolean; }) => {
-                    return (
-                        <div key={invitation.sender.username} className="flex flex- justify-start items-center mt-5 ml-10">
-                            <img src={invitation.sender.avatar} alt="avatar" className="w-10 h-10 rounded-full"/>
-                            <h1 className="ml-2">{invitation.sender.username}</h1>
-                            <h1 className="ml-2">invited</h1>
-                            <img src={invitation.receiver.avatar} alt="avatar" className="w-10 h-10 rounded-full"/>
-                            <h1 className="ml-2">{invitation.receiver.username}</h1>
-                            <h1 className="ml-2">at {invitation.time}</h1>
-                            <h1 className="ml-2">{invitation.is_accepted ? "Accepted" : "Pending"}</h1>
-                        </div>
-                    );
-                })
-            }
-            <Separator className="my-4 mr-2"/>
-            <h1 className="text-4xl mt-5 ml-10">Invitate a friend</h1>
-            <div className="flex flex-row justify-start items-center mt-5 ml-10">
-                {
-                    
-                    friends.data && friends.data.map((friend: { id: string; username: string; avatar: string; }) => {
+                (invitations && invitations.length !== 0) ? 
+                    invitations.map((invitation) => {
+                        const date = new Date(invitation.timestamp);
                         return (
-                            <div key={friend.id} className="flex flex-row justify-start items-center">
-                                <img src={friend.avatar} alt="avatar" className="w-10 h-10 rounded-full"/>
-                                <h1 className="ml-2">{friend.username} {friend.avatar}</h1>
-                                <button className="ml-2 bg-primary text-white px-2 py-1 rounded-md" onClick={() => invite(friend.id)}><UserPlus size={20}/></button>
+                            <div key={invitation.id} className={invitation.is_accepted === false ? "hidden" : "" }>
+                                <div className="flex flex-row justify-start items-center mt-5 ml-10">
+                                    <img src={invitation.sender.avatar} alt="avatar" className="w-10 h-10 rounded-full"/>
+                                    <div className="flex flex-col justify-start items-start ml-2">
+                                        <h1>{invitation.sender.username}</h1>
+                                        <p className="text-xs">{date.toLocaleString()}</p>
+                                    </div>
+                                    <button 
+                                    className="ml-2 bg-primary hover:bg-pink-500 text-white px-2 py-1 rounded-md"
+                                    onClick={async () => await acceptInvitation(invitation.id)}>
+                                        <Swords size={20}/>
+                                    </button>
+                                    <button 
+                                    className="ml-2 bg-secondary hover:bg-black text-white px-2 py-1 rounded-md"
+                                    onClick={async () => await declineMutation(invitation.id)}>
+                                        <CircleOff size={20}/>
+                                    </button>
+                                </div>
                             </div>
                         );
                     })
-                }
-            </div>
+                : (<h1 className="text-2xl mt-5 ml-10">No invitations</h1>)
+            }
         </div>
-    );
+    ); 
 }
 
-export default invitations;
+export default Invitations;

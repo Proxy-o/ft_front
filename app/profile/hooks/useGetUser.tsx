@@ -1,7 +1,5 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
-import { UserContext } from "@/lib/providers/UserContext";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useContext } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 const fetchUser = async ({ id }: { id: string }) => {
   try {
@@ -18,10 +16,8 @@ const fetchUser = async ({ id }: { id: string }) => {
 export default function useGetUser(id: string) {
   const info = useQuery({
     queryKey: ["user", id],
-    queryFn: async () => {
-      const data = await fetchUser({ id });
-      return data;
+    queryFn: () => fetchUser({ id })
     },
-  });
+  );
   return info;
 }

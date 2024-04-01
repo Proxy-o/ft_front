@@ -1,10 +1,7 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useContext } from "react";
-import { UserContext } from "@/lib/providers/UserContext";
-import { AxiosError } from "axios";
-import { toast } from "sonner";
+
 // login hook
 export default function useLogin() {
   const router = useRouter();

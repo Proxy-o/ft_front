@@ -1,19 +1,19 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import getCookie from "@/lib/functions/getCookie";
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, use } from "react";
 import useWebSocket from "react-use-websocket";
 import useGetMessages from "../hooks/useGetMessages";
 import ChatBubble from "./chatBubble";
-import { Conversation } from "../types";
 import { Input } from "@/components/ui/input";
 import { useQueryClient } from "@tanstack/react-query";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { SendHorizonal } from "lucide-react";
 import { User } from "@/lib/types";
-import useGetUser from "@/app/profile/hooks/useGetUser";
 import { Avatar } from "@radix-ui/react-avatar";
 import { AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import readMessages from "../hooks/useReadMessages";
+import { Message } from "../types";
 
 export default function ChatCard({
   receiver,
@@ -26,10 +26,8 @@ export default function ChatCard({
   const senderId = sender.id;
   const receiverId = receiver.id;
   const token = getCookie("refresh");
-  const [socketUrl, setSocketUrl] = useState(
-    process.env.NEXT_PUBLIC_CHAT_URL + "2/?refresh=" + token
-  );
-  const { sendJsonMessage, lastMessage, readyState } = useWebSocket(socketUrl);
+  const socketUrl = process.env.NEXT_PUBLIC_CHAT_URL + "2/?refresh=" + token;
+  const { sendJsonMessage, lastMessage } = useWebSocket(socketUrl);
 
   const [hasMore, setHasMore] = useState(true);
   const [message, setMessage] = useState("");
@@ -59,6 +57,14 @@ export default function ChatCard({
     }
   }, [lastMessage, queryClient, senderId, receiverId]);
 
+  useEffect(() => {
+    readMessages(receiverId).then(() => {
+      queryClient.invalidateQueries({
+        queryKey: ["friends", user_id],
+      });
+    });
+  }, [lastMessage, receiverId, queryClient, user_id]);
+
   const handleFetchNextPage = useCallback(() => {
     if (data?.pages[data.pages.length - 1].next === null) {
       setHasMore(false);
@@ -71,22 +77,26 @@ export default function ChatCard({
   }, [fetchNextPage, data]);
 
   return (
-    <div className=" flex flex-col h-screen border-r w-full  relative">
-      <div className=" flex justify-end md:justify-start ml-2 p-1 shadow-sm border-b-2">
-        <Avatar className=" mr-2">
+    <div className=" flex flex-col h-screen border-r w-full  relative ">
+      <div className="  flex justify-end md:justify-start ml-2 p-2 shadow-2xl ">
+        <Avatar className=" mr-2 relative">
+          {receiver.status === "offline" && (
+            <div className="bg-green-500 size-2 rounded-full absolute bottom-[8px] right-1 z-50"></div>
+          )}
           <AvatarImage
             src={receiver.avatar}
             alt="profile image"
             className="rounded-full h-8 w-8"
           />
-          <AvatarFallback className="rounded-sm">PF</AvatarFallback>
+          <AvatarFallback className="rounded-full h-8 w-8">PF</AvatarFallback>
         </Avatar>
-        <p className="text-center flex items-center mr-2 w-5 overflow-clip ">
+        <div className="text-center flex flex-col justify-center items-center mr-2 w-fit overflow-clip ">
           {receiver.username}
-        </p>
+          <p className="text-xs text-gray-600">{receiver.status}</p>
+        </div>
       </div>
       <div
-        className="  overflow-auto flex flex-col-reverse mx-2  scrollbar scrollbar-thumb-primary/10 scrollbar-track-secondary scrollbar-w-2 p-2 pt-4"
+        className="  overflow-auto flex flex-col-reverse   scrollbar scrollbar-thumb-primary/10 scrollbar-track-secondary scrollbar-w-2 p-2 pt-4 mb-[72px]"
         id="scrollableDiv"
       >
         <InfiniteScroll
@@ -100,24 +110,25 @@ export default function ChatCard({
         >
           {isSuccess && !hasNoMessages ? (
             data?.pages.map((page) => {
-              return page.results.map((result: any, index: number) => {
+              return page.results.map((result: Message, index: number) => {
                 return (
                   <ChatBubble
                     key={index}
-                    message={result.content}
+                    message={result}
                     me={result.user == user_id}
+                    sender={sender}
                   />
                 );
               });
             })
           ) : (
-            <div className="flex justify-center items-center  bg-secondary/30 rounded-sm mt-24 h-12">
+            <div className="flex justify-center items-center  bg-secondary/30 rounded-full mt-24 h-12">
               <p>No Messages yet</p>
             </div>
           )}
         </InfiniteScroll>
       </div>
-      <div className="flex  justify-between items-center bg-secondary/90 w-full p-2 absolute bottom-0 ">
+      <div className="flex justify-between items-center bg-secondary/90 w-full p-2 absolute bottom-0 ">
         <Input
           placeholder="Type a message"
           value={message}

@@ -11,12 +11,10 @@ import {
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import useGetFriends from "@/app/chat/hooks/useGetFriends";
-import getCookie from "@/lib/functions/getCookie";
 import { User } from "@/lib/types";
 
 export default function FriendList({ user_id }: { user_id: string }) {
-  const { data, isSuccess } = useGetFriends(user_id || "0");
-  const friends = data;
+  const { data: friends, isSuccess } = useGetFriends(user_id || "0");
   return (
     <Card className="p-4   flex  lg:w-72 flex-col">
       <p className="text-center w-full">Friends</p>
@@ -35,6 +33,9 @@ export default function FriendList({ user_id }: { user_id: string }) {
                         className="rounded-sm"
                       />
                       <AvatarFallback className="rounded-sm">PF</AvatarFallback>
+                      {friend.status === "offline" && (
+                        <div className="bg-green-500 size-2 rounded-full absolute bottom-[4px] right-1 z-50"></div>
+                      )}
                     </Avatar>
                   </Link>
                 </TooltipTrigger>

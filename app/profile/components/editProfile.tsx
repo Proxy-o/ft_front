@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { SquarePen } from "lucide-react";
 
-import { CardContent, CardFooter, Card } from "@/components/ui/card";
+import { CardContent, CardFooter } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { buttonVariants } from "@/components/ui/button";

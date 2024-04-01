@@ -20,7 +20,7 @@ export default function RegisterForm() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { mutate: register, isPending } = useRegister();
+  const { mutate: register } = useRegister();
   return (
     <div className="flex flex-col items-center justify-center min-h-screen overflow-hidden">
       <Card className="w-full max-w-md ">

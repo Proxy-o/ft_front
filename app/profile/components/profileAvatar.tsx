@@ -1,8 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import axiosInstance from "@/lib/functions/axiosInstance";
-import { UserContext } from "@/lib/providers/UserContext";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import useEditAvatar from "../hooks/useEditAvatar";
 import { User } from "@/lib/types";
 import { PenBox } from "lucide-react";
@@ -46,10 +43,10 @@ export default function ProfileAvatar({
         <Avatar className="rounded-sm w-full h-full ">
           <AvatarImage
             src={user.avatar}
-            alt="@shadcn"
+            alt="@profile"
             className={cn(isBlocked && "filter grayscale")}
           />
-          <AvatarFallback className="rounded-sm">AV</AvatarFallback>
+          <AvatarFallback className="rounded-sm h-40">AV</AvatarFallback>
         </Avatar>
         <input
           ref={inputFileRef}
