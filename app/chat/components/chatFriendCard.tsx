@@ -28,28 +28,31 @@ export default function ChatFriendCard({
             alt="profile image"
             className="rounded-full  hover:scale-110"
           />
-          <AvatarFallback className="rounded-full">PF</AvatarFallback>
+          <AvatarFallback className="rounded-full">
+            {friend.username?.charAt(0)}
+          </AvatarFallback>
         </Avatar>
-        <p className="text-center flex items-center mr-2 w-fit overflow-clip ">
+
+        <p className="text-center flex items-center mr-2 w-full  overflow-clip ">
           {friend.username}
         </p>
       </div>
       <div className="flex justify-center items-center ">
-        {friend.has_unread_messages && (
-          <div className="bg-primary size-2 rounded-full  bottom-[5px] right-1 z-50" />
-        )}
         <User2
           onClick={handleViewProfile}
           className="text-green-600/70 mr-2 hover:scale-110"
         >
           Profile
         </User2>
-        <MessageCircle
-          className="text-primary hover:scale-110"
-          onClick={() => setReceiverId(parseInt(friend.id))}
-        >
-          Chat
-        </MessageCircle>
+        <div className="relative flex justify-center">
+          {friend.has_unread_messages && (
+            <div className="bg-primary size-2 rounded-full  absolute z-50 animate-pulse right-0" />
+          )}
+          <MessageCircle
+            className=" hover:scale-110"
+            onClick={() => setReceiverId(parseInt(friend.id))}
+          ></MessageCircle>
+        </div>
       </div>
     </div>
   );
