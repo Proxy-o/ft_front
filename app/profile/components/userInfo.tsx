@@ -64,7 +64,7 @@ export default function UserInfo({
     setVisible(!visible);
   };
   return (
-    <Card className="relative rounded-lg shadow-md p-6 md:flex max-w-7xl">
+    <Card className="relative rounded-lg p-6 md:flex max-w-7xl">
       <div className="absolute top-0 right-0 p-2">
         {isBlocked && blocked_by_current_user ? (
           <Button
