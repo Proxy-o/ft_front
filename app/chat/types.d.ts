@@ -9,3 +9,11 @@ export interface LastMessage {
   user: string;
   read?: boolean;
 }
+
+export interface Message {
+  user: string;
+  receiver: string;
+  content: string;
+  read: boolean;
+  timestamp: string;
+}

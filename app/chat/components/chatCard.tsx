@@ -13,6 +13,7 @@ import { User } from "@/lib/types";
 import { Avatar } from "@radix-ui/react-avatar";
 import { AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import readMessages from "../hooks/useReadMessages";
+import { Message } from "../types";
 
 export default function ChatCard({
   receiver,
@@ -109,14 +110,13 @@ export default function ChatCard({
         >
           {isSuccess && !hasNoMessages ? (
             data?.pages.map((page) => {
-              return page.results.map((result: any, index: number) => {
+              return page.results.map((result: Message, index: number) => {
                 return (
                   <ChatBubble
                     key={index}
-                    message={result.content}
+                    message={result}
                     me={result.user == user_id}
                     sender={sender}
-                    receiver={receiver}
                   />
                 );
               });
