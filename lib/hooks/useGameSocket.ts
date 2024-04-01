@@ -27,7 +27,7 @@ export default function useGameSocket() {
       sendJsonMessage({ message: toSend });
     }
 
-    const handleSurrender = (surrenderer: string, winner: string) => {
+    const handleSurrender = (surrenderer: string, winner: string, game_id: string) => {
       const toSend = "/surrender " + surrenderer + " " + winner;
       sendJsonMessage({ message: toSend });
     }
@@ -43,6 +43,12 @@ export default function useGameSocket() {
     sendJsonMessage({ message: toSend });
  };
 
+ const handleEnemyScore = (newScore: number, user: string) => {
+    const toSend = "/enemyScore " + newScore + " " + user;
+    sendJsonMessage({ message: toSend });
+    // TODO: catch this in backend
+ }
+
 
  return {
     handelSendInvitation,
@@ -52,5 +58,6 @@ export default function useGameSocket() {
     handleSurrender,
     handleMovePaddle,
     handleChangeBallDirection,
+    handleEnemyScore,
  };
 }

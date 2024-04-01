@@ -334,7 +334,7 @@ const OneOffline = () => {
   }, [gameStarted]);
 
   return (
-    <div className="w-full h-fit flex flex-col justify-center items-center dark:text-white bg-green-500">
+    <div className="w-full h-fit flex flex-col justify-center items-center">
       <h1 className="text-4xl">Ping Pong</h1>
       <br />
       <Score leftPlayerScore={leftScore} rightPlayerScore={rightScore} />

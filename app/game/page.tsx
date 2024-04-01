@@ -14,7 +14,7 @@ export default function Page() {
   const user_id = getCookie("user_id") || "";
   const { data: user, isSuccess, isLoading } = useGetUser(user_id || "0");
   const router = useRouter();
-  const [tab, setTab] = useState("online");
+  const [tab, setTab] = useState("local");
 
   useEffect(() => {
     if (!user && isSuccess) {
@@ -32,14 +32,9 @@ export default function Page() {
   return (
     <>
       <GameNav setTab={setTab} tab={tab} />
-      <div className="w-full h-fit flex flex-row justify-start bg-cyan-600 items-start dark:text-white mx-auto mt-10">
+      <div className="w-full h-fit flex flex-row justify-start items-start mx-auto mt-10">
         {tab === "online" && (
           <div className="flex flex-col w-full h-full justify-start items-center">
-            <div className="w-fit h-fit flex flex-col justify-start items-start dark:text-white mb-9">
-              <Invitations />
-              <Separator className="w-full mt-4" />
-              <InviteFriend />
-            </div>
             <OneOnline />
           </div>
         )}
