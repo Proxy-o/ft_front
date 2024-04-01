@@ -1,8 +1,9 @@
-import { Sword } from "lucide-react";
+import { Image, Sword } from "lucide-react";
 import axiosInstance from "@/lib/functions/axiosInstance";
 import getCookie from "@/lib/functions/getCookie";
 import useGetFriends from "@/app/chat/hooks/useGetFriends";
 import useGameSocket from "@/lib/hooks/useGameSocket";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const InviteFriends = () => {
   const { handelSendInvitation } = useGameSocket();
@@ -37,11 +38,14 @@ const InviteFriends = () => {
                   key={friend.id}
                   className="flex flex-row justify-start items-center"
                 >
-                  <img
-                    src={friend.avatar}
-                    alt="avatar"
-                    className="w-10 h-10 rounded-full"
-                  />
+                  <Avatar className=" mr-2">
+                    <AvatarImage
+                      src={friend.avatar}
+                      alt="profile image"
+                      className="rounded-full h-8 w-8"
+                    />
+                    <AvatarFallback className="rounded-sm">PF</AvatarFallback>
+                  </Avatar>
                   <h1 className="ml-2">{friend.username}</h1>
                   <button
                     className="ml-2 bg-primary text-white px-2 py-1 rounded-md"

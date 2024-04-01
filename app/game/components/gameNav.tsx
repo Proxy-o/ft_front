@@ -32,7 +32,7 @@ const GameNav = ({
           </Button>
           <div className="absolute top-12 h-5 w-24"></div>
           {showInvitations && (
-            <div className="w-fit h-fit flex flex-col justify-start items-start p-9 top-14 absolute border-secondary border-2 rounded-md bg-inherit shadow-sm shadow-primary">
+            <div className="w-fit h-fit flex flex-col justify-start items-start p-9 top-[3.75rem] absolute border-secondary border-2 rounded-md bg-inherit shadow-sm shadow-primary">
               <Invitations setTab={setTab} />
               <Separator className="w-full mt-4" />
               <InviteFriends />
