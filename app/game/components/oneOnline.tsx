@@ -26,6 +26,7 @@ const OneOnline = () => {
   const animationFrameId = useRef(0);
   const isAnimating = useRef(false);
   const gameIsOver = useRef(false);
+  const isEnemyReadyRef = useRef(false);
   const {
     newNotif,
     handleStartGame,
@@ -295,6 +296,21 @@ const OneOnline = () => {
       isAnimating.current = false;
     }
 
+    function enemyLeftGame() {
+      if (canvas === null) return;
+      if (newBallPositionRef.current.x > canvas.width + 500) {
+        handleSurrender(
+          leftUser?.username || "",
+          rightUser?.username || "",
+          onGoingGame.data?.game?.id || ""
+        );
+        setGameAccepted(false);
+        setGameStarted(false);
+        setStartCountdown(false);
+        toast.success("You have won the game");
+      }
+    }
+
     const drawOnlineOne = () => {
       if (canvas === null) return;
       if (!gameAccepted) return;
@@ -320,6 +336,9 @@ const OneOnline = () => {
 
       // Move the ball
       moveBall();
+
+      // Check if enemy has left the game
+      enemyLeftGame();
 
       if (gameIsOver.current) {
         returnFunction();
@@ -348,6 +367,7 @@ const OneOnline = () => {
       const message = JSON.parse(notif.data);
       if (message.message?.split(" ")[0] === "/show") {
         handleStartGame(username, message.message.split(" ")[1]);
+        isEnemyReadyRef.current = true;
         setStartCountdown(true);
         onGoingGame.refetch();
       } else if (message.message?.split(" ")[0] === "/start") {
@@ -425,8 +445,13 @@ const OneOnline = () => {
           )}
           {onGoingGame.isSuccess && !gameStarted && (
             <Button
-              onClick={() => {
+              onClick={async () => {
                 handleStartGame(username, rightUser?.username || "");
+                setTimeout(() => {
+                  if (!isEnemyReadyRef.current) {
+                    toast.error("The enemy is not ready");
+                  }
+                }, 1000);
               }}
               className="w-1/2 mt-4"
             >
