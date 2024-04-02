@@ -347,6 +347,7 @@ const OneOnline = () => {
     if (notif) {
       const message = JSON.parse(notif.data);
       if (message.message?.split(" ")[0] === "/show") {
+        handleStartGame(username, message.message.split(" ")[1]);
         setStartCountdown(true);
         onGoingGame.refetch();
       } else if (message.message?.split(" ")[0] === "/start") {
@@ -425,11 +426,7 @@ const OneOnline = () => {
           {onGoingGame.isSuccess && !gameStarted && (
             <Button
               onClick={() => {
-                handleStartGame(
-                  onGoingGame.data?.game?.user1.username || "",
-                  onGoingGame.data?.game?.user2.username || ""
-                );
-                setStartCountdown(true);
+                handleStartGame(username, rightUser?.username || "");
               }}
               className="w-1/2 mt-4"
             >
