@@ -28,7 +28,8 @@ export default function useGameSocket() {
     }
 
     const handleSurrender = (surrenderer: string, winner: string, game_id: string) => {
-      const toSend = "/surrender " + surrenderer + " " + winner;
+      const toSend = "/surrender " + surrenderer + " " + winner + " " + game_id;
+      console.log(toSend);
       sendJsonMessage({ message: toSend });
     }
 
@@ -39,7 +40,6 @@ export default function useGameSocket() {
 
  const handleChangeBallDirection = (ballX: number, ballY: number, angle: number, user: string) => {
     const toSend = "/changeBallDirection " + ballX + " " + ballY + " " + angle + " " + user;
-    console.log(toSend);
     sendJsonMessage({ message: toSend });
  };
 

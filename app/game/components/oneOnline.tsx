@@ -25,6 +25,7 @@ const OneOnline = () => {
   const isFirstTime = useRef(true);
   const animationFrameId = useRef(0);
   const isAnimating = useRef(false);
+  const gameIsOver = useRef(false);
   const {
     newNotif,
     handleStartGame,
@@ -173,7 +174,6 @@ const OneOnline = () => {
 
     function moveBall() {
       if (isFirstTime.current == true) {
-        console.log("isFirstTime.current", isFirstTime.current);
         if (user?.username === leftUser?.username)
           newBallPositionRef.current.x += Math.cos(newAngleRef.current) * 3;
         else newBallPositionRef.current.x -= Math.cos(newAngleRef.current) * 3;
@@ -284,6 +284,17 @@ const OneOnline = () => {
       }
     }
 
+    // Cleanup function to remove the event listeners and stop the animation loop
+    function returnFunction() {
+      document.removeEventListener("keydown", handleKeyEvent, false);
+      document.removeEventListener("keyup", handleKeyEvent, false);
+
+      if (animationFrameId.current) {
+        cancelAnimationFrame(animationFrameId.current);
+      }
+      isAnimating.current = false;
+    }
+
     const drawOnlineOne = () => {
       if (canvas === null) return;
       if (!gameAccepted) return;
@@ -309,6 +320,10 @@ const OneOnline = () => {
 
       // Move the ball
       moveBall();
+
+      if (gameIsOver.current) {
+        returnFunction();
+      }
     };
 
     const animate = () => {
@@ -324,16 +339,7 @@ const OneOnline = () => {
       animate();
     }
 
-    return () => {
-      // Cleanup function to remove the event listeners and stop the animation loop
-      document.removeEventListener("keydown", handleKeyEvent, false);
-      document.removeEventListener("keyup", handleKeyEvent, false);
-
-      if (animationFrameId.current) {
-        cancelAnimationFrame(animationFrameId.current);
-      }
-      isAnimating.current = false;
-    };
+    return returnFunction;
   }, [gameStarted]);
 
   useEffect(() => {
@@ -354,6 +360,8 @@ const OneOnline = () => {
         setLeftScore(parseInt(message.message.split(" ")[1]));
         leftScoreRef.current = parseInt(message.message.split(" ")[1]);
       } else if (message.message?.split(" ")[0] === "/end") {
+        console.log("game over");
+        gameIsOver.current = true;
         setGameAccepted(false);
         setGameStarted(false);
         setStartCountdown(false);
@@ -387,7 +395,7 @@ const OneOnline = () => {
     } else {
       setGameAccepted(false);
     }
-  }, [onGoingGame.isSuccess]);
+  }, [onGoingGame.isSuccess, onGoingGame.data]);
 
   return (
     <div className="w-full h-fit flex flex-col justify-center items-center">
@@ -431,13 +439,16 @@ const OneOnline = () => {
           {onGoingGame.isSuccess && gameStarted && (
             <Button
               onClick={() => {
+                gameIsOver.current = true;
                 surrenderGame();
                 handleSurrender(
                   onGoingGame.data?.game?.user1.username || "",
                   onGoingGame.data?.game?.user2.username || "",
                   onGoingGame.data?.game?.id || ""
                 );
-                onGoingGame.refetch();
+                setGameAccepted(false);
+                setGameStarted(false);
+                setStartCountdown(false);
               }}
               className="w-1/2 mt-4"
             >
