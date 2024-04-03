@@ -10,9 +10,6 @@ async function accept(invitationId: string) {
   const gameId = res.data.gameId;
   if (res.status === 200) {
     toast.success("Invitation accepted");
-    setTimeout(() => {
-      toast.info("You will be redirected to the game page");
-    }, 2000);
   }
   return gameId;
 }
@@ -22,11 +19,8 @@ export default function useAcceptInvitation({
 }: {
   setTab: Dispatch<SetStateAction<string>>;
 }) {
-  const queryClient = useQueryClient();
   const mutation = useMutation({
-    mutationFn: (invitationId: string) => {
-      return accept(invitationId);
-    },
+    mutationFn: accept,
     onSuccess: () => {
       setTab("online");
     },
