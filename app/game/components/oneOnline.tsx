@@ -25,7 +25,6 @@ const OneOnline = () => {
   const isFirstTime = useRef(true);
   const animationFrameId = useRef(0);
   const isAnimating = useRef(false);
-  const gameIsOver = useRef(false);
   const isEnemyReadyRef = useRef(false);
   const {
     newNotif,
@@ -253,7 +252,7 @@ const OneOnline = () => {
 
     function checkLoseConditionOnline() {
       if (canvas === null) return;
-      if (rightScoreRef.current === 10) {
+      if (rightScoreRef.current === 3) {
         setGameAccepted(false);
         setGameStarted(false);
         setStartCountdown(false);
@@ -339,10 +338,6 @@ const OneOnline = () => {
 
       // Check if enemy has left the game
       enemyLeftGame();
-
-      if (gameIsOver.current) {
-        returnFunction();
-      }
     };
 
     const animate = () => {
@@ -382,7 +377,6 @@ const OneOnline = () => {
         leftScoreRef.current = parseInt(message.message.split(" ")[1]);
       } else if (message.message?.split(" ")[0] === "/end") {
         console.log("game over");
-        gameIsOver.current = true;
         setGameAccepted(false);
         setGameStarted(false);
         setStartCountdown(false);
@@ -461,7 +455,6 @@ const OneOnline = () => {
           {onGoingGame.isSuccess && gameStarted && (
             <Button
               onClick={() => {
-                gameIsOver.current = true;
                 surrenderGame();
                 handleSurrender(
                   onGoingGame.data?.game?.user1.username || "",

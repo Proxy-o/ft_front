@@ -28,8 +28,6 @@ export default function useAcceptInvitation({
       return accept(invitationId);
     },
     onSuccess: () => {
-      // queryClient.invalidateQueries({ queryKey: ["invitations"] });
-      //   queryClient.invalidateQueries({ queryKey: ["game"] });
       setTab("online");
     },
   });

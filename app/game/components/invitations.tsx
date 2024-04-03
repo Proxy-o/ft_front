@@ -53,18 +53,18 @@ const Invitations = ({
               key={invitation.id}
               className={
                 invitation.is_accepted === false
-                  ? "hidden"
-                  : "border-2 border-secondary rounded-full hover:bg-secondary/60"
+                  ? ""
+                  : "border-2 border-secondary rounded-full hover:bg-secondary/60 w-11/12 mr-auto"
               }
             >
-              <div className="flex flex-row justify-start items-center my-2 mx-auto px-4 gap-2">
-                <Avatar className=" mr-2">
+              <div className="flex flex-row justify-start items-center my-2 mx-auto gap-2">
+                <Avatar className=" mr-2 ml-auto">
                   <AvatarImage
                     src={invitation.sender.avatar}
                     alt="profile image"
-                    className="rounded-full h-8 w-8"
+                    className="rounded-xl h-8 w-8"
                   />
-                  <AvatarFallback className="rounded-sm">PF</AvatarFallback>
+                  <AvatarFallback className="rounded-xl">PF</AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col justify-start items-start ml-2">
                   <h1>{invitation.sender.username}</h1>
@@ -82,7 +82,7 @@ const Invitations = ({
                   <Swords size={20} />
                 </Button>
                 <Button
-                  className="rounded-xl"
+                  className="rounded-xl bg-secondary hover:bg-background mr-auto"
                   size={"sm"}
                   onClick={async () => await declineMutation(invitation.id)}
                 >
