@@ -44,11 +44,11 @@ const GameNav = ({
   window.addEventListener("resize", checkScreenSize);
   return (
     <>
-      <nav className="mt-6 w-fit h-fit flex flex-row md:gap-2 pb-2">
+      <nav className="mt-6 md:mt-2 w-fit h-fit flex flex-row md:gap-2 pb-2">
         {(showInvitations_1 || showInvitations_2 || showInvitations_3) && (
           <>
             <div
-              className="absolute top-12 h-5 w-11/12 md:w-24"
+              className="absolute top-12 md:top-8 h-5 w-11/12 md:w-24"
               onMouseEnter={() => setShowInvitations_1(true)}
               onMouseLeave={() => setShowInvitations_1(false)}
             ></div>
@@ -56,7 +56,7 @@ const GameNav = ({
               onMouseEnter={() => setShowInvitations_3(true)}
               onMouseLeave={() => setShowInvitations_3(false)}
               id="dropdown"
-              className="w-[400px] h-fit flex flex-col justify-start items-start p-2 top-[68px] absolute border-secondary border-2 rounded-md shadow-sm shadow-primary bg-background"
+              className="w-[400px] h-fit flex flex-col justify-start items-start p-2 top-[68px] md:top-[52px] absolute border-secondary border-2 rounded-md shadow-sm shadow-primary bg-background"
             >
               <Invitations setTab={setTab} />
               <Separator className="w-full mt-4" />
