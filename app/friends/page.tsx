@@ -20,7 +20,7 @@ export default function Page() {
   return (
     user && (
       <>
-        <FriendList user_id={user_id || "0"} />
+        {/* <FriendList user_id={user_id || "0"} /> */}
         <FriendRequests />
       </>
     )
