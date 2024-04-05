@@ -3,18 +3,16 @@ import getCookie from "@/lib/functions/getCookie";
 
 import useGetUser from "../profile/hooks/useGetUser";
 import { useEffect, useState } from "react";
-import Invitations from "./components/invitations";
-import InviteFriend from "./components/inviteFriend";
-import { Separator } from "@/components/ui/separator";
 import { useRouter } from "next/navigation";
 import GameNav from "./components/gameNav";
 import OneOnline from "./components/oneOnline";
 import OneOffline from "./components/oneOffline";
+import Four from "./components/four";
 export default function Page() {
   const user_id = getCookie("user_id") || "";
   const { data: user, isSuccess, isLoading } = useGetUser(user_id || "0");
   const router = useRouter();
-  const [tab, setTab] = useState("online");
+  const [tab, setTab] = useState("four");
 
   useEffect(() => {
     if (!user && isSuccess) {
@@ -41,6 +39,13 @@ export default function Page() {
         {tab === "local" && (
           <>
             <OneOffline />
+          </>
+        )}
+        {tab === "four" && (
+          <>
+            <div className="flex flex-col w-full h-full justify-start items-center">
+              <Four />
+            </div>
           </>
         )}
       </div>
