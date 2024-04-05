@@ -9,6 +9,7 @@ import useGetFriends from "../chat/hooks/useGetFriends";
 import ChatFriendCard from "../chat/components/chatFriendCard";
 import { User } from "@/lib/types";
 import { Card } from "@/components/ui/card";
+import Link from "next/link";
 
 export default function Page() {
   const user_id = getCookie("user_id");
@@ -38,9 +39,13 @@ export default function Page() {
           {friendsIsSuccess &&
             friends.map((friend: User) => {
               return (
-                <div key={friend.id} className="cursor-pointer ">
+                <Link
+                  key={friend.id}
+                  className="cursor-pointer"
+                  href={`/profile/${friend.id.toString()}`}
+                >
                   <ChatFriendCard friend={friend} setReceiverId={() => {}} />
-                </div>
+                </Link>
               );
             })}
         </div>
