@@ -10,11 +10,13 @@ import { User } from "@/lib/types";
 import Score from "./score";
 import useGetFourGame from "../hooks/useGetFourGame";
 import useCreateGameFour from "../hooks/useCreateGameFour";
+import Players from "./players";
+import InviteFriends from "./inviteFriend";
 
 const Four = () => {
   const user_id = getCookie("user_id") || "";
   const { data: user } = useGetUser(user_id || "0");
-  const username = user?.username || "";
+  const username: string = user?.username || "";
   const [startCountdown, setStartCountdown] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
   const [gameAccepted, setGameAccepted] = useState(false);
@@ -38,6 +40,7 @@ const Four = () => {
     handleMovePaddleFour,
     handleChangeBallDirectionFour,
     handleEnemyScoreFour,
+    handleRefetchPlayers,
   } = useGameSocket();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [leftScore, setLeftScore] = useState(0);
@@ -50,11 +53,16 @@ const Four = () => {
   // if (onGoingGame.isSuccess && onGoingGame.data !== null) {
   //     setStartGame(true);
   // }
+  const dummyPlayer: User = {
+    username: "player",
+    avatar: "none",
+    id: "",
+  };
 
-  const rightUserTop: User | undefined = onGoingGame?.data?.game?.user1;
-  const leftUserTop: User | undefined = onGoingGame?.data?.game?.user2;
-  const rightUserBottom: User | undefined = onGoingGame?.data?.game?.user3;
-  const leftUserBottom: User | undefined = onGoingGame?.data?.game?.user4;
+  const leftUserTop: User = onGoingGame?.data?.game?.user1 || dummyPlayer;
+  const leftUserBottom: User = onGoingGame?.data?.game?.user2 || dummyPlayer;
+  const rightUserTop: User = onGoingGame?.data?.game?.user3 || dummyPlayer;
+  const rightUserBottom: User = onGoingGame?.data?.game?.user4 || dummyPlayer;
 
   if (username === rightUserTop?.username)
     myPaddleRef.current = paddleRightTopYRef.current;
@@ -465,9 +473,17 @@ const Four = () => {
       } else if (message.message?.split(" ")[0] === "/start") {
         // invitaionsData.refetch();
         onGoingGame.refetch();
+        handleRefetchPlayers(
+          leftUserTop?.username || "",
+          leftUserBottom?.username || "",
+          rightUserTop?.username || "",
+          rightUserBottom?.username || ""
+        );
         isFirstTime.current = true;
         setGameAccepted(true);
         // setStartCountdown(true);
+      } else if (message.message?.split(" ")[0] === "/refetchPlayers") {
+        onGoingGame.refetch();
       } else if (message.message?.split(" ")[0] === "/score") {
         isFirstTime.current = true;
         setLeftScore(parseInt(message.message.split(" ")[1]));
@@ -513,10 +529,9 @@ const Four = () => {
 
   return (
     <div className="w-full h-fit flex flex-col justify-center items-center">
+      <h1 className="text-4xl">Ping Pong</h1>
       {gameAccepted && (
         <>
-          {console.log(onGoingGame.data?.game)}
-          <h1 className="text-4xl">Ping Pong</h1>
           <br />
           {onGoingGame.isSuccess && gameStarted && (
             <Score leftPlayerScore={leftScore} rightPlayerScore={rightScore} />
@@ -527,6 +542,13 @@ const Four = () => {
               setStartCountdown={setStartCountdown}
             />
           )}
+          <Players
+            topLeft={leftUserTop}
+            topRight={rightUserTop}
+            bottomLeft={leftUserBottom}
+            bottomRight={rightUserBottom}
+            username={username}
+          />
           {onGoingGame.isSuccess && gameStarted && (
             <div className="w-full h-fit">
               <canvas
@@ -539,7 +561,6 @@ const Four = () => {
           )}
           {onGoingGame.isSuccess && !gameStarted && (
             <>
-              {console.log(onGoingGame.data.game)}
               <Button
                 onClick={async () => {
                   handleStartGameFour(
@@ -589,6 +610,9 @@ const Four = () => {
           {onGoingGame.isLoading && (
             <h1 className="text-4xl">Waiting for the game to start</h1>
           )}
+          <div className=" w-fit h-fit">
+            <InviteFriends gameType="four" />
+          </div>
         </>
       )}
       {!gameAccepted && (

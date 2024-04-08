@@ -59,7 +59,7 @@ const GameNav = ({
             >
               <Invitations setTab={setTab} />
               <Separator className="w-full mt-4" />
-              <InviteFriends />
+              <InviteFriends gameType="two" />
             </div>
           </>
         )}

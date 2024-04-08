@@ -1,5 +1,5 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 async function CreateGameFour(userId: string) {
@@ -14,9 +14,12 @@ async function CreateGameFour(userId: string) {
 }
 
 export default function useCreateGameFour(userId: string) {
+  const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: CreateGameFour,
-    onSuccess: () => {},
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["gameFour", userId] });
+    },
   });
   return mutation;
 }

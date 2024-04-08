@@ -28,9 +28,9 @@ export default function Page() {
   // );
 
   return (
-    <>
+    <div className="relative w-full h-full">
       <GameNav setTab={setTab} tab={tab} />
-      <div className="w-full h-fit flex flex-row justify-start items-start mx-auto mt-10">
+      <div className="w-full h-fit flex flex-row justify-start items-start mt-10">
         {tab === "online" && (
           <div className="flex flex-col w-full h-full justify-start items-center">
             <OneOnline />
@@ -43,12 +43,12 @@ export default function Page() {
         )}
         {tab === "four" && (
           <>
-            <div className="flex flex-col w-full h-full justify-start items-center">
+            <div className="flex flex-col w-full h-full justify-start items-cente left-0">
               <Four />
             </div>
           </>
         )}
       </div>
-    </>
+    </div>
   );
 }

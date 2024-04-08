@@ -4,7 +4,7 @@ import { Dispatch, SetStateAction } from "react";
 import { toast } from "sonner";
 
 async function accept(invitationId: string) {
-  const res = await axiosInstance.post("game/accept_invitation", {
+  const res = await axiosInstance.post("game/accept_invitation_four", {
     invitationId,
   });
   const gameId = res.data.gameId;
@@ -14,9 +14,16 @@ async function accept(invitationId: string) {
   return gameId;
 }
 
-export default function useAcceptInvitation() {
+export default function useAcceptInvitation({
+  setTab,
+}: {
+  setTab: Dispatch<SetStateAction<string>>;
+}) {
   const mutation = useMutation({
     mutationFn: accept,
+    onSuccess: () => {
+      setTab("online");
+    },
   });
   return mutation;
 }

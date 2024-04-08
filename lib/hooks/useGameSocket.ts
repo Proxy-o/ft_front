@@ -186,6 +186,24 @@ export default function useGameSocket() {
     sendJsonMessage({ message: toSend });
   };
 
+  const handleRefetchPlayers = (
+    leftTop: string,
+    leftBottom: string,
+    rightTop: string,
+    rightBottom: string
+  ) => {
+    const toSend =
+      "/refetchPlayers " +
+      leftTop +
+      " " +
+      leftBottom +
+      " " +
+      rightTop +
+      " " +
+      rightBottom;
+    sendJsonMessage({ message: toSend });
+  };
+
   return {
     handelSendInvitation,
     newNotif,
@@ -200,5 +218,6 @@ export default function useGameSocket() {
     handleSurrenderFour,
     handleChangeBallDirectionFour,
     handleEnemyScoreFour,
+    handleRefetchPlayers,
   };
 }
