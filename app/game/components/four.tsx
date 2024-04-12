@@ -33,6 +33,7 @@ const Four = () => {
   const animationFrameId = useRef(0);
   const isAnimating = useRef(false);
   const isEnemyReadyRef = useRef(false);
+  const playerReadyRef = useRef(0);
   const {
     newNotif,
     handleStartGameFour,
@@ -41,6 +42,8 @@ const Four = () => {
     handleChangeBallDirectionFour,
     handleEnemyScoreFour,
     handleRefetchPlayers,
+    handleReadyFour,
+    handleReadyToStartFour,
   } = useGameSocket();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [leftScore, setLeftScore] = useState(0);
@@ -64,14 +67,6 @@ const Four = () => {
   const rightUserTop: User = onGoingGame?.data?.game?.user3 || dummyPlayer;
   const rightUserBottom: User = onGoingGame?.data?.game?.user4 || dummyPlayer;
 
-  if (username === rightUserTop?.username)
-    myPaddleRef.current = paddleRightTopYRef.current;
-  if (username === rightUserBottom?.username)
-    myPaddleRef.current = paddleRightBottomYRef.current;
-  if (username === leftUserTop?.username)
-    myPaddleRef.current = paddleleftTopYRef.current;
-  if (username === leftUserBottom?.username)
-    myPaddleRef.current = paddleLeftBottomYRef.current;
   useEffect(() => {
     if (!gameStarted) return; // Exit if game is not started
 
@@ -87,6 +82,7 @@ const Four = () => {
     setRightScore(0);
 
     let ballInLeftPaddle = false;
+    let ballInRightPaddle = false;
 
     let ballRadius = 10;
     let x = canvas.width / 2;
@@ -106,7 +102,6 @@ const Four = () => {
       ) {
         newAngleRef.current = Math.random() * 2 * Math.PI;
       }
-      let enemyAngle = Math.PI - newAngleRef.current;
       handleChangeBallDirectionFour(
         newBallPositionRef.current.x,
         newBallPositionRef.current.y,
@@ -119,15 +114,24 @@ const Four = () => {
       );
     }
 
-    const paddleHeight = 80;
+    const paddleHeight = 195;
     const paddleWidth = 10;
-    paddleRightTopYRef.current = (canvas.height - paddleHeight) / 4;
-    paddleleftTopYRef.current = (canvas.height - paddleHeight) / 4;
-    paddleLeftBottomYRef.current = ((canvas.height - paddleHeight) * 3) / 4;
-    paddleRightBottomYRef.current = ((canvas.height - paddleHeight) * 3) / 4;
+    paddleRightTopYRef.current = 0; // (canvas.height - paddleHeight) / 4;
+    paddleleftTopYRef.current = 0; // (canvas.height - paddleHeight) / 4;
+    paddleLeftBottomYRef.current = canvas.height - paddleHeight; // * 3) / 4;
+    paddleRightBottomYRef.current = canvas.height - paddleHeight; // * 3) / 4;
 
-    const paddleLeftX = 25;
-    const paddleRightX = canvas.width - 25 - paddleWidth;
+    if (username === rightUserTop?.username)
+      myPaddleRef.current = paddleRightTopYRef.current;
+    if (username === rightUserBottom?.username)
+      myPaddleRef.current = paddleRightBottomYRef.current;
+    if (username === leftUserTop?.username)
+      myPaddleRef.current = paddleleftTopYRef.current;
+    if (username === leftUserBottom?.username)
+      myPaddleRef.current = paddleLeftBottomYRef.current;
+
+    const paddleLeftX = 70;
+    const paddleRightX = canvas.width - 70 - paddleWidth;
     let upPressed = false;
     let downPressed = false;
 
@@ -240,6 +244,8 @@ const Four = () => {
     function changeBallDirectionOnline() {
       if (canvas === null) return;
       if (
+        (username === leftUserTop?.username ||
+          username === leftUserBottom?.username) &&
         newBallPositionRef.current.x < paddleLeftX + paddleWidth + ballRadius &&
         newBallPositionRef.current.x > paddleLeftX + ballRadius &&
         newBallPositionRef.current.y + ballRadius / 2 > myPaddleRef.current &&
@@ -276,14 +282,65 @@ const Four = () => {
       } else {
         ballInLeftPaddle = false;
       }
+      if (
+        (username === rightUserTop?.username ||
+          username === rightUserBottom?.username) &&
+        newBallPositionRef.current.x > paddleRightX - ballRadius &&
+        newBallPositionRef.current.x < paddleRightX + ballRadius &&
+        newBallPositionRef.current.y + ballRadius / 2 > myPaddleRef.current &&
+        newBallPositionRef.current.y - ballRadius / 2 <
+          myPaddleRef.current + paddleHeight
+      ) {
+        isFirstTime.current = false;
+        if (!ballInRightPaddle) {
+          let ballPositionOnPaddle =
+            newBallPositionRef.current.y - myPaddleRef.current;
+          let ballPercentageOnPaddle = ballPositionOnPaddle / paddleHeight;
+          if (
+            newBallPositionRef.current.y <
+            myPaddleRef.current + paddleHeight / 2
+          ) {
+            newAngleRef.current =
+              ((-Math.PI * 2) / 6) * (0.5 - ballPercentageOnPaddle);
+          } else {
+            newAngleRef.current =
+              ((Math.PI * 2) / 6) * (ballPercentageOnPaddle - 0.5);
+          }
+          newAngleRef.current = Math.PI - newAngleRef.current;
+          handleChangeBallDirectionFour(
+            newBallPositionRef.current.x,
+            newBallPositionRef.current.y,
+            newAngleRef.current,
+            username,
+            leftUserTop?.username || "",
+            leftUserBottom?.username || "",
+            rightUserTop?.username || "",
+            rightUserBottom?.username || ""
+          );
+          ballInRightPaddle = true;
+        }
+      } else {
+        ballInRightPaddle = false;
+      }
     }
 
     function changeScoreOnline() {
       if (canvas === null) return;
-      if (newBallPositionRef.current.x < -50) {
+      if (
+        newBallPositionRef.current.x < -50 ||
+        newBallPositionRef.current.x > canvas.width + 50
+      ) {
         isFirstTime.current = true;
-        rightScoreRef.current = rightScoreRef.current + 1;
-        setRightScore(rightScoreRef.current);
+        if (
+          username === leftUserTop?.username ||
+          username === leftUserBottom?.username
+        ) {
+          rightScoreRef.current = rightScoreRef.current + 1;
+          setRightScore(rightScoreRef.current);
+        } else {
+          leftScoreRef.current = leftScoreRef.current + 1;
+          setLeftScore(leftScoreRef.current);
+        }
         newBallPositionRef.current.x = canvas.width / 2;
         newAngleRef.current = Math.random() * 2 * Math.PI;
         while (
@@ -304,6 +361,7 @@ const Four = () => {
           rightUserTop?.username || "",
           rightUserBottom?.username || ""
         );
+
         handleEnemyScoreFour(
           username === rightUserTop?.username ||
             username === rightUserBottom?.username
@@ -374,6 +432,14 @@ const Four = () => {
           rightUserBottom?.username || ""
         );
       }
+      if (username === rightUserTop?.username)
+        paddleRightTopYRef.current = myPaddleRef.current;
+      if (username === rightUserBottom?.username)
+        paddleRightBottomYRef.current = myPaddleRef.current;
+      if (username === leftUserTop?.username)
+        paddleleftTopYRef.current = myPaddleRef.current;
+      if (username === leftUserBottom?.username)
+        paddleLeftBottomYRef.current = myPaddleRef.current;
     }
 
     // Cleanup function to remove the event listeners and stop the animation loop
@@ -416,6 +482,8 @@ const Four = () => {
       drawBall();
       drawRightPaddle();
       drawLeftPaddle();
+      drawLeftPaddleTwo();
+      drawRightPaddleTwo();
 
       // move paddles
       movePaddlesOnline();
@@ -436,7 +504,7 @@ const Four = () => {
       moveBall();
 
       // Check if enemy has left the game
-      enemyLeftGame();
+      // enemyLeftGame();
     };
 
     const animate = () => {
@@ -459,17 +527,37 @@ const Four = () => {
     const notif = newNotif();
     if (notif) {
       const message = JSON.parse(notif.data);
-      if (message.message?.split(" ")[0] === "/show") {
-        handleStartGameFour(
-          username,
-          leftUserTop?.username || "",
-          leftUserBottom?.username || "",
-          rightUserTop?.username || "",
-          rightUserBottom?.username || ""
-        );
-        isEnemyReadyRef.current = true;
+      if (message.message?.split(" ")[0] === "/showFour") {
+        const sender = message.message.split(" ")[1];
+        const receiver = message.message.split(" ")[2];
+        handleReadyFour(sender, receiver);
+      } else if (message.message?.split(" ")[0] === "/readyFour") {
+        playerReadyRef.current += 1;
+        if (playerReadyRef.current === 4) {
+          handleReadyToStartFour(
+            leftUserTop?.username || "",
+            leftUserBottom?.username || "",
+            rightUserTop?.username || "",
+            rightUserBottom?.username || ""
+          );
+          // setStartCountdown(true);
+        }
+      } else if (message.message?.split(" ")[0] === "/fourMove") {
+        const paddleY = parseInt(message.message.split(" ")[1]);
+        const playerMoved = message.message.split(" ")[2];
+        if (playerMoved === leftUserTop?.username) {
+          paddleleftTopYRef.current = paddleY;
+        } else if (playerMoved === leftUserBottom?.username) {
+          paddleLeftBottomYRef.current = paddleY;
+        } else if (playerMoved === rightUserTop?.username) {
+          paddleRightTopYRef.current = paddleY;
+        } else if (playerMoved === rightUserBottom?.username) {
+          paddleRightBottomYRef.current = paddleY;
+        }
+      } else if (message.message?.split(" ")[0] === "/startFour") {
+        // setGameStarted(true);
         setStartCountdown(true);
-        onGoingGame.refetch();
+        playerReadyRef.current = 0;
       } else if (message.message?.split(" ")[0] === "/start") {
         // invitaionsData.refetch();
         onGoingGame.refetch();
@@ -484,10 +572,20 @@ const Four = () => {
         // setStartCountdown(true);
       } else if (message.message?.split(" ")[0] === "/refetchPlayers") {
         onGoingGame.refetch();
-      } else if (message.message?.split(" ")[0] === "/score") {
+      } else if (message.message?.split(" ")[0] === "/fourScore") {
         isFirstTime.current = true;
-        setLeftScore(parseInt(message.message.split(" ")[1]));
-        leftScoreRef.current = parseInt(message.message.split(" ")[1]);
+        const score = parseInt(message.message.split(" ")[1]);
+        const user = message.message.split(" ")[2];
+        if (
+          user === leftUserTop?.username ||
+          user === leftUserBottom?.username
+        ) {
+          rightScoreRef.current = score;
+          setRightScore(score);
+        } else {
+          leftScoreRef.current = score;
+          setLeftScore(score);
+        }
       } else if (message.message?.split(" ")[0] === "/end") {
         console.log("game over");
         setGameAccepted(false);
@@ -502,7 +600,7 @@ const Four = () => {
         }
         // } else if (message.message?.split(" ")[0] === "/move") {
         //   PaddleRightYRef.current = parseInt(message.message.split(" ")[1]); // Update the ref
-      } else if (message.message?.split(" ")[0] === "/ballDirection") {
+      } else if (message.message?.split(" ")[0] === "/fourBallDirection") {
         newBallPositionRef.current = {
           x: parseInt(message.message.split(" ")[1]),
           y: parseInt(message.message.split(" ")[2]),

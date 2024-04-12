@@ -204,6 +204,22 @@ export default function useGameSocket() {
     sendJsonMessage({ message: toSend });
   };
 
+  const handleReadyFour = (sender: string, receiver: string) => {
+    const toSend = "/readyFour " + sender + " " + receiver;
+    sendJsonMessage({ message: toSend });
+  };
+
+  const handleReadyToStartFour = (
+    user1: string,
+    user2: string,
+    user3: string,
+    user4: string
+  ) => {
+    const toSend =
+      "/readyToStartFour " + user1 + " " + user2 + " " + user3 + " " + user4;
+    sendJsonMessage({ message: toSend });
+  };
+
   return {
     handelSendInvitation,
     newNotif,
@@ -219,5 +235,7 @@ export default function useGameSocket() {
     handleChangeBallDirectionFour,
     handleEnemyScoreFour,
     handleRefetchPlayers,
+    handleReadyFour,
+    handleReadyToStartFour,
   };
 }
