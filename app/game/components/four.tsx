@@ -12,6 +12,7 @@ import useGetFourGame from "../hooks/useGetFourGame";
 import useCreateGameFour from "../hooks/useCreateGameFour";
 import Players from "./players";
 import InviteFriends from "./inviteFriend";
+import { Card } from "@/components/ui/card";
 
 const Four = () => {
   const user_id = getCookie("user_id") || "";
@@ -626,7 +627,9 @@ const Four = () => {
   }, [onGoingGame.isSuccess, onGoingGame.data]);
 
   return (
-    <div className="w-full h-fit flex flex-col justify-center items-center">
+    // <div className="w-full h-fit flex flex-col justify-center items-center">
+
+    <Card className="p-4   h-fit  flex flex-col mx-auto justify-center w-fit">
       <h1 className="text-4xl">Ping Pong</h1>
       {gameAccepted && (
         <>
@@ -725,7 +728,7 @@ const Four = () => {
           </Button>
         </>
       )}
-    </div>
+    </Card>
   );
 };
 
