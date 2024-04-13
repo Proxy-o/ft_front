@@ -2,8 +2,14 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Crown } from "lucide-react";
+import useGetTournement from "../hooks/useGetTournement";
+import getCookie from "@/lib/functions/getCookie";
+import useCreateTournement from "../hooks/useCreateTournement";
 
 const TourenementBoard = () => {
+  const user_id = getCookie("user_id") || "";
+  const tournament = useGetTournement(user_id);
+  console.log(tournament);
   return (
     <Card className="p-4 h-fit w-fit flex flex-col justify-center">
       <div className="mx-auto">Board</div>
@@ -96,7 +102,7 @@ const TourenementBoard = () => {
           </Avatar>
         </div>
         <div className="flex flex-col justify-center items-center gap-4 my-auto mx-4 py-4">
-          <Avatar className="">
+          <Avatar className="shadow-lg shadow-yellow-500 rounded-xl">
             <AvatarImage
               //   src={topLeft.avatar}
               alt="profile image"
