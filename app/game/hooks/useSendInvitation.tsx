@@ -35,6 +35,18 @@ const invite = async ({
     } catch (error) {
       console.log(error);
     }
+  } else if (gameType === "tournament") {
+    try {
+      const res = await axiosInstance.post("game/send_invitation", {
+        sender: user_id,
+        receiver: userid,
+        gameType: "tournament",
+      });
+      if (res.status === 201) {
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 };
 
