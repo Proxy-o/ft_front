@@ -2,20 +2,23 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Crown } from "lucide-react";
-import useGetTournement from "../hooks/useGetTournement";
+import useGetTournament from "../hooks/useGetTournament";
 import getCookie from "@/lib/functions/getCookie";
 
-const TourenementBoard = () => {
+const TournamentBoard = () => {
   const user_id = getCookie("user_id") || "";
-  const data = useGetTournement(user_id);
-  const tournament = data.tournement;
+  const { tournament } = useGetTournament(user_id);
+  // const;
   let participants = [];
-  if (tournament.isLoading) return "looking for tournement...";
-  if (tournament.isSuccess && !tournament.data.tournement)
-    return "no tournement found";
-  if (tournament.isSuccess && tournament.data.tournement) {
-    participants = tournament.data.tournement?.participants || [];
+  let games = [];
+  if (tournament.isLoading) return "looking for tournament...";
+  if (tournament.isSuccess && !tournament.data.tournament)
+    return "no tournament found";
+  if (tournament.isSuccess && tournament.data.tournament) {
+    participants = tournament.data.tournament?.participants || [];
+    games = tournament.data.tournament.games || [];
   }
+
   return (
     <Card className="p-4 h-fit w-fit flex flex-col justify-center">
       <div className="mx-auto">Board</div>
@@ -80,22 +83,22 @@ const TourenementBoard = () => {
         <div className="flex flex-col justify-start items-start gap-20 my-auto">
           <Avatar className="">
             <AvatarImage
-              src={participants[4]?.avatar}
+              src={games[0]?.winner?.avatar}
               alt="profile image"
               className="rounded-xl h-8 w-8"
             />
             <AvatarFallback className="rounded-xl">
-              {participants[4]?.username || "user"}
+              {games[0]?.winner?.username || "user"}
             </AvatarFallback>
           </Avatar>
           <Avatar className="">
             <AvatarImage
-              src={participants[5]?.avatar}
+              src={games[1]?.winner?.avatar}
               alt="profile image"
               className="rounded-xl h-8 w-8"
             />
             <AvatarFallback className="rounded-xl">
-              {participants[5]?.username || "user"}
+              {games[1]?.winner?.username || "user"}
             </AvatarFallback>
           </Avatar>
         </div>
@@ -112,24 +115,24 @@ const TourenementBoard = () => {
         <div className="flex flex-col justify-start items-start my-auto">
           <Avatar className="">
             <AvatarImage
-              src={participants[6]?.avatar}
+              src={games[4]?.winner?.avatar}
               alt="profile image"
               className="rounded-xl h-8 w-8"
             />
             <AvatarFallback className="rounded-xl">
-              {participants[6]?.username || "user"}
+              {games[4]?.winner?.username || "user"}
             </AvatarFallback>
           </Avatar>
         </div>
         <div className="flex flex-col justify-center items-center gap-4 my-auto mx-4 py-4">
           <Avatar className="shadow-lg shadow-yellow-500 rounded-xl">
             <AvatarImage
-              src={participants[7]?.avatar}
+              src={games[6]?.winner?.avatar}
               alt="profile image"
               className="rounded-xl h-8 w-8"
             />
             <AvatarFallback className="rounded-xl">
-              {participants[7]?.username || "user"}
+              {games[6]?.winner?.username || "user"}
             </AvatarFallback>
           </Avatar>
           <Crown size={24} className="text-yellow-500" />
@@ -138,12 +141,12 @@ const TourenementBoard = () => {
         <div className="flex flex-col justify-start items-start my-auto">
           <Avatar className="">
             <AvatarImage
-              src={participants[8]?.avatar}
+              src={games[5]?.winner?.avatar}
               alt="profile image"
               className="rounded-xl h-8 w-8"
             />
             <AvatarFallback className="rounded-xl">
-              {participants[8]?.username || "user"}
+              {games[5]?.winner?.username || "user"}
             </AvatarFallback>
           </Avatar>
         </div>
@@ -160,22 +163,22 @@ const TourenementBoard = () => {
         <div className="flex flex-col justify-start items-start gap-20 my-auto">
           <Avatar className="">
             <AvatarImage
-              src={participants[9]?.avatar}
+              src={games[2]?.winner?.avatar}
               alt="profile image"
               className="rounded-xl h-8 w-8"
             />
             <AvatarFallback className="rounded-xl">
-              {participants[9]?.username || "user"}
+              {games[2]?.winner?.username || "user"}
             </AvatarFallback>
           </Avatar>
           <Avatar className="">
             <AvatarImage
-              src={participants[10]?.avatar}
+              src={games[3]?.winner?.avatar}
               alt="profile image"
               className="rounded-xl h-8 w-8"
             />
             <AvatarFallback className="rounded-xl">
-              {participants[10]?.username || "user"}
+              {games[3]?.winner?.username || "user"}
             </AvatarFallback>
           </Avatar>
         </div>
@@ -196,42 +199,42 @@ const TourenementBoard = () => {
         <div className="flex flex-col justify-start items-start gap-4">
           <Avatar className="">
             <AvatarImage
-              src={participants[11]?.avatar}
+              src={participants[4]?.avatar}
               alt="profile image"
               className="rounded-xl h-8 w-8"
             />
             <AvatarFallback className="rounded-xl">
-              {participants[11]?.username || "user"}
+              {participants[4]?.username || "user"}
             </AvatarFallback>
           </Avatar>
           <Avatar className="">
             <AvatarImage
-              src={participants[12]?.avatar}
+              src={participants[5]?.avatar}
               alt="profile image"
               className="rounded-xl h-8 w-8"
             />
             <AvatarFallback className="rounded-xl">
-              {participants[12]?.username || "user"}
+              {participants[5]?.username || "user"}
             </AvatarFallback>
           </Avatar>
           <Avatar className="">
             <AvatarImage
-              src={participants[13]?.avatar}
+              src={participants[6]?.avatar}
               alt="profile image"
               className="rounded-xl h-8 w-8"
             />
             <AvatarFallback className="rounded-xl">
-              {participants[13]?.username || "user"}
+              {participants[6]?.username || "user"}
             </AvatarFallback>
           </Avatar>
           <Avatar className="">
             <AvatarImage
-              src={participants[14]?.avatar}
+              src={participants[7]?.avatar}
               alt="profile image"
               className="rounded-xl h-8 w-8"
             />
             <AvatarFallback className="rounded-xl">
-              {participants[14]?.username || "user"}
+              {participants[7]?.username || "user"}
             </AvatarFallback>
           </Avatar>
         </div>
@@ -240,4 +243,4 @@ const TourenementBoard = () => {
   );
 };
 
-export default TourenementBoard;
+export default TournamentBoard;

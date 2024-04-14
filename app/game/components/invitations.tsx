@@ -10,7 +10,7 @@ import { Invitation } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
-import useAcceptInvitationTournement from "../hooks/useAccepteInvitationTournement";
+import useAcceptInvitationTournament from "../hooks/useAccepteInvitationTournament";
 
 const Invitations = ({
   setTab,
@@ -24,7 +24,7 @@ const Invitations = ({
   const { mutate: declineMutation } = useDeclineInvitation();
   const { mutate: acceptInvitationMutation } = useAcceptInvitation();
   const { mutate: acceptInvitationTournamentMutation } =
-    useAcceptInvitationTournement();
+    useAcceptInvitationTournament();
   const invitations: Invitation[] = invitationsData.data
     ? invitationsData.data
     : [];

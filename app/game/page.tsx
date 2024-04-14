@@ -8,7 +8,7 @@ import GameNav from "./components/gameNav";
 import OneOnline from "./components/oneOnline";
 import OneOffline from "./components/oneOffline";
 import Four from "./components/four";
-import Tourenement from "./components/tournement";
+import Tournament from "./components/tournament";
 export default function Page() {
   const user_id = getCookie("user_id") || "";
   const { data: user, isSuccess, isLoading } = useGetUser(user_id || "0");
@@ -34,7 +34,7 @@ export default function Page() {
       <div className="w-full h-fit flex flex-row justify-start items-start mt-10">
         {tab === "online" && (
           <div className="flex flex-col w-full h-full justify-start items-center">
-            <OneOnline />
+            <OneOnline type="online" />
           </div>
         )}
         {tab === "local" && (
@@ -52,7 +52,7 @@ export default function Page() {
         {tab === "tournament" && (
           <>
             <div className="flex flex-col w-full h-full justify-start items-center left-0">
-              <Tourenement />
+              <Tournament />
             </div>
           </>
         )}

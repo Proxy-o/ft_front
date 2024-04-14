@@ -10,7 +10,7 @@ import { User } from "@/lib/types";
 import useGetGame from "../hooks/useGetGames";
 import Score from "./score";
 
-const OneOnline = () => {
+const OneOnline = ({ type }: { type: string }) => {
   const user_id = getCookie("user_id") || "";
   const { data: user } = useGetUser(user_id || "0");
   const username = user?.username || "";
@@ -40,7 +40,7 @@ const OneOnline = () => {
   const [rightScore, setRightScore] = useState(0);
   const rightScoreRef = useRef(0);
   //game logic
-  const { onGoingGame } = useGetGame(user_id || "0");
+  const { onGoingGame } = useGetGame(user_id || "0", type);
 
   // if (onGoingGame.isSuccess && onGoingGame.data !== null) {
   //     setStartGame(true);
