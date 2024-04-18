@@ -417,6 +417,12 @@ const OneOnline = ({ type }: { type: string }) => {
       {gameAccepted && (
         <>
           <h1 className="text-4xl">Ping Pong</h1>
+          <h1 className="text-2xl">
+            Game {onGoingGame.data?.game?.game_number}
+          </h1>
+          <h1 className="text-2xl">
+            {leftUser?.username} vs {rightUser?.username}
+          </h1>
           <br />
           {onGoingGame.isSuccess && gameStarted && (
             <Score leftPlayerScore={leftScore} rightPlayerScore={rightScore} />

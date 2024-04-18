@@ -1,11 +1,9 @@
-import { Image, Sword } from "lucide-react";
-import axiosInstance from "@/lib/functions/axiosInstance";
+import { Sword } from "lucide-react";
 import getCookie from "@/lib/functions/getCookie";
 import useGetFriends from "@/app/chat/hooks/useGetFriends";
 import useGameSocket from "@/lib/hooks/useGameSocket";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import useSendInvitation from "../hooks/useSendInvitation";
-import { useEffect } from "react";
 
 const InviteFriends = ({ gameType }: { gameType: string }) => {
   const { handelSendInvitation } = useGameSocket();

@@ -4,20 +4,26 @@ import { Separator } from "@/components/ui/separator";
 import { Crown } from "lucide-react";
 import useGetTournament from "../hooks/useGetTournament";
 import getCookie from "@/lib/functions/getCookie";
+import { useEffect, useState } from "react";
 
 const TournamentBoard = () => {
   const user_id = getCookie("user_id") || "";
+  const [participants, setParticipants] = useState<any[]>([]);
+  const [games, setGames] = useState<any[]>([]);
   const { tournament } = useGetTournament(user_id);
-  // const;
-  let participants = [];
-  let games = [];
   if (tournament.isLoading) return "looking for tournament...";
-  if (tournament.isSuccess && !tournament.data.tournament)
+  if (
+    (tournament.isSuccess && !tournament.data.tournament) ||
+    tournament.data === undefined
+  )
     return "no tournament found";
-  if (tournament.isSuccess && tournament.data.tournament) {
-    participants = tournament.data.tournament?.participants || [];
-    games = tournament.data.tournament.games || [];
-  }
+  useEffect(() => {
+    console.log(tournament);
+    if (tournament.isSuccess && tournament.data.tournament) {
+      setParticipants(tournament.data.tournament?.participants || []);
+      setGames(tournament.data.tournament.games || []);
+    }
+  }, [tournament.isSuccess, tournament.data.tournament]);
 
   return (
     <Card className="p-4 h-fit w-fit flex flex-col justify-center">

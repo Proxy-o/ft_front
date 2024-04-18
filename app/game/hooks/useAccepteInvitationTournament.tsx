@@ -1,5 +1,5 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Dispatch, SetStateAction } from "react";
 import { toast } from "sonner";
 
@@ -16,9 +16,12 @@ async function accept(invitationId: string) {
 }
 
 export default function useAcceptInvitationTournament() {
+  const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: accept,
-    onSuccess: () => {},
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tournament"] });
+    },
   });
   return mutation;
 }
