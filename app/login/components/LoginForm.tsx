@@ -26,7 +26,10 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen overflow-hidden">
+    <form
+      className="flex flex-col items-center justify-center min-h-screen overflow-hidden"
+      action={onSubmit}
+    >
       <Card className="w-full max-w-md ">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl">Login</CardTitle>
@@ -85,6 +88,7 @@ export default function LoginForm() {
               )}
             </Button>
           </div>
+
           <div className="flex w-32 justify-center my-4 text-xs items-center">
             <Separator className="my-4 mr-2 " />
             OR
@@ -103,6 +107,6 @@ export default function LoginForm() {
           </div>
         </CardFooter>
       </Card>
-    </div>
+    </form>
   );
 }
