@@ -38,12 +38,6 @@ export default function ChatFriendCard({
         </p>
       </div>
       <div className="flex justify-center items-center ">
-        <User2
-          onClick={handleViewProfile}
-          className="text-green-600/70 mr-2 hover:scale-110"
-        >
-          Profile
-        </User2>
         <div className="relative flex justify-center">
           {friend.has_unread_messages && (
             <div className="bg-primary size-2 rounded-full  absolute z-50 animate-pulse right-0" />
@@ -53,6 +47,12 @@ export default function ChatFriendCard({
             onClick={() => setReceiverId(parseInt(friend.id))}
           ></MessageCircle>
         </div>
+        <User2
+          onClick={handleViewProfile}
+          className="text-green-600/70 ml-2 hover:scale-110"
+        >
+          Profile
+        </User2>
       </div>
     </div>
   );

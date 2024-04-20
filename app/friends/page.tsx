@@ -24,17 +24,16 @@ export default function Page() {
     }
   }, [user, isSuccess, router]);
 
-  const frndCount = friends?.length;
+  const friendCount = friends?.length;
 
   return (
     user && (
       <div className="flex gap-1 overflow-auto h-full">
-        <FriendRequests />
-        <Card className=" w-full border    flex flex-col    my-3 p-1  ">
+        <Card className=" w-full border    flex flex-col    my-3 p-1 mr-2 ">
           <div className="flex w-full justify-center items-center border-b-2 mb-1 p-2">
             Friends
             <p className="border bg-primary mx-2 rounded-full size-6  text-center">
-              {frndCount}
+              {friendCount}
             </p>
           </div>
           <div className="overflow-y-auto">
@@ -52,6 +51,7 @@ export default function Page() {
               })}
           </div>
         </Card>
+        <FriendRequests />
       </div>
     )
   );
