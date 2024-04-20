@@ -28,7 +28,7 @@ export default function Page() {
 
   return (
     user && (
-      <div className="flex gap-1 overflow-auto h-full">
+      <div className="flex gap-1 overflow-auto h-full p-1">
         <Card className=" w-full border    flex flex-col    my-3 p-1 mr-2 ">
           <div className="flex w-full justify-center items-center border-b-2 mb-1 p-2">
             Friends
