@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
-import { Asterisk, Loader, User } from "lucide-react";
+import { Asterisk, Eye, EyeOff, Loader, User } from "lucide-react";
 import { useState } from "react";
 import useLogin from "../hooks/useLogin";
 
@@ -20,6 +20,7 @@ export default function LoginForm() {
   const { mutate: login, isError, isPending } = useLogin();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
   const onSubmit = () => {
     login({ username, password });
@@ -69,11 +70,18 @@ export default function LoginForm() {
               <Input
                 name="password"
                 placeholder="Password"
-                type="password"
+                type={passwordVisible ? "text" : "password"}
                 onChange={(ev) => setPassword(ev.target.value)}
               />
-              <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                <Asterisk className="h-5 w-5 text-secondary" />
+              <div
+                className="hover:cursor-pointer absolute right-3 top-1/2 transform -translate-y-1/2"
+                onClick={() => setPasswordVisible((prev) => !prev)}
+              >
+                {passwordVisible ? (
+                  <EyeOff className="size-5" />
+                ) : (
+                  <Eye className="h-5 w-5 text-secondary" />
+                )}
               </div>
             </div>
           </div>
