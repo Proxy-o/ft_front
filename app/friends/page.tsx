@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
 import FriendRequests from "./components/friendRequests";
-import FriendList from "./components/friendList";
 import getCookie from "@/lib/functions/getCookie";
 import useGetUser from "../profile/hooks/useGetUser";
 import { useRouter } from "next/navigation";

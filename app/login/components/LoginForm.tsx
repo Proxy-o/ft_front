@@ -20,9 +20,8 @@ export default function LoginForm() {
   const { mutate: login, isError, isPending } = useLogin();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  
 
-  const onSubmit = async () => {
+  const onSubmit = () => {
     login({ username, password });
   };
 

@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import axiosInstance from "./axiosInstance";
 import getCookie from "./getCookie";
 
@@ -19,6 +20,15 @@ const authService = {
       return true;
     } catch (error) {
       // Handle token refresh error (e.g., logout the user)
+      document.cookie =
+        "access=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=None; Secure;";
+      document.cookie =
+        "refresh=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;SameSite=None; Secure;";
+      document.cookie =
+        "logged_in=no;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;SameSite=None; Secure;";
+      document.cookie =
+        "user_id=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;SameSite=None; Secure;";
+      redirect("/login");
       return false;
     }
   },
