@@ -376,7 +376,6 @@ const OneOnline = ({ type }: { type: string }) => {
         setLeftScore(parseInt(message.message.split(" ")[1]));
         leftScoreRef.current = parseInt(message.message.split(" ")[1]);
       } else if (message.message?.split(" ")[0] === "/end") {
-        console.log("game over");
         setGameAccepted(false);
         setGameStarted(false);
         setStartCountdown(false);
@@ -394,7 +393,9 @@ const OneOnline = ({ type }: { type: string }) => {
           x: parseInt(message.message.split(" ")[1]),
           y: parseInt(message.message.split(" ")[2]),
         }; // Update the ref
-        isFirstTime.current = false;
+        if (newAngleRef.current !== 0) {
+          isFirstTime.current = false;
+        }
         newAngleRef.current = parseFloat(message.message.split(" ")[3]); // Update the ref
       }
     }

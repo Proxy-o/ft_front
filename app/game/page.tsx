@@ -13,7 +13,7 @@ export default function Page() {
   const user_id = getCookie("user_id") || "";
   const { data: user, isSuccess, isLoading } = useGetUser(user_id || "0");
   const router = useRouter();
-  const [tab, setTab] = useState("tournament");
+  const [tab, setTab] = useState("online");
 
   useEffect(() => {
     if (!user && isSuccess) {
