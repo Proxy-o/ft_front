@@ -8,216 +8,75 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Card } from "@/components/ui/card";
-import { Games } from "../types";
 import { Flame, MinusSquare, PlusSquare, Square } from "lucide-react";
 import { cn } from "@/lib/utils";
+import useGetGames from "../hooks/useGetGames";
+import { Game } from "../types";
 
-const games: Games[] = [
-  {
-    player1: {
-      name: "othmane ait taleb",
-      score: "3",
-      status: "win",
-    },
-    player2: {
-      name: "zbiba hassan",
-      score: "2",
-      status: "lose",
-    },
-    date: "2021-10-10",
-  },
-  {
-    player1: {
-      name: "othmane ait taleb",
-      score: "3",
-      status: "lose",
-    },
-    player2: {
-      name: "zbiba hassan",
-      score: "5",
-      status: "win",
-    },
-    date: "2021-10-10",
-  },
-  {
-    player1: {
-      name: "othmane ait taleb",
-      score: "6",
-      status: "lose",
-    },
-    player2: {
-      name: "zbiba hassan",
-      score: "7",
-      status: "win",
-    },
-    date: "2021-10-10",
-  },
-  {
-    player1: {
-      name: "othmane ait taleb",
-      score: "3",
-      status: "win",
-    },
-    player2: {
-      name: "zbiba hassan",
-      score: "2",
-      status: "lose",
-    },
-    date: "2021-10-10",
-  },
-  {
-    player1: {
-      name: "othmane ait taleb",
-      score: "3",
-      status: "lose",
-    },
-    player2: {
-      name: "zbiba hassan",
-      score: "4",
-      status: "win",
-    },
-    date: "2021-10-10",
-  },
-  {
-    player1: {
-      name: "othmane ait taleb",
-      score: "3",
-      status: "lose",
-    },
-    player2: {
-      name: "zbiba hassan",
-      score: "4",
-      status: "win",
-    },
-    date: "2021-10-10",
-  },
-  {
-    player1: {
-      name: "othmane ait taleb",
-      score: "3",
-      status: "lose",
-    },
-    player2: {
-      name: "zbiba hassan",
-      score: "4",
-      status: "win",
-    },
-    date: "2021-10-10",
-  },
-  {
-    player1: {
-      name: "othmane ait taleb",
-      score: "3",
-      status: "lose",
-    },
-    player2: {
-      name: "zbiba hassan",
-      score: "4",
-      status: "win",
-    },
-    date: "2021-10-10",
-  },
-  {
-    player1: {
-      name: "othmane ait taleb",
-      score: "3",
-      status: "lose",
-    },
-    player2: {
-      name: "zbiba hassan",
-      score: "4",
-      status: "win",
-    },
-    date: "2021-10-10",
-  },
-  {
-    player1: {
-      name: "othmane ait taleb",
-      score: "3",
-      status: "lose",
-    },
-    player2: {
-      name: "zbiba hassan",
-      score: "4",
-      status: "win",
-    },
-    date: "2021-10-10",
-  },
-  {
-    player1: {
-      name: "othmane ait taleb",
-      score: "3",
-      status: "lose",
-    },
-    player2: {
-      name: "zbiba hassan",
-      score: "4",
-      status: "win",
-    },
-    date: "2021-10-10",
-  },
-];
-export default function GamesTable() {
+export default function GamesTable({ id }: { id: string }) {
   const username = "othmane ait taleb";
+  const { data: games, isSuccess } = useGetGames(id);
+  isSuccess && console.log(games);
+
   return (
-    <>
-      <div className="p-4 relative">Completed games</div>
-      <Card className="">
-        <Table>
-          <TableHeader className="bg-secondary ">
-            <TableRow>
-              <TableHead></TableHead>
-              <TableHead>Players</TableHead>
-              <TableHead>Result</TableHead>
-              <TableHead className="text-right">Date</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {games.map((game, index) => (
-              <TableRow key={index}>
-                <TableCell className="text-center">
-                  <Flame className="text-yellow-400" />
-                </TableCell>
-                <TableCell className="font-medium">
-                  <div>
-                    <div className=" flex items-center">
-                      <Square
-                        className={cn(game.player1.status === "win" && "mr-1")}
-                        size={12}
-                      />
-                      {game.player1.name}
+    isSuccess && (
+      <>
+        <div className="p-4 relative">Completed games</div>
+        <Card className="">
+          <Table>
+            <TableHeader className="bg-secondary ">
+              <TableRow>
+                <TableHead></TableHead>
+                <TableHead>Players</TableHead>
+                <TableHead>Result</TableHead>
+                <TableHead className="text-right">Date</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {games.map((game: Game, index: number) => (
+                <TableRow key={index}>
+                  <TableCell className="text-center">
+                    <Flame className="text-yellow-400" />
+                  </TableCell>
+                  <TableCell className="font-medium">
+                    <div>
+                      <div className=" flex items-center">
+                        {game.user1.username}
+                      </div>
+                      <div className=" flex items-center">
+                        {game.user3?.username}
+                      </div>
                     </div>
-                    <div className=" flex items-center">
-                      <Square
-                        className={cn(
-                          game.player2.status === "win" &&
-                            "border  border-green-500",
-                          "mr-1 "
-                        )}
-                        size={12}
-                      />
-                      {game.player2.name}
+                    <div>
+                      <div className=" flex items-center">
+                        {game.user2?.username}
+                      </div>
+                      <div className=" flex items-center">
+                        {game.user4?.username}
+                      </div>
                     </div>
+                  </TableCell>
+                  <TableCell className="flex items-center">
+                    {/* <div className="mr-2">
+                    <div>{game.user1_score}</div>
+                    <div>{game.user2_score}</div>
                   </div>
-                </TableCell>
-                <TableCell className="flex items-center">
-                  <div className="mr-2">
-                    <div>{game.player1.score}</div>
-                    <div>{game.player2.score}</div>
-                  </div>
-                  {game.player1.name === username &&
+                  {game.winner.id === id &&
                   game.player1.status === "win" ? (
                     <PlusSquare className="text-green-500" />
                   ) : (
                     <MinusSquare className="text-red-500" />
-                  )}
-                </TableCell>
-                <TableCell className="text-right">{game.date}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Card>
-    </>
+                  )} */}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    {new Date(game.timestamp).toLocaleDateString()}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Card>
+      </>
+    )
   );
 }

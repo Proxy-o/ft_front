@@ -10,7 +10,6 @@ import useGetBlocked from "@/app/friends/hooks/useGetBlocked";
 import useGetFriends from "@/app/chat/hooks/useGetFriends";
 import ChatCard from "@/app/chat/components/chatCard";
 import { XCircle } from "lucide-react";
-import useGetGames from "../hooks/useGetGames";
 
 export default function Profile({ id }: { id: string }) {
   const id_cookie = getCookie("user_id") as string;
@@ -22,7 +21,6 @@ export default function Profile({ id }: { id: string }) {
   const { data: sender, isSuccess: isSender } = useGetUser(id_cookie);
   const { data: blocked } = useGetBlocked();
   const { data: friends } = useGetFriends(id_cookie);
-  const { data: games, isSuccess: gameIsSuccess } = useGetGames(id);
   const isBlocked = blocked?.some((user: any) => user.id == id);
   const isFriend = friends?.some((user: any) => user.id == id);
   const blocked_by_current_user = blocked?.some((user: any) => {
@@ -45,9 +43,7 @@ export default function Profile({ id }: { id: string }) {
       }
     }
   }, [isChatOpen, isSender, isSuccess]);
-  if (gameIsSuccess) {
-    console.log(games);
-  }
+
   return (
     <div className="relative lg:flex justify-center gap-4 p-4 ">
       {isSuccess && (
@@ -71,7 +67,7 @@ export default function Profile({ id }: { id: string }) {
                 <ChatCard sender={sender} receiver={data} />
               </div>
             )}
-            {!isBlocked && <GamesTable />}
+            {!isBlocked && <GamesTable id={id} />}
           </div>
           <div className="flex flex-col gap-4">
             <States />
