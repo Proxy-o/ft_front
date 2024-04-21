@@ -16,17 +16,15 @@ import useMediaQuery from "@/lib/hooks/useMediaQuery";
 import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import useLogout from "@/app/login/hooks/useLogout";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import getCookie from "@/lib/functions/getCookie";
 import useWebSocket from "react-use-websocket";
-import useGameSocket from "@/lib/hooks/useGameSocket";
-import { toast } from "sonner";
-import useGetUser from "@/app/profile/hooks/useGetUser";
 import { linksProps } from "./types";
 import { useQueryClient } from "@tanstack/react-query";
 import type { User } from "@/lib/types";
 import useGetFriends from "@/app/chat/hooks/useGetFriends";
 import { LastMessage } from "@/app/chat/types";
+import useGetFrdReq from "@/app/friends/hooks/useGetFrReq";
 
 export default function Nav() {
   const { mutate: logout } = useLogout();
@@ -80,11 +78,23 @@ export default function Nav() {
   const { lastJsonMessage }: { lastJsonMessage: LastMessage } =
     useWebSocket(socketUrl);
   const [showNotif, setShowNotif] = useState(false);
+  const [reqNotif, setReqNotif] = useState(false);
   const { data: friends, isSuccess: isSuccessFriends } = useGetFriends(
     id ? id : "0"
   );
+  const { data: requests, isSuccess: isSuccessReq } = useGetFrdReq();
 
   const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (isSuccessReq && requests) {
+      requests.forEach((request: any) => {
+        console.log(request);
+        if (request.to_user.id.toString() === id) setReqNotif(true);
+      });
+    }
+  }, [isSuccessReq, requests, id]);
+
   useEffect(() => {
     if (lastJsonMessage) {
       queryClient.invalidateQueries({
@@ -129,7 +139,13 @@ export default function Nav() {
                 <div className="relative">
                   <link.icon className=" h-6 w-6 " />
                   <span className="h-3 w-3 bg-white rounded-full absolute top-0 right-0 "></span>
-                  <span className="h-1 w-1 bg-primary rounded-full absolute top-1 right-1 "></span>
+                  <span className="h-1 w-1 bg-primary rounded-full absolute top-1 right-1 animate-ping "></span>
+                </div>
+              ) : link.title === "Friends" && reqNotif ? (
+                <div className="relative">
+                  <link.icon className=" h-6 w-6 " />
+                  <span className="h-3 w-3 bg-white rounded-full absolute top-0 right-0 "></span>
+                  <span className="h-1 w-1 bg-primary rounded-full absolute top-1 right-1 animate-ping"></span>
                 </div>
               ) : (
                 <link.icon className=" mr-2 h-6 w-6 " />

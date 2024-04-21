@@ -80,7 +80,7 @@ export default function ChatCard({
     <div className=" flex flex-col h-screen border-r w-full  relative ">
       <div className="  flex justify-end md:justify-start ml-2 p-2 shadow-2xl ">
         <Avatar className=" mr-2 relative">
-          {receiver.status === "offline" && (
+          {receiver.status === "online" && (
             <div className="bg-green-500 size-2 rounded-full absolute bottom-[8px] right-1 z-50"></div>
           )}
           <AvatarImage

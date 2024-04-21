@@ -20,7 +20,7 @@ export default function ChatFriendCard({
     <div className="flex p-2  rounded-sm  bg-secondary/60 hover:bg-secondary my-1 w-full ">
       <div className="flex flex-1 ">
         <Avatar className="rounded-full mr-2 relative">
-          {friend.status === "offline" && (
+          {friend.status === "online" && (
             <div className="bg-green-500 size-2 rounded-full absolute bottom-[5px] right-1 z-50"></div>
           )}
           <AvatarImage
