@@ -13,9 +13,11 @@ export type User = {
 export type t_Game = {
   id: string;
   user1: User;
-  user1Score: number;
   user2: User;
-  user2Score: number;
+  user3: User;
+  user4: User;
+  Score1: number;
+  Score2: number;
   winner: User;
   timestamp: string;
 };
@@ -33,5 +35,6 @@ export type Invitation = {
     avatar: string;
   };
   timestamp: string;
+  type: string;
   is_accepted: boolean;
 };

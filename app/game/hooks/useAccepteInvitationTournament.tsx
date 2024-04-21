@@ -4,7 +4,8 @@ import { Dispatch, SetStateAction } from "react";
 import { toast } from "sonner";
 
 async function accept(invitationId: string) {
-  const res = await axiosInstance.post("game/accept_invitation", {
+  console.log("accepting invitation");
+  const res = await axiosInstance.post("game/accept_invitation_tournament", {
     invitationId,
   });
   const gameId = res.data.gameId;
@@ -14,9 +15,13 @@ async function accept(invitationId: string) {
   return gameId;
 }
 
-export default function useAcceptInvitation() {
+export default function useAcceptInvitationTournament() {
+  const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: accept,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["tournament"] });
+    },
   });
   return mutation;
 }

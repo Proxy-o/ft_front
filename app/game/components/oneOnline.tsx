@@ -10,7 +10,7 @@ import { User } from "@/lib/types";
 import useGetGame from "../hooks/useGetGames";
 import Score from "./score";
 
-const OneOnline = () => {
+const OneOnline = ({ type }: { type: string }) => {
   const user_id = getCookie("user_id") || "";
   const { data: user } = useGetUser(user_id || "0");
   const username = user?.username || "";
@@ -25,6 +25,7 @@ const OneOnline = () => {
   const isFirstTime = useRef(true);
   const animationFrameId = useRef(0);
   const isAnimating = useRef(false);
+  const isEnemyReadyRef = useRef(false);
   const {
     newNotif,
     handleStartGame,
@@ -39,7 +40,7 @@ const OneOnline = () => {
   const [rightScore, setRightScore] = useState(0);
   const rightScoreRef = useRef(0);
   //game logic
-  const { onGoingGame } = useGetGame(user_id || "0");
+  const { onGoingGame } = useGetGame(user_id || "0", type);
 
   // if (onGoingGame.isSuccess && onGoingGame.data !== null) {
   //     setStartGame(true);
@@ -173,7 +174,6 @@ const OneOnline = () => {
 
     function moveBall() {
       if (isFirstTime.current == true) {
-        console.log("isFirstTime.current", isFirstTime.current);
         if (user?.username === leftUser?.username)
           newBallPositionRef.current.x += Math.cos(newAngleRef.current) * 3;
         else newBallPositionRef.current.x -= Math.cos(newAngleRef.current) * 3;
@@ -252,7 +252,7 @@ const OneOnline = () => {
 
     function checkLoseConditionOnline() {
       if (canvas === null) return;
-      if (rightScoreRef.current === 10) {
+      if (rightScoreRef.current === 3) {
         setGameAccepted(false);
         setGameStarted(false);
         setStartCountdown(false);
@@ -284,6 +284,32 @@ const OneOnline = () => {
       }
     }
 
+    // Cleanup function to remove the event listeners and stop the animation loop
+    function returnFunction() {
+      document.removeEventListener("keydown", handleKeyEvent, false);
+      document.removeEventListener("keyup", handleKeyEvent, false);
+
+      if (animationFrameId.current) {
+        cancelAnimationFrame(animationFrameId.current);
+      }
+      isAnimating.current = false;
+    }
+
+    function enemyLeftGame() {
+      if (canvas === null) return;
+      if (newBallPositionRef.current.x > canvas.width + 500) {
+        handleSurrender(
+          leftUser?.username || "",
+          rightUser?.username || "",
+          onGoingGame.data?.game?.id || ""
+        );
+        setGameAccepted(false);
+        setGameStarted(false);
+        setStartCountdown(false);
+        toast.success("You have won the game");
+      }
+    }
+
     const drawOnlineOne = () => {
       if (canvas === null) return;
       if (!gameAccepted) return;
@@ -309,6 +335,9 @@ const OneOnline = () => {
 
       // Move the ball
       moveBall();
+
+      // Check if enemy has left the game
+      enemyLeftGame();
     };
 
     const animate = () => {
@@ -324,16 +353,7 @@ const OneOnline = () => {
       animate();
     }
 
-    return () => {
-      // Cleanup function to remove the event listeners and stop the animation loop
-      document.removeEventListener("keydown", handleKeyEvent, false);
-      document.removeEventListener("keyup", handleKeyEvent, false);
-
-      if (animationFrameId.current) {
-        cancelAnimationFrame(animationFrameId.current);
-      }
-      isAnimating.current = false;
-    };
+    return returnFunction;
   }, [gameStarted]);
 
   useEffect(() => {
@@ -341,6 +361,8 @@ const OneOnline = () => {
     if (notif) {
       const message = JSON.parse(notif.data);
       if (message.message?.split(" ")[0] === "/show") {
+        handleStartGame(username, message.message.split(" ")[1]);
+        isEnemyReadyRef.current = true;
         setStartCountdown(true);
         onGoingGame.refetch();
       } else if (message.message?.split(" ")[0] === "/start") {
@@ -354,6 +376,7 @@ const OneOnline = () => {
         setLeftScore(parseInt(message.message.split(" ")[1]));
         leftScoreRef.current = parseInt(message.message.split(" ")[1]);
       } else if (message.message?.split(" ")[0] === "/end") {
+        console.log("game over");
         setGameAccepted(false);
         setGameStarted(false);
         setStartCountdown(false);
@@ -387,13 +410,19 @@ const OneOnline = () => {
     } else {
       setGameAccepted(false);
     }
-  }, [onGoingGame.isSuccess]);
+  }, [onGoingGame.isSuccess, onGoingGame.data]);
 
   return (
     <div className="w-full h-fit flex flex-col justify-center items-center">
       {gameAccepted && (
         <>
           <h1 className="text-4xl">Ping Pong</h1>
+          <h1 className="text-2xl">
+            Game {onGoingGame.data?.game?.game_number}
+          </h1>
+          <h1 className="text-2xl">
+            {leftUser?.username} vs {rightUser?.username}
+          </h1>
           <br />
           {onGoingGame.isSuccess && gameStarted && (
             <Score leftPlayerScore={leftScore} rightPlayerScore={rightScore} />
@@ -416,12 +445,13 @@ const OneOnline = () => {
           )}
           {onGoingGame.isSuccess && !gameStarted && (
             <Button
-              onClick={() => {
-                handleStartGame(
-                  onGoingGame.data?.game?.user1.username || "",
-                  onGoingGame.data?.game?.user2.username || ""
-                );
-                setStartCountdown(true);
+              onClick={async () => {
+                handleStartGame(username, rightUser?.username || "");
+                setTimeout(() => {
+                  if (!isEnemyReadyRef.current) {
+                    toast.error("The enemy is not ready");
+                  }
+                }, 1000);
               }}
               className="w-1/2 mt-4"
             >
@@ -437,7 +467,9 @@ const OneOnline = () => {
                   onGoingGame.data?.game?.user2.username || "",
                   onGoingGame.data?.game?.id || ""
                 );
-                onGoingGame.refetch();
+                setGameAccepted(false);
+                setGameStarted(false);
+                setStartCountdown(false);
               }}
               className="w-1/2 mt-4"
             >

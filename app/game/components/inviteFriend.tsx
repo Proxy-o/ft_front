@@ -1,35 +1,23 @@
-import { Image, Sword } from "lucide-react";
-import axiosInstance from "@/lib/functions/axiosInstance";
+import { Sword } from "lucide-react";
 import getCookie from "@/lib/functions/getCookie";
 import useGetFriends from "@/app/chat/hooks/useGetFriends";
 import useGameSocket from "@/lib/hooks/useGameSocket";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import useSendInvitation from "../hooks/useSendInvitation";
 
-const InviteFriends = () => {
+const InviteFriends = ({ gameType }: { gameType: string }) => {
   const { handelSendInvitation } = useGameSocket();
 
   const user_id = getCookie("user_id");
 
   const friends = useGetFriends(user_id || "0");
 
-  const invite = async (userid: string) => {
-    try {
-      const res = await axiosInstance.post("game/send_invitation", {
-        sender: user_id,
-        receiver: userid,
-      });
-      if (res.status === 201) {
-        handelSendInvitation(userid);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const { mutate: invite } = useSendInvitation();
 
   return (
-    <div className="w-full h-full flex flex-col justify-start items-start">
+    <div className="w-fit h-fit flex flex-col justify-start items-start mx-auto">
       <h1 className="text-4xl mt-5">Defy a friend</h1>
-      <div className="flex flex-row justify-start items-center mt-5 ml-10">
+      <div className="flex flex-col justify-start items-center mt-5 ml-10">
         {friends.data &&
           friends.data.map(
             (friend: { id: string; username: string; avatar: string }) => {
@@ -49,7 +37,13 @@ const InviteFriends = () => {
                   <h1 className="ml-2">{friend.username}</h1>
                   <button
                     className="ml-2 bg-primary text-white px-2 py-1 rounded-md"
-                    onClick={() => invite(friend.id)}
+                    onClick={() => {
+                      invite({
+                        userid: friend.id,
+                        gameType: gameType,
+                      });
+                      handelSendInvitation(friend.id);
+                    }}
                   >
                     <Sword size={20} />
                   </button>

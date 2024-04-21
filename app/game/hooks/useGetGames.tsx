@@ -1,26 +1,28 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
 import { useQuery } from "@tanstack/react-query";
-import type { t_Game } from "@/lib/types";
+import { AxiosResponse } from "axios";
 
-const getOnGoingGame = async () => {
-    try {
-        const response = await axiosInstance.get('/game/onGoingGame')
-        if (response.data.status === 204) {
-            return {game: null};
-        }
-        const game: t_Game = response.data;
-        return {game};
+const getOnGoingGame = async (type: string) => {
+  try {
+    let response: AxiosResponse<any, any> | undefined;
+    if (type === "tournament")
+      response = await axiosInstance.get("/game/onGoingTournamentGame");
+    else if (type === "online")
+      response = await axiosInstance.get("/game/onGoingGame");
+    if (response?.data.status === 204) {
+      return { game: null };
     }
-    catch (error) {
-        return {game: null};
-    }
-}
 
-export default function useGetGame(userId: string) {
-    const data = useQuery({
-        queryKey: ["game", userId],
-        queryFn: () => getOnGoingGame(),
-    });
+    return { game: response?.data };
+  } catch (error) {
+    return { game: null };
+  }
+};
 
-    return {onGoingGame: data};
+export default function useGetGame(userId: string, type: string) {
+  const data = useQuery({
+    queryKey: ["game", userId],
+    queryFn: () => getOnGoingGame(type),
+  });
+  return { onGoingGame: data };
 }
