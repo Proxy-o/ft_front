@@ -22,11 +22,14 @@ export default function FriendRequests() {
   const reqCount = filteredData.length;
   return (
     isSuccess && (
-      <div className="flex flex-col h-full w-full p-1">
-        <Card className=" w-full border h-12 flex items-center justify-center mb-1">
-          Friend Requests{" "}
-          <p className="border bg-primary mx-2 rounded-sm p-1 ">{reqCount}</p>
-        </Card>
+      <Card className=" w-full border    flex flex-col    my-3 p-1   ">
+        <div className="flex w-full justify-center items-center border-b-2 mb-1 p-2">
+          Friend Requests
+          <p className="border bg-primary mx-2 rounded-full size-6  text-center">
+            {reqCount}
+          </p>
+        </div>
+
         {reqCount !== 0 && (
           <>
             {filteredData.map(
@@ -73,7 +76,7 @@ export default function FriendRequests() {
             )}
           </>
         )}
-      </div>
+      </Card>
     )
   );
 }

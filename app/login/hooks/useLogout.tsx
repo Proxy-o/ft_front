@@ -1,7 +1,6 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
-import getCookie, { checkCookie } from "@/lib/functions/getCookie";
+import getCookie from "@/lib/functions/getCookie";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { redirect } from "next/navigation";
 
 // login hook
 export default function useLogout() {
@@ -18,7 +17,7 @@ export default function useLogout() {
       document.cookie =
         "refresh=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;SameSite=None; Secure;";
       document.cookie =
-        "logged_in=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;SameSite=None; Secure;";
+        "logged_in=no;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;SameSite=None; Secure;";
       document.cookie =
         "user_id=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;SameSite=None; Secure;";
 

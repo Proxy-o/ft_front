@@ -15,7 +15,9 @@ export default function Profile({ id }: { id: string }) {
   const id_cookie = getCookie("user_id") as string;
   const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
 
+  // get the data for the same user or the user that is being visited
   const { data, isSuccess } = useGetUser(id);
+  // get the data for the user that is logged in
   const { data: sender, isSuccess: isSender } = useGetUser(id_cookie);
   const { data: blocked } = useGetBlocked();
   const { data: friends } = useGetFriends(id_cookie);
@@ -41,6 +43,7 @@ export default function Profile({ id }: { id: string }) {
       }
     }
   }, [isChatOpen, isSender, isSuccess]);
+
   return (
     <div className="relative lg:flex justify-center gap-4 p-4 ">
       {isSuccess && (
@@ -64,7 +67,7 @@ export default function Profile({ id }: { id: string }) {
                 <ChatCard sender={sender} receiver={data} />
               </div>
             )}
-            {!isBlocked && <GamesTable />}
+            {!isBlocked && <GamesTable id={id} />}
           </div>
           <div className="flex flex-col gap-4">
             <States />

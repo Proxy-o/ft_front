@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import getCookie from "@/lib/functions/getCookie";
-import React, { useState, useCallback, useEffect, use } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import useWebSocket from "react-use-websocket";
 import useGetMessages from "../hooks/useGetMessages";
 import ChatBubble from "./chatBubble";
@@ -14,6 +14,7 @@ import { Avatar } from "@radix-ui/react-avatar";
 import { AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import readMessages from "../hooks/useReadMessages";
 import { Message } from "../types";
+import Link from "next/link";
 
 export default function ChatCard({
   receiver,
@@ -78,23 +79,28 @@ export default function ChatCard({
 
   return (
     <div className=" flex flex-col h-screen border-r w-full  relative ">
-      <div className="  flex justify-end md:justify-start ml-2 p-2 shadow-2xl ">
+      <Link
+        className="  flex justify-end md:justify-start ml-2 p-2 shadow-2xl "
+        href={`profile/${receiver.id}`}
+      >
         <Avatar className=" mr-2 relative">
           {receiver.status === "online" && (
             <div className="bg-green-500 size-2 rounded-full absolute bottom-[8px] right-1 z-50"></div>
           )}
           <AvatarImage
             src={receiver.avatar}
-            alt="profile image"
+            alt={receiver.username}
             className="rounded-full h-8 w-8"
           />
-          <AvatarFallback className="rounded-full h-8 w-8">PF</AvatarFallback>
+          <AvatarFallback className="rounded-full h-8 w-8">
+            {receiver.username?.slice(0, 2)}
+          </AvatarFallback>
         </Avatar>
         <div className="text-center flex flex-col justify-center items-center mr-2 w-fit overflow-clip ">
           {receiver.username}
           <p className="text-xs text-gray-600">{receiver.status}</p>
         </div>
-      </div>
+      </Link>
       <div
         className="  overflow-auto flex flex-col-reverse   scrollbar scrollbar-thumb-primary/10 scrollbar-track-secondary scrollbar-w-2 p-2 pt-4 mb-[72px]"
         id="scrollableDiv"

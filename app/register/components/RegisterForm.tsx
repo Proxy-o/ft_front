@@ -22,7 +22,10 @@ export default function RegisterForm() {
   const [password, setPassword] = useState("");
   const { mutate: register } = useRegister();
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen overflow-hidden">
+    <form
+      className="flex flex-col items-center justify-center min-h-screen overflow-hidden"
+      action={() => register({ username, email, password })}
+    >
       <Card className="w-full max-w-md ">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl">Register</CardTitle>
@@ -100,6 +103,6 @@ export default function RegisterForm() {
           </div>
         </CardFooter>
       </Card>
-    </div>
+    </form>
   );
 }

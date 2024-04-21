@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
-import { Asterisk, Loader, User } from "lucide-react";
+import { Asterisk, Eye, EyeOff, Loader, User } from "lucide-react";
 import { useState } from "react";
 import useLogin from "../hooks/useLogin";
 
@@ -20,14 +20,17 @@ export default function LoginForm() {
   const { mutate: login, isError, isPending } = useLogin();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
-  const onSubmit = async () => {
+  const onSubmit = () => {
     login({ username, password });
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen overflow-hidden">
+    <form
+      className="flex flex-col items-center justify-center min-h-screen overflow-hidden"
+      action={onSubmit}
+    >
       <Card className="w-full max-w-md ">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl">Login</CardTitle>
@@ -67,11 +70,18 @@ export default function LoginForm() {
               <Input
                 name="password"
                 placeholder="Password"
-                type="password"
+                type={passwordVisible ? "text" : "password"}
                 onChange={(ev) => setPassword(ev.target.value)}
               />
-              <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                <Asterisk className="h-5 w-5 text-secondary" />
+              <div
+                className="hover:cursor-pointer absolute right-3 top-1/2 transform -translate-y-1/2"
+                onClick={() => setPasswordVisible((prev) => !prev)}
+              >
+                {passwordVisible ? (
+                  <EyeOff className="size-5" />
+                ) : (
+                  <Eye className="h-5 w-5 text-secondary" />
+                )}
               </div>
             </div>
           </div>
@@ -86,6 +96,7 @@ export default function LoginForm() {
               )}
             </Button>
           </div>
+
           <div className="flex w-32 justify-center my-4 text-xs items-center">
             <Separator className="my-4 mr-2 " />
             OR
@@ -104,6 +115,6 @@ export default function LoginForm() {
           </div>
         </CardFooter>
       </Card>
-    </div>
+    </form>
   );
 }

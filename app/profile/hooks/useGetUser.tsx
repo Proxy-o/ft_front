@@ -7,17 +7,14 @@ const fetchUser = async ({ id }: { id: string }) => {
     const response = await axiosInstance.get(`/user/${id}`);
     return response.data;
   } catch (error: any) {
-    if (error.response && error.response.status !== 401) {
-      throw new Error(error.response.data.message);
-    }
+    throw new Error(error.response.data.message);
   }
 };
 
 export default function useGetUser(id: string) {
   const info = useQuery({
     queryKey: ["user", id],
-    queryFn: () => fetchUser({ id })
-    },
-  );
+    queryFn: () => fetchUser({ id }),
+  });
   return info;
 }

@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
 import FriendRequests from "./components/friendRequests";
-import FriendList from "./components/friendList";
 import getCookie from "@/lib/functions/getCookie";
 import useGetUser from "../profile/hooks/useGetUser";
 import { useRouter } from "next/navigation";
@@ -25,30 +24,34 @@ export default function Page() {
     }
   }, [user, isSuccess, router]);
 
-  const frndCount = friends?.length;
+  const friendCount = friends?.length;
 
   return (
     user && (
-      <div className="flex gap-1 h-full">
+      <div className="flex gap-1 overflow-auto h-full p-1">
+        <Card className=" w-full border    flex flex-col    my-3 p-1 mr-2 ">
+          <div className="flex w-full justify-center items-center border-b-2 mb-1 p-2">
+            Friends
+            <p className="border bg-primary mx-2 rounded-full size-6  text-center">
+              {friendCount}
+            </p>
+          </div>
+          <div className="overflow-y-auto">
+            {friendsIsSuccess &&
+              friends.map((friend: User) => {
+                return (
+                  <Link
+                    key={friend.id}
+                    className="cursor-pointer"
+                    href={`/profile/${friend.id.toString()}`}
+                  >
+                    <ChatFriendCard friend={friend} setReceiverId={() => {}} />
+                  </Link>
+                );
+              })}
+          </div>
+        </Card>
         <FriendRequests />
-        <div className="flex flex-col w-3/5 border  overflow-y-auto h-full p-1">
-          <Card className=" w-full border h-12 flex items-center justify-center ">
-            Friends{" "}
-            <p className="border bg-primary mx-2 rounded-sm p-1">{frndCount}</p>
-          </Card>
-          {friendsIsSuccess &&
-            friends.map((friend: User) => {
-              return (
-                <Link
-                  key={friend.id}
-                  className="cursor-pointer"
-                  href={`/profile/${friend.id.toString()}`}
-                >
-                  <ChatFriendCard friend={friend} setReceiverId={() => {}} />
-                </Link>
-              );
-            })}
-        </div>
       </div>
     )
   );
