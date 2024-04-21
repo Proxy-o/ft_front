@@ -57,16 +57,15 @@ export default function GamesTable({ id }: { id: string }) {
                     </div>
                   </TableCell>
                   <TableCell className="flex items-center">
-                    {/* <div className="mr-2">
-                    <div>{game.user1_score}</div>
-                    <div>{game.user2_score}</div>
-                  </div>
-                  {game.winner.id === id &&
-                  game.player1.status === "win" ? (
-                    <PlusSquare className="text-green-500" />
-                  ) : (
-                    <MinusSquare className="text-red-500" />
-                  )} */}
+                    <div className="mr-2">
+                      <div>{game.user1_score}</div>
+                      <div>{game.user2_score}</div>
+                    </div>
+                    {game.winner?.id === id && game.play === "win" ? (
+                      <PlusSquare className="text-green-500" />
+                    ) : (
+                      <MinusSquare className="text-red-500" />
+                    )}
                   </TableCell>
                   <TableCell className="text-right">
                     {new Date(game.timestamp).toLocaleDateString()}
