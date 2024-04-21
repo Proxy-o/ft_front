@@ -7,7 +7,7 @@ interface User {
 export interface Game {
   user1: User;
   user1_score?: number;
-  user2: User?;
+  user2: User;
   user2_score?: number;
   user3: User;
   user3_score?: number;
