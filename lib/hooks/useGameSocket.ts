@@ -55,7 +55,6 @@ export default function useGameSocket() {
     game_id: string
   ) => {
     const toSend = "/surrender " + surrenderer + " " + winner + " " + game_id;
-    console.log(toSend);
     sendJsonMessage({ message: toSend });
   };
 

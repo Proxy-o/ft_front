@@ -9,6 +9,15 @@ import CountDown from "./contDown";
 import { User } from "@/lib/types";
 import useGetGame from "../hooks/useGetGames";
 import Score from "./score";
+import changeScoreOnline from "../methods/changeScore";
+import enemyLeftGame from "../methods/enemyLeftGame";
+import movePaddlesOnline from "../methods/movePaddles";
+import checkLoseConditionOnline from "../methods/checkLoseCondition";
+import changeBallDirectionOnline from "../methods/changeBallDirection";
+import draw from "../methods/draw";
+import checkCollisionWithHorizontalWalls from "../methods/checkCollisionWithHorizontalWalls";
+import moveBall from "../methods/moveBall";
+import { canvasParams } from "../types";
 
 const OneOnline = ({ type }: { type: string }) => {
   const user_id = getCookie("user_id") || "";
@@ -17,10 +26,10 @@ const OneOnline = ({ type }: { type: string }) => {
   const [startCountdown, setStartCountdown] = useState(false);
   const [gameStarted, setGameStarted] = useState(false);
   const [gameAccepted, setGameAccepted] = useState(false);
-  const PaddleRightYRef = useRef(0); // Use a ref to store the current state
+  const PaddleRightYRef = useRef(0);
+  const paddleLeftYRef = useRef(0);
   const newBallPositionRef = useRef({ x: 0, y: 0 }); // Use a ref to store the current state
   const newAngleRef = useRef(0); // Use a ref to store the current state
-  const leftPaddleOldY = useRef(0);
   const { mutate: surrenderGame } = useSurrenderGame();
   const isFirstTime = useRef(true);
   const animationFrameId = useRef(0);
@@ -97,11 +106,9 @@ const OneOnline = ({ type }: { type: string }) => {
 
     const paddleHeight = 80;
     const paddleWidth = 10;
-    let paddleRightY = (canvas.height - paddleHeight) / 2;
-    let paddleLeftY = (canvas.height - paddleHeight) / 2;
 
-    PaddleRightYRef.current = paddleRightY; // Initialize the ref
-    leftPaddleOldY.current = paddleLeftY;
+    paddleLeftYRef.current = (canvas.height - paddleHeight) / 2;
+    PaddleRightYRef.current = (canvas.height - paddleHeight) / 2;
 
     const paddleLeftX = 25;
     const paddleRightX = canvas.width - 25 - paddleWidth;
@@ -127,162 +134,7 @@ const OneOnline = ({ type }: { type: string }) => {
     document.addEventListener("keydown", handleKeyEvent, false);
     document.addEventListener("keyup", handleKeyEvent, false);
 
-    const drawBall = () => {
-      ctx.beginPath();
-      ctx.arc(
-        newBallPositionRef.current.x,
-        newBallPositionRef.current.y,
-        ballRadius,
-        0,
-        Math.PI * 2
-      );
-      ctx.fillStyle = "#0095DD";
-      ctx.fill();
-      ctx.closePath();
-    };
-
-    const drawRightPaddle = () => {
-      ctx.beginPath();
-      ctx.rect(
-        paddleRightX,
-        PaddleRightYRef.current,
-        paddleWidth,
-        paddleHeight
-      );
-      ctx.fillStyle = "#0095DD";
-      ctx.fill();
-      ctx.closePath();
-    };
-
-    const drawLeftPaddle = () => {
-      ctx.beginPath();
-      ctx.rect(paddleLeftX, paddleLeftY, paddleWidth, paddleHeight);
-      ctx.fillStyle = "#ee95DD";
-      ctx.fill();
-      ctx.closePath();
-    };
-
-    function checkCollisionWithHorizontalWalls() {
-      if (canvas === null) return;
-      if (
-        newBallPositionRef.current.y > canvas.height - ballRadius ||
-        newBallPositionRef.current.y < ballRadius
-      ) {
-        newAngleRef.current = -newAngleRef.current;
-      }
-    }
-
-    function moveBall() {
-      if (isFirstTime.current == true) {
-        if (user?.username === leftUser?.username)
-          newBallPositionRef.current.x += Math.cos(newAngleRef.current) * 3;
-        else newBallPositionRef.current.x -= Math.cos(newAngleRef.current) * 3;
-        newBallPositionRef.current.y += Math.sin(newAngleRef.current) * 3;
-      } else {
-        if (user?.username === leftUser?.username)
-          newBallPositionRef.current.x += Math.cos(newAngleRef.current) * 8;
-        else newBallPositionRef.current.x -= Math.cos(newAngleRef.current) * 8;
-        newBallPositionRef.current.y += Math.sin(newAngleRef.current) * 8;
-      }
-    }
-
     // 1 vs 1 online -------------------------------------------------------------------------------------
-    function changeBallDirectionOnline() {
-      if (canvas === null) return;
-      if (
-        newBallPositionRef.current.x < paddleLeftX + paddleWidth + ballRadius &&
-        newBallPositionRef.current.x > paddleLeftX + ballRadius &&
-        newBallPositionRef.current.y + ballRadius / 2 > paddleLeftY &&
-        newBallPositionRef.current.y - ballRadius / 2 <
-          paddleLeftY + paddleHeight
-      ) {
-        isFirstTime.current = false;
-        if (!ballInLeftPaddle) {
-          let ballPositionOnPaddle = newBallPositionRef.current.y - paddleLeftY;
-          let ballPercentageOnPaddle = ballPositionOnPaddle / paddleHeight;
-          if (newBallPositionRef.current.y < paddleLeftY + paddleHeight / 2) {
-            newAngleRef.current =
-              ((-Math.PI * 2) / 6) * (0.5 - ballPercentageOnPaddle);
-          } else {
-            newAngleRef.current =
-              ((Math.PI * 2) / 6) * (ballPercentageOnPaddle - 0.5);
-          }
-          let enemyX = canvas.width - newBallPositionRef.current.x;
-          let enemyY = newBallPositionRef.current.y;
-          let enemyAngle = Math.PI - newAngleRef.current;
-          handleChangeBallDirection(
-            enemyX,
-            enemyY,
-            enemyAngle,
-            rightUser?.username || ""
-          );
-          ballInLeftPaddle = true;
-        }
-      } else {
-        ballInLeftPaddle = false;
-      }
-    }
-
-    function changeScoreOnline() {
-      if (canvas === null) return;
-      if (newBallPositionRef.current.x < -50) {
-        isFirstTime.current = true;
-        rightScoreRef.current = rightScoreRef.current + 1;
-        setRightScore(rightScoreRef.current);
-        newBallPositionRef.current.x = canvas.width / 2;
-        newAngleRef.current = Math.random() * 2 * Math.PI;
-        while (
-          (newAngleRef.current > Math.PI / 6 &&
-            newAngleRef.current < (Math.PI * 5) / 6) ||
-          (newAngleRef.current > (Math.PI * 7) / 6 &&
-            newAngleRef.current < (Math.PI * 11) / 6)
-        ) {
-          newAngleRef.current = Math.random() * 2 * Math.PI;
-        }
-        let enemyAngle = Math.PI - newAngleRef.current;
-        handleChangeBallDirection(
-          newBallPositionRef.current.x,
-          newBallPositionRef.current.y,
-          enemyAngle,
-          rightUser?.username || ""
-        );
-        handleEnemyScore(rightScoreRef.current, rightUser?.username || "");
-      }
-    }
-
-    function checkLoseConditionOnline() {
-      if (canvas === null) return;
-      if (rightScoreRef.current === 3) {
-        setGameAccepted(false);
-        setGameStarted(false);
-        setStartCountdown(false);
-        handleSurrender(
-          leftUser?.username || "",
-          rightUser?.username || "",
-          onGoingGame.data?.game?.id || ""
-        );
-        toast.error("You have lost the game");
-      }
-    }
-
-    function movePaddlesOnline() {
-      if (canvas === null) return;
-      if (upPressed && paddleLeftY > 0) {
-        if (paddleLeftY - 6 < 0) {
-          paddleLeftY = 0;
-        } else {
-          paddleLeftY -= 6;
-        }
-        handleMovePaddle(paddleLeftY, rightUser?.username || "");
-      } else if (downPressed && paddleLeftY < canvas.height - paddleHeight) {
-        if (paddleLeftY + 6 > canvas.height - paddleHeight) {
-          paddleLeftY = canvas.height - paddleHeight;
-        } else {
-          paddleLeftY += 6;
-        }
-        handleMovePaddle(paddleLeftY, rightUser?.username || "");
-      }
-    }
 
     // Cleanup function to remove the event listeners and stop the animation loop
     function returnFunction() {
@@ -295,49 +147,88 @@ const OneOnline = ({ type }: { type: string }) => {
       isAnimating.current = false;
     }
 
-    function enemyLeftGame() {
-      if (canvas === null) return;
-      if (newBallPositionRef.current.x > canvas.width + 500) {
-        handleSurrender(
-          leftUser?.username || "",
-          rightUser?.username || "",
-          onGoingGame.data?.game?.id || ""
-        );
-        setGameAccepted(false);
-        setGameStarted(false);
-        setStartCountdown(false);
-        toast.success("You have won the game");
-      }
-    }
-
     const drawOnlineOne = () => {
       if (canvas === null) return;
       if (!gameAccepted) return;
+      const canvasParams: canvasParams = {
+        canvas,
+        ctx,
+        paddleLeftYRef,
+        paddleRightX,
+        PaddleRightYRef,
+        newBallPositionRef,
+        paddleLeftX,
+        paddleWidth,
+        paddleHeight,
+        ballRadius,
+        upPressed,
+        downPressed,
+        isFirstTime,
+        rightScoreRef,
+      };
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      drawBall();
-      drawRightPaddle();
-      drawLeftPaddle();
+
+      // draw paddles and ball
+      draw(canvasParams);
 
       // move paddles
-      movePaddlesOnline();
+      movePaddlesOnline(canvasParams, handleMovePaddle, rightUser);
 
       // Check for collision with left paddle
-      changeBallDirectionOnline();
+      changeBallDirectionOnline(
+        canvasParams,
+        newAngleRef,
+        ballInLeftPaddle,
+        handleChangeBallDirection,
+        rightUser
+      );
 
       // Check for score
-      checkLoseConditionOnline();
+      checkLoseConditionOnline(
+        canvas,
+        rightScoreRef,
+        setGameAccepted,
+        setGameStarted,
+        setStartCountdown,
+        leftUser,
+        rightUser,
+        onGoingGame,
+        handleSurrender
+      );
 
       // Change score
-      changeScoreOnline();
+      changeScoreOnline(
+        canvasParams,
+        setRightScore,
+        newAngleRef,
+        handleChangeBallDirection,
+        handleEnemyScore,
+        rightUser
+      );
 
       // Check for collision with the horizontal walls
-      checkCollisionWithHorizontalWalls();
+      checkCollisionWithHorizontalWalls(
+        canvas,
+        ballRadius,
+        newBallPositionRef,
+        newAngleRef
+      );
 
       // Move the ball
-      moveBall();
+      moveBall(canvasParams, user, leftUser, newAngleRef);
 
       // Check if enemy has left the game
-      enemyLeftGame();
+      enemyLeftGame(
+        leftUser,
+        rightUser,
+        onGoingGame,
+        newBallPositionRef,
+        handleSurrender,
+        canvas,
+        setGameAccepted,
+        setGameStarted,
+        setStartCountdown
+      );
     };
 
     const animate = () => {
@@ -359,44 +250,43 @@ const OneOnline = ({ type }: { type: string }) => {
   useEffect(() => {
     const notif = newNotif();
     if (notif) {
-      const message = JSON.parse(notif.data);
-      if (message.message?.split(" ")[0] === "/show") {
-        handleStartGame(username, message.message.split(" ")[1]);
+      const parsedMessage = JSON.parse(notif.data);
+      const message = parsedMessage?.message.split(" ");
+      if (message[0] === "/show") {
+        console.log("show");
+        handleStartGame(username, message[1]);
         isEnemyReadyRef.current = true;
         setStartCountdown(true);
-        onGoingGame.refetch();
-      } else if (message.message?.split(" ")[0] === "/start") {
-        // invitaionsData.refetch();
+      } else if (message[0] === "/start") {
         onGoingGame.refetch();
         isFirstTime.current = true;
         setGameAccepted(true);
-        // setStartCountdown(true);
-      } else if (message.message?.split(" ")[0] === "/score") {
+      } else if (message[0] === "/score") {
         isFirstTime.current = true;
-        setLeftScore(parseInt(message.message.split(" ")[1]));
-        leftScoreRef.current = parseInt(message.message.split(" ")[1]);
-      } else if (message.message?.split(" ")[0] === "/end") {
+        setLeftScore(parseInt(message[1]));
+        leftScoreRef.current = parseInt(message[1]);
+      } else if (message[0] === "/end") {
         setGameAccepted(false);
         setGameStarted(false);
         setStartCountdown(false);
         onGoingGame.refetch();
-        if (message.message?.split(" ")[1] === username) {
+        if (message[1] === username) {
           toast.error("You have lost the game");
         }
-        if (message.message?.split(" ")[2] === username) {
+        if (message[2] === username) {
           toast.success("You have won the game");
         }
-      } else if (message.message?.split(" ")[0] === "/move") {
-        PaddleRightYRef.current = parseInt(message.message.split(" ")[1]); // Update the ref
-      } else if (message.message?.split(" ")[0] === "/ballDirection") {
+      } else if (message[0] === "/move") {
+        PaddleRightYRef.current = parseInt(message[1]);
+      } else if (message[0] === "/ballDirection") {
         newBallPositionRef.current = {
-          x: parseInt(message.message.split(" ")[1]),
-          y: parseInt(message.message.split(" ")[2]),
-        }; // Update the ref
+          x: parseInt(message[1]),
+          y: parseInt(message[2]),
+        };
         if (newAngleRef.current !== 0) {
           isFirstTime.current = false;
         }
-        newAngleRef.current = parseFloat(message.message.split(" ")[3]); // Update the ref
+        newAngleRef.current = parseFloat(message[3]);
       }
     }
   }, [newNotif()?.data]);
