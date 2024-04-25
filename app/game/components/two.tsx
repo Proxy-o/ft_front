@@ -18,8 +18,9 @@ import draw from "../methods/draw";
 import checkCollisionWithHorizontalWalls from "../methods/checkCollisionWithHorizontalWalls";
 import moveBall from "../methods/moveBall";
 import { canvasParams } from "../types";
+import InviteFriends from "./inviteFriend";
 
-const OneOnline = ({ type }: { type: string }) => {
+const Two = ({ type }: { type: string }) => {
   const user_id = getCookie("user_id") || "";
   const { data: user } = useGetUser(user_id || "0");
   const username = user?.username || "";
@@ -253,7 +254,6 @@ const OneOnline = ({ type }: { type: string }) => {
       const parsedMessage = JSON.parse(notif.data);
       const message = parsedMessage?.message.split(" ");
       if (message[0] === "/show") {
-        console.log("show");
         handleStartGame(username, message[1]);
         isEnemyReadyRef.current = true;
         setStartCountdown(true);
@@ -261,21 +261,6 @@ const OneOnline = ({ type }: { type: string }) => {
         onGoingGame.refetch();
         isFirstTime.current = true;
         setGameAccepted(true);
-      } else if (message[0] === "/score") {
-        isFirstTime.current = true;
-        setLeftScore(parseInt(message[1]));
-        leftScoreRef.current = parseInt(message[1]);
-      } else if (message[0] === "/end") {
-        setGameAccepted(false);
-        setGameStarted(false);
-        setStartCountdown(false);
-        onGoingGame.refetch();
-        if (message[1] === username) {
-          toast.error("You have lost the game");
-        }
-        if (message[2] === username) {
-          toast.success("You have won the game");
-        }
       } else if (message[0] === "/move") {
         PaddleRightYRef.current = parseInt(message[1]);
       } else if (message[0] === "/ballDirection") {
@@ -287,6 +272,21 @@ const OneOnline = ({ type }: { type: string }) => {
           isFirstTime.current = false;
         }
         newAngleRef.current = parseFloat(message[3]);
+      } else if (message[0] === "/score") {
+        isFirstTime.current = true;
+        setLeftScore(parseInt(message[1]));
+        leftScoreRef.current = parseInt(message[1]);
+      } else if (message[0] === "/end") {
+        // setGameAccepted(false);
+        setGameStarted(false);
+        setStartCountdown(false);
+        onGoingGame.refetch();
+        if (message[1] === username) {
+          toast.error("You have lost the game");
+        }
+        if (message[2] === username) {
+          toast.success("You have won the game");
+        }
       }
     }
   }, [newNotif()?.data]);
@@ -301,13 +301,14 @@ const OneOnline = ({ type }: { type: string }) => {
     } else {
       setGameAccepted(false);
     }
-  }, [onGoingGame.isSuccess, onGoingGame.data]);
+    console.log("game accepted", gameAccepted);
+  }, [onGoingGame.isSuccess, onGoingGame.isLoading, onGoingGame.data]);
 
   return (
     <div className="w-full h-fit flex flex-col justify-center items-center">
+      <h1 className="text-4xl">Ping Pong</h1>
       {gameAccepted && (
         <>
-          <h1 className="text-4xl">Ping Pong</h1>
           <h1 className="text-2xl">
             Game {onGoingGame.data?.game?.game_number}
           </h1>
@@ -375,8 +376,9 @@ const OneOnline = ({ type }: { type: string }) => {
           )}
         </>
       )}
+      {!gameAccepted && <InviteFriends gameType={type} />}
     </div>
   );
 };
 
-export default OneOnline;
+export default Two;

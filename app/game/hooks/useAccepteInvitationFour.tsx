@@ -22,7 +22,7 @@ export default function useAcceptInvitation({
   const mutation = useMutation({
     mutationFn: accept,
     onSuccess: () => {
-      setTab("online");
+      setTab("two");
     },
   });
   return mutation;

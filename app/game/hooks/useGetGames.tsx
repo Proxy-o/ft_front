@@ -7,7 +7,7 @@ const getOnGoingGame = async (type: string) => {
     let response: AxiosResponse<any, any> | undefined;
     if (type === "tournament")
       response = await axiosInstance.get("/game/onGoingTournamentGame");
-    else if (type === "online")
+    else if (type === "two")
       response = await axiosInstance.get("/game/onGoingGame");
     if (response?.data.status === 204) {
       return { game: null };

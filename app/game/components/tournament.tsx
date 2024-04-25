@@ -7,7 +7,7 @@ import InviteFriends from "./inviteFriend";
 import useStartTournament from "../hooks/useStartTournament";
 import useGetUser from "@/app/profile/hooks/useGetUser";
 import useGetTournamentGame from "../hooks/useGetGameTournament";
-import OneOnline from "./oneOnline";
+import Two from "./two";
 
 const Tournament = () => {
   const user_id = getCookie("user_id") || "";
@@ -28,7 +28,7 @@ const Tournament = () => {
           {onGoingGame && onGoingGame.isSuccess && onGoingGame.data && (
             <div className="text-center">
               <h1 className="text-2xl font-bold">Game on going</h1>
-              <OneOnline type="tournament"/>
+              <Two type="tournament" />
             </div>
           )}
           <TournamentBoard />

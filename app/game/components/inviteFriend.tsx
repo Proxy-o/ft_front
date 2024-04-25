@@ -4,6 +4,7 @@ import useGetFriends from "@/app/chat/hooks/useGetFriends";
 import useGameSocket from "@/lib/hooks/useGameSocket";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import useSendInvitation from "../hooks/useSendInvitation";
+import { Card } from "@/components/ui/card";
 
 const InviteFriends = ({ gameType }: { gameType: string }) => {
   const { handelSendInvitation } = useGameSocket();
@@ -15,44 +16,53 @@ const InviteFriends = ({ gameType }: { gameType: string }) => {
   const { mutate: invite } = useSendInvitation();
 
   return (
-    <div className="w-fit h-fit flex flex-col justify-start items-start mx-auto">
-      <h1 className="text-4xl mt-5">Defy a friend</h1>
-      <div className="flex flex-col justify-start items-center mt-5 ml-10">
-        {friends.data &&
-          friends.data.map(
-            (friend: { id: string; username: string; avatar: string }) => {
-              return (
-                <div
-                  key={friend.id}
-                  className="flex flex-row justify-start items-center"
-                >
-                  <Avatar className=" mr-2">
-                    <AvatarImage
-                      src={friend.avatar}
-                      alt="profile image"
-                      className="rounded-full h-8 w-8"
-                    />
-                    <AvatarFallback className="rounded-sm">PF</AvatarFallback>
-                  </Avatar>
-                  <h1 className="ml-2">{friend.username}</h1>
-                  <button
-                    className="ml-2 bg-primary text-white px-2 py-1 rounded-md"
-                    onClick={() => {
-                      invite({
-                        userid: friend.id,
-                        gameType: gameType,
-                      });
-                      handelSendInvitation(friend.id);
-                    }}
+    <Card className="w-96 h-fit p-4 mt-24">
+      <div className="w-full h-fit flex flex-col justify-start items-start">
+        <h1 className="text-4xl mx-auto border-b-2 pb-4 w-full text-center">
+          Defy a friend
+        </h1>
+        <div className="flex flex-col w-full items-center mt-5 justify-between">
+          {friends.data &&
+            friends.data.map(
+              (friend: { id: string; username: string; avatar: string }) => {
+                return (
+                  <div
+                    key={friend.id}
+                    className="flex flex-row justify-between w-3/4 mx-5 items-center"
                   >
-                    <Sword size={20} />
-                  </button>
-                </div>
-              );
-            }
-          )}
+                    <div className="flex flex-row items-center">
+                      <Avatar className=" mr-2">
+                        <AvatarImage
+                          src={friend.avatar}
+                          alt="profile image"
+                          className="rounded-full h-8 w-8"
+                        />
+                        <AvatarFallback className="rounded-sm">
+                          PF
+                        </AvatarFallback>
+                      </Avatar>
+                      <h1 className="ml-2">{friend.username}</h1>
+                    </div>
+                    <button
+                      className="ml-2 bg-primary text-white px-2 py-1 rounded-md"
+                      onClick={() => {
+                        console.log("sending invitation");
+                        invite({
+                          userid: friend.id,
+                          gameType: gameType,
+                        });
+                        handelSendInvitation(friend.id);
+                      }}
+                    >
+                      <Sword size={20} />
+                    </button>
+                  </div>
+                );
+              }
+            )}
+        </div>
       </div>
-    </div>
+    </Card>
   );
 };
 

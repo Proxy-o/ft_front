@@ -5,7 +5,7 @@ import useGetUser from "../profile/hooks/useGetUser";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import GameNav from "./components/gameNav";
-import OneOnline from "./components/oneOnline";
+import Two from "./components/two";
 import OneOffline from "./components/oneOffline";
 import Four from "./components/four";
 import Tournament from "./components/tournament";
@@ -13,7 +13,7 @@ export default function Page() {
   const user_id = getCookie("user_id") || "";
   const { data: user, isSuccess, isLoading } = useGetUser(user_id || "0");
   const router = useRouter();
-  const [tab, setTab] = useState("online");
+  const [tab, setTab] = useState("two");
 
   useEffect(() => {
     if (!user && isSuccess) {
@@ -32,9 +32,9 @@ export default function Page() {
     <div className="relative w-full h-full">
       <GameNav setTab={setTab} tab={tab} />
       <div className="w-full h-fit flex flex-row justify-start items-start mt-10">
-        {tab === "online" && (
+        {tab === "two" && (
           <div className="flex flex-col w-full h-full justify-start items-center">
-            <OneOnline type="online" />
+            <Two type="two" />
           </div>
         )}
         {tab === "local" && (

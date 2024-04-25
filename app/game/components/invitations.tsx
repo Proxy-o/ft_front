@@ -95,7 +95,7 @@ const Invitations = ({
                     size={"sm"}
                     onClick={() => {
                       acceptInvitation(invitation.id);
-                      setTab("online");
+                      setTab("two");
                     }}
                   >
                     <Swords size={20} />

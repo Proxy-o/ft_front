@@ -24,7 +24,7 @@ const GameNav = ({
     if (window.innerWidth <= 640) {
       // 640px is the default breakpoint for 'sm:' in Tailwind CSS
       setLocal("Local");
-      setOnline("Online");
+      setOnline("two");
       setFour("Four");
     } else {
       setLocal("Play Local");
@@ -58,8 +58,8 @@ const GameNav = ({
               className="w-[400px] h-fit flex flex-col justify-start items-start p-2 top-[68px] md:top-[52px] absolute border-secondary border-2 rounded-md shadow-sm shadow-primary bg-background"
             >
               <Invitations setTab={setTab} />
-              <Separator className="w-full mt-4" />
-              <InviteFriends gameType="two" />
+              {/* <Separator className="w-full mt-4" />
+              <InviteFriends gameType="two" /> */}
             </div>
           </>
         )}
@@ -67,10 +67,10 @@ const GameNav = ({
           <Button
             onMouseEnter={() => setShowInvitations_2(true)}
             onMouseLeave={() => setShowInvitations_2(false)}
-            id="online"
-            variant={tab === "online" ? "default" : "ghost"}
+            id="two"
+            variant={tab === "two" ? "default" : "ghost"}
             size={"sm"}
-            onClick={() => setTab("online")}
+            onClick={() => setTab("two")}
           >
             {online}
           </Button>
