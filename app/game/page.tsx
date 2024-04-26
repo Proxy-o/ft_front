@@ -8,11 +8,13 @@ import GameNav from "./components/gameNav/gameNav";
 import Two from "./components/two";
 import OneOffline from "./components/oneOffline";
 import Four from "./components/four";
-import Tournament from "./components/tournament";
 import { Card } from "@/components/ui/card";
 import { ArrowLeft, Crown, Diamond, User, Users } from "lucide-react";
 import GamesTable from "../profile/components/gamesTable";
 import OneVOne from "./components/gameNav/oneVOne";
+import TwoVTwo from "./components/gameNav/twoVTwo";
+import TournamentNav from "./components/gameNav/tournament";
+import Tournament from "./components/tournament";
 export default function Page() {
   const user_id = getCookie("user_id") || "";
   const { data: user, isSuccess, isLoading } = useGetUser(user_id || "0");
@@ -48,28 +50,16 @@ export default function Page() {
           <>
             <div className="flex flex-row gap-4">
               <div onClick={() => setTab("two")}>
-                <OneVOne />
+                <OneVOne type="two" />
               </div>
-              <div
-                className="w-52 h-52 bg-background flex flex-col justify-center items-center rounded-xl shadow-primary shadow-sm"
-                onClick={() => setTab("local")}
-              >
-                <Diamond size={150} />
-                <div className="text-2xl font-bold">Local</div>
+              <div onClick={() => setTab("local")}>
+                <OneVOne type="local" />
               </div>
-              <div
-                className="w-52 h-52 bg-background flex flex-col justify-center items-center rounded-xl shadow-primary shadow-sm"
-                onClick={() => setTab("four")}
-              >
-                <Users size={150} />
-                <div className="text-2xl font-bold">2 v 2</div>
+              <div onClick={() => setTab("four")}>
+                <TwoVTwo />
               </div>
-              <div
-                className="w-52 h-52 bg-background flex flex-col justify-center items-center rounded-xl shadow-primary shadow-sm"
-                onClick={() => setTab("tournament")}
-              >
-                <Crown size={150} />
-                <div className="text-2xl font-bold">Tournament</div>
+              <div onClick={() => setTab("tournament")}>
+                <TournamentNav />
               </div>
             </div>
             <GamesTable id={user_id} />

@@ -1,7 +1,7 @@
-import { User } from "lucide-react";
+import { Diamond, User } from "lucide-react";
 import { useState } from "react";
 
-const OneVOne = () => {
+const OneVOne = ({ type }: { type: string }) => {
   const [hover, setHover] = useState(false);
   return (
     <>
@@ -10,15 +10,42 @@ const OneVOne = () => {
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
       >
-        <div
-          className={
-            `absolute w-full h-full flex flex-col justify-center items-center transition duration-300 ease-in-out` +
-            (hover ? "transform opacity-0" : "transform opacity-100")
-          }
-        >
-          <User size={150} />
-          <div className="text-2xl font-bold">1 v 1</div>
-        </div>
+        {type === "two" && (
+          <div
+            className={
+              `absolute w-full h-full flex flex-col justify-center items-center transition duration-300 ease-in-out` +
+              (hover ? "transform blur-sm" : "transform blur-none")
+            }
+          >
+            <div
+              className={
+                `transition duration-2000 ease-in-out` +
+                (hover ? "transform animate-in" : "transform animate-none")
+              }
+            >
+              <User size={150} />
+            </div>
+            <div className="text-2xl font-bold">1 v 1</div>
+          </div>
+        )}
+        {type === "local" && (
+          <div
+            className={
+              `absolute w-full h-full flex flex-col justify-center items-center transition duration-300 ease-in-out` +
+              (hover ? "transform blur-sm" : "transform blur-none")
+            }
+          >
+            <div
+              className={
+                `transition duration-300 ease-in-out` +
+                (hover ? "transform rotate-45" : "transform rotate-0")
+              }
+            >
+              <Diamond size={150} />
+            </div>
+            <div className="text-2xl font-bold">Local</div>
+          </div>
+        )}
         <div
           className={`w-full h-full flex flex-row justify-between items-left transition duration-300 ease-in-out ${
             hover ? "opacity-100" : "opacity-0"
