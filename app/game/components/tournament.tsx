@@ -43,7 +43,6 @@ const Tournament = () => {
                   Start Tournament
                 </Button>
               )}
-            <InviteFriends gameType="tournament" />
           </div>
         </>
       )}

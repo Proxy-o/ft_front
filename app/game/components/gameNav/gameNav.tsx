@@ -2,8 +2,10 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import Invitations from "./invitations";
-import InviteFriends from "./inviteFriend";
+import Invitations from "../invitations";
+import InviteFriends from "../inviteFriend";
+import { SwordsIcon, User, Users } from "lucide-react";
+import FriendList from "@/app/friends/components/friendList";
 
 const GameNav = ({
   setTab,
@@ -16,31 +18,6 @@ const GameNav = ({
   const [showInvitations_2, setShowInvitations_2] = useState(false);
   const [showInvitations_3, setShowInvitations_3] = useState(false);
 
-  const [local, setLocal] = useState("Play Local");
-  const [online, setOnline] = useState("Play Online");
-  const [four, setFour] = useState("Four Players");
-
-  function checkScreenSize() {
-    if (window.innerWidth <= 640) {
-      // 640px is the default breakpoint for 'sm:' in Tailwind CSS
-      setLocal("Local");
-      setOnline("two");
-      setFour("Four");
-    } else {
-      setLocal("Play Local");
-      setOnline("Play Online");
-      setFour("Four Players");
-    }
-  }
-
-  // Check screen size on load
-  useEffect(() => {
-    checkScreenSize();
-  }),
-    [];
-
-  // Listen for window resize
-  window.addEventListener("resize", checkScreenSize);
   return (
     <>
       <nav className="mt-6 md:mt-2 w-fit h-fit flex flex-row md:gap-2 pb-2">
@@ -58,8 +35,6 @@ const GameNav = ({
               className="w-[400px] h-fit flex flex-col justify-start items-start p-2 top-[68px] md:top-[52px] absolute border-secondary border-2 rounded-md shadow-sm shadow-primary bg-background"
             >
               <Invitations setTab={setTab} />
-              {/* <Separator className="w-full mt-4" />
-              <InviteFriends gameType="two" /> */}
             </div>
           </>
         )}
@@ -71,8 +46,9 @@ const GameNav = ({
             variant={tab === "two" ? "default" : "ghost"}
             size={"sm"}
             onClick={() => setTab("two")}
+            className="flex items-center gap-1"
           >
-            {online}
+            <User size={20} /> 1 v 1
           </Button>
           <Button
             id="local"
@@ -80,15 +56,16 @@ const GameNav = ({
             size={"sm"}
             onClick={() => setTab("local")}
           >
-            {local}
+            Local
           </Button>
           <Button
             id="four"
             variant={tab === "four" ? "default" : "ghost"}
             size={"sm"}
             onClick={() => setTab("four")}
+            className="flex items-center gap-1"
           >
-            {four}
+            <Users size={16} />2 v 2
           </Button>
           <Button
             id="tournament"

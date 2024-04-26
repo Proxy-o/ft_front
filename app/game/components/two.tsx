@@ -277,7 +277,7 @@ const Two = ({ type }: { type: string }) => {
         setLeftScore(parseInt(message[1]));
         leftScoreRef.current = parseInt(message[1]);
       } else if (message[0] === "/end") {
-        // setGameAccepted(false);
+        setGameAccepted(false);
         setGameStarted(false);
         setStartCountdown(false);
         onGoingGame.refetch();
@@ -301,7 +301,6 @@ const Two = ({ type }: { type: string }) => {
     } else {
       setGameAccepted(false);
     }
-    console.log("game accepted", gameAccepted);
   }, [onGoingGame.isSuccess, onGoingGame.isLoading, onGoingGame.data]);
 
   return (
