@@ -588,7 +588,6 @@ const Four = () => {
           setLeftScore(score);
         }
       } else if (message.message?.split(" ")[0] === "/end") {
-        console.log("game over");
         setGameAccepted(false);
         setGameStarted(false);
         setStartCountdown(false);

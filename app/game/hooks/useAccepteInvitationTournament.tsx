@@ -4,7 +4,6 @@ import { Dispatch, SetStateAction } from "react";
 import { toast } from "sonner";
 
 async function accept(invitationId: string) {
-  console.log("accepting invitation");
   const res = await axiosInstance.post("game/accept_invitation_tournament", {
     invitationId,
   });

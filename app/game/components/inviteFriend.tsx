@@ -46,7 +46,6 @@ const InviteFriends = ({ gameType }: { gameType: string }) => {
                     <button
                       className="ml-2 bg-primary text-white px-2 py-1 rounded-md"
                       onClick={() => {
-                        console.log("sending invitation");
                         invite({
                           userid: friend.id,
                           gameType: gameType,

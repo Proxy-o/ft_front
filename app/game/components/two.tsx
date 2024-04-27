@@ -253,6 +253,7 @@ const Two = ({ type }: { type: string }) => {
     if (notif) {
       const parsedMessage = JSON.parse(notif.data);
       const message = parsedMessage?.message.split(" ");
+      console.log(message);
       if (message[0] === "/show") {
         handleStartGame(username, message[1]);
         isEnemyReadyRef.current = true;

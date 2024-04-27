@@ -12,7 +12,6 @@ const TournamentBoard = () => {
   const [games, setGames] = useState<any[]>([]);
   const { tournament } = useGetTournament(user_id);
   useEffect(() => {
-    console.log(tournament);
     if (tournament.isSuccess && tournament.data.tournament) {
       setParticipants(tournament.data.tournament?.participants || []);
       setGames(tournament.data.tournament.games || []);

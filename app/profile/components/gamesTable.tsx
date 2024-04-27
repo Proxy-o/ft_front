@@ -16,7 +16,6 @@ import { Game } from "../types";
 export default function GamesTable({ id }: { id: string }) {
   const username = "othmane ait taleb";
   const { data: games, isSuccess } = useGetGames(id);
-  isSuccess && console.log(games);
 
   return (
     isSuccess && (

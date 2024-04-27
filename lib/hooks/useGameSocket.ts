@@ -82,7 +82,6 @@ export default function useGameSocket() {
       winnerTeam +
       " " +
       game_id;
-    console.log(toSend);
     sendJsonMessage({ message: toSend });
   };
 

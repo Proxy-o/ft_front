@@ -4,7 +4,6 @@ import { useQuery } from "@tanstack/react-query";
 const getOnGoingTournamentGame = async () => {
   try {
     const response = await axiosInstance.get("/game/onGoingTournamentGame");
-    console.log(response);
     if (response.data.status === 204) {
       return { game: null };
     }
