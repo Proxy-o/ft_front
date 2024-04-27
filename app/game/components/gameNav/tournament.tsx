@@ -25,12 +25,16 @@ const TournamentNav = () => {
           >
             <Crown size={150} />
           </div>
-          <div className="text-2xl font-bold">Tournament</div>
         </div>
         {hover && (
+          <div className="text-lg font-bold mt-auto mb-10 transition duration-75 animate-moveDownTournament scale-150">
+            Tournament
+          </div>
+        )}
+        {hover && (
           <div
-            className={`w-full h-full flex flex-row justify-between items-left transition duration-300 ease-in-out ${
-              hover ? "opacity-100" : "opacity-0"
+            className={`w-full h-full flex flex-row justify-between items-left transition duration-1000 ease-in-out ${
+              hover ? "scale-100" : "scale-0"
             } absolute`}
           >
             <div className="flex flex-row mx-auto relative">
@@ -89,6 +93,9 @@ const TournamentNav = () => {
           0% {
             transform: translateY(0) translateX(0);
           }
+          1% {
+            transform: translateY(0) translateX(0);
+          }
           2.5% {
             transform: translateY(230%) translateX(70%);
           }
@@ -101,11 +108,14 @@ const TournamentNav = () => {
         }
 
         .animate-moveLeft {
-          animation: moveLeft 40s ease-in-out;
+          animation: moveLeft 30s ease-in-out;
         }
 
         @keyframes moveRight {
           0% {
+            transform: translateY(0) translateX(0);
+          }
+          1% {
             transform: translateY(0) translateX(0);
           }
           2.5% {
@@ -123,11 +133,14 @@ const TournamentNav = () => {
         }
 
         .animate-moveRight {
-          animation: moveRight 40s ease-in-out;
+          animation: moveRight 30s ease-in-out;
         }
 
         @keyframes crown {
           0% {
+            transform: translateY(0);
+          }
+          1% {
             transform: translateY(0);
           }
           5.0% {
@@ -157,7 +170,23 @@ const TournamentNav = () => {
         }
 
         .animate-crown {
-          animation: crown 40s ease-in-out;
+          animation: crown 30s ease-in-out;
+        }
+
+        @keyframes moveDownTournament {
+          0% {
+            transform: translateY(0);
+          }
+          1% {
+            transform: translateY(100%);
+          }
+          100% {
+            transform: translateY(100%);
+          }
+        }
+
+        .animate-moveDownTournament {
+          animation: moveDownTournament 30s ease-in-out;
         }
       `}</style>
     </>

@@ -11,40 +11,46 @@ const OneVOne = ({ type }: { type: string }) => {
         onMouseLeave={() => setHover(false)}
       >
         {type === "two" && (
-          <div
-            className={
-              `absolute w-full h-full flex flex-col justify-center items-center transition duration-300 ease-in-out` +
-              (hover ? "transform blur-sm" : "transform blur-none")
-            }
-          >
+          <>
             <div
               className={
-                `transition duration-2000 ease-in-out` +
-                (hover ? "transform animate-in" : "transform animate-none")
+                `absolute w-full h-full flex flex-col justify-center items-center transition duration-300 ease-in-out` +
+                (hover
+                  ? "transform scale-75 blur-sm opacity-25"
+                  : "transform scale-100")
               }
             >
-              <User size={150} />
+              <div
+                className={
+                  `transition duration-2000 ease-in-out` +
+                  (hover ? "transform animate-in" : "transform animate-none")
+                }
+              >
+                <User size={150} />
+              </div>
             </div>
-            <div className="text-2xl font-bold">1 v 1</div>
-          </div>
+            {hover && <div className="text-4xl font-bold">1 v 1</div>}
+          </>
         )}
         {type === "local" && (
-          <div
-            className={
-              `absolute w-full h-full flex flex-col justify-center items-center transition duration-300 ease-in-out` +
-              (hover ? "transform blur-sm" : "transform blur-none")
-            }
-          >
+          <>
             <div
               className={
-                `transition duration-300 ease-in-out` +
-                (hover ? "transform rotate-45" : "transform rotate-0")
+                `absolute w-full h-full flex flex-col justify-center items-center transition duration-300 ease-in-out` +
+                (hover ? "transform blur-sm" : "transform blur-none")
               }
             >
-              <Diamond size={150} />
+              <div
+                className={
+                  `transition duration-300 ease-in-out` +
+                  (hover ? "transform rotate-45" : "transform rotate-0")
+                }
+              >
+                <Diamond size={150} />
+              </div>
             </div>
-            <div className="text-2xl font-bold">Local</div>
-          </div>
+            {hover && <div className="text-2xl font-bold">Local</div>}
+          </>
         )}
         <div
           className={`w-full h-full flex flex-row justify-between items-left transition duration-300 ease-in-out ${

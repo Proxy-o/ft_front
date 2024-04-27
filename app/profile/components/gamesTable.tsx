@@ -22,7 +22,7 @@ export default function GamesTable({ id }: { id: string }) {
     isSuccess && (
       <>
         <div className="p-4 relative">Completed games</div>
-        <Card className="">
+        <Card className="w-full">
           <Table>
             <TableHeader className="bg-secondary ">
               <TableRow>

@@ -13,12 +13,14 @@ const TwoVTwo = () => {
         <div
           className={
             `absolute w-full h-full flex flex-col justify-center items-center transition duration-300 ease-in-out` +
-            (hover ? "transform blur-sm" : "transform blur-none")
+            (hover
+              ? "transform blur-sm scale-75 opacity-25"
+              : "transform blur-none")
           }
         >
           <Users size={150} />
-          <div className="text-2xl font-bold">2 v 2</div>
         </div>
+        {hover && <div className="text-4xl font-bold">2 v 2</div>}
         <div
           className={`w-full h-full flex flex-row justify-between items-left transition duration-300 ease-in-out ${
             hover ? "opacity-100" : "opacity-0"

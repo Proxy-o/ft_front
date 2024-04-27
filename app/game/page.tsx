@@ -15,6 +15,7 @@ import OneVOne from "./components/gameNav/oneVOne";
 import TwoVTwo from "./components/gameNav/twoVTwo";
 import TournamentNav from "./components/gameNav/tournament";
 import Tournament from "./components/tournament";
+import Invitations from "./components/invitations";
 export default function Page() {
   const user_id = getCookie("user_id") || "";
   const { data: user, isSuccess, isLoading } = useGetUser(user_id || "0");
@@ -36,8 +37,8 @@ export default function Page() {
 
   return (
     <div className="relative w-full h-full">
-      <GameNav setTab={setTab} tab={tab} />
-      <Card className="w-11/12 h-fit flex flex-col justify-start items-start p-2 mx-auto mt-12 gap-2">
+      {/* <GameNav setTab={setTab} tab={tab} /> */}
+      <Card className="w-fit h-fit flex flex-col justify-start items-start p-2 mx-auto mt-12 gap-2">
         {tab !== "tab" && (
           <div
             className="w-15 h-15 bg-background flex flex-col justify-center items-center rounded-xl shadow-primary shadow-sm"
@@ -48,12 +49,13 @@ export default function Page() {
         )}
         {tab === "tab" && (
           <>
+            <div className="p-4">Modes</div>
             <div className="flex flex-row gap-4">
-              <div onClick={() => setTab("two")}>
-                <OneVOne type="two" />
-              </div>
               <div onClick={() => setTab("local")}>
                 <OneVOne type="local" />
+              </div>
+              <div onClick={() => setTab("two")}>
+                <OneVOne type="two" />
               </div>
               <div onClick={() => setTab("four")}>
                 <TwoVTwo />
@@ -62,7 +64,15 @@ export default function Page() {
                 <TournamentNav />
               </div>
             </div>
-            <GamesTable id={user_id} />
+            <div className="w-full h-full flex flex-row justify-start items-start gap-4">
+              <div className="w-1/2 h-full flex flex-col justify-start items-start">
+                <GamesTable id={user_id} />
+              </div>
+              <div className="w-1/2 h-full flex flex-col justify-start items-start">
+                <div className="p-4">Invitations</div>
+                <Invitations setTab={setTab} />
+              </div>
+            </div>
           </>
         )}
         {tab === "two" && (
