@@ -89,7 +89,6 @@ export default function Nav() {
   useEffect(() => {
     if (isSuccessReq && requests) {
       requests.forEach((request: any) => {
-        console.log(request);
         if (request.to_user.id.toString() === id) setReqNotif(true);
       });
     }

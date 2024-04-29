@@ -19,6 +19,7 @@ import checkCollisionWithHorizontalWalls from "../methods/checkCollisionWithHori
 import moveBall from "../methods/moveBall";
 import { canvasParams } from "../types";
 import InviteFriends from "./inviteFriend";
+import useEndGame from "../hooks/useEndGame";
 
 const Two = ({ type }: { type: string }) => {
   const user_id = getCookie("user_id") || "";
@@ -32,6 +33,7 @@ const Two = ({ type }: { type: string }) => {
   const newBallPositionRef = useRef({ x: 0, y: 0 }); // Use a ref to store the current state
   const newAngleRef = useRef(0); // Use a ref to store the current state
   const { mutate: surrenderGame } = useSurrenderGame();
+  const { mutate: endGame } = useEndGame();
   const isFirstTime = useRef(true);
   const animationFrameId = useRef(0);
   const isAnimating = useRef(false);
@@ -187,6 +189,7 @@ const Two = ({ type }: { type: string }) => {
       // Check for score
       checkLoseConditionOnline(
         canvas,
+        leftScoreRef,
         rightScoreRef,
         setGameAccepted,
         setGameStarted,
@@ -194,7 +197,8 @@ const Two = ({ type }: { type: string }) => {
         leftUser,
         rightUser,
         onGoingGame,
-        handleSurrender
+        handleSurrender,
+        endGame
       );
 
       // Change score
@@ -253,7 +257,6 @@ const Two = ({ type }: { type: string }) => {
     if (notif) {
       const parsedMessage = JSON.parse(notif.data);
       const message = parsedMessage?.message.split(" ");
-      console.log(message);
       if (message[0] === "/show") {
         handleStartGame(username, message[1]);
         isEnemyReadyRef.current = true;
