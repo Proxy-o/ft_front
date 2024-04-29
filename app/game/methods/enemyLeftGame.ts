@@ -15,7 +15,13 @@ function enemyLeftGame(
   canvas: HTMLCanvasElement | null,
   setGameAccepted: React.Dispatch<React.SetStateAction<boolean>>,
   setGameStarted: React.Dispatch<React.SetStateAction<boolean>>,
-  setStartCountdown: React.Dispatch<React.SetStateAction<boolean>>
+  setStartCountdown: React.Dispatch<React.SetStateAction<boolean>>,
+  endGame: (data: {
+    winner: string;
+    winnerScore: number;
+    loser: string;
+    loserScore: number;
+  }) => void
 ) {
   if (canvas === null) return;
   if (newBallPositionRef.current.x > canvas.width + 500) {
@@ -27,6 +33,12 @@ function enemyLeftGame(
     setGameAccepted(false);
     setGameStarted(false);
     setStartCountdown(false);
+    endGame({
+      winner: leftUser?.id || "",
+      winnerScore: 10,
+      loser: rightUser?.id || "",
+      loserScore: 0,
+    });
     toast.success("You have won the game");
   }
 }

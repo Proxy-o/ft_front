@@ -232,7 +232,8 @@ const Two = ({ type }: { type: string }) => {
         canvas,
         setGameAccepted,
         setGameStarted,
-        setStartCountdown
+        setStartCountdown,
+        endGame
       );
     };
 
@@ -277,16 +278,10 @@ const Two = ({ type }: { type: string }) => {
         setLeftScore(parseInt(message[1]));
         leftScoreRef.current = parseInt(message[1]);
       } else if (message[0] === "/end") {
-        setGameAccepted(false);
-        setGameStarted(false);
-        setStartCountdown(false);
+        // setGameAccepted(false);
+        // setGameStarted(false);
+        // setStartCountdown(false);
         onGoingGame.refetch();
-        if (message[1] === username) {
-          toast.error("You have lost the game");
-        }
-        if (message[2] === username) {
-          toast.success("You have won the game");
-        }
       }
     }
   }, [newNotif()?.data]);
