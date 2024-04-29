@@ -19,10 +19,12 @@ export default function useAcceptInvitation({
 }: {
   setTab: Dispatch<SetStateAction<string>>;
 }) {
+  const query = useQueryClient();
   const mutation = useMutation({
     mutationFn: accept,
     onSuccess: () => {
       setTab("two");
+      query.invalidateQueries({ queryKey: ["game"] });
     },
   });
   return mutation;

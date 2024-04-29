@@ -258,10 +258,6 @@ const Two = ({ type }: { type: string }) => {
         handleStartGame(username, message[1]);
         isEnemyReadyRef.current = true;
         setStartCountdown(true);
-      } else if (message[0] === "/start") {
-        onGoingGame.refetch();
-        isFirstTime.current = true;
-        setGameAccepted(true);
       } else if (message[0] === "/move") {
         PaddleRightYRef.current = parseInt(message[1]);
       } else if (message[0] === "/ballDirection") {

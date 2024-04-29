@@ -33,7 +33,6 @@ const Invitations = ({
   const acceptInvitation = async (invitationId: string) => {
     try {
       await acceptInvitationMutation(invitationId);
-      handleAcceptInvitation(invitationId);
     } catch (error) {
       console.log(error);
     }
@@ -42,7 +41,6 @@ const Invitations = ({
   const acceptInvitationTournament = async (invitationId: string) => {
     try {
       await acceptInvitationTournamentMutation(invitationId);
-      handleAcceptInvitation(invitationId);
     } catch (error) {
       console.log(error);
     }

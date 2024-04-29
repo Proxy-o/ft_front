@@ -15,8 +15,14 @@ async function accept(invitationId: string) {
 }
 
 export default function useAcceptInvitation() {
+  const { handleAcceptInvitation } = useGameSocket();
+  const query = useQueryClient();
   const mutation = useMutation({
     mutationFn: accept,
+    onSuccess: (invitationId) => {
+      handleAcceptInvitation(invitationId);
+      query.invalidateQueries({ queryKey: ["game"] });
+    },
   });
   return mutation;
 }

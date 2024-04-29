@@ -2,7 +2,7 @@
 import getCookie from "@/lib/functions/getCookie";
 
 import useGetUser from "../profile/hooks/useGetUser";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Two from "./components/two";
 import OneOffline from "./components/oneOffline";
@@ -15,17 +15,34 @@ import TwoVTwo from "./components/gameNav/twoVTwo";
 import TournamentNav from "./components/gameNav/tournament";
 import Tournament from "./components/tournament";
 import Invitations from "./components/invitations";
+import useGameSocket from "@/lib/hooks/useGameSocket";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 export default function Page() {
   const user_id = getCookie("user_id") || "";
   const { data: user, isSuccess, isLoading } = useGetUser(user_id || "0");
+  const { newNotif } = useGameSocket();
   const router = useRouter();
   const [tab, setTab] = useState("tab");
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (!user && isSuccess) {
       router.push("/login");
     }
   }, [user, isSuccess, router]);
+
+  useEffect(() => {
+    const notif = newNotif();
+    if (notif) {
+      const parsedMessage = JSON.parse(notif.data);
+      const message = parsedMessage?.message.split(" ");
+      if (message[0] === "/start") {
+        queryClient.invalidateQueries({ queryKey: ["game"] });
+        toast.success("The game has started");
+      }
+    }
+  }, [newNotif()?.data]);
 
   if (isLoading) return <div>loading...</div>;
 
