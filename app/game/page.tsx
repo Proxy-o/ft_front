@@ -63,7 +63,7 @@ export default function Page() {
           </div>
           <div className="w-1/2 h-full flex flex-col justify-start items-start">
             <div className="p-4">Invitations</div>
-            <Invitations />
+            <Invitations mode="all" />
           </div>
         </div>
       </Card>

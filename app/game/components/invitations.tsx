@@ -15,8 +15,8 @@ import { Card } from "@/components/ui/card";
 import Router from "next/router";
 import { useRouter } from "next/navigation";
 
-const Invitations = () => {
-  const { newNotif, handleAcceptInvitation } = useGameSocket();
+const Invitations = ({ mode }: { mode: string }) => {
+  const { newNotif } = useGameSocket();
   const user_id = getCookie("user_id") || "";
   const router = useRouter();
   let invitationsData = useGetInvitations(user_id || "0");
@@ -59,11 +59,29 @@ const Invitations = () => {
     (invitation) => invitation.type === "tournament"
   );
 
+  if (mode !== "all") {
+    if (mode === "two") {
+      twoVsTwoInvitations.length = 0;
+      tournamentInvitations.length = 0;
+    } else if (mode === "four") {
+      oneVsOneInvitations.length = 0;
+      tournamentInvitations.length = 0;
+    } else if (mode === "tournament") {
+      oneVsOneInvitations.length = 0;
+      twoVsTwoInvitations.length = 0;
+    }
+  }
+
   return (
-    <div className="w-full flex flex-col justify-start items-start space-y-2">
-      {oneVsOneInvitations.length !== 0 ? (
-        <>
-          <Card className="w-full h-full flex flex-col justify-start items-start p-2 mx-auto gap-2 bg-background">
+    <Card className="w-full h-full flex flex-col justify-start items-start p-2 mx-auto gap-2 bg-background">
+      <div className="w-full flex flex-col justify-start items-start space-y-2">
+        {mode !== "all" && (
+          <h1 className="text-4xl mx-auto border-b-2 pl-4 pb-4 w-full text-start">
+            Invitations
+          </h1>
+        )}
+        {oneVsOneInvitations.length !== 0 ? (
+          <>
             <h1 className="text-4xl mx-auto">1 vs 1</h1>
             <Separator className="w-full my-4" />
             {oneVsOneInvitations.map((invitation) => {
@@ -109,13 +127,11 @@ const Invitations = () => {
                 </div>
               );
             })}
-          </Card>
-        </>
-      ) : null}
+          </>
+        ) : null}
 
-      {twoVsTwoInvitations.length !== 0 ? (
-        <>
-          <Card className="w-full h-full flex flex-col justify-start items-start p-2 mx-auto gap-2 bg-background">
+        {twoVsTwoInvitations.length !== 0 ? (
+          <>
             <h1 className="text-4xl mx-auto">2 vs 2</h1>
             <Separator className="w-full my-4" />
             {twoVsTwoInvitations.map((invitation) => {
@@ -161,13 +177,11 @@ const Invitations = () => {
                 </div>
               );
             })}
-          </Card>
-        </>
-      ) : null}
+          </>
+        ) : null}
 
-      {tournamentInvitations.length !== 0 ? (
-        <>
-          <Card className="w-full h-full flex flex-col justify-start items-start p-2 mx-auto gap-2 bg-background">
+        {tournamentInvitations.length !== 0 ? (
+          <>
             <h1 className="text-4xl mx-auto">Tournament</h1>
             <Separator className="w-full my-4" />
             {tournamentInvitations.map((invitation) => {
@@ -213,17 +227,20 @@ const Invitations = () => {
                 </div>
               );
             })}
-          </Card>
-        </>
-      ) : null}
+          </>
+        ) : null}
 
-      {invitations.length === 0 && (
-        <h1 className="flex gap-2 text-md mt-2 ml-4 text-primary/70">
-          <Inbox />
-          No invitations
-        </h1>
-      )}
-    </div>
+        {((invitations.length === 0 && mode === "all") ||
+          (oneVsOneInvitations.length === 0 && mode === "two") ||
+          (twoVsTwoInvitations.length === 0 && mode === "four") ||
+          (tournamentInvitations.length === 0 && mode === "tournament")) && (
+          <h1 className="flex gap-2 text-md mt-2 ml-4 text-primary/70">
+            <Inbox />
+            No invitations
+          </h1>
+        )}
+      </div>
+    </Card>
   );
 };
 

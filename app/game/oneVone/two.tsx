@@ -20,7 +20,6 @@ import draw from "../methods/draw";
 import checkCollisionWithHorizontalWalls from "../methods/checkCollisionWithHorizontalWalls";
 import moveBall from "../methods/moveBall";
 import { canvasParams } from "../types";
-import InviteFriends from "../components/inviteFriend";
 import useEndGame from "../hooks/useEndGame";
 
 const Two = ({ type }: { type: string }) => {
@@ -375,7 +374,6 @@ const Two = ({ type }: { type: string }) => {
           )}
         </>
       )}
-      {!gameAccepted && <InviteFriends gameType={type} />}
     </div>
   );
 };

@@ -16,9 +16,9 @@ const InviteFriends = ({ gameType }: { gameType: string }) => {
   const { mutate: invite } = useSendInvitation();
 
   return (
-    <Card className="w-96 h-fit p-4 mt-24">
-      <div className="w-full h-fit flex flex-col justify-start items-start">
-        <h1 className="text-4xl mx-auto border-b-2 pb-4 w-full text-center">
+    <Card className="w-full h-full p-4 bg-background">
+      <div className="w-full h-full flex flex-col justify-start items-start">
+        <h1 className="text-4xl mx-auto border-b-2 pl-4 pb-4 w-full text-start">
           Defy a friend
         </h1>
         <div className="flex flex-col w-full items-center mt-5 justify-between">
