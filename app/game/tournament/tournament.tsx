@@ -1,13 +1,15 @@
+"use client";
+
 import getCookie from "@/lib/functions/getCookie";
 import useCreateTournament from "../hooks/useCreateTournament";
-import TournamentBoard from "./tournamentBoard";
+import TournamentBoard from "../components/tournamentBoard";
 import { Button } from "@/components/ui/button";
 import useGetTournament from "../hooks/useGetTournament";
-import InviteFriends from "./inviteFriend";
+import InviteFriends from "../components/inviteFriend";
 import useStartTournament from "../hooks/useStartTournament";
 import useGetUser from "@/app/profile/hooks/useGetUser";
 import useGetTournamentGame from "../hooks/useGetGameTournament";
-import Two from "./two";
+import Two from "../oneVone/two";
 
 const Tournament = () => {
   const user_id = getCookie("user_id") || "";

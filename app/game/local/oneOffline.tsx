@@ -1,7 +1,9 @@
+"use client";
+
 import React, { useRef, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import CountDown from "./contDown";
-import Score from "./score";
+import CountDown from "../components/contDown";
+import Score from "../components/score";
 
 const OneOffline = () => {
   const [startCountdown, setStartCountdown] = useState(false);

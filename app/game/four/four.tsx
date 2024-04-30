@@ -1,3 +1,4 @@
+"use client";
 import React, { useRef, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import useSurrenderGame from "../hooks/useSurrender";
@@ -5,13 +6,13 @@ import useGameSocket from "@/lib/hooks/useGameSocket"; // Make sure this is the 
 import getCookie from "@/lib/functions/getCookie";
 import { toast } from "sonner";
 import useGetUser from "@/app/profile/hooks/useGetUser";
-import CountDown from "./contDown";
+import CountDown from "../components/contDown";
 import { User } from "@/lib/types";
-import Score from "./score";
+import Score from "../components/score";
 import useGetFourGame from "../hooks/useGetFourGame";
 import useCreateGameFour from "../hooks/useCreateGameFour";
-import Players from "./players";
-import InviteFriends from "./inviteFriend";
+import Players from "../components/players";
+import InviteFriends from "../components/inviteFriend";
 import { Card } from "@/components/ui/card";
 
 const Four = () => {

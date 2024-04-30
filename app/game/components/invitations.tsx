@@ -12,15 +12,13 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import useAcceptInvitationTournament from "../hooks/useAccepteInvitationTournament";
 import { Card } from "@/components/ui/card";
+import Router from "next/router";
+import { useRouter } from "next/navigation";
 
-const Invitations = ({
-  setTab,
-}: {
-  setTab: Dispatch<SetStateAction<string>>;
-}) => {
+const Invitations = () => {
   const { newNotif, handleAcceptInvitation } = useGameSocket();
   const user_id = getCookie("user_id") || "";
-
+  const router = useRouter();
   let invitationsData = useGetInvitations(user_id || "0");
   const { mutate: declineMutation } = useDeclineInvitation();
   const { mutate: acceptInvitationMutation } = useAcceptInvitation();
@@ -95,7 +93,7 @@ const Invitations = ({
                       size={"sm"}
                       onClick={() => {
                         acceptInvitation(invitation.id);
-                        setTab("two");
+                        router.push("/game/oneVone");
                       }}
                     >
                       <Swords size={20} />
@@ -147,7 +145,7 @@ const Invitations = ({
                       size={"sm"}
                       onClick={() => {
                         acceptInvitation(invitation.id);
-                        setTab("four");
+                        router.push("/game/four");
                       }}
                     >
                       <Swords size={20} />
@@ -199,7 +197,7 @@ const Invitations = ({
                       size={"sm"}
                       onClick={() => {
                         acceptInvitationTournament(invitation.id);
-                        setTab("tournament");
+                        router.push("/game/tournament");
                       }}
                     >
                       <Swords size={20} />

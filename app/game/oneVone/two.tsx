@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useRef, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import useSurrenderGame from "../hooks/useSurrender";
@@ -5,10 +7,10 @@ import useGameSocket from "@/lib/hooks/useGameSocket"; // Make sure this is the 
 import getCookie from "@/lib/functions/getCookie";
 import { toast } from "sonner";
 import useGetUser from "@/app/profile/hooks/useGetUser";
-import CountDown from "./contDown";
+import CountDown from "../components/contDown";
 import { User } from "@/lib/types";
 import useGetGame from "../hooks/useGetGames";
-import Score from "./score";
+import Score from "../components/score";
 import changeScoreOnline from "../methods/changeScore";
 import enemyLeftGame from "../methods/enemyLeftGame";
 import movePaddlesOnline from "../methods/movePaddles";
@@ -18,7 +20,7 @@ import draw from "../methods/draw";
 import checkCollisionWithHorizontalWalls from "../methods/checkCollisionWithHorizontalWalls";
 import moveBall from "../methods/moveBall";
 import { canvasParams } from "../types";
-import InviteFriends from "./inviteFriend";
+import InviteFriends from "../components/inviteFriend";
 import useEndGame from "../hooks/useEndGame";
 
 const Two = ({ type }: { type: string }) => {
@@ -257,11 +259,14 @@ const Two = ({ type }: { type: string }) => {
     const notif = newNotif();
     if (notif) {
       const parsedMessage = JSON.parse(notif.data);
+      toast.info(parsedMessage?.message);
       const message = parsedMessage?.message.split(" ");
       if (message[0] === "/show") {
         handleStartGame(username, message[1]);
         isEnemyReadyRef.current = true;
         setStartCountdown(true);
+      } else if (message[0] === "/start") {
+        onGoingGame.refetch();
       } else if (message[0] === "/move") {
         PaddleRightYRef.current = parseInt(message[1]);
       } else if (message[0] === "/ballDirection") {
@@ -278,9 +283,9 @@ const Two = ({ type }: { type: string }) => {
         setLeftScore(parseInt(message[1]));
         leftScoreRef.current = parseInt(message[1]);
       } else if (message[0] === "/end") {
-        // setGameAccepted(false);
-        // setGameStarted(false);
-        // setStartCountdown(false);
+        setGameAccepted(false);
+        setGameStarted(false);
+        setStartCountdown(false);
         onGoingGame.refetch();
       }
     }
