@@ -44,4 +44,48 @@ function checkLoseConditionOnline(
   }
 }
 
-export default checkLoseConditionOnline;
+function checkLoseConditionFour(
+  canvas: HTMLCanvasElement | null,
+  leftScoreRef: React.MutableRefObject<number>,
+  rightScoreRef: React.MutableRefObject<number>,
+  setGameAccepted: React.Dispatch<React.SetStateAction<boolean>>,
+  setGameStarted: React.Dispatch<React.SetStateAction<boolean>>,
+  setStartCountdown: React.Dispatch<React.SetStateAction<boolean>>,
+  leftUserTop: User | undefined,
+  leftUserBottom: User | undefined,
+  rightUserTop: User | undefined,
+  rightUserBottom: User | undefined,
+  onGoingGame: UseQueryResult<{ game: any }, Error>,
+  handleSurrenderFour: (
+    username: string,
+    leftUserTop: string,
+    leftUserBottom: string,
+    rightUserTop: string,
+    rightUserBottom: string,
+    winner: string,
+    game_id: string
+  ) => void,
+  username: string
+) {
+  if (canvas === null) return;
+  if (rightScoreRef.current === 3) {
+    setGameAccepted(false);
+    setGameStarted(false);
+    setStartCountdown(false);
+    handleSurrenderFour(
+      username,
+      leftUserTop?.username || "",
+      leftUserBottom?.username || "",
+      rightUserTop?.username || "",
+      rightUserBottom?.username || "",
+      username === rightUserTop?.username ||
+        username === rightUserBottom?.username
+        ? "left"
+        : "right",
+      onGoingGame.data?.game?.id || ""
+    );
+    toast.error("You have lost the game");
+  }
+}
+
+export { checkLoseConditionOnline, checkLoseConditionFour };

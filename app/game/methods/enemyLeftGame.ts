@@ -24,7 +24,10 @@ function enemyLeftGame(
   }) => void
 ) {
   if (canvas === null) return;
-  if (newBallPositionRef.current.x > canvas.width + 500) {
+  if (
+    newBallPositionRef.current.x > canvas.width + 500 ||
+    newBallPositionRef.current.x < -500
+  ) {
     handleSurrender(
       leftUser?.username || "",
       rightUser?.username || "",

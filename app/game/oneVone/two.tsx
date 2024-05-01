@@ -11,14 +11,14 @@ import CountDown from "../components/contDown";
 import { User } from "@/lib/types";
 import useGetGame from "../hooks/useGetGames";
 import Score from "../components/score";
-import changeScoreOnline from "../methods/changeScore";
+import { changeScoreOnline } from "../methods/changeScore";
 import enemyLeftGame from "../methods/enemyLeftGame";
-import movePaddlesOnline from "../methods/movePaddles";
-import checkLoseConditionOnline from "../methods/checkLoseCondition";
-import changeBallDirectionOnline from "../methods/changeBallDirection";
+import { movePaddlesOnline } from "../methods/movePaddles";
+import { checkLoseConditionOnline } from "../methods/checkLoseCondition";
+import { changeBallDirectionOnline } from "../methods/changeBallDirection";
 import draw from "../methods/draw";
 import checkCollisionWithHorizontalWalls from "../methods/checkCollisionWithHorizontalWalls";
-import moveBall from "../methods/moveBall";
+import { moveBall } from "../methods/moveBall";
 import { canvasParams } from "../types";
 import useEndGame from "../hooks/useEndGame";
 
@@ -138,8 +138,6 @@ const Two = ({ type }: { type: string }) => {
     document.addEventListener("keydown", handleKeyEvent, false);
     document.addEventListener("keyup", handleKeyEvent, false);
 
-    // 1 vs 1 online -------------------------------------------------------------------------------------
-
     // Cleanup function to remove the event listeners and stop the animation loop
     function returnFunction() {
       document.removeEventListener("keydown", handleKeyEvent, false);
@@ -258,7 +256,7 @@ const Two = ({ type }: { type: string }) => {
     const notif = newNotif();
     if (notif) {
       const parsedMessage = JSON.parse(notif.data);
-      toast.info(parsedMessage?.message);
+      // toast.info(parsedMessage?.message);
       const message = parsedMessage?.message.split(" ");
       if (message[0] === "/show") {
         handleStartGame(username, message[1]);
