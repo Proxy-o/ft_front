@@ -30,6 +30,7 @@ export type canvasParamsFour = {
   userRightBottom: User | undefined;
   newBallPositionRef: React.MutableRefObject<{ x: number; y: number }>;
   paddleLeftX: number;
+  paddleRightX: number;
   paddleWidth: number;
   paddleHeight: number;
   ballRadius: number;

@@ -58,7 +58,6 @@ function movePaddlesFour(
     paddleHeight,
   } = canvasParams;
   if (canvas === null) return;
-  console.log("myPaddleRef", myPaddleRef.current);
   if (upPressed) {
     if (myPaddleRef.current <= canvas.height / 2 - paddleHeight) {
       if (myPaddleRef.current - 6 < 0) {

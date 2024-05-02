@@ -16,7 +16,7 @@ import enemyLeftGame from "../methods/enemyLeftGame";
 import { movePaddlesOnline } from "../methods/movePaddles";
 import { checkLoseConditionOnline } from "../methods/checkLoseCondition";
 import { changeBallDirectionOnline } from "../methods/changeBallDirection";
-import draw from "../methods/draw";
+import { draw } from "../methods/draw";
 import checkCollisionWithHorizontalWalls from "../methods/checkCollisionWithHorizontalWalls";
 import { moveBall } from "../methods/moveBall";
 import { canvasParams } from "../types";

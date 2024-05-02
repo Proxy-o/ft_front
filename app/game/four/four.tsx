@@ -21,6 +21,7 @@ import { changeScoreFour } from "../methods/changeScore";
 import checkCollisionWithHorizontalWalls from "../methods/checkCollisionWithHorizontalWalls";
 import { moveBallFour } from "../methods/moveBall";
 import { movePaddlesFour } from "../methods/movePaddles";
+import { drawFour } from "../methods/draw";
 
 const Four = () => {
   const user_id = getCookie("user_id") || "";
@@ -123,12 +124,12 @@ const Four = () => {
       );
     }
 
-    const paddleHeight = 195;
+    const paddleHeight = 80;
     const paddleWidth = 10;
-    paddleRightTopYRef.current = 0; // (canvas.height - paddleHeight) / 4;
-    paddleLeftTopYRef.current = 0; // (canvas.height - paddleHeight) / 4;
-    paddleLeftBottomYRef.current = canvas.height - paddleHeight; //* 3) / 4;
-    paddleRightBottomYRef.current = canvas.height - paddleHeight; //* 3) / 4;
+    paddleRightTopYRef.current = (canvas.height - paddleHeight) / 4;
+    paddleLeftTopYRef.current = (canvas.height - paddleHeight) / 4;
+    paddleLeftBottomYRef.current = ((canvas.height - paddleHeight) * 3) / 4;
+    paddleRightBottomYRef.current = ((canvas.height - paddleHeight) * 3) / 4;
 
     if (username === rightUserTop?.username)
       myPaddleRef.current = paddleRightTopYRef.current;
@@ -182,6 +183,7 @@ const Four = () => {
       paddleLeftBottomYRef,
       newBallPositionRef,
       paddleLeftX,
+      paddleRightX,
       paddleWidth,
       paddleHeight,
       ballRadius,
@@ -193,81 +195,12 @@ const Four = () => {
       userRightTop: rightUserTop,
       userRightBottom: rightUserBottom,
     };
-    const drawBall = () => {
-      ctx.beginPath();
-      ctx.arc(
-        newBallPositionRef.current.x,
-        newBallPositionRef.current.y,
-        ballRadius,
-        0,
-        Math.PI * 2
-      );
-      ctx.fillStyle = "#0095DD";
-      ctx.fill();
-      ctx.closePath();
-    };
-
-    const drawRightPaddle = () => {
-      ctx.beginPath();
-      ctx.rect(
-        paddleRightX,
-        paddleRightTopYRef.current,
-        paddleWidth,
-        paddleHeight
-      );
-      ctx.fillStyle = "#0095DD";
-      ctx.fill();
-      ctx.closePath();
-    };
-
-    const drawLeftPaddle = () => {
-      ctx.beginPath();
-      ctx.rect(
-        paddleLeftX,
-        paddleLeftTopYRef.current,
-        paddleWidth,
-        paddleHeight
-      );
-      ctx.fillStyle = "#ee95DD";
-      ctx.fill();
-      ctx.closePath();
-    };
-
-    const drawLeftPaddleTwo = () => {
-      ctx.beginPath();
-      ctx.rect(
-        paddleLeftX,
-        paddleLeftBottomYRef.current,
-        paddleWidth,
-        paddleHeight
-      );
-      ctx.fillStyle = "#ee95DD";
-      ctx.fill();
-      ctx.closePath();
-    };
-
-    const drawRightPaddleTwo = () => {
-      ctx.beginPath();
-      ctx.rect(
-        paddleRightX,
-        paddleRightBottomYRef.current,
-        paddleWidth,
-        paddleHeight
-      );
-      ctx.fillStyle = "#0095DD";
-      ctx.fill();
-      ctx.closePath();
-    };
 
     const drawOnlineOne = () => {
       if (canvas === null) return;
       if (!gameAccepted) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      drawBall();
-      drawRightPaddle();
-      drawLeftPaddle();
-      drawLeftPaddleTwo();
-      drawRightPaddleTwo();
+      drawFour(canvasParams);
 
       // move paddles
       movePaddlesFour(
@@ -300,21 +233,21 @@ const Four = () => {
       );
 
       // Check for score
-      // checkLoseConditionFour(
-      //   canvas,
-      //   leftScoreRef,
-      //   rightScoreRef,
-      //   setGameAccepted,
-      //   setGameStarted,
-      //   setStartCountdown,
-      //   leftUserTop,
-      //   leftUserBottom,
-      //   rightUserTop,
-      //   rightUserBottom,
-      //   onGoingGame,
-      //   handleSurrenderFour,
-      //   username
-      // );
+      checkLoseConditionFour(
+        canvas,
+        leftScoreRef,
+        rightScoreRef,
+        setGameAccepted,
+        setGameStarted,
+        setStartCountdown,
+        leftUserTop,
+        leftUserBottom,
+        rightUserTop,
+        rightUserBottom,
+        onGoingGame,
+        handleSurrenderFour,
+        username
+      );
 
       // Change score
       changeScoreFour(
@@ -370,8 +303,6 @@ const Four = () => {
       const parsedMessage = JSON.parse(notif.data);
       // toast.info(parsedMessage?.message);
       const message = parsedMessage?.message.split(" ");
-      toast.info(parsedMessage?.message);
-
       if (message[0] === "/showFour") {
         const sender = message[1];
         const receiver = message[2];
@@ -417,7 +348,7 @@ const Four = () => {
         // setStartCountdown(true);
       } else if (message[0] === "/refetchPlayers") {
         onGoingGame.refetch();
-      } else if (message[0] === "/fourScore") {
+      } else if (message[0] === "/score") {
         isFirstTime.current = true;
         const score = parseInt(message[1]);
         const user = message[2];
@@ -448,8 +379,14 @@ const Four = () => {
         newBallPositionRef.current = {
           x: parseInt(message[1]),
           y: parseInt(message[2]),
-        }; // Update the ref
-        isFirstTime.current = false;
+        };
+        if (
+          canvasRef.current &&
+          (newBallPositionRef.current.x < canvasRef.current.width / 6 ||
+            newBallPositionRef.current.x > (canvasRef.current.width * 5) / 6)
+        ) {
+          isFirstTime.current = false;
+        }
         newAngleRef.current = parseFloat(message[3]); // Update the ref
       }
     }
@@ -472,7 +409,7 @@ const Four = () => {
   return (
     // <div className="w-full h-fit flex flex-col justify-center items-center">
 
-    <Card className="p-4   h-fit  flex flex-col mx-auto justify-center w-fit">
+    <Card className="p-4 h-fit  flex flex-col mx-auto justify-center w-fit">
       <h1 className="text-4xl">Ping Pong</h1>
       {gameAccepted && (
         <>
