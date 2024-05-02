@@ -84,48 +84,52 @@ function changeScoreFour(
     newBallPositionRef.current.x > canvas.width + 50
   ) {
     isFirstTime.current = true;
-    if (
-      username === leftUserTop?.username ||
-      username === leftUserBottom?.username
-    ) {
+    if (newBallPositionRef.current.x < -50) {
       rightScoreRef.current = rightScoreRef.current + 1;
       setRightScore(rightScoreRef.current);
-    } else {
+    } else if (newBallPositionRef.current.x > canvas.width + 50) {
       leftScoreRef.current = leftScoreRef.current + 1;
       setLeftScore(leftScoreRef.current);
     }
-    newBallPositionRef.current.x = canvas.width / 2;
-    newAngleRef.current = Math.random() * 2 * Math.PI;
-    while (
-      (newAngleRef.current > Math.PI / 6 &&
-        newAngleRef.current < (Math.PI * 5) / 6) ||
-      (newAngleRef.current > (Math.PI * 7) / 6 &&
-        newAngleRef.current < (Math.PI * 11) / 6)
+    if (
+      (username === leftUserTop?.username &&
+        newBallPositionRef.current.x < -50) ||
+      (username === rightUserTop?.username &&
+        newBallPositionRef.current.x > canvas.width + 50)
     ) {
+      newBallPositionRef.current.x = canvas.width / 2;
       newAngleRef.current = Math.random() * 2 * Math.PI;
-    }
-    handleChangeBallDirectionFour(
-      newBallPositionRef.current.x,
-      newBallPositionRef.current.y,
-      newAngleRef.current,
-      username,
-      leftUserTop?.username || "",
-      leftUserBottom?.username || "",
-      rightUserTop?.username || "",
-      rightUserBottom?.username || ""
-    );
+      while (
+        (newAngleRef.current > Math.PI / 6 &&
+          newAngleRef.current < (Math.PI * 5) / 6) ||
+        (newAngleRef.current > (Math.PI * 7) / 6 &&
+          newAngleRef.current < (Math.PI * 11) / 6)
+      ) {
+        newAngleRef.current = Math.random() * 2 * Math.PI;
+      }
+      handleChangeBallDirectionFour(
+        newBallPositionRef.current.x,
+        newBallPositionRef.current.y,
+        newAngleRef.current,
+        username,
+        leftUserTop?.username || "",
+        leftUserBottom?.username || "",
+        rightUserTop?.username || "",
+        rightUserBottom?.username || ""
+      );
 
-    handleEnemyScoreFour(
-      username === rightUserTop?.username ||
-        username === rightUserBottom?.username
-        ? leftScoreRef.current
-        : rightScoreRef.current,
-      username,
-      leftUserTop?.username || "",
-      leftUserBottom?.username || "",
-      rightUserTop?.username || "",
-      rightUserBottom?.username || ""
-    );
+      handleEnemyScoreFour(
+        username === rightUserTop?.username ||
+          username === rightUserBottom?.username
+          ? leftScoreRef.current
+          : rightScoreRef.current,
+        username,
+        leftUserTop?.username || "",
+        leftUserBottom?.username || "",
+        rightUserTop?.username || "",
+        rightUserBottom?.username || ""
+      );
+    }
   }
 }
 

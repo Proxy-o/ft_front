@@ -68,7 +68,7 @@ function checkLoseConditionFour(
   username: string
 ) {
   if (canvas === null) return;
-  if (rightScoreRef.current === 3) {
+  if (rightScoreRef.current === 3 || leftScoreRef.current === 3) {
     setGameAccepted(false);
     setGameStarted(false);
     setStartCountdown(false);
@@ -84,7 +84,19 @@ function checkLoseConditionFour(
         : "right",
       onGoingGame.data?.game?.id || ""
     );
-    toast.error("You have lost the game");
+    if (
+      rightScoreRef.current === 3 &&
+      (username === rightUserTop?.username ||
+        username === rightUserBottom?.username)
+    ) {
+      toast.success("You have won the game");
+    } else if (
+      leftScoreRef.current === 3 &&
+      (username === leftUserTop?.username ||
+        username === leftUserBottom?.username)
+    ) {
+      toast.error("You have lost the game");
+    }
   }
 }
 

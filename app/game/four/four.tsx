@@ -367,12 +367,6 @@ const Four = () => {
         setGameStarted(false);
         setStartCountdown(false);
         onGoingGame.refetch();
-        if (message[1] === username) {
-          toast.error("You have lost the game");
-        }
-        if (message[2] === username) {
-          toast.success("You have won the game");
-        }
         // } else if (message[0] === "/move") {
         //   PaddleRightYRef.current = parseInt(message[1]); // Update the ref
       } else if (message[0] === "/fourBallDirection") {
