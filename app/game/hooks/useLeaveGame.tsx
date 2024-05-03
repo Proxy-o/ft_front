@@ -1,6 +1,5 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
 
 const leaveGame = async () => {
   try {
@@ -15,7 +14,7 @@ export default function useLeaveGame() {
   const mutation = useMutation({
     mutationFn: () => leaveGame(),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["game"] });
+      queryClient.invalidateQueries({ queryKey: ["gameFour"] });
     },
   });
   return mutation;

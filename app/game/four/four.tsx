@@ -10,7 +10,6 @@ import CountDown from "../components/contDown";
 import { User } from "@/lib/types";
 import Score from "../components/score";
 import useGetFourGame from "../hooks/useGetFourGame";
-import useCreateGameFour from "../hooks/useCreateGameFour";
 import Players from "../components/players";
 import InviteFriends from "../components/inviteFriend";
 import { Card } from "@/components/ui/card";
@@ -40,7 +39,6 @@ const Four = () => {
   const newAngleRef = useRef(0); // Use a ref to store the current state
   const { mutate: surrenderGame } = useSurrenderGame();
   const { mutate: leaveGame } = useLeaveGame();
-  const { mutate: handleCreateGameFour } = useCreateGameFour(user_id || "0");
   const isFirstTime = useRef(true);
   const animationFrameId = useRef(0);
   const isAnimating = useRef(false);
@@ -339,12 +337,7 @@ const Four = () => {
       } else if (message[0] === "/start") {
         // invitaionsData.refetch();
         onGoingGame.refetch();
-        handleRefetchPlayers(
-          leftUserTop?.username || "",
-          leftUserBottom?.username || "",
-          rightUserTop?.username || "",
-          rightUserBottom?.username || ""
-        );
+        handleRefetchPlayers();
         isFirstTime.current = true;
         setGameAccepted(true);
         // setStartCountdown(true);
@@ -460,6 +453,7 @@ const Four = () => {
               <Button
                 onClick={() => {
                   leaveGame();
+                  handleRefetchPlayers();
                 }}
                 className="w-1/4 mt-4"
               >
@@ -495,18 +489,6 @@ const Four = () => {
           {onGoingGame.isLoading && (
             <h1 className="text-4xl">Waiting for the game to start</h1>
           )}
-        </>
-      )}
-      {!gameAccepted && (
-        <>
-          <h1 className="text-4xl">Create a game for four people to play!</h1>
-          <Button
-            onClick={() => {
-              handleCreateGameFour(username);
-            }}
-          >
-            Create Game
-          </Button>
         </>
       )}
     </div>

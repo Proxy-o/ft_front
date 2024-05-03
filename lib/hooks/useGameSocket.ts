@@ -185,21 +185,8 @@ export default function useGameSocket() {
     sendJsonMessage({ message: toSend });
   };
 
-  const handleRefetchPlayers = (
-    leftTop: string,
-    leftBottom: string,
-    rightTop: string,
-    rightBottom: string
-  ) => {
-    const toSend =
-      "/refetchPlayers " +
-      leftTop +
-      " " +
-      leftBottom +
-      " " +
-      rightTop +
-      " " +
-      rightBottom;
+  const handleRefetchPlayers = () => {
+    const toSend = "/refetchPlayers ";
     sendJsonMessage({ message: toSend });
   };
 

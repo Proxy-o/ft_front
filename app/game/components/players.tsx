@@ -1,9 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User } from "@/lib/types";
 import { Plus } from "lucide-react";
-import useSendInvitation from "../hooks/useSendInvitation";
-import { useState } from "react";
-import InviteFriends from "./inviteFriend";
 
 export default function Players(props: {
   topLeft: User;
@@ -12,9 +9,7 @@ export default function Players(props: {
   bottomRight: User;
   username: string;
 }) {
-  const { mutate: invite } = useSendInvitation();
   const { topLeft, topRight, bottomLeft, bottomRight } = props;
-  const [showInvite, setShowInvite] = useState(true);
 
   return (
     <>
