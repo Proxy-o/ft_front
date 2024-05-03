@@ -334,28 +334,28 @@ const Two = ({ type }: { type: string }) => {
             </div>
           )}
           {onGoingGame.isSuccess && !gameStarted && (
-            <div className="w-full h-fit flex flex-row justify-center items-center">
-            <Button
-              onClick={async () => {
-                handleStartGame(username, rightUser?.username || "");
-                setTimeout(() => {
-                  if (!isEnemyReadyRef.current) {
-                    toast.error("The enemy is not ready");
-                  }
-                }, 1000);
-              }}
-              className="w-1/2 mt-4"
+            <div className="w-full h-fit flex flex-row justify-center items-center gap-4">
+              <Button
+                onClick={async () => {
+                  handleStartGame(username, rightUser?.username || "");
+                  setTimeout(() => {
+                    if (!isEnemyReadyRef.current) {
+                      toast.error("The enemy is not ready");
+                    }
+                  }, 1000);
+                }}
+                className="w-1/4 mt-4"
               >
-              Start Game
-            </Button>
-            <Button
-            onClick={() => {
-              leaveGame();
-            }}
-            className="w-1/2 mt-4"
-            >
-            Leave Game
-          </Button>
+                Start Game
+              </Button>
+              <Button
+                onClick={() => {
+                  leaveGame();
+                }}
+                className="w-1/4 mt-4"
+              >
+                Leave Game
+              </Button>
             </div>
           )}
           {onGoingGame.isSuccess && gameStarted && (

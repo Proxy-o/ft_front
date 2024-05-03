@@ -405,8 +405,8 @@ const Four = () => {
   return (
     // <div className="w-full h-fit flex flex-col justify-center items-center">
 
-    <Card className="p-4 h-fit  flex flex-col mx-auto justify-center w-fit">
-      <h1 className="text-4xl">Ping Pong</h1>
+    <div className="p-4 h-fit  flex flex-col mx-auto justify-center w-full">
+      <h1 className="text-4xl mx-auto">Four Player Game</h1>
       {gameAccepted && (
         <>
           <br />
@@ -453,7 +453,7 @@ const Four = () => {
                     }
                   }, 1000);
                 }}
-                className="w-1/2 mt-4"
+                className="w-1/4 mt-4"
               >
                 Start Game
               </Button>
@@ -461,7 +461,7 @@ const Four = () => {
                 onClick={() => {
                   leaveGame();
                 }}
-                className="w-1/2 mt-4"
+                className="w-1/4 mt-4"
               >
                 Leave Game
               </Button>
@@ -495,9 +495,6 @@ const Four = () => {
           {onGoingGame.isLoading && (
             <h1 className="text-4xl">Waiting for the game to start</h1>
           )}
-          <div className=" w-fit h-fit">
-            <InviteFriends gameType="four" />
-          </div>
         </>
       )}
       {!gameAccepted && (
@@ -512,7 +509,7 @@ const Four = () => {
           </Button>
         </>
       )}
-    </Card>
+    </div>
   );
 };
 
