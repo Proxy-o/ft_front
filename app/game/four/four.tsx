@@ -22,6 +22,7 @@ import checkCollisionWithHorizontalWalls from "../methods/checkCollisionWithHori
 import { moveBallFour } from "../methods/moveBall";
 import { movePaddlesFour } from "../methods/movePaddles";
 import { drawFour } from "../methods/draw";
+import useLeaveGame from "../hooks/useLeaveGame";
 
 const Four = () => {
   const user_id = getCookie("user_id") || "";
@@ -38,6 +39,7 @@ const Four = () => {
   const newBallPositionRef = useRef({ x: 0, y: 0 }); // Use a ref to store the current state
   const newAngleRef = useRef(0); // Use a ref to store the current state
   const { mutate: surrenderGame } = useSurrenderGame();
+  const { mutate: leaveGame } = useLeaveGame();
   const { mutate: handleCreateGameFour } = useCreateGameFour(user_id || "0");
   const isFirstTime = useRef(true);
   const animationFrameId = useRef(0);
@@ -435,7 +437,7 @@ const Four = () => {
             </div>
           )}
           {onGoingGame.isSuccess && !gameStarted && (
-            <>
+            <div className="w-full h-fit flex flex-row justify-center items-center gap-4">
               <Button
                 onClick={async () => {
                   handleStartGameFour(
@@ -455,7 +457,15 @@ const Four = () => {
               >
                 Start Game
               </Button>
-            </>
+              <Button
+                onClick={() => {
+                  leaveGame();
+                }}
+                className="w-1/2 mt-4"
+              >
+                Leave Game
+              </Button>
+            </div>
           )}
           {onGoingGame.isSuccess && gameStarted && (
             <Button

@@ -21,6 +21,7 @@ import checkCollisionWithHorizontalWalls from "../methods/checkCollisionWithHori
 import { moveBall } from "../methods/moveBall";
 import { canvasParams } from "../types";
 import useEndGame from "../hooks/useEndGame";
+import useLeaveGame from "../hooks/useLeaveGame";
 
 const Two = ({ type }: { type: string }) => {
   const user_id = getCookie("user_id") || "";
@@ -34,6 +35,7 @@ const Two = ({ type }: { type: string }) => {
   const newBallPositionRef = useRef({ x: 0, y: 0 }); // Use a ref to store the current state
   const newAngleRef = useRef(0); // Use a ref to store the current state
   const { mutate: surrenderGame } = useSurrenderGame();
+  const { mutate: leaveGame } = useLeaveGame();
   const { mutate: endGame } = useEndGame();
   const isFirstTime = useRef(true);
   const animationFrameId = useRef(0);
@@ -332,6 +334,7 @@ const Two = ({ type }: { type: string }) => {
             </div>
           )}
           {onGoingGame.isSuccess && !gameStarted && (
+            <div className="w-full h-fit flex flex-row justify-center items-center">
             <Button
               onClick={async () => {
                 handleStartGame(username, rightUser?.username || "");
@@ -342,9 +345,18 @@ const Two = ({ type }: { type: string }) => {
                 }, 1000);
               }}
               className="w-1/2 mt-4"
-            >
+              >
               Start Game
             </Button>
+            <Button
+            onClick={() => {
+              leaveGame();
+            }}
+            className="w-1/2 mt-4"
+            >
+            Leave Game
+          </Button>
+            </div>
           )}
           {onGoingGame.isSuccess && gameStarted && (
             <Button
