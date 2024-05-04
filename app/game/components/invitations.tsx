@@ -45,7 +45,15 @@ const Invitations = ({ mode }: { mode: string }) => {
   };
 
   useEffect(() => {
-    invitationsData.refetch();
+    const notif = newNotif();
+    if (notif) {
+      const parsedMessage = JSON.parse(notif.data);
+      console.log(parsedMessage?.message);
+      const message = parsedMessage?.message.split(" ");
+      if (message[0] === "/notif") {
+        invitationsData.refetch();
+      }
+    }
   }, [newNotif()?.data]);
 
   // Separate invitations by type
