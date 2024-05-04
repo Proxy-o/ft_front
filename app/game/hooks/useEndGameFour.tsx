@@ -1,7 +1,7 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-const endGame = async (data: {
+const endGameFour = async (data: {
   winner: string;
   winnerScore: number;
   loser: string;
@@ -9,7 +9,7 @@ const endGame = async (data: {
 }) => {
   try {
     const { winner, winnerScore, loser, loserScore } = data;
-    const res = await axiosInstance.post("/game/endGame", {
+    const res = await axiosInstance.post("/game/endGameFour", {
       winner,
       winnerScore,
       loser,
@@ -20,7 +20,7 @@ const endGame = async (data: {
   }
 };
 
-export default function useEndGame() {
+export default function useEndGameFour() {
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: (data: {
@@ -28,9 +28,9 @@ export default function useEndGame() {
       winnerScore: number;
       loser: string;
       loserScore: number;
-    }) => endGame(data),
+    }) => endGameFour(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["game"] });
+      queryClient.invalidateQueries({ queryKey: ["gameFour"] });
     },
   });
   return mutation;

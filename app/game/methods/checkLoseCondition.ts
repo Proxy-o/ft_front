@@ -25,7 +25,7 @@ function checkLoseConditionOnline(
   }) => void
 ) {
   if (canvas === null) return;
-  if (rightScoreRef.current === 3) {
+  if (rightScoreRef.current === 10) {
     setGameAccepted(false);
     setGameStarted(false);
     setStartCountdown(false);
@@ -55,47 +55,51 @@ function checkLoseConditionFour(
   leftUserBottom: User | undefined,
   rightUserTop: User | undefined,
   rightUserBottom: User | undefined,
-  onGoingGame: UseQueryResult<{ game: any }, Error>,
-  handleSurrenderFour: (
-    username: string,
-    leftUserTop: string,
-    leftUserBottom: string,
-    rightUserTop: string,
-    rightUserBottom: string,
-    winner: string,
-    game_id: string
-  ) => void,
+  endGameFour: (data: {
+    winner: string;
+    winnerScore: number;
+    loser: string;
+    loserScore: number;
+  }) => void,
   username: string
 ) {
   if (canvas === null) return;
-  if (rightScoreRef.current === 3 || leftScoreRef.current === 3) {
+  if (rightScoreRef.current === 10 || leftScoreRef.current === 10) {
     setGameAccepted(false);
     setGameStarted(false);
     setStartCountdown(false);
-    handleSurrenderFour(
-      username,
-      leftUserTop?.username || "",
-      leftUserBottom?.username || "",
-      rightUserTop?.username || "",
-      rightUserBottom?.username || "",
-      username === rightUserTop?.username ||
+
+    if (rightScoreRef.current === 10) {
+      if (username === leftUserTop?.username) {
+        endGameFour({
+          winner: rightUserTop?.id || "",
+          winnerScore: rightScoreRef.current,
+          loser: leftUserTop?.id || "",
+          loserScore: leftScoreRef.current,
+        });
+      }
+      if (
+        username === rightUserTop?.username ||
         username === rightUserBottom?.username
-        ? "left"
-        : "right",
-      onGoingGame.data?.game?.id || ""
-    );
-    if (
-      rightScoreRef.current === 3 &&
-      (username === rightUserTop?.username ||
-        username === rightUserBottom?.username)
-    ) {
-      toast.success("You have won the game");
-    } else if (
-      leftScoreRef.current === 3 &&
-      (username === leftUserTop?.username ||
-        username === leftUserBottom?.username)
-    ) {
-      toast.error("You have lost the game");
+      ) {
+        toast.success("You have won the game");
+      }
+    }
+    if (leftScoreRef.current === 10) {
+      if (username === rightUserTop?.username) {
+        endGameFour({
+          winner: leftUserTop?.id || "",
+          winnerScore: leftScoreRef.current,
+          loser: rightUserTop?.id || "",
+          loserScore: rightScoreRef.current,
+        });
+      }
+      if (
+        username === leftUserTop?.username ||
+        username === leftUserBottom?.username
+      ) {
+        toast.error("You have lost the game");
+      }
     }
   }
 }

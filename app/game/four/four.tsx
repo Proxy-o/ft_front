@@ -22,6 +22,7 @@ import { moveBallFour } from "../methods/moveBall";
 import { movePaddlesFour } from "../methods/movePaddles";
 import { drawFour } from "../methods/draw";
 import useLeaveGame from "../hooks/useLeaveGame";
+import useEndGameFour from "../hooks/useEndGameFour";
 
 const Four = () => {
   const user_id = getCookie("user_id") || "";
@@ -39,6 +40,8 @@ const Four = () => {
   const newAngleRef = useRef(0); // Use a ref to store the current state
   const { mutate: surrenderGame } = useSurrenderGame();
   const { mutate: leaveGame } = useLeaveGame();
+  const { mutate: endGameFour } = useEndGameFour();
+
   const isFirstTime = useRef(true);
   const animationFrameId = useRef(0);
   const isAnimating = useRef(false);
@@ -244,8 +247,7 @@ const Four = () => {
         leftUserBottom,
         rightUserTop,
         rightUserBottom,
-        onGoingGame,
-        handleSurrenderFour,
+        endGameFour,
         username
       );
 
