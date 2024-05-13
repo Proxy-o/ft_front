@@ -57,6 +57,7 @@ export default function ChatList() {
                     <ChatFriendCard
                       friend={friend}
                       setReceiverId={setReceiverId}
+                      showChat={true}
                     />
                   </div>
                 );

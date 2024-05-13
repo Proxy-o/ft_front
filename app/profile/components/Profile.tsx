@@ -48,7 +48,7 @@ export default function Profile({ id }: { id: string }) {
     <div className="relative lg:flex justify-center gap-4 p-4 ">
       {isSuccess && (
         <>
-          <div className="flex flex-col gap-4 mb-4 sm:min-w-[40rem]">
+          <div className="flex flex-col gap-4 mb-4 sm:min-w-[40rem] ">
             <UserInfo
               user={data}
               canEdit={canEdit}
@@ -61,7 +61,7 @@ export default function Profile({ id }: { id: string }) {
               // get the high of the screen and put it in the bottom
               <div className="relative  " ref={chatRef}>
                 <XCircle
-                  className="absolute z-50 top-2 right-2 text-red-600 hover:cursor-pointer hover:scale-[1.05] transition duration-300 ease-in-out"
+                  className="absolute z-40 top-2 right-2 text-red-600 hover:cursor-pointer hover:scale-[1.05] transition duration-300 ease-in-out"
                   onClick={() => setIsChatOpen(false)}
                 />
                 <ChatCard sender={sender} receiver={data} />

@@ -7,9 +7,11 @@ import React from "react";
 export default function ChatFriendCard({
   friend,
   setReceiverId,
+  showChat,
 }: {
   friend: User;
   setReceiverId: React.Dispatch<React.SetStateAction<number>>;
+  showChat?: boolean;
 }) {
   const router = useRouter();
 
@@ -38,15 +40,17 @@ export default function ChatFriendCard({
         </p>
       </div>
       <div className="flex justify-center items-center ">
-        <div className="relative flex justify-center">
-          {friend.has_unread_messages && (
-            <div className="bg-primary size-2 rounded-full  absolute z-50 animate-pulse right-0" />
-          )}
-          <MessageCircle
-            className=" hover:scale-110"
-            onClick={() => setReceiverId(parseInt(friend.id))}
-          ></MessageCircle>
-        </div>
+        {showChat && (
+          <div className="relative flex justify-center">
+            {friend.has_unread_messages && (
+              <div className="bg-primary size-2 rounded-full  absolute z-50 animate-pulse right-0" />
+            )}
+            <MessageCircle
+              className=" hover:scale-110"
+              onClick={() => setReceiverId(parseInt(friend.id))}
+            ></MessageCircle>
+          </div>
+        )}
         <User2
           onClick={handleViewProfile}
           className="text-green-600/70 ml-2 hover:scale-110"
