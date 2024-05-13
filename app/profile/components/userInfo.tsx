@@ -38,9 +38,6 @@ export default function UserInfo({
   blocked_by_current_user: boolean;
   setChatOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const [visible, setVisible] = useState(true);
-  const [status, setStatus] = useState(user.status);
-  const { mutate: editUser } = useEditUser();
   const { mutate: addFriend } = useAddFriend();
   const { mutate: unfriend } = useUnfriend();
   const { mutate: block } = useBlock();
@@ -57,12 +54,6 @@ export default function UserInfo({
     (req: any) => req.to_user.id == current_user_id
   )?.id;
 
-  const handleSubmit = () => {
-    if (status !== user.status) {
-      editUser({ id, status });
-    }
-    setVisible(!visible);
-  };
   return (
     <Card className="relative rounded-lg p-6 md:flex max-w-7xl">
       <div className="absolute top-0 right-0 p-2">
@@ -95,34 +86,7 @@ export default function UserInfo({
       </div>
       <div className=" flex-1 px-6">
         <div className="text-2xl font-bold mt-4 sm:mt-0">{user.username}</div>
-        {canEdit && (
-          <div className="flex text-zinc-300 mt-4 items-center">
-            <p className={cn(!visible && "hidden")}>
-              {status || "Enter status"}
-            </p>
-            <Input
-              className={cn(visible && "hidden relative")}
-              onChange={(e) => setStatus(e.target.value)}
-              defaultValue={status}
-            />
-            <Check
-              className={cn(
-                visible && "hidden",
-                "hover:cursor-pointer hover:bg-primary m-2 bg-secondary p-1 absolute right-12 rounded-sm"
-              )}
-              size={30}
-              onClick={handleSubmit}
-            />
-            <SquarePen
-              onClick={() => setVisible(!visible)}
-              className={cn(
-                !visible && "hidden",
-                "ml-2 hover:cursor-pointer hover:text-zinc-300 hover:bg-secondary p-1 rounded-sm"
-              )}
-              size={30}
-            />
-          </div>
-        )}
+
         <div className="flex justify-around items-center w-full mt-6">
           <TooltipProvider delayDuration={0}>
             <Tooltip delayDuration={0}>
