@@ -9,13 +9,15 @@ import {
 } from "@/components/ui/table";
 import { Card } from "@/components/ui/card";
 import { Flame, MinusSquare, PlusSquare, Square } from "lucide-react";
-import { cn } from "@/lib/utils";
 import useGetGames from "../hooks/useGetGames";
 import { Game } from "../types";
+import useIsWinner from "../hooks/useIsWinner";
+import { cn } from "@/lib/utils";
+import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 
 export default function GamesTable({ id }: { id: string }) {
-  const username = "othmane ait taleb";
   const { data: games, isSuccess } = useGetGames(id);
+  const isWinner = useIsWinner();
 
   return (
     isSuccess && (
@@ -35,23 +37,109 @@ export default function GamesTable({ id }: { id: string }) {
               {games.map((game: Game, index: number) => (
                 <TableRow key={index}>
                   <TableCell className="text-center">
-                    <Flame className="text-yellow-400" />
+                    <Flame
+                      className={cn(
+                        game.winner?.id == id
+                          ? "text-yellow-500"
+                          : "text-red-500"
+                      )}
+                    />
                   </TableCell>
                   <TableCell className="font-medium">
-                    <div>
-                      <div className=" flex items-center">
-                        {game.user1.username}
+                    <div className="flex gap-2  items-center">
+                      <div className=" flex items-center   ">
+                        <div className="flex   ">
+                          <Avatar className="  size-4">
+                            <AvatarImage
+                              src={game.user1.avatar}
+                              alt="profile image"
+                              className="rounded-full size-1"
+                            />
+                            <AvatarFallback className="rounded-sm size-4 text-xs bg-primary">
+                              {game.user1.username.slice(0, 1)}
+                            </AvatarFallback>
+                          </Avatar>
+                          <h1
+                            className={cn(
+                              game.user1.id == id &&
+                                (game.winner?.id == id
+                                  ? "text-yellow-300 "
+                                  : "text-red-300 "),
+                              "w-fit"
+                            )}
+                          >
+                            {game.user1.username}
+                          </h1>
+                        </div>
+                        <div className="flex">
+                          <Avatar className="  size-4">
+                            <AvatarImage
+                              src={game.user3?.avatar}
+                              alt="profile image"
+                              className="rounded-full size-1"
+                            />
+                            <AvatarFallback className="rounded-sm size-4 text-xs bg-primary">
+                              {game.user3?.username.slice(0, 1)}
+                            </AvatarFallback>
+                          </Avatar>
+                          <h1
+                            className={cn(
+                              game.user3?.id == id &&
+                                (game.winner?.id == id
+                                  ? "text-yellow-300 "
+                                  : "text-red-300 ")
+                            )}
+                          >
+                            {game.user3?.username}
+                          </h1>
+                        </div>
                       </div>
-                      <div className=" flex items-center">
-                        {game.user3?.username}
-                      </div>
-                    </div>
-                    <div>
-                      <div className=" flex items-center">
-                        {game.user2?.username}
-                      </div>
-                      <div className=" flex items-center">
-                        {game.user4?.username}
+                      <h1 className="mr-3">VS</h1>
+                      <div className=" flex items-center gap-1">
+                        <div className="flex">
+                          <Avatar className="  size-4">
+                            <AvatarImage
+                              src={game.user2.avatar}
+                              alt="profile image"
+                              className="rounded-full size-1"
+                            />
+                            <AvatarFallback className="rounded-sm size-4 text-xs bg-primary">
+                              {game.user2.username.slice(0, 1)}
+                            </AvatarFallback>
+                          </Avatar>
+                          <h1
+                            className={cn(
+                              game.user2.id == id &&
+                                (game.winner?.id == id
+                                  ? "text-yellow-300 "
+                                  : "text-red-300 ")
+                            )}
+                          >
+                            {game.user2.username}
+                          </h1>
+                        </div>
+                        <div className="flex">
+                          <Avatar className="  size-4">
+                            <AvatarImage
+                              src={game.user4?.avatar}
+                              alt="profile image"
+                              className="rounded-full size-1"
+                            />
+                            <AvatarFallback className="rounded-sm size-4 text-xs bg-primary">
+                              {game.user4?.username.slice(0, 1)}
+                            </AvatarFallback>
+                          </Avatar>
+                          <h1
+                            className={cn(
+                              game.user4?.id == id &&
+                                (game.winner?.id == id
+                                  ? "text-yellow-300 "
+                                  : "text-red-300 ")
+                            )}
+                          >
+                            {game.user4?.username}
+                          </h1>
+                        </div>
                       </div>
                     </div>
                   </TableCell>
@@ -60,7 +148,7 @@ export default function GamesTable({ id }: { id: string }) {
                       <div>{game.user1_score}</div>
                       <div>{game.user2_score}</div>
                     </div>
-                    {game.winner?.id === id && game.play === "win" ? (
+                    {isWinner(game, id) ? (
                       <PlusSquare className="text-green-500" />
                     ) : (
                       <MinusSquare className="text-red-500" />

@@ -9,10 +9,8 @@ export interface Game {
   user1_score?: number;
   user2: User;
   user2_score?: number;
-  user3: User;
-  user3_score?: number;
+  user3: User?;
   user4: User?;
-  user4_score?: number;
   winner: User?;
   timestamp: string;
 }
