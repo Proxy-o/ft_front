@@ -91,6 +91,21 @@ export default function EditProfile({ user }: { user: User }) {
                   }
                 />
               </div>
+              <div className="space-y-2">
+                <Label htmlFor="email">password</Label>
+                <Input
+                  defaultValue={user.password}
+                  id="password"
+                  placeholder="Enter your password"
+                  type="password"
+                  onChange={(e) =>
+                    setUserInfo({
+                      ...userInfo,
+                      password: e.target.value,
+                    })
+                  }
+                />
+              </div>
             </CardContent>
             <CardFooter>
               <DialogClose
