@@ -8,7 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Card } from "@/components/ui/card";
-import { Flame, MinusSquare, PlusSquare, Square } from "lucide-react";
+import { Flame, MinusSquare, PlusSquare } from "lucide-react";
 import useGetGames from "../hooks/useGetGames";
 import { Game } from "../types";
 import useIsWinner from "../hooks/useIsWinner";
@@ -34,131 +34,139 @@ export default function GamesTable({ id }: { id: string }) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {games.map((game: Game, index: number) => (
-                <TableRow key={index}>
-                  <TableCell className="text-center">
-                    <Flame
-                      className={cn(
-                        game.winner?.id == id
-                          ? "text-yellow-500"
-                          : "text-red-500"
+              {games.length > 0 ? (
+                games.map((game: Game, index: number) => (
+                  <TableRow key={index}>
+                    <TableCell className="text-center">
+                      <Flame
+                        className={cn(
+                          game.winner?.id == id
+                            ? "text-yellow-500"
+                            : "text-red-500"
+                        )}
+                      />
+                    </TableCell>
+                    <TableCell className="font-medium">
+                      <div className="flex gap-2  items-center">
+                        <div className=" flex items-center   ">
+                          <div className="flex   ">
+                            <Avatar className="  size-4">
+                              <AvatarImage
+                                src={game.user1.avatar}
+                                alt="profile image"
+                                className="rounded-full size-1"
+                              />
+                              <AvatarFallback className="rounded-sm size-4 text-xs bg-primary">
+                                {game.user1.username.slice(0, 1)}
+                              </AvatarFallback>
+                            </Avatar>
+                            <h1
+                              className={cn(
+                                game.user1.id == id &&
+                                  (game.winner?.id == id
+                                    ? "text-yellow-300 "
+                                    : "text-red-300 "),
+                                "w-fit"
+                              )}
+                            >
+                              {game.user1.username}
+                            </h1>
+                          </div>
+                          <div className="flex">
+                            <Avatar className="  size-4">
+                              <AvatarImage
+                                src={game.user3?.avatar}
+                                alt="profile image"
+                                className="rounded-full size-1"
+                              />
+                              <AvatarFallback className="rounded-sm size-4 text-xs bg-primary">
+                                {game.user3?.username.slice(0, 1)}
+                              </AvatarFallback>
+                            </Avatar>
+                            <h1
+                              className={cn(
+                                game.user3?.id == id &&
+                                  (game.winner?.id == id
+                                    ? "text-yellow-300 "
+                                    : "text-red-300 ")
+                              )}
+                            >
+                              {game.user3?.username}
+                            </h1>
+                          </div>
+                        </div>
+                        <h1 className="mr-3">VS</h1>
+                        <div className=" flex items-center gap-1">
+                          <div className="flex">
+                            <Avatar className="  size-4">
+                              <AvatarImage
+                                src={game.user2.avatar}
+                                alt="profile image"
+                                className="rounded-full size-1"
+                              />
+                              <AvatarFallback className="rounded-sm size-4 text-xs bg-primary">
+                                {game.user2.username.slice(0, 1)}
+                              </AvatarFallback>
+                            </Avatar>
+                            <h1
+                              className={cn(
+                                game.user2.id == id &&
+                                  (game.winner?.id == id
+                                    ? "text-yellow-300 "
+                                    : "text-red-300 ")
+                              )}
+                            >
+                              {game.user2.username}
+                            </h1>
+                          </div>
+                          <div className="flex">
+                            <Avatar className="  size-4">
+                              <AvatarImage
+                                src={game.user4?.avatar}
+                                alt="profile image"
+                                className="rounded-full size-1"
+                              />
+                              <AvatarFallback className="rounded-sm size-4 text-xs bg-primary">
+                                {game.user4?.username.slice(0, 1)}
+                              </AvatarFallback>
+                            </Avatar>
+                            <h1
+                              className={cn(
+                                game.user4?.id == id &&
+                                  (game.winner?.id == id
+                                    ? "text-yellow-300 "
+                                    : "text-red-300 ")
+                              )}
+                            >
+                              {game.user4?.username}
+                            </h1>
+                          </div>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell className="flex items-center">
+                      <div className="mr-2">
+                        <div>{game.user1_score}</div>
+                        <div>{game.user2_score}</div>
+                      </div>
+                      {isWinner(game, id) ? (
+                        <PlusSquare className="text-green-500" />
+                      ) : (
+                        <MinusSquare className="text-red-500" />
                       )}
-                    />
-                  </TableCell>
-                  <TableCell className="font-medium">
-                    <div className="flex gap-2  items-center">
-                      <div className=" flex items-center   ">
-                        <div className="flex   ">
-                          <Avatar className="  size-4">
-                            <AvatarImage
-                              src={game.user1.avatar}
-                              alt="profile image"
-                              className="rounded-full size-1"
-                            />
-                            <AvatarFallback className="rounded-sm size-4 text-xs bg-primary">
-                              {game.user1.username.slice(0, 1)}
-                            </AvatarFallback>
-                          </Avatar>
-                          <h1
-                            className={cn(
-                              game.user1.id == id &&
-                                (game.winner?.id == id
-                                  ? "text-yellow-300 "
-                                  : "text-red-300 "),
-                              "w-fit"
-                            )}
-                          >
-                            {game.user1.username}
-                          </h1>
-                        </div>
-                        <div className="flex">
-                          <Avatar className="  size-4">
-                            <AvatarImage
-                              src={game.user3?.avatar}
-                              alt="profile image"
-                              className="rounded-full size-1"
-                            />
-                            <AvatarFallback className="rounded-sm size-4 text-xs bg-primary">
-                              {game.user3?.username.slice(0, 1)}
-                            </AvatarFallback>
-                          </Avatar>
-                          <h1
-                            className={cn(
-                              game.user3?.id == id &&
-                                (game.winner?.id == id
-                                  ? "text-yellow-300 "
-                                  : "text-red-300 ")
-                            )}
-                          >
-                            {game.user3?.username}
-                          </h1>
-                        </div>
-                      </div>
-                      <h1 className="mr-3">VS</h1>
-                      <div className=" flex items-center gap-1">
-                        <div className="flex">
-                          <Avatar className="  size-4">
-                            <AvatarImage
-                              src={game.user2.avatar}
-                              alt="profile image"
-                              className="rounded-full size-1"
-                            />
-                            <AvatarFallback className="rounded-sm size-4 text-xs bg-primary">
-                              {game.user2.username.slice(0, 1)}
-                            </AvatarFallback>
-                          </Avatar>
-                          <h1
-                            className={cn(
-                              game.user2.id == id &&
-                                (game.winner?.id == id
-                                  ? "text-yellow-300 "
-                                  : "text-red-300 ")
-                            )}
-                          >
-                            {game.user2.username}
-                          </h1>
-                        </div>
-                        <div className="flex">
-                          <Avatar className="  size-4">
-                            <AvatarImage
-                              src={game.user4?.avatar}
-                              alt="profile image"
-                              className="rounded-full size-1"
-                            />
-                            <AvatarFallback className="rounded-sm size-4 text-xs bg-primary">
-                              {game.user4?.username.slice(0, 1)}
-                            </AvatarFallback>
-                          </Avatar>
-                          <h1
-                            className={cn(
-                              game.user4?.id == id &&
-                                (game.winner?.id == id
-                                  ? "text-yellow-300 "
-                                  : "text-red-300 ")
-                            )}
-                          >
-                            {game.user4?.username}
-                          </h1>
-                        </div>
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell className="flex items-center">
-                    <div className="mr-2">
-                      <div>{game.user1_score}</div>
-                      <div>{game.user2_score}</div>
-                    </div>
-                    {isWinner(game, id) ? (
-                      <PlusSquare className="text-green-500" />
-                    ) : (
-                      <MinusSquare className="text-red-500" />
-                    )}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    {new Date(game.timestamp).toLocaleDateString()}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      {new Date(game.timestamp).toLocaleDateString()}
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow>
+                  <TableCell colSpan={4} className="text-center  text-xl">
+                    No games man 😢
                   </TableCell>
                 </TableRow>
-              ))}
+              )}
             </TableBody>
           </Table>
         </Card>
