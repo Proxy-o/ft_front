@@ -14,6 +14,7 @@ import { Game } from "../types";
 import useIsWinner from "../hooks/useIsWinner";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
+import Link from "next/link";
 
 export default function GamesTable({ id }: { id: string }) {
   const { data: games, isSuccess } = useGetGames(id);
@@ -49,7 +50,10 @@ export default function GamesTable({ id }: { id: string }) {
                     <TableCell className="font-medium">
                       <div className="flex gap-2  items-center">
                         <div className=" flex items-center   ">
-                          <div className="flex   ">
+                          <Link
+                            className="flex"
+                            href={`/profile/${game.user1.id}`}
+                          >
                             <Avatar className="  size-4">
                               <AvatarImage
                                 src={game.user1.avatar}
@@ -71,8 +75,11 @@ export default function GamesTable({ id }: { id: string }) {
                             >
                               {game.user1.username}
                             </h1>
-                          </div>
-                          <div className="flex">
+                          </Link>
+                          <Link
+                            className="flex"
+                            href={`/profile/${game.user3?.id}`}
+                          >
                             <Avatar className="  size-4">
                               <AvatarImage
                                 src={game.user3?.avatar}
@@ -93,11 +100,14 @@ export default function GamesTable({ id }: { id: string }) {
                             >
                               {game.user3?.username}
                             </h1>
-                          </div>
+                          </Link>
                         </div>
                         <h1 className="mr-3">VS</h1>
                         <div className=" flex items-center gap-1">
-                          <div className="flex">
+                          <Link
+                            className="flex"
+                            href={`/profile/${game.user2.id}`}
+                          >
                             <Avatar className="  size-4">
                               <AvatarImage
                                 src={game.user2.avatar}
@@ -118,8 +128,11 @@ export default function GamesTable({ id }: { id: string }) {
                             >
                               {game.user2.username}
                             </h1>
-                          </div>
-                          <div className="flex">
+                          </Link>
+                          <Link
+                            className="flex"
+                            href={`/profile/${game.user4?.id}`}
+                          >
                             <Avatar className="  size-4">
                               <AvatarImage
                                 src={game.user4?.avatar}
@@ -140,7 +153,7 @@ export default function GamesTable({ id }: { id: string }) {
                             >
                               {game.user4?.username}
                             </h1>
-                          </div>
+                          </Link>
                         </div>
                       </div>
                     </TableCell>
