@@ -81,7 +81,7 @@ export default function ChatCard({
     <div className=" flex flex-col h-screen border-r w-full  relative ">
       <Link
         className="  flex justify-end md:justify-start ml-2 p-2 shadow-2xl "
-        href={`profile/${receiver.id}`}
+        href={`/profile/${receiver.id}`}
       >
         <Avatar className=" mr-2 relative">
           {receiver.status === "online" && (
