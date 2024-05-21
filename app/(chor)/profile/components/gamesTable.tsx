@@ -49,16 +49,16 @@ export default function GamesTable({ id }: { id: string }) {
                     </TableCell>
                     <TableCell className="font-medium">
                       <div className="flex gap-2  items-center">
-                        <div className=" flex items-center   ">
+                        <div className=" flex items-center flex-col ">
                           <Link
                             className="flex"
                             href={`/profile/${game.user1.id}`}
                           >
-                            <Avatar className="  size-4">
+                            <Avatar className=" mr-1 size-4 ">
                               <AvatarImage
                                 src={game.user1.avatar}
                                 alt="profile image"
-                                className="rounded-full size-1"
+                                className="rounded-full size-4 "
                               />
                               <AvatarFallback className="rounded-sm size-4 text-xs bg-primary">
                                 {game.user1.username.slice(0, 1)}
@@ -76,43 +76,45 @@ export default function GamesTable({ id }: { id: string }) {
                               {game.user1.username}
                             </h1>
                           </Link>
-                          <Link
-                            className="flex"
-                            href={`/profile/${game.user3?.id}`}
-                          >
-                            <Avatar className="  size-4">
-                              <AvatarImage
-                                src={game.user3?.avatar}
-                                alt="profile image"
-                                className="rounded-full size-1"
-                              />
-                              <AvatarFallback className="rounded-sm size-4 text-xs bg-primary">
-                                {game.user3?.username.slice(0, 1)}
-                              </AvatarFallback>
-                            </Avatar>
-                            <h1
-                              className={cn(
-                                game.user3?.id == id &&
-                                  (game.winner?.id == id
-                                    ? "text-yellow-300 "
-                                    : "text-red-300 ")
-                              )}
+                          {game.user3 && (
+                            <Link
+                              className="flex"
+                              href={`/profile/${game.user3?.id}`}
                             >
-                              {game.user3?.username}
-                            </h1>
-                          </Link>
+                              <Avatar className=" mr-1 size-4">
+                                <AvatarImage
+                                  src={game.user3?.avatar}
+                                  alt="profile image"
+                                  className="rounded-full size-4 mr-2"
+                                />
+                                <AvatarFallback className="rounded-sm size-4 text-xs bg-primary">
+                                  {game.user3?.username.slice(0, 1)}
+                                </AvatarFallback>
+                              </Avatar>
+                              <h1
+                                className={cn(
+                                  game.user3?.id == id &&
+                                    (game.winner?.id == id
+                                      ? "text-yellow-300 "
+                                      : "text-red-300 ")
+                                )}
+                              >
+                                {game.user3?.username}
+                              </h1>
+                            </Link>
+                          )}
                         </div>
-                        <h1 className="mr-3">VS</h1>
-                        <div className=" flex items-center gap-1">
+                        <h1 className="mx-3">VS</h1>
+                        <div className=" flex items-center flex-col ">
                           <Link
                             className="flex"
                             href={`/profile/${game.user2.id}`}
                           >
-                            <Avatar className="  size-4">
+                            <Avatar className=" mr-1 size-4">
                               <AvatarImage
                                 src={game.user2.avatar}
                                 alt="profile image"
-                                className="rounded-full size-1"
+                                className="rounded-full size-4 mr-2"
                               />
                               <AvatarFallback className="rounded-sm size-4 text-xs bg-primary">
                                 {game.user2.username.slice(0, 1)}
@@ -129,31 +131,33 @@ export default function GamesTable({ id }: { id: string }) {
                               {game.user2.username}
                             </h1>
                           </Link>
-                          <Link
-                            className="flex"
-                            href={`/profile/${game.user4?.id}`}
-                          >
-                            <Avatar className="  size-4">
-                              <AvatarImage
-                                src={game.user4?.avatar}
-                                alt="profile image"
-                                className="rounded-full size-1"
-                              />
-                              <AvatarFallback className="rounded-sm size-4 text-xs bg-primary">
-                                {game.user4?.username.slice(0, 1)}
-                              </AvatarFallback>
-                            </Avatar>
-                            <h1
-                              className={cn(
-                                game.user4?.id == id &&
-                                  (game.winner?.id == id
-                                    ? "text-yellow-300 "
-                                    : "text-red-300 ")
-                              )}
+                          {game.user4 && (
+                            <Link
+                              className="flex"
+                              href={`/profile/${game.user4?.id}`}
                             >
-                              {game.user4?.username}
-                            </h1>
-                          </Link>
+                              <Avatar className=" mr-1 size-4">
+                                <AvatarImage
+                                  src={game.user4?.avatar}
+                                  alt="profile image"
+                                  className="rounded-full size-4 mr-2"
+                                />
+                                <AvatarFallback className="rounded-sm size-4 text-xs bg-primary">
+                                  {game.user4?.username.slice(0, 1)}
+                                </AvatarFallback>
+                              </Avatar>
+                              <h1
+                                className={cn(
+                                  game.user4?.id == id &&
+                                    (game.winner?.id == id
+                                      ? "text-yellow-300 "
+                                      : "text-red-300 ")
+                                )}
+                              >
+                                {game.user4?.username}
+                              </h1>
+                            </Link>
+                          )}
                         </div>
                       </div>
                     </TableCell>

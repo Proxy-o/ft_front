@@ -10,11 +10,13 @@ import {
 import useVerifyOtp from "./hooks/useVerifyOtp";
 import { Button } from "@/components/ui/button";
 import getCookie from "@/lib/functions/getCookie";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
   const [value, setValue] = React.useState("");
   const { mutate } = useVerifyOtp();
   const user_id = getCookie("user_id");
+  const router = useRouter();
 
   React.useEffect(() => {
     if (value.length === 6) {
@@ -43,6 +45,7 @@ export default function Page() {
           <InputOTPSlot index={5} />
         </InputOTPGroup>
       </InputOTP>
+      <Button onClick={() => router.push("/login")}>Go back</Button>
     </div>
   );
 }
