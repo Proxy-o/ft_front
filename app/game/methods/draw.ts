@@ -1,8 +1,7 @@
 import { canvasParams, canvasParamsFour } from "../types";
 
-function draw(canvasParams: canvasParams) {
+function draw(canvasParams: canvasParams, ctx: CanvasRenderingContext2D) {
   const {
-    ctx,
     paddleLeftYRef,
     paddleRightX,
     PaddleRightYRef,

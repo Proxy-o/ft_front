@@ -7,10 +7,10 @@ function movePaddlesOnline(
   handleMovePaddle: (y: number, user: string) => void,
   rightUser: User | undefined
 ) {
-  const { canvas, paddleLeftYRef, upPressed, downPressed, paddleHeight } =
+  const { canvas, paddleLeftYRef, upPressedRef, downPressedRef, paddleHeight } =
     canvasParams;
   if (canvas === null) return;
-  if (upPressed && paddleLeftYRef.current > 0) {
+  if (upPressedRef.current && paddleLeftYRef.current > 0) {
     if (paddleLeftYRef.current - 6 < 0) {
       paddleLeftYRef.current = 0;
     } else {
@@ -18,7 +18,7 @@ function movePaddlesOnline(
     }
     handleMovePaddle(paddleLeftYRef.current, rightUser?.username || "");
   } else if (
-    downPressed &&
+    downPressedRef.current &&
     paddleLeftYRef.current < canvas.height - paddleHeight
   ) {
     if (paddleLeftYRef.current + 6 > canvas.height - paddleHeight) {

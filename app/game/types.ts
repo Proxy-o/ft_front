@@ -2,7 +2,6 @@ import { User } from "@/lib/types";
 
 export type canvasParams = {
   canvas: HTMLCanvasElement | null;
-  ctx: CanvasRenderingContext2D;
   paddleLeftYRef: React.MutableRefObject<number>;
   paddleRightX: number;
   PaddleRightYRef: React.MutableRefObject<number>;
@@ -11,10 +10,11 @@ export type canvasParams = {
   paddleWidth: number;
   paddleHeight: number;
   ballRadius: number;
-  upPressed: boolean;
-  downPressed: boolean;
+  upPressedRef: React.MutableRefObject<boolean>;
+  downPressedRef: React.MutableRefObject<boolean>;
   isFirstTime: React.MutableRefObject<boolean>;
   rightScoreRef: React.MutableRefObject<number>;
+  leftScoreRef: React.MutableRefObject<number>;
 };
 
 export type canvasParamsFour = {

@@ -1,5 +1,3 @@
-"use client";
-
 import getCookie from "@/lib/functions/getCookie";
 
 import useGetUser from "../profile/hooks/useGetUser";
@@ -12,18 +10,9 @@ import TwoVTwo from "./components/gameNav/twoVTwo";
 import TournamentNav from "./components/gameNav/tournament";
 import Invitations from "./components/invitations";
 import Link from "next/link";
+import CheckLogin from "@/components/checkLogin";
 export default function Page() {
   const user_id = getCookie("user_id") || "";
-  const { data: user, isSuccess, isLoading } = useGetUser(user_id || "0");
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!user && isSuccess) {
-      router.push("/login");
-    }
-  }, [user, isSuccess, router]);
-
-  if (isLoading) return <div>loading...</div>;
 
   // window.addEventListener('offline', () => {
   //     console.log("offline");
@@ -32,6 +21,7 @@ export default function Page() {
 
   return (
     <div className="relative w-full h-full">
+      <CheckLogin />
       {/* <GameNav setTab={setTab} tab={tab} /> */}
       <Card className="w-fit h-fit flex flex-col justify-start items-start p-2 mx-auto mt-12 gap-2">
         <div className="p-4">Modes</div>
@@ -59,7 +49,7 @@ export default function Page() {
         </div>
         <div className="w-full h-full flex flex-row justify-start items-start gap-4">
           <div className="w-1/2 h-full flex flex-col justify-start items-start">
-            <GamesTable id={user_id} />
+            {/* <GamesTable id={user_id} /> */}
           </div>
           <div className="w-1/2 h-full flex flex-col justify-start items-start">
             <div className="p-4">Invitations</div>

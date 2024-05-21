@@ -1,3 +1,5 @@
+"use client";
+
 import { Sword } from "lucide-react";
 import getCookie from "@/lib/functions/getCookie";
 import useGetFriends from "@/app/chat/hooks/useGetFriends";

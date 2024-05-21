@@ -26,6 +26,7 @@ export default function useGameSocket() {
 
   const handleStartGame = (user1: string, user2: string) => {
     const toSend = "/debut " + user1 + " " + user2;
+    // console.log(toSend);
     sendJsonMessage({ message: toSend });
   };
 
@@ -156,8 +157,14 @@ export default function useGameSocket() {
     sendJsonMessage({ message: toSend });
   };
 
-  const handleEnemyScore = (newScore: number, user: string) => {
-    const toSend = "/enemyScore " + newScore + " " + user;
+  const handleEnemyScore = (
+    user1: string,
+    score1: number,
+    user2: string,
+    score2: number
+  ) => {
+    const toSend =
+      "/enemyScore " + user1 + " " + score1 + " " + user2 + " " + score2;
     sendJsonMessage({ message: toSend });
   };
 

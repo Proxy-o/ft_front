@@ -6,9 +6,6 @@ function checkLoseConditionOnline(
   canvas: HTMLCanvasElement | null,
   leftScoreRef: React.MutableRefObject<number>,
   rightScoreRef: React.MutableRefObject<number>,
-  setGameAccepted: React.Dispatch<React.SetStateAction<boolean>>,
-  setGameStarted: React.Dispatch<React.SetStateAction<boolean>>,
-  setStartCountdown: React.Dispatch<React.SetStateAction<boolean>>,
   leftUser: User | undefined,
   rightUser: User | undefined,
   onGoingGame: UseQueryResult<{ game: any }, Error>,
@@ -22,13 +19,12 @@ function checkLoseConditionOnline(
     winnerScore: number;
     loser: string;
     loserScore: number;
-  }) => void
+  }) => void,
+  gameStartedRef: React.MutableRefObject<boolean>
 ) {
   if (canvas === null) return;
-  if (rightScoreRef.current === 10) {
-    setGameAccepted(false);
-    setGameStarted(false);
-    setStartCountdown(false);
+  if (rightScoreRef.current === 3) {
+    gameStartedRef.current = false;
     endGame({
       winner: leftUser?.id || "",
       winnerScore: leftScoreRef.current,

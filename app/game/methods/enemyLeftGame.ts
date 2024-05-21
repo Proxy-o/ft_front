@@ -13,9 +13,6 @@ function enemyLeftGame(
     game_id: string
   ) => void,
   canvas: HTMLCanvasElement | null,
-  setGameAccepted: React.Dispatch<React.SetStateAction<boolean>>,
-  setGameStarted: React.Dispatch<React.SetStateAction<boolean>>,
-  setStartCountdown: React.Dispatch<React.SetStateAction<boolean>>,
   endGame: (data: {
     winner: string;
     winnerScore: number;
@@ -33,9 +30,6 @@ function enemyLeftGame(
       rightUser?.username || "",
       onGoingGame.data?.game?.id || ""
     );
-    setGameAccepted(false);
-    setGameStarted(false);
-    setStartCountdown(false);
     endGame({
       winner: leftUser?.id || "",
       winnerScore: 10,
