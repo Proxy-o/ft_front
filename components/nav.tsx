@@ -22,7 +22,7 @@ import { Button, buttonVariants } from "./ui/button";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
-import useLogout from "@/app/login/hooks/useLogout";
+import useLogout from "@/app/(auth)/login/hooks/useLogout";
 import { useEffect, useState } from "react";
 import getCookie from "@/lib/functions/getCookie";
 import useWebSocket from "react-use-websocket";
@@ -36,11 +36,11 @@ interface linksProps {
   variant: "default" | "ghost";
 }
 
-let lastInvitation:MessageEvent<any> | null = null;
+let lastInvitation: MessageEvent<any> | null = null;
 export default function Nav() {
   const { mutate: logout } = useLogout();
-  
-  const {newNotif} = useGameSocket();
+
+  const { newNotif } = useGameSocket();
   const [notification, setNotification] = useState(false);
   const links: linksProps[] = [
     {
@@ -102,8 +102,8 @@ export default function Nav() {
     if (newNotif()) {
       setNotification(true);
       const notif = newNotif();
-        const message = notif && JSON.parse(notif?.data) || "";
-        if (message && message.message?.split(" ")[0] === "/notif") {
+      const message = (notif && JSON.parse(notif?.data)) || "";
+      if (message && message.message?.split(" ")[0] === "/notif") {
         toast.info("you have a new invitation");
         lastInvitation = newNotif();
       }
@@ -162,16 +162,14 @@ export default function Nav() {
                   <span className="h-2 w-2 bg-primary rounded-full absolute top-0 right-0 "></span>
                   <link.icon className="mr-2 h-6 w-6 " />
                 </div>
+              ) : link.title === "Play" && notification ? (
+                <div className="relative">
+                  <link.icon className=" h-6 w-6 " />
+                  <span className="h-3 w-3 bg-white rounded-full absolute top-0 right-0 "></span>
+                  <span className="h-1 w-1 bg-primary rounded-full absolute top-1 right-1 "></span>
+                </div>
               ) : (
-                (link.title === "Play" && notification) ? (
-                  <div className="relative">
-                    <link.icon className=" h-6 w-6 " />
-                    <span className="h-3 w-3 bg-white rounded-full absolute top-0 right-0 "></span>
-                    <span className="h-1 w-1 bg-primary rounded-full absolute top-1 right-1 "></span>
-                  </div>
-                  ) : (
-                    <link.icon className=" h-6 w-6 " />
-                  )
+                <link.icon className=" h-6 w-6 " />
               )}
               {link.title}
             </Link>

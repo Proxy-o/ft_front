@@ -15,16 +15,16 @@ import { Button, buttonVariants } from "../ui/button";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
 import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
-import useLogout from "@/app/login/hooks/useLogout";
+import useLogout from "@/app/(auth)/login/hooks/useLogout";
 import { useEffect, useState } from "react";
 import getCookie from "@/lib/functions/getCookie";
 import useWebSocket from "react-use-websocket";
 import { linksProps } from "./types";
 import { useQueryClient } from "@tanstack/react-query";
 import type { User } from "@/lib/types";
-import useGetFriends from "@/app/chat/hooks/useGetFriends";
-import { LastMessage } from "@/app/chat/types";
-import useGetFrdReq from "@/app/friends/hooks/useGetFrReq";
+import useGetFriends from "@/app/(chor)/chat/hooks/useGetFriends";
+import { LastMessage } from "@/app/(chor)/chat/types";
+import useGetFrdReq from "@/app/(chor)/friends/hooks/useGetFrReq";
 
 export default function Nav() {
   const { mutate: logout } = useLogout();
@@ -156,7 +156,7 @@ export default function Nav() {
 
         <div className="flex flex-col px-2">
           <Link
-            href="#"
+            href="/profile/settings"
             className={cn(
               buttonVariants({ variant: "ghost", size: "sm" }),
               "justify-start mb-2"
