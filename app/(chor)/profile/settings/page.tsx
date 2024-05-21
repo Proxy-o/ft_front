@@ -11,24 +11,28 @@ export default function Page() {
   const { mutate: toggleOTP } = useToggleOTP(userId || "0");
   const { data: user, isSuccess } = useGetUser(userId ?? "0");
   return (
-    <div>
+    <div className="gap-4 w-full h-full flex flex-col justify-center items-center">
       {isSuccess && user.otp_active && (
         <div>
           <Image
             src={user?.qr_code ?? ""}
             alt="avatar"
-            width={200}
-            height={200}
+            width={230}
+            height={230}
           />
         </div>
       )}
-
-      <Button disabled={user?.otp_active} onClick={() => toggleOTP("enable")}>
-        Enable OTP
-      </Button>
-      <Button disabled={!user?.otp_active} onClick={() => toggleOTP("disable")}>
-        Disable OTP
-      </Button>
+      <div className="space-x-3">
+        <Button disabled={user?.otp_active} onClick={() => toggleOTP("enable")}>
+          Enable OTP
+        </Button>
+        <Button
+          disabled={!user?.otp_active}
+          onClick={() => toggleOTP("disable")}
+        >
+          Disable OTP
+        </Button>
+      </div>
     </div>
   );
 }
