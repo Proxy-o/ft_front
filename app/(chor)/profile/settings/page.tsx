@@ -5,6 +5,7 @@ import useGetUser from "../hooks/useGetUser";
 import getCookie from "@/lib/functions/getCookie";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import EditProfileForm from "../components/editProfileForm";
 
 export default function Page() {
   const userId = getCookie("user_id");
@@ -33,6 +34,7 @@ export default function Page() {
           Disable OTP
         </Button>
       </div>
+      {isSuccess && <EditProfileForm user={user} />}
     </div>
   );
 }
