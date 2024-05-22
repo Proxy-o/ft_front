@@ -4,7 +4,7 @@ import "./globals.css";
 import TanstackProvider from "@/lib/providers/TanstackProvider";
 
 const inter = Inter({ subsets: ["latin"] });
-import { Suspense, lazy, useEffect, useRef, useState } from "react";
+import { Suspense, lazy } from "react";
 import HomeSkel from "@/components/skeletons/homeSkel";
 import dynamic from "next/dynamic";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
@@ -35,6 +35,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+            <h1></h1>
             <UserContextProvider>
               <Suspense fallback={<HomeSkel />}>
                 <div className="md:flex relative">
