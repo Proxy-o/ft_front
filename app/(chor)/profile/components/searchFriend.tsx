@@ -35,17 +35,22 @@ export default function SearchFriend() {
             {isPending ? (
               <div>Loading...</div>
             ) : (
-              <div>
-                {data.map((friend: User) => (
-                  <Link
-                    key={friend.id}
-                    className="cursor-pointer"
-                    href={`/profile/${friend.id.toString()}`}
-                  >
-                    <ChatFriendCard friend={friend} setReceiverId={() => {}} />
-                  </Link>
-                ))}
-              </div>
+              data && (
+                <div>
+                  {data.map((friend: User) => (
+                    <Link
+                      key={friend.id}
+                      className="cursor-pointer"
+                      href={`/profile/${friend.id.toString()}`}
+                    >
+                      <ChatFriendCard
+                        friend={friend}
+                        setReceiverId={() => {}}
+                      />
+                    </Link>
+                  ))}
+                </div>
+              )
             )}
           </>
         )}

@@ -8,7 +8,7 @@ export default function RootLayout({
   return (
     <>
       <SearchFriend />
-      {children};
+      {children}
     </>
   );
 }
