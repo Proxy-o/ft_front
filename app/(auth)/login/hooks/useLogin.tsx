@@ -23,7 +23,7 @@ export default function useLogin() {
       } catch (error: any) {
         if (error.response) {
           const data = error.response.data;
-          if (data.detail) {
+          if (data.detail === "2FA required") {
             var date = new Date();
             date.setTime(date.getTime() + 30 * 24 * 60 * 60 * 1000); // 30 days
             var expires = "; expires=" + date.toUTCString();
