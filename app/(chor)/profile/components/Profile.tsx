@@ -9,7 +9,7 @@ import FriendList from "@/app/(chor)/friends/components/friendList";
 import useGetBlocked from "@/app/(chor)/friends/hooks/useGetBlocked";
 import useGetFriends from "@/app/(chor)/chat/hooks/useGetFriends";
 import ChatCard from "@/app/(chor)/chat/components/chatCard";
-import { XCircle } from "lucide-react";
+import { UserRoundX, XCircle } from "lucide-react";
 
 export default function Profile({ id }: { id: string }) {
   const id_cookie = getCookie("user_id") as string;
@@ -44,7 +44,12 @@ export default function Profile({ id }: { id: string }) {
     }
   }, [isChatOpen, isSender, isSuccess]);
 
-  return (
+  return !data && isSender ? (
+    <div className="flex flex-col w-full  h-full justify-center  items-center gap-2">
+      <UserRoundX size={80} className="text-red-400" />
+      No User found.
+    </div>
+  ) : (
     <>
       <div className="relative lg:flex justify-center gap-4 p-4 ">
         {isSuccess && (
