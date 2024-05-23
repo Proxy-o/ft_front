@@ -2,6 +2,7 @@ import { canvasParams, canvasParamsFour } from "../types";
 
 function draw(canvasParams: canvasParams, ctx: CanvasRenderingContext2D) {
   const {
+    canvas,
     paddleLeftYRef,
     paddleRightX,
     PaddleRightYRef,
@@ -40,13 +41,25 @@ function draw(canvasParams: canvasParams, ctx: CanvasRenderingContext2D) {
     ctx.fill();
     ctx.closePath();
   };
+
+  const drawMiddleLine = () => {
+    if (canvas === null) return;
+    ctx.beginPath();
+    ctx.rect(0, canvas.height / 2 - 1, canvas.width, 2);
+    ctx.fillStyle = "#ee95DD";
+    ctx.fill();
+    ctx.closePath();
+  };
+
   drawBall();
   drawRightPaddle();
   drawLeftPaddle();
+  drawMiddleLine();
 }
 
 function drawFour(canvasParams: canvasParamsFour) {
   const {
+    canvas,
     ctx,
     paddleLeftTopYRef,
     paddleLeftBottomYRef,
@@ -119,11 +132,25 @@ function drawFour(canvasParams: canvasParamsFour) {
     ctx.fill();
     ctx.closePath();
   };
+
+  const drawMiddleLine = () => {
+    let i = 0;
+    if (canvas === null) return;
+    while (i < canvas.width) {
+      ctx.beginPath();
+      ctx.rect(i, canvas.height / 2 - 2, 7, 4);
+      ctx.fillStyle = "#ee95DD";
+      ctx.fill();
+      ctx.closePath();
+      i += 15;
+    }
+  };
+  drawRightPaddleTwo();
   drawBall();
+  drawMiddleLine();
   drawRightPaddle();
   drawLeftPaddle();
   drawLeftPaddleTwo();
-  drawRightPaddleTwo();
 }
 
 export { draw, drawFour };

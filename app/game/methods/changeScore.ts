@@ -58,8 +58,6 @@ function changeScoreOnline(
 
 function changeScoreFour(
   canvasParams: canvasParamsFour,
-  setRightScore: (score: number) => void,
-  setLeftScore: (score: number) => void,
   newAngleRef: React.MutableRefObject<number>,
   handleChangeBallDirectionFour: (
     x: number,
@@ -100,10 +98,8 @@ function changeScoreFour(
     isFirstTime.current = true;
     if (newBallPositionRef.current.x < -50) {
       rightScoreRef.current = rightScoreRef.current + 1;
-      setRightScore(rightScoreRef.current);
     } else if (newBallPositionRef.current.x > canvas.width + 50) {
       leftScoreRef.current = leftScoreRef.current + 1;
-      setLeftScore(leftScoreRef.current);
     }
     if (
       (username === leftUserTop?.username &&

@@ -87,8 +87,8 @@ export default function useGameSocket() {
     sendJsonMessage({ message: toSend });
   };
 
-  const handleMovePaddle = (paddleY: number, user: string) => {
-    const toSend = "/move " + paddleY + " " + user;
+  const handleMovePaddle = (paddleY: number, user: string, sender: string) => {
+    const toSend = "/move " + paddleY + " " + user + " " + sender;
     sendJsonMessage({ message: toSend });
   };
 

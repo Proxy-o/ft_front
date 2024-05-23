@@ -44,9 +44,7 @@ function checkLoseConditionFour(
   canvas: HTMLCanvasElement | null,
   leftScoreRef: React.MutableRefObject<number>,
   rightScoreRef: React.MutableRefObject<number>,
-  setGameAccepted: React.Dispatch<React.SetStateAction<boolean>>,
-  setGameStarted: React.Dispatch<React.SetStateAction<boolean>>,
-  setStartCountdown: React.Dispatch<React.SetStateAction<boolean>>,
+  gameStartedRef: React.MutableRefObject<boolean>,
   leftUserTop: User | undefined,
   leftUserBottom: User | undefined,
   rightUserTop: User | undefined,
@@ -61,10 +59,7 @@ function checkLoseConditionFour(
 ) {
   if (canvas === null) return;
   if (rightScoreRef.current === 10 || leftScoreRef.current === 10) {
-    setGameAccepted(false);
-    setGameStarted(false);
-    setStartCountdown(false);
-
+    gameStartedRef.current = false;
     if (rightScoreRef.current === 10) {
       if (username === leftUserTop?.username) {
         endGameFour({

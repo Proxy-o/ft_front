@@ -9,14 +9,12 @@ import { checkLoseConditionOnline } from "../methods/checkLoseCondition";
 import { changeScoreOnline } from "../methods/changeScore";
 import checkCollisionWithHorizontalWalls from "../methods/checkCollisionWithHorizontalWalls";
 import { moveBall } from "../methods/moveBall";
-import enemyLeftGame from "../methods/enemyLeftGame";
 import { User } from "@/lib/types";
 import useGetUser from "@/app/profile/hooks/useGetUser";
 import getCookie from "@/lib/functions/getCookie";
 import useGetGame from "../hooks/useGetGames";
 import useEndGame from "../hooks/useEndGame";
 import useGameSocket from "@/lib/hooks/useGameSocket";
-import { Button } from "@/components/ui/button";
 import Actions from "../components/actions";
 
 const Game = ({ type }: { type: string }) => {
@@ -30,9 +28,6 @@ const Game = ({ type }: { type: string }) => {
   const newAngleRef = useRef<number>(0);
   const leftScoreRef = useRef<number>(0);
   const rightScoreRef = useRef<number>(0);
-  const isEnemyReadyRef = useRef<boolean>(false);
-  const changeBallDirectionRef = useRef<boolean>(false);
-  const movePaddleRef = useRef<boolean>(false);
   const upPressedRef = useRef<boolean>(false);
   const downPressedRef = useRef<boolean>(false);
   const gameStartedRef = useRef<boolean>(false);
@@ -40,12 +35,7 @@ const Game = ({ type }: { type: string }) => {
   const leftUserRef = useRef<string>("");
   const rightUserRef = useRef<string>("");
 
-  const { mutate: endGame } = useEndGame();
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
-
-  const user_id = getCookie("user_id") || "";
-  const { data: user } = useGetUser(user_id || "0");
-  const { onGoingGame } = useGetGame(user_id || "0", type);
 
   const {
     newNotif,
@@ -55,6 +45,10 @@ const Game = ({ type }: { type: string }) => {
     handleChangeBallDirection,
     handleEnemyScore,
   } = useGameSocket();
+  const user_id = getCookie("user_id") || "";
+  const { data: user } = useGetUser(user_id || "0");
+  const { onGoingGame } = useGetGame(user_id || "0", type);
+  const { mutate: endGame } = useEndGame();
 
   const username = user?.username || "";
   let rightUser: User | undefined;
@@ -357,7 +351,7 @@ const Game = ({ type }: { type: string }) => {
         width="800"
         className="w-full md:w-5/6 h-[400px] lg:h-[500px] max-w-[800px] bg-black border-2 border-yellow-500 mx-auto"
       ></canvas>
-      <Actions gameStarted={gameStartedRef.current} />
+      <Actions gameStarted={gameStartedRef.current} type={type} />
     </div>
   );
 };

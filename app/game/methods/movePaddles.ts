@@ -11,20 +11,20 @@ function movePaddlesOnline(
     canvasParams;
   if (canvas === null) return;
   if (upPressedRef.current && paddleLeftYRef.current > 0) {
-    if (paddleLeftYRef.current - 6 < 0) {
+    if (paddleLeftYRef.current - 25 < 0) {
       paddleLeftYRef.current = 0;
     } else {
-      paddleLeftYRef.current -= 6;
+      paddleLeftYRef.current -= 25;
     }
     handleMovePaddle(paddleLeftYRef.current, rightUser?.username || "");
   } else if (
     downPressedRef.current &&
     paddleLeftYRef.current < canvas.height - paddleHeight
   ) {
-    if (paddleLeftYRef.current + 6 > canvas.height - paddleHeight) {
+    if (paddleLeftYRef.current + 25 > canvas.height - paddleHeight) {
       paddleLeftYRef.current = canvas.height - paddleHeight;
     } else {
-      paddleLeftYRef.current += 6;
+      paddleLeftYRef.current += 25;
     }
     handleMovePaddle(paddleLeftYRef.current, rightUser?.username || "");
   }
@@ -32,22 +32,15 @@ function movePaddlesOnline(
 
 function movePaddlesFour(
   canvasParams: canvasParamsFour,
-  handleMovePaddleFour: (
-    y: number,
-    user: string,
-    leftUserTop: string,
-    leftUserBottom: string,
-    rightUserTop: string,
-    rightUserBottom: string
-  ) => void,
+  handleMovePaddle: (y: number, user: string, sender: string) => void,
   leftUserTop: User | undefined,
   leftUserBottom: User | undefined,
   rightUserTop: User | undefined,
   rightUserBottom: User | undefined,
   username: string,
   myPaddleRef: React.MutableRefObject<number>,
-  upPressed: boolean,
-  downPressed: boolean
+  upPressedRef: React.MutableRefObject<boolean>,
+  downPressedRef: React.MutableRefObject<boolean>
 ) {
   const {
     canvas,
@@ -58,50 +51,72 @@ function movePaddlesFour(
     paddleHeight,
   } = canvasParams;
   if (canvas === null) return;
-  if (upPressed) {
+  if (upPressedRef.current) {
     if (myPaddleRef.current <= canvas.height / 2 - paddleHeight) {
-      if (myPaddleRef.current - 6 < 0) {
+      if (myPaddleRef.current - 25 < 0) {
         myPaddleRef.current = 0;
       } else {
-        myPaddleRef.current -= 6;
+        myPaddleRef.current -= 25;
       }
+      upPressedRef.current = false;
     } else {
-      if (myPaddleRef.current - 6 <= canvas.height / 2) {
+      if (myPaddleRef.current - 25 <= canvas.height / 2) {
         myPaddleRef.current = canvas.height / 2;
       } else {
-        myPaddleRef.current -= 6;
+        myPaddleRef.current -= 25;
       }
     }
-    handleMovePaddleFour(
-      myPaddleRef.current,
-      username,
-      leftUserTop?.username || "",
-      leftUserBottom?.username || "",
-      rightUserTop?.username || "",
-      rightUserBottom?.username || ""
-    );
-  } else if (downPressed) {
+    upPressedRef.current = false;
+  } else if (downPressedRef.current) {
     if (myPaddleRef.current <= canvas.height / 2 - paddleHeight) {
-      if (myPaddleRef.current + 6 > canvas.height / 2 - paddleHeight) {
+      if (myPaddleRef.current + 25 >= canvas.height / 2 - paddleHeight) {
         myPaddleRef.current = canvas.height / 2 - paddleHeight;
       } else {
-        myPaddleRef.current += 6;
+        myPaddleRef.current += 25;
       }
     } else {
-      if (myPaddleRef.current + 6 >= canvas.height - paddleHeight) {
+      if (myPaddleRef.current + 25 >= canvas.height - paddleHeight) {
         myPaddleRef.current = canvas.height - paddleHeight;
       } else {
-        myPaddleRef.current += 6;
+        myPaddleRef.current += 25;
       }
     }
-    handleMovePaddleFour(
-      myPaddleRef.current,
-      username,
-      leftUserTop?.username || "",
-      leftUserBottom?.username || "",
-      rightUserTop?.username || "",
-      rightUserBottom?.username || ""
-    );
+    downPressedRef.current = false;
+  }
+  if (
+    (username === rightUserTop?.username &&
+      myPaddleRef.current !== paddleRightTopYRef.current) ||
+    (username === rightUserBottom?.username &&
+      myPaddleRef.current !== paddleRightBottomYRef.current) ||
+    (username === leftUserTop?.username &&
+      myPaddleRef.current !== paddleLeftTopYRef.current) ||
+    (username === leftUserBottom?.username &&
+      myPaddleRef.current !== paddleLeftBottomYRef.current)
+  ) {
+    if (username !== leftUserTop?.username)
+      handleMovePaddle(
+        myPaddleRef.current,
+        leftUserTop?.username || "",
+        username
+      );
+    if (username !== leftUserBottom?.username)
+      handleMovePaddle(
+        myPaddleRef.current,
+        leftUserBottom?.username || "",
+        username
+      );
+    if (username !== rightUserTop?.username)
+      handleMovePaddle(
+        myPaddleRef.current,
+        rightUserTop?.username || "",
+        username
+      );
+    if (username !== rightUserBottom?.username)
+      handleMovePaddle(
+        myPaddleRef.current,
+        rightUserBottom?.username || "",
+        username
+      );
   }
   if (username === rightUserTop?.username)
     paddleRightTopYRef.current = myPaddleRef.current;
