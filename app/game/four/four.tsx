@@ -15,10 +15,13 @@ const Four = () => {
   return (
     <div className="p-4 h-fit  flex flex-col mx-auto justify-center w-full">
       <h1 className="text-4xl mx-auto">Four Player Game</h1>
-      <>
-        {onGoingGame.isSuccess && <Score />}
-        {onGoingGame.isSuccess && <Game type="four" />}
-      </>
+
+      {onGoingGame.isSuccess && (
+        <>
+          {/* {onGoingGame.data.game.user1 && <Score type="four" />} */}
+          <Game type="four" />
+        </>
+      )}
     </div>
   );
 };

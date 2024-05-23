@@ -71,6 +71,8 @@ function drawFour(canvasParams: canvasParamsFour) {
     paddleHeight,
     ballRadius,
     paddleRightX,
+    leftScoreRef,
+    rightScoreRef,
   } = canvasParams;
   const drawBall = () => {
     ctx.beginPath();
@@ -134,8 +136,8 @@ function drawFour(canvasParams: canvasParamsFour) {
   };
 
   const drawMiddleLine = () => {
-    let i = 0;
     if (canvas === null) return;
+    let i = 0;
     while (i < canvas.width) {
       ctx.beginPath();
       ctx.rect(i, canvas.height / 2 - 2, 7, 4);
@@ -145,6 +147,25 @@ function drawFour(canvasParams: canvasParamsFour) {
       i += 15;
     }
   };
+
+  const drawScore = () => {
+    if (canvas === null) return;
+    // italic and bold
+    ctx.font = "italic bold 50px Arial";
+    ctx.fillStyle = "#0095DD";
+    ctx.fillText(
+      "" + leftScoreRef.current,
+      canvas.width / 2 - 150,
+      canvas.height / 2 - 20
+    );
+    ctx.fillText(
+      "" + rightScoreRef.current,
+      canvas.width / 2 + 150,
+      canvas.height / 2 - 20
+    );
+  };
+
+  drawScore();
   drawRightPaddleTwo();
   drawBall();
   drawMiddleLine();

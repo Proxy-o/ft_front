@@ -4,8 +4,9 @@ import { toast } from "sonner";
 
 function movePaddlesOnline(
   canvasParams: canvasParams,
-  handleMovePaddle: (y: number, user: string) => void,
-  rightUser: User | undefined
+  handleMovePaddle: (y: number, user: string, sender: string) => void,
+  rightUser: User | undefined,
+  username: string
 ) {
   const { canvas, paddleLeftYRef, upPressedRef, downPressedRef, paddleHeight } =
     canvasParams;
@@ -16,7 +17,11 @@ function movePaddlesOnline(
     } else {
       paddleLeftYRef.current -= 25;
     }
-    handleMovePaddle(paddleLeftYRef.current, rightUser?.username || "");
+    handleMovePaddle(
+      paddleLeftYRef.current,
+      rightUser?.username || "",
+      username
+    );
   } else if (
     downPressedRef.current &&
     paddleLeftYRef.current < canvas.height - paddleHeight
@@ -26,7 +31,11 @@ function movePaddlesOnline(
     } else {
       paddleLeftYRef.current += 25;
     }
-    handleMovePaddle(paddleLeftYRef.current, rightUser?.username || "");
+    handleMovePaddle(
+      paddleLeftYRef.current,
+      rightUser?.username || "",
+      username
+    );
   }
 }
 

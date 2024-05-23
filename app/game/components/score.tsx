@@ -5,17 +5,21 @@ import getCookie from "@/lib/functions/getCookie";
 import useGameSocket from "@/lib/hooks/useGameSocket";
 import { User } from "@/lib/types";
 import useGetUser from "@/app/profile/hooks/useGetUser";
+import useGetFourGame from "../hooks/useGetFourGame";
 
-export default function Score() {
+export default function Score({ type }: { type: string }) {
   const [leftPlayerScore, setLeftPlayerScore] = useState(0);
   const [rightPlayerScore, setRightPlayerScore] = useState(0);
   const user_id = getCookie("user_id") || "";
   const { data: user } = useGetUser(user_id || "0");
   const username = user?.username || "";
-  const type = "two";
+  let onGoingGame;
 
-  const { onGoingGame } = useGetGame(user_id || "0", type);
-
+  if (type === "two") {
+    const { onGoingGame } = useGetGame(user_id || "0", type);
+  } else {
+    const { onGoingGame } = useGetFourGame(user_id || "0");
+  }
   const leftUser: User | undefined =
     onGoingGame?.data?.game?.user1?.username === username
       ? onGoingGame?.data?.game?.user1

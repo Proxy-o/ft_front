@@ -231,7 +231,12 @@ const Game = ({ type }: { type: string }) => {
           draw(canvasParams, ctx);
 
           // move paddles
-          movePaddlesOnline(canvasParams, handleMovePaddle, rightUser);
+          movePaddlesOnline(
+            canvasParams,
+            handleMovePaddle,
+            rightUser,
+            username
+          );
           // console.log("move paddle" + movePaddleRef.current);
 
           // Check for collision with left paddle
@@ -349,7 +354,7 @@ const Game = ({ type }: { type: string }) => {
         ref={canvasRef}
         height="400"
         width="800"
-        className="w-full md:w-5/6 h-[400px] lg:h-[500px] max-w-[800px] bg-black border-2 border-yellow-500 mx-auto"
+        className="w-full md:w-5/6 h-[400px] lg:h-[500px] max-w-[800px] bg-black border-2 border-white mx-auto"
       ></canvas>
       <Actions gameStarted={gameStartedRef.current} type={type} />
     </div>

@@ -16,7 +16,7 @@ const Two = ({ type }: { type: string }) => {
       <h1 className="text-4xl">Ping Pong</h1>
       {onGoingGame.isSuccess && (
         <>
-          {onGoingGame.data.game.user1 && <Score />}
+          {/* {onGoingGame.data.game.user1 && <Score type={type} />} */}
           <Game type={type} />
         </>
       )}

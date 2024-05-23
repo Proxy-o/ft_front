@@ -427,11 +427,11 @@ const Game = ({ type }: { type: string }) => {
       />
       <canvas
         ref={canvasRef}
-        width={800}
-        height={400}
-        className="border-2 border-black"
+        height="400"
+        width="800"
+        className="w-full md:w-5/6 h-[400px] lg:h-[500px] max-w-[800px] bg-black border-2 border-white mx-auto"
       ></canvas>
-      <Actions gameStarted={gameStartedRef.current} type={type} />
+      {/* <Actions gameStarted={gameStartedRef.current} type={type} /> */}
     </>
   );
 };
