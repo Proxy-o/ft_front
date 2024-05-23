@@ -1,4 +1,3 @@
-"use client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -8,13 +7,11 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { User } from "@/lib/types";
-import { Activity, Check, Clock, SquarePen, Users } from "lucide-react";
-import React, { useState } from "react";
+import { Activity, Clock, Users } from "lucide-react";
+import React from "react";
 import EditProfile from "./editProfile";
 import ProfileAvatar from "./profileAvatar";
-import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
-import useEditUser from "../hooks/useEditUser";
+
 import useAddFriend from "../../friends/hooks/useAddFriend";
 import useUnfriend from "@/app/(chor)/friends/hooks/useUnfriend";
 import useGetFriends from "@/app/(chor)/chat/hooks/useGetFriends";
@@ -22,6 +19,8 @@ import useGetFrdReq from "@/app/(chor)/friends/hooks/useGetFrReq";
 import useBlock from "@/app/(chor)/friends/hooks/useBlockUser";
 import useUnBlock from "@/app/(chor)/friends/hooks/useUnBlockUser";
 import useAcceptFriend from "@/app/(chor)/friends/hooks/useAcceptFriend";
+import useLogout from "@/app/(auth)/login/hooks/useLogout";
+import { useRouter } from "next/navigation";
 
 export default function UserInfo({
   user,
@@ -45,6 +44,9 @@ export default function UserInfo({
   const { data: friendReq } = useGetFrdReq();
   const { mutate: acceptFriend } = useAcceptFriend();
   const { data: friends, isSuccess } = useGetFriends(current_user_id);
+  const { mutate: logout } = useLogout();
+  const router = useRouter();
+
   const id = user.id;
   const isFriend =
     isSuccess && friends.some((friend: User) => friend.id === id);
@@ -54,6 +56,10 @@ export default function UserInfo({
     (req: any) => req.to_user.id == current_user_id
   )?.id;
 
+  const handleLogout = () => {
+    logout();
+    router.push("/");
+  };
   return (
     <Card className="relative rounded-lg p-6 md:flex max-w-7xl">
       <div className="absolute top-0 right-0 p-2">
@@ -132,7 +138,11 @@ export default function UserInfo({
         </div>
         <div className="flex justify-center items-center space-x-3 ">
           {canEdit ? (
-            <Button className="mt-6 w-full" variant="outline">
+            <Button
+              className="mt-6 w-full"
+              variant="outline"
+              onClick={() => handleLogout()}
+            >
               Logout
             </Button>
           ) : (

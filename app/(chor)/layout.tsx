@@ -11,7 +11,7 @@ export default function RootLayout({
   const router = useRouter();
   const is_logged_in = getCookie("logged_in");
   if (!is_logged_in) {
-    router.push("/login");
+    return router.push("/login");
   }
 
   return (

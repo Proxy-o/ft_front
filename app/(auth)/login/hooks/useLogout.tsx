@@ -2,7 +2,6 @@ import axiosInstance from "@/lib/functions/axiosInstance";
 import getCookie from "@/lib/functions/getCookie";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-// login hook
 export default function useLogout() {
   const queryClient = useQueryClient();
 
