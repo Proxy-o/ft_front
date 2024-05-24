@@ -101,10 +101,11 @@ function changeScoreFour(
     } else if (newBallPositionRef.current.x > canvas.width + 50) {
       leftScoreRef.current = leftScoreRef.current + 1;
     }
+    newBallPositionRef.current.x = canvas.width / 2;
     if (
-      (username === leftUserTop?.username &&
+      (username === leftUserTop.current?.username &&
         newBallPositionRef.current.x < -50) ||
-      (username === rightUserTop?.username &&
+      (username === rightUserTop.current?.username &&
         newBallPositionRef.current.x > canvas.width + 50)
     ) {
       newBallPositionRef.current.x = canvas.width / 2;
@@ -122,22 +123,22 @@ function changeScoreFour(
         newBallPositionRef.current.y,
         newAngleRef.current,
         username,
-        leftUserTop?.username || "",
-        leftUserBottom?.username || "",
-        rightUserTop?.username || "",
-        rightUserBottom?.username || ""
+        leftUserTop.current?.username || "",
+        leftUserBottom.current?.username || "",
+        rightUserTop.current?.username || "",
+        rightUserBottom.current?.username || ""
       );
 
       handleEnemyScoreFour(
-        username === rightUserTop?.username ||
-          username === rightUserBottom?.username
+        username === rightUserTop.current?.username ||
+          username === rightUserBottom.current?.username
           ? leftScoreRef.current
           : rightScoreRef.current,
         username,
-        leftUserTop?.username || "",
-        leftUserBottom?.username || "",
-        rightUserTop?.username || "",
-        rightUserBottom?.username || ""
+        leftUserTop.current?.username || "",
+        leftUserBottom.current?.username || "",
+        rightUserTop.current?.username || "",
+        rightUserBottom.current?.username || ""
       );
     }
   }

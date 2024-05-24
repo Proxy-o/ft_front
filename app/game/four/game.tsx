@@ -35,6 +35,22 @@ const Game = ({ type }: { type: string }) => {
   const clickedRef = useRef(false);
   const upPressedRef = useRef(false);
   const downPressedRef = useRef(false);
+  const dummyPlayer: User = {
+    username: "player",
+    avatar: "none",
+    id: "",
+  };
+
+  const leftUserTop = useRef<User>(dummyPlayer);
+  const leftUserBottom = useRef<User>(dummyPlayer);
+  const rightUserTop = useRef<User>(dummyPlayer);
+  const rightUserBottom = useRef<User>(dummyPlayer);
+
+  const user_id = getCookie("user_id") || "";
+  const { data: user } = useGetUser(user_id || "0");
+  const username: string = user?.username || "";
+
+  const { onGoingGame } = useGetFourGame(user_id || "0");
 
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
 
@@ -49,112 +65,13 @@ const Game = ({ type }: { type: string }) => {
     handleReadyFour,
     handleReadyToStartFour,
   } = useGameSocket();
-  const user_id = getCookie("user_id") || "";
-  const { data: user } = useGetUser(user_id || "0");
-  const username: string = user?.username || "";
+
   const { mutate: endGameFour } = useEndGameFour();
 
-  const { onGoingGame } = useGetFourGame(user_id || "0");
-
-  const dummyPlayer: User = {
-    username: "player",
-    avatar: "none",
-    id: "",
-  };
-
-  const leftUserTop: User = onGoingGame?.data?.game?.user1 || dummyPlayer;
-  const leftUserBottom: User = onGoingGame?.data?.game?.user2 || dummyPlayer;
-  const rightUserTop: User = onGoingGame?.data?.game?.user3 || dummyPlayer;
-  const rightUserBottom: User = onGoingGame?.data?.game?.user4 || dummyPlayer;
-
-  useEffect(() => {
-    const notif = newNotif();
-    if (notif) {
-      const parsedMessage = JSON.parse(notif.data);
-      const message = parsedMessage?.message.split(" ");
-      // console.log(parsedMessage.message);
-      if (message[0] === "/showFour") {
-        const sender = message[1];
-        const receiver = message[2];
-        console.log(sender, receiver);
-        handleReadyFour(sender, receiver);
-      } else if (message[0] === "/readyFour") {
-        playerReadyRef.current += 1;
-        if (playerReadyRef.current === 4) {
-          handleReadyToStartFour(
-            leftUserTop?.username || "",
-            leftUserBottom?.username || "",
-            rightUserTop?.username || "",
-            rightUserBottom?.username || ""
-          );
-        }
-      } else if (message[0] === "/move") {
-        const paddleY = parseInt(message[1]);
-        const playerMoved = message[2];
-        if (playerMoved !== username) {
-          if (
-            playerMoved === leftUserTop?.username &&
-            paddleY !== paddleLeftTopYRef.current
-          ) {
-            paddleLeftTopYRef.current = paddleY;
-          } else if (
-            playerMoved === leftUserBottom?.username &&
-            paddleY !== paddleLeftBottomYRef.current
-          ) {
-            paddleLeftBottomYRef.current = paddleY;
-          } else if (
-            playerMoved === rightUserTop?.username &&
-            paddleY !== paddleRightTopYRef.current
-          ) {
-            paddleRightTopYRef.current = paddleY;
-          } else if (
-            playerMoved === rightUserBottom?.username &&
-            paddleY !== paddleRightBottomYRef.current
-          ) {
-            paddleRightBottomYRef.current = paddleY;
-          }
-        }
-      } else if (message[0] === "/startFour") {
-        gameStartedRef.current = true;
-        playerReadyRef.current = 0;
-      } else if (message[0] === "/start") {
-        // invitaionsData.refetch();
-        onGoingGame.refetch();
-        handleRefetchPlayers();
-        isFirstTime.current = true;
-        // setStartCountdown(true);
-      } else if (message[0] === "/refetchPlayers") {
-        onGoingGame.refetch();
-      } else if (message[0] === "/score") {
-        isFirstTime.current = true;
-        const score = parseInt(message[1]);
-        const user = message[2];
-        if (
-          user === leftUserTop?.username ||
-          user === leftUserBottom?.username
-        ) {
-          rightScoreRef.current = score;
-        } else {
-          leftScoreRef.current = score;
-        }
-      } else if (message[0] === "/end") {
-        onGoingGame.refetch();
-      } else if (message[0] === "/fourBallDirection") {
-        newBallPositionRef.current = {
-          x: parseInt(message[1]),
-          y: parseInt(message[2]),
-        };
-        if (
-          canvasRef.current &&
-          (newBallPositionRef.current.x < canvasRef.current.width / 6 ||
-            newBallPositionRef.current.x > (canvasRef.current.width * 5) / 6)
-        ) {
-          isFirstTime.current = false;
-        }
-        newAngleRef.current = parseFloat(message[3]); // Update the ref
-      }
-    }
-  }, [newNotif()?.data]);
+  leftUserTop.current = onGoingGame.data?.game?.user1 || dummyPlayer;
+  leftUserBottom.current = onGoingGame.data?.game?.user3 || dummyPlayer;
+  rightUserTop.current = onGoingGame.data?.game?.user2 || dummyPlayer;
+  rightUserBottom.current = onGoingGame.data?.game?.user4 || dummyPlayer;
 
   useEffect(() => {
     setCanvas(canvasRef.current);
@@ -192,10 +109,10 @@ const Game = ({ type }: { type: string }) => {
         newBallPositionRef.current.y,
         newAngleRef.current,
         username,
-        leftUserTop?.username || "",
-        leftUserBottom?.username || "",
-        rightUserTop?.username || "",
-        rightUserBottom?.username || ""
+        leftUserTop.current?.username || "",
+        leftUserBottom.current?.username || "",
+        rightUserTop.current?.username || "",
+        rightUserBottom.current?.username || ""
       );
     }
 
@@ -206,13 +123,13 @@ const Game = ({ type }: { type: string }) => {
     paddleLeftBottomYRef.current = ((canvas.height - paddleHeight) * 3) / 4;
     paddleRightBottomYRef.current = ((canvas.height - paddleHeight) * 3) / 4;
 
-    if (username === rightUserTop?.username)
+    if (username === rightUserTop.current?.username)
       myPaddleRef.current = paddleRightTopYRef.current;
-    if (username === rightUserBottom?.username)
+    if (username === rightUserBottom.current?.username)
       myPaddleRef.current = paddleRightBottomYRef.current;
-    if (username === leftUserTop?.username)
+    if (username === leftUserTop.current?.username)
       myPaddleRef.current = paddleLeftTopYRef.current;
-    if (username === leftUserBottom?.username)
+    if (username === leftUserBottom.current?.username)
       myPaddleRef.current = paddleLeftBottomYRef.current;
 
     const paddleLeftX = 25;
@@ -283,10 +200,6 @@ const Game = ({ type }: { type: string }) => {
         movePaddlesFour(
           canvasParams,
           handleMovePaddle,
-          leftUserTop,
-          leftUserBottom,
-          rightUserTop,
-          rightUserBottom,
           username,
           myPaddleRef,
           upPressedRef,
@@ -298,10 +211,6 @@ const Game = ({ type }: { type: string }) => {
           canvasParams,
           newAngleRef,
           ballInLeftPaddle,
-          rightUserBottom,
-          rightUserTop,
-          leftUserBottom,
-          leftUserTop,
           myPaddleRef,
           paddleRightX,
           ballInRightPaddle,
@@ -310,18 +219,16 @@ const Game = ({ type }: { type: string }) => {
         );
 
         // Check for score
-        // checkLoseConditionFour(
-        //   canvas,
-        //   leftScoreRef,
-        //   rightScoreRef,
-        //   gameStartedRef,
-        //   leftUserTop,
-        //   leftUserBottom,
-        //   rightUserTop,
-        //   rightUserBottom,
-        //   endGameFour,
-        //   username
-        // );
+        checkLoseConditionFour(
+          canvasParams,
+          canvas,
+          leftScoreRef,
+          rightScoreRef,
+          gameStartedRef,
+          endGameFour,
+          username,
+          handleRefetchPlayers
+        );
 
         // Change score
         changeScoreFour(
@@ -341,13 +248,7 @@ const Game = ({ type }: { type: string }) => {
         );
 
         // Move the ball
-        moveBallFour(
-          canvasParams,
-          user,
-          leftUserTop,
-          leftUserBottom,
-          newAngleRef
-        );
+        moveBallFour(canvasParams, newAngleRef);
 
         // Check if enemy has left the game
         // enemyLeftGame();
@@ -387,10 +288,10 @@ const Game = ({ type }: { type: string }) => {
             console.log("clicked");
             handleStartGameFour(
               username,
-              onGoingGame.data?.game?.user1?.username || "",
-              onGoingGame.data?.game?.user3?.username || "",
-              onGoingGame.data?.game?.user2?.username || "",
-              onGoingGame.data?.game?.user4?.username || ""
+              leftUserTop.current?.username || "",
+              leftUserBottom.current?.username || "",
+              rightUserTop.current?.username || "",
+              rightUserBottom.current?.username || ""
             );
             clickedRef.current = true;
           }
@@ -414,7 +315,109 @@ const Game = ({ type }: { type: string }) => {
     }
 
     // return returnFunction;
-  }, [canvas, onGoingGame.data?.game.user1]);
+  }, [
+    canvas,
+    onGoingGame.data?.game.user1,
+    onGoingGame.data?.game.user2,
+    onGoingGame.data?.game.user3,
+    onGoingGame.data?.game.user4,
+  ]);
+
+  useEffect(() => {
+    const notif = newNotif();
+    if (notif) {
+      const parsedMessage = JSON.parse(notif.data);
+      const message = parsedMessage?.message.split(" ");
+      console.log(parsedMessage.message);
+      if (message[0] === "/showFour") {
+        const sender = message[1];
+        const receiver = message[2];
+        handleReadyFour(sender, receiver);
+      } else if (message[0] === "/readyFour") {
+        playerReadyRef.current += 1;
+        if (playerReadyRef.current === 4) {
+          handleReadyToStartFour(
+            leftUserTop.current?.username || "",
+            leftUserBottom.current?.username || "",
+            rightUserTop.current?.username || "",
+            rightUserBottom.current?.username || ""
+          );
+        }
+      } else if (message[0] === "/move") {
+        const paddleY = parseInt(message[1]);
+        const playerMoved = message[2];
+        if (playerMoved !== username) {
+          if (
+            playerMoved === leftUserTop.current?.username &&
+            paddleY !== paddleLeftTopYRef.current
+          ) {
+            paddleLeftTopYRef.current = paddleY;
+          } else if (
+            playerMoved === leftUserBottom.current?.username &&
+            paddleY !== paddleLeftBottomYRef.current
+          ) {
+            paddleLeftBottomYRef.current = paddleY;
+          } else if (
+            playerMoved === rightUserTop.current?.username &&
+            paddleY !== paddleRightTopYRef.current
+          ) {
+            paddleRightTopYRef.current = paddleY;
+          } else if (
+            playerMoved === rightUserBottom.current?.username &&
+            paddleY !== paddleRightBottomYRef.current
+          ) {
+            paddleRightBottomYRef.current = paddleY;
+          }
+        }
+      } else if (message[0] === "/startFour") {
+        gameStartedRef.current = true;
+        playerReadyRef.current = 0;
+      } else if (message[0] === "/start") {
+        // invitaionsData.refetch();
+        onGoingGame.refetch();
+        handleRefetchPlayers();
+        isFirstTime.current = true;
+        // setStartCountdown(true);
+      } else if (message[0] === "/refetchPlayers") {
+        onGoingGame.refetch();
+      } else if (message[0] === "/score") {
+        isFirstTime.current = true;
+        const score = parseInt(message[1]);
+        const user = message[2];
+        if (
+          user === leftUserTop.current?.username ||
+          user === leftUserBottom.current?.username
+        ) {
+          rightScoreRef.current = score;
+        } else {
+          leftScoreRef.current = score;
+        }
+      } else if (message[0] === "/end") {
+        onGoingGame.refetch();
+        leftScoreRef.current = 0;
+        rightScoreRef.current = 0;
+        gameStartedRef.current = false;
+        isFirstTime.current = true;
+        leftUserTop.current = dummyPlayer;
+        leftUserBottom.current = dummyPlayer;
+        rightUserTop.current = dummyPlayer;
+        rightUserBottom.current = dummyPlayer;
+      } else if (message[0] === "/fourBallDirection") {
+        newBallPositionRef.current = {
+          x: parseInt(message[1]),
+          y: parseInt(message[2]),
+        };
+        if (
+          canvasRef.current &&
+          (newBallPositionRef.current.x < canvasRef.current.width / 6 ||
+            newBallPositionRef.current.x > (canvasRef.current.width * 5) / 6)
+        ) {
+          isFirstTime.current = false;
+        }
+        newAngleRef.current = parseFloat(message[3]); // Update the ref
+      }
+    }
+  }, [newNotif()?.data]);
 
   return (
     <>

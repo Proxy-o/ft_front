@@ -66,10 +66,6 @@ function changeBallDirectionFour(
   canvasParams: canvasParamsFour,
   newAngleRef: React.MutableRefObject<number>,
   ballInLeftPaddle: boolean,
-  rightUserBottom: User | undefined,
-  rightUserTop: User | undefined,
-  leftUserBottom: User | undefined,
-  leftUserTop: User | undefined,
   myPaddleRef: React.MutableRefObject<number>,
   paddleRightX: number,
   ballInRightPaddle: boolean,
@@ -93,11 +89,15 @@ function changeBallDirectionFour(
     paddleHeight,
     ballRadius,
     isFirstTime,
+    userLeftTop: leftUserTop,
+    userLeftBottom: leftUserBottom,
+    userRightTop: rightUserTop,
+    userRightBottom: rightUserBottom,
   } = canvasParams;
   if (canvas === null) return;
   if (
-    (username === leftUserTop?.username ||
-      username === leftUserBottom?.username) &&
+    (username === leftUserTop.current?.username ||
+      username === leftUserBottom.current?.username) &&
     newBallPositionRef.current.x < paddleLeftX + paddleWidth + ballRadius &&
     newBallPositionRef.current.x > paddleLeftX + ballRadius &&
     newBallPositionRef.current.y + ballRadius / 2 > myPaddleRef.current &&
@@ -124,10 +124,10 @@ function changeBallDirectionFour(
         newBallPositionRef.current.y,
         newAngleRef.current,
         username,
-        leftUserTop?.username || "",
-        leftUserBottom?.username || "",
-        rightUserTop?.username || "",
-        rightUserBottom?.username || ""
+        leftUserTop.current?.username || "",
+        leftUserBottom.current?.username || "",
+        rightUserTop.current?.username || "",
+        rightUserBottom.current?.username || ""
       );
       ballInLeftPaddle = true;
     }
@@ -135,8 +135,8 @@ function changeBallDirectionFour(
     ballInLeftPaddle = false;
   }
   if (
-    (username === rightUserTop?.username ||
-      username === rightUserBottom?.username) &&
+    (username === rightUserTop.current?.username ||
+      username === rightUserBottom.current?.username) &&
     newBallPositionRef.current.x > paddleRightX - ballRadius &&
     newBallPositionRef.current.x < paddleRightX + ballRadius &&
     newBallPositionRef.current.y + ballRadius / 2 > myPaddleRef.current &&
@@ -164,10 +164,10 @@ function changeBallDirectionFour(
         newBallPositionRef.current.y,
         newAngleRef.current,
         username,
-        leftUserTop?.username || "",
-        leftUserBottom?.username || "",
-        rightUserTop?.username || "",
-        rightUserBottom?.username || ""
+        leftUserTop.current?.username || "",
+        leftUserBottom.current?.username || "",
+        rightUserTop.current?.username || "",
+        rightUserBottom.current?.username || ""
       );
       ballInRightPaddle = true;
     }

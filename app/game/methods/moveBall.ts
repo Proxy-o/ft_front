@@ -23,9 +23,6 @@ function moveBall(
 
 function moveBallFour(
   canvasParams: canvasParamsFour,
-  user: User | undefined,
-  leftUserTop: User | undefined,
-  leftUserBottom: User | undefined,
   newAngleRef: React.MutableRefObject<number>
 ) {
   const { newBallPositionRef, isFirstTime } = canvasParams;

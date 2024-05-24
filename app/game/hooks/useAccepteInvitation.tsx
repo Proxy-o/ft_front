@@ -22,6 +22,7 @@ export default function useAcceptInvitation() {
     onSuccess: (invitationId) => {
       handleAcceptInvitation(invitationId);
       query.invalidateQueries({ queryKey: ["game"] });
+      query.invalidateQueries({ queryKey: ["gameFour"] });
       query.invalidateQueries({ queryKey: ["invitations"] });
     },
   });

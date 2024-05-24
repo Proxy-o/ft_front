@@ -24,10 +24,10 @@ export type canvasParamsFour = {
   paddleLeftBottomYRef: React.MutableRefObject<number>;
   paddleRightTopYRef: React.MutableRefObject<number>;
   paddleRightBottomYRef: React.MutableRefObject<number>;
-  userLeftTop: User | undefined;
-  userLeftBottom: User | undefined;
-  userRightTop: User | undefined;
-  userRightBottom: User | undefined;
+  userLeftTop: React.MutableRefObject<User>;
+  userLeftBottom: React.MutableRefObject<User>;
+  userRightTop: React.MutableRefObject<User>;
+  userRightBottom: React.MutableRefObject<User>;
   newBallPositionRef: React.MutableRefObject<{ x: number; y: number }>;
   paddleLeftX: number;
   paddleRightX: number;

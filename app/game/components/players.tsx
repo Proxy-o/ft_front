@@ -1,12 +1,13 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User } from "@/lib/types";
 import { Plus } from "lucide-react";
+import React from "react";
 
 export default function Players(props: {
-  topLeft: User;
-  topRight: User;
-  bottomLeft: User;
-  bottomRight: User;
+  topLeft: React.MutableRefObject<User>;
+  topRight: React.MutableRefObject<User>;
+  bottomLeft: React.MutableRefObject<User>;
+  bottomRight: React.MutableRefObject<User>;
   username: string;
 }) {
   const { topLeft, topRight, bottomLeft, bottomRight } = props;
@@ -18,38 +19,38 @@ export default function Players(props: {
           <div className="flex flex-col justify-start items-start">
             <div>
               <Avatar className=" mr-2 ml-auto">
-                {topLeft.avatar === "none" ? (
+                {topLeft.current.avatar === "none" ? (
                   <div className="rounded-xl h-8 w-8 bg-primary/20 flex justify-center items-center">
                     <Plus size={24} />
                   </div>
                 ) : (
                   <>
                     <AvatarImage
-                      src={topLeft.avatar}
+                      src={topLeft.current.avatar}
                       alt="profile image"
                       className="rounded-xl h-8 w-8"
                     />
                     <AvatarFallback className="rounded-xl">
-                      {topLeft.username}
+                      {topLeft.current.username}
                     </AvatarFallback>
                   </>
                 )}
               </Avatar>
             </div>
             <Avatar className=" mr-2 ml-auto">
-              {topRight.avatar === "none" ? (
+              {topRight.current.avatar === "none" ? (
                 <div className="rounded-xl h-8 w-8 bg-primary/20 flex justify-center items-center">
                   <Plus size={24} />
                 </div>
               ) : (
                 <>
                   <AvatarImage
-                    src={topRight.avatar}
+                    src={topRight.current.avatar}
                     alt="profile image"
                     className="rounded-xl h-8 w-8"
                   />
                   <AvatarFallback className="rounded-xl">
-                    {topRight.username}
+                    {topRight.current.username}
                   </AvatarFallback>
                 </>
               )}
@@ -57,37 +58,37 @@ export default function Players(props: {
           </div>
           <div className="flex flex-col justify-start items-start">
             <Avatar className=" mr-2 ml-auto">
-              {bottomLeft.avatar === "none" ? (
+              {bottomLeft.current.avatar === "none" ? (
                 <div className="rounded-xl h-8 w-8 bg-primary/20 flex justify-center items-center">
                   <Plus size={24} />
                 </div>
               ) : (
                 <>
                   <AvatarImage
-                    src={bottomLeft.avatar}
+                    src={bottomLeft.current.avatar}
                     alt="profile image"
                     className="rounded-xl h-8 w-8"
                   />
                   <AvatarFallback className="rounded-xl">
-                    {bottomLeft.username}
+                    {bottomLeft.current.username}
                   </AvatarFallback>
                 </>
               )}
             </Avatar>
             <Avatar className=" mr-2 ml-auto">
-              {bottomRight.avatar === "none" ? (
+              {bottomRight.current.avatar === "none" ? (
                 <div className="rounded-xl h-8 w-8 bg-primary/20 flex justify-center items-center">
                   <Plus size={24} />
                 </div>
               ) : (
                 <>
                   <AvatarImage
-                    src={bottomRight.avatar}
+                    src={bottomRight.current.avatar}
                     alt="profile image"
                     className="rounded-xl h-8 w-8"
                   />
                   <AvatarFallback className="rounded-xl">
-                    {bottomRight.username}
+                    {bottomRight.current.username}
                   </AvatarFallback>
                 </>
               )}
