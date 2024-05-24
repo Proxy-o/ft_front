@@ -16,7 +16,11 @@ import useEndGameFour from "../hooks/useEndGameFour";
 import Players from "../components/players";
 import Actions from "../components/actions";
 
-const Game = ({ type }: { type: string }) => {
+const Game = ({
+  gameStartedRef,
+}: {
+  gameStartedRef: React.MutableRefObject<boolean>;
+}) => {
   const playerReadyRef = useRef(0);
   const isFirstTime = useRef(true);
   const paddleRightTopYRef = useRef(0);
@@ -31,7 +35,6 @@ const Game = ({ type }: { type: string }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationFrameId = useRef(0);
   const isAnimating = useRef(false);
-  const gameStartedRef = useRef(false);
   const clickedRef = useRef(false);
   const upPressedRef = useRef(false);
   const downPressedRef = useRef(false);
@@ -92,7 +95,7 @@ const Game = ({ type }: { type: string }) => {
 
     isFirstTime.current = true;
 
-    if (username === onGoingGame.data?.game?.user1?.username) {
+    if (username === leftUserTop.current?.username) {
       y = Math.random() * (canvas.height - ballRadius * 2) + ballRadius;
       newBallPositionRef.current = { x, y }; // Initialize the ref
       newAngleRef.current = Math.random() * Math.PI;
@@ -375,7 +378,12 @@ const Game = ({ type }: { type: string }) => {
       } else if (message[0] === "/start") {
         // invitaionsData.refetch();
         onGoingGame.refetch();
-        handleRefetchPlayers();
+        handleRefetchPlayers(
+          leftUserTop.current?.username || "",
+          leftUserBottom.current?.username || "",
+          rightUserTop.current?.username || "",
+          rightUserBottom.current?.username || ""
+        );
         isFirstTime.current = true;
         // setStartCountdown(true);
       } else if (message[0] === "/refetchPlayers") {
@@ -434,7 +442,16 @@ const Game = ({ type }: { type: string }) => {
         width="800"
         className="w-full md:w-5/6 h-[400px] lg:h-[500px] max-w-[800px] bg-black border-2 border-white mx-auto"
       ></canvas>
-      {/* <Actions gameStarted={gameStartedRef.current} type={type} /> */}
+      {/* {children} */}
+      <Actions
+        gameStartedRef={gameStartedRef}
+        type="four"
+        userLeftTop={leftUserTop.current.username || ""}
+        userRightTop={rightUserTop.current.username || ""}
+        userLeftBottom={leftUserBottom.current.username || ""}
+        userRightBottom={rightUserBottom.current.username || ""}
+        gameId={onGoingGame.data?.game.id}
+      />
     </>
   );
 };

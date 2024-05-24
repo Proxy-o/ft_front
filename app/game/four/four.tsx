@@ -1,15 +1,18 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 
 import getCookie from "@/lib/functions/getCookie";
 import Score from "../components/score";
 import useGetFourGame from "../hooks/useGetFourGame";
 
 import Game from "./game";
+import Actions from "../components/actions";
 
 const Four = () => {
   const user_id = getCookie("user_id") || "";
+  const gameStartedRef = useRef(false);
+
   const { onGoingGame } = useGetFourGame(user_id || "0");
 
   return (
@@ -19,7 +22,8 @@ const Four = () => {
       {onGoingGame.isSuccess && (
         <>
           {/* {onGoingGame.data.game.user1 && <Score type="four" />} */}
-          <Game type="four" />
+          <Game gameStartedRef={gameStartedRef} />
+          {/* </Game> */}
         </>
       )}
     </div>

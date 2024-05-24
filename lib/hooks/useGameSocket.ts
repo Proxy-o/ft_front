@@ -192,8 +192,14 @@ export default function useGameSocket() {
     sendJsonMessage({ message: toSend });
   };
 
-  const handleRefetchPlayers = () => {
-    const toSend = "/refetchPlayers ";
+  const handleRefetchPlayers = (
+    user1: string,
+    user2: string,
+    user3: string,
+    user4: string
+  ) => {
+    const toSend =
+      "/refetchPlayers " + user1 + " " + user2 + " " + user3 + " " + user4;
     sendJsonMessage({ message: toSend });
   };
 
