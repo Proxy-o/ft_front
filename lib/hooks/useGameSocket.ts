@@ -17,27 +17,8 @@ export default function useGameSocket() {
     sendJsonMessage({ message: toSend });
   };
 
-  const handleMovePaddleFour = (
-    paddleY: number,
-    user: string,
-    leftTop: string,
-    leftBottom: string,
-    rightTop: string,
-    rightBottom: string
-  ) => {
-    const toSend =
-      "/fourMove " +
-      paddleY +
-      " " +
-      user +
-      " " +
-      leftTop +
-      " " +
-      leftBottom +
-      " " +
-      rightTop +
-      " " +
-      rightBottom;
+  const handleMovePaddleFour = (paddleY: number, user: string) => {
+    const toSend = "/fourMove " + paddleY + " " + user;
     sendJsonMessage({ message: toSend });
   };
 

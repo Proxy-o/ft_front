@@ -40,6 +40,7 @@ const Game = ({
   const clickedRef = useRef(false);
   const upPressedRef = useRef(false);
   const downPressedRef = useRef(false);
+  const gameIdRef = useRef("");
   const dummyPlayer: User = {
     username: "player",
     avatar: "none",
@@ -61,7 +62,7 @@ const Game = ({
 
   const {
     gameMsg,
-    handleMovePaddle,
+    handleMovePaddleFour,
     handleChangeBallDirectionFour,
     handleEnemyScoreFour,
   } = useGameSocket();
@@ -80,6 +81,7 @@ const Game = ({
   leftUserBottom.current = onGoingGame.data?.game?.user3 || dummyPlayer;
   rightUserTop.current = onGoingGame.data?.game?.user2 || dummyPlayer;
   rightUserBottom.current = onGoingGame.data?.game?.user4 || dummyPlayer;
+  gameIdRef.current = onGoingGame.data?.game.id || "";
 
   useEffect(() => {
     setCanvas(canvasRef.current);
@@ -153,14 +155,13 @@ const Game = ({
         } else if (e.key === "ArrowDown") {
           downPressedRef.current = true;
         }
+      } else if (e.type === "keyup") {
+        if (e.key === "ArrowUp") {
+          upPressedRef.current = false;
+        } else if (e.key === "ArrowDown") {
+          downPressedRef.current = false;
+        }
       }
-      // else if (e.type === "keyup") {
-      //   if (e.key === "ArrowUp") {
-      //     upPressed = false;
-      //   } else if (e.key === "ArrowDown") {
-      //     downPressed = false;
-      //   }
-      // }
     };
 
     document.addEventListener("keydown", handleKeyEvent, false);
@@ -207,7 +208,7 @@ const Game = ({
         // move paddles
         movePaddlesFour(
           canvasParams,
-          handleMovePaddle,
+          handleMovePaddleFour,
           username,
           myPaddleRef,
           upPressedRef,
@@ -322,7 +323,7 @@ const Game = ({
       animate();
     }
 
-    // return returnFunction;
+    return returnFunction;
   }, [
     canvas,
     onGoingGame.data?.game.user1,
@@ -385,31 +386,17 @@ const Game = ({
       const gameMsge = gameMsg()?.data;
       const parsedMessage = JSON.parse(gameMsge);
       const message = parsedMessage.message.split(" ");
-      console.log(parsedMessage.message);
-
-      if (message[0] === "/moveFour") {
+      if (message[0] === "/move") {
         const paddleY = parseInt(message[1]);
         const playerMoved = message[2];
         if (playerMoved !== username) {
-          if (
-            playerMoved === leftUserTop.current?.username &&
-            paddleY !== paddleLeftTopYRef.current
-          ) {
+          if (playerMoved === leftUserTop.current?.username) {
             paddleLeftTopYRef.current = paddleY;
-          } else if (
-            playerMoved === leftUserBottom.current?.username &&
-            paddleY !== paddleLeftBottomYRef.current
-          ) {
+          } else if (playerMoved === leftUserBottom.current?.username) {
             paddleLeftBottomYRef.current = paddleY;
-          } else if (
-            playerMoved === rightUserTop.current?.username &&
-            paddleY !== paddleRightTopYRef.current
-          ) {
+          } else if (playerMoved === rightUserTop.current?.username) {
             paddleRightTopYRef.current = paddleY;
-          } else if (
-            playerMoved === rightUserBottom.current?.username &&
-            paddleY !== paddleRightBottomYRef.current
-          ) {
+          } else if (playerMoved === rightUserBottom.current?.username) {
             paddleRightBottomYRef.current = paddleY;
           }
         }
