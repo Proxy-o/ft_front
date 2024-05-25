@@ -11,6 +11,8 @@ function draw(canvasParams: canvasParams, ctx: CanvasRenderingContext2D) {
     paddleWidth,
     paddleHeight,
     ballRadius,
+    leftScoreRef,
+    rightScoreRef,
   } = canvasParams;
   const drawBall = () => {
     ctx.beginPath();
@@ -44,17 +46,48 @@ function draw(canvasParams: canvasParams, ctx: CanvasRenderingContext2D) {
 
   const drawMiddleLine = () => {
     if (canvas === null) return;
-    ctx.beginPath();
-    ctx.rect(0, canvas.height / 2 - 1, canvas.width, 2);
-    ctx.fillStyle = "#ee95DD";
-    ctx.fill();
-    ctx.closePath();
+    let i = 0;
+    while (i < canvas.width) {
+      ctx.beginPath();
+      ctx.rect(i, canvas.height / 2 - 2, 7, 4);
+      ctx.fillStyle = "#ee95DD";
+      ctx.fill();
+      ctx.closePath();
+      i += 15;
+    }
   };
 
+  const drawScore = () => {
+    if (canvas === null) return;
+    // italic and bold
+    ctx.font = "italic bold 50px Arial";
+    ctx.fillStyle = "#0095DD";
+    ctx.fillText(
+      "" + leftScoreRef.current,
+      canvas.width / 2 - 150,
+      canvas.height / 2 - 20
+    );
+    ctx.fillText(
+      "" + rightScoreRef.current,
+      canvas.width / 2 + 150,
+      canvas.height / 2 - 20
+    );
+  };
+
+  const drawPlayer = () => {
+    if (canvas === null) return;
+    ctx.font = "italic bold 50px Arial";
+    ctx.fillStyle = "#0095DD";
+    // ctx.fillText({ user }, canvas.width / 2 - 150, canvas.height / 2 - 20);
+    ctx.fillText("Player", canvas.width / 2 + 150, canvas.height / 2 - 20);
+  };
+
+  drawPlayer();
+  drawMiddleLine();
+  drawScore();
   drawBall();
   drawRightPaddle();
   drawLeftPaddle();
-  drawMiddleLine();
 }
 
 function drawFour(canvasParams: canvasParamsFour) {

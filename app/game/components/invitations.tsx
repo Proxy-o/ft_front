@@ -17,9 +17,10 @@ import { Card } from "@/components/ui/card";
 import Router from "next/router";
 import { useRouter } from "next/navigation";
 import useWebSocket from "react-use-websocket";
+import useInvitationSocket from "@/lib/hooks/useInvitationSocket";
 
 const Invitations = ({ mode }: { mode: string }) => {
-  const { newNotif } = useGameSocket();
+  const { newNotif } = useInvitationSocket();
   const user_id = getCookie("user_id") || "";
   const router = useRouter();
   let invitationsData = useGetInvitations(user_id || "0");

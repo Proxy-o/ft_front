@@ -16,6 +16,7 @@ import useGetGame from "../hooks/useGetGames";
 import useEndGame from "../hooks/useEndGame";
 import useGameSocket from "@/lib/hooks/useGameSocket";
 import Actions from "../components/actions";
+import useInvitationSocket from "@/lib/hooks/useInvitationSocket";
 
 const Game = ({ type }: { type: string }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -37,14 +38,9 @@ const Game = ({ type }: { type: string }) => {
 
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
 
-  const {
-    newNotif,
-    handleStartGame,
-    handleSurrender,
-    handleMovePaddle,
-    handleChangeBallDirection,
-    handleEnemyScore,
-  } = useGameSocket();
+  const { handleMovePaddle, handleChangeBallDirection, handleEnemyScore } =
+    useGameSocket();
+  const { newNotif, handleStartGame } = useInvitationSocket();
   const user_id = getCookie("user_id") || "";
   const { data: user } = useGetUser(user_id || "0");
   const { onGoingGame } = useGetGame(user_id || "0", type);
@@ -249,17 +245,17 @@ const Game = ({ type }: { type: string }) => {
           );
 
           // Check for score
-          checkLoseConditionOnline(
-            canvas,
-            leftScoreRef,
-            rightScoreRef,
-            leftUser,
-            rightUser,
-            onGoingGame,
-            handleSurrender,
-            endGame,
-            gameStartedRef
-          );
+          // checkLoseConditionOnline(
+          //   canvas,
+          //   leftScoreRef,
+          //   rightScoreRef,
+          //   leftUser,
+          //   rightUser,
+          //   onGoingGame,
+          //   handleSurrender,
+          //   endGame,
+          //   gameStartedRef
+          // );
 
           // Change score
           changeScoreOnline(
@@ -356,7 +352,15 @@ const Game = ({ type }: { type: string }) => {
         width="800"
         className="w-full md:w-5/6 h-[400px] lg:h-[500px] max-w-[800px] bg-black border-2 border-white mx-auto"
       ></canvas>
-      <Actions gameStarted={gameStartedRef.current} type={type} />
+      <Actions
+        gameStartedRef={gameStartedRef}
+        type={type}
+        userLeftTop={leftUser?.username || ""}
+        userRightTop={rightUser?.username || ""}
+        userLeftBottom={""}
+        userRightBottom={""}
+        gameId={onGoingGame.data?.game.id}
+      />
     </div>
   );
 };

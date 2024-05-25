@@ -3,13 +3,13 @@
 import { Sword } from "lucide-react";
 import getCookie from "@/lib/functions/getCookie";
 import useGetFriends from "@/app/chat/hooks/useGetFriends";
-import useGameSocket from "@/lib/hooks/useGameSocket";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import useSendInvitation from "../hooks/useSendInvitation";
 import { Card } from "@/components/ui/card";
+import useInvitationSocket from "@/lib/hooks/useInvitationSocket";
 
 const InviteFriends = ({ gameType }: { gameType: string }) => {
-  const { handelSendInvitation } = useGameSocket();
+  const { handelSendInvitation } = useInvitationSocket();
 
   const user_id = getCookie("user_id");
 

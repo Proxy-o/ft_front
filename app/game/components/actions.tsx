@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import useGetUser from "@/app/profile/hooks/useGetUser";
 import { toast } from "sonner";
 import { useRef } from "react";
+import useInvitationSocket from "@/lib/hooks/useInvitationSocket";
 
 const Actions = ({
   gameStartedRef,
@@ -36,7 +37,7 @@ const Actions = ({
     handleSurrenderFour,
     handleStartGameFour,
     handleRefetchPlayers,
-  } = useGameSocket();
+  } = useInvitationSocket();
 
   return (
     <div className="w-full h-fit flex flex-col justify-center items-center">

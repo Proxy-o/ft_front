@@ -1,90 +1,15 @@
 import getCookie from "@/lib/functions/getCookie";
 import useWebSocket from "react-use-websocket";
-import { toast } from "sonner";
 
 export default function useGameSocket() {
   const user_id = getCookie("user_id");
   const token = getCookie("refresh");
-  const socketUrl =
-    process.env.NEXT_PUBLIC_INVIATION_URL + "/?refresh=" + token;
+  const socketUrl = process.env.NEXT_PUBLIC_GAME_URL + "/?refresh=" + token;
 
   const { sendJsonMessage, lastMessage } = useWebSocket(socketUrl);
 
-  const handelSendInvitation = (receiver: string) => {
-    const toSend = "/notif " + user_id + " " + receiver;
-    sendJsonMessage({ message: toSend });
-  };
-
-  const newNotif = () => {
+  const gameMsg = () => {
     return lastMessage;
-  };
-
-  const handleAcceptInvitation = (invitationId: string) => {
-    const toSend = "/accept " + invitationId;
-    sendJsonMessage({ message: toSend });
-  };
-
-  const handleStartGame = (user1: string, user2: string) => {
-    const toSend = "/debut " + user1 + " " + user2;
-    // console.log(toSend);
-    sendJsonMessage({ message: toSend });
-  };
-
-  const handleStartGameFour = (
-    user: string,
-    leftTop: string,
-    leftBottom: string,
-    rightTop: string,
-    rightBottom: string
-  ) => {
-    const toSend =
-      "/fourDebut " +
-      user +
-      " " +
-      leftTop +
-      " " +
-      leftBottom +
-      " " +
-      rightTop +
-      " " +
-      rightBottom;
-    sendJsonMessage({ message: toSend });
-  };
-
-  const handleSurrender = (
-    surrenderer: string,
-    winner: string,
-    game_id: string
-  ) => {
-    const toSend = "/surrender " + surrenderer + " " + winner + " " + game_id;
-    sendJsonMessage({ message: toSend });
-  };
-
-  const handleSurrenderFour = (
-    user: string,
-    leftTop: string,
-    leftBottom: string,
-    rightTop: string,
-    rightBottom: string,
-    winnerTeam: string,
-    game_id: string
-  ) => {
-    const toSend =
-      "/fourSurrender " +
-      user +
-      " " +
-      leftTop +
-      " " +
-      leftBottom +
-      " " +
-      rightTop +
-      " " +
-      rightBottom +
-      " " +
-      winnerTeam +
-      " " +
-      game_id;
-    sendJsonMessage({ message: toSend });
   };
 
   const handleMovePaddle = (paddleY: number, user: string, sender: string) => {
@@ -192,49 +117,13 @@ export default function useGameSocket() {
     sendJsonMessage({ message: toSend });
   };
 
-  const handleRefetchPlayers = (
-    user1: string,
-    user2: string,
-    user3: string,
-    user4: string
-  ) => {
-    const toSend =
-      "/refetchPlayers " + user1 + " " + user2 + " " + user3 + " " + user4;
-    sendJsonMessage({ message: toSend });
-  };
-
-  const handleReadyFour = (sender: string, receiver: string) => {
-    const toSend = "/readyFour " + sender + " " + receiver;
-    sendJsonMessage({ message: toSend });
-  };
-
-  const handleReadyToStartFour = (
-    user1: string,
-    user2: string,
-    user3: string,
-    user4: string
-  ) => {
-    const toSend =
-      "/readyToStartFour " + user1 + " " + user2 + " " + user3 + " " + user4;
-    sendJsonMessage({ message: toSend });
-  };
-
   return {
-    handelSendInvitation,
-    newNotif,
-    handleAcceptInvitation,
-    handleStartGame,
-    handleSurrender,
+    gameMsg,
     handleMovePaddle,
     handleChangeBallDirection,
     handleEnemyScore,
-    handleStartGameFour,
     handleMovePaddleFour,
-    handleSurrenderFour,
     handleChangeBallDirectionFour,
     handleEnemyScoreFour,
-    handleRefetchPlayers,
-    handleReadyFour,
-    handleReadyToStartFour,
   };
 }

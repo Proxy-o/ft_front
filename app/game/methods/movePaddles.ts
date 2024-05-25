@@ -12,30 +12,32 @@ function movePaddlesOnline(
     canvasParams;
   if (canvas === null) return;
   if (upPressedRef.current && paddleLeftYRef.current > 0) {
-    if (paddleLeftYRef.current - 25 < 0) {
+    if (paddleLeftYRef.current - 6 < 0) {
       paddleLeftYRef.current = 0;
     } else {
-      paddleLeftYRef.current -= 25;
+      paddleLeftYRef.current -= 6;
     }
     handleMovePaddle(
       paddleLeftYRef.current,
       rightUser?.username || "",
       username
     );
+    // upPressedRef.current = false;
   } else if (
     downPressedRef.current &&
     paddleLeftYRef.current < canvas.height - paddleHeight
   ) {
-    if (paddleLeftYRef.current + 25 > canvas.height - paddleHeight) {
+    if (paddleLeftYRef.current + 6 > canvas.height - paddleHeight) {
       paddleLeftYRef.current = canvas.height - paddleHeight;
     } else {
-      paddleLeftYRef.current += 25;
+      paddleLeftYRef.current += 6;
     }
     handleMovePaddle(
       paddleLeftYRef.current,
       rightUser?.username || "",
       username
     );
+    // downPressedRef.current = false;
   }
 }
 
@@ -62,32 +64,32 @@ function movePaddlesFour(
   if (canvas === null) return;
   if (upPressedRef.current) {
     if (myPaddleRef.current <= canvas.height / 2 - paddleHeight) {
-      if (myPaddleRef.current - 25 < 0) {
+      if (myPaddleRef.current - 6 < 0) {
         myPaddleRef.current = 0;
       } else {
-        myPaddleRef.current -= 25;
+        myPaddleRef.current -= 6;
       }
       upPressedRef.current = false;
     } else {
-      if (myPaddleRef.current - 25 <= canvas.height / 2) {
+      if (myPaddleRef.current - 6 <= canvas.height / 2) {
         myPaddleRef.current = canvas.height / 2;
       } else {
-        myPaddleRef.current -= 25;
+        myPaddleRef.current -= 6;
       }
     }
     upPressedRef.current = false;
   } else if (downPressedRef.current) {
     if (myPaddleRef.current <= canvas.height / 2 - paddleHeight) {
-      if (myPaddleRef.current + 25 >= canvas.height / 2 - paddleHeight) {
+      if (myPaddleRef.current + 6 >= canvas.height / 2 - paddleHeight) {
         myPaddleRef.current = canvas.height / 2 - paddleHeight;
       } else {
-        myPaddleRef.current += 25;
+        myPaddleRef.current += 6;
       }
     } else {
-      if (myPaddleRef.current + 25 >= canvas.height - paddleHeight) {
+      if (myPaddleRef.current + 6 >= canvas.height - paddleHeight) {
         myPaddleRef.current = canvas.height - paddleHeight;
       } else {
-        myPaddleRef.current += 25;
+        myPaddleRef.current += 6;
       }
     }
     downPressedRef.current = false;
