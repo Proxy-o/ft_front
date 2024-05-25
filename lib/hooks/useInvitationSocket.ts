@@ -59,30 +59,8 @@ export default function useInvitationSocket() {
     sendJsonMessage({ message: toSend });
   };
 
-  const handleSurrenderFour = (
-    user: string,
-    leftTop: string,
-    leftBottom: string,
-    rightTop: string,
-    rightBottom: string,
-    winnerTeam: string,
-    game_id: string
-  ) => {
-    const toSend =
-      "/fourSurrender " +
-      user +
-      " " +
-      leftTop +
-      " " +
-      leftBottom +
-      " " +
-      rightTop +
-      " " +
-      rightBottom +
-      " " +
-      winnerTeam +
-      " " +
-      game_id;
+  const handleSurrenderFour = () => {
+    const toSend = "/fourSurrender ";
     sendJsonMessage({ message: toSend });
   };
 

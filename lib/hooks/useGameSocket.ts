@@ -37,11 +37,7 @@ export default function useGameSocket() {
     ballX: number,
     ballY: number,
     angle: number,
-    user: string,
-    leftTop: string,
-    leftBottom: string,
-    rightTop: string,
-    rightBottom: string
+    user: string
   ) => {
     const toSend =
       "/fourChangeBallDirection " +
@@ -51,15 +47,7 @@ export default function useGameSocket() {
       " " +
       angle +
       " " +
-      user +
-      " " +
-      leftTop +
-      " " +
-      leftBottom +
-      " " +
-      rightTop +
-      " " +
-      rightBottom;
+      user;
     sendJsonMessage({ message: toSend });
   };
 

@@ -73,11 +73,7 @@ function changeBallDirectionFour(
     x: number,
     y: number,
     angle: number,
-    user: string,
-    leftUserTop: string,
-    leftUserBottom: string,
-    rightUserTop: string,
-    rightUserBottom: string
+    user: string
   ) => void,
   username: string
 ) {
@@ -123,11 +119,7 @@ function changeBallDirectionFour(
         newBallPositionRef.current.x,
         newBallPositionRef.current.y,
         newAngleRef.current,
-        username,
-        leftUserTop.current?.username || "",
-        leftUserBottom.current?.username || "",
-        rightUserTop.current?.username || "",
-        rightUserBottom.current?.username || ""
+        username
       );
       ballInLeftPaddle = true;
     }
@@ -163,11 +155,7 @@ function changeBallDirectionFour(
         newBallPositionRef.current.x,
         newBallPositionRef.current.y,
         newAngleRef.current,
-        username,
-        leftUserTop.current?.username || "",
-        leftUserBottom.current?.username || "",
-        rightUserTop.current?.username || "",
-        rightUserBottom.current?.username || ""
+        username
       );
       ballInRightPaddle = true;
     }

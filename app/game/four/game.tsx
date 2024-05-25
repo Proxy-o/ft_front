@@ -102,30 +102,6 @@ const Game = ({
 
     isFirstTime.current = true;
 
-    if (username === leftUserTop.current?.username) {
-      y = Math.random() * (canvas.height - ballRadius * 2) + ballRadius;
-      newBallPositionRef.current = { x, y }; // Initialize the ref
-      newAngleRef.current = Math.random() * Math.PI;
-      while (
-        (newAngleRef.current > Math.PI / 6 &&
-          newAngleRef.current < (Math.PI * 5) / 6) ||
-        (newAngleRef.current > (Math.PI * 7) / 6 &&
-          newAngleRef.current < (Math.PI * 11) / 6)
-      ) {
-        newAngleRef.current = Math.random() * 2 * Math.PI;
-      }
-      handleChangeBallDirectionFour(
-        newBallPositionRef.current.x,
-        newBallPositionRef.current.y,
-        newAngleRef.current,
-        username,
-        leftUserTop.current?.username || "",
-        leftUserBottom.current?.username || "",
-        rightUserTop.current?.username || "",
-        rightUserBottom.current?.username || ""
-      );
-    }
-
     const paddleHeight = 50;
     const paddleWidth = 10;
     paddleRightTopYRef.current = (canvas.height - paddleHeight) / 4;
@@ -202,6 +178,28 @@ const Game = ({
     const drawOnlineOne = () => {
       if (canvas === null) return;
       if (gameStartedRef.current) {
+        if (
+          username === leftUserTop.current?.username &&
+          newAngleRef.current === 0
+        ) {
+          y = Math.random() * (canvas.height - ballRadius * 2) + ballRadius;
+          newBallPositionRef.current = { x, y }; // Initialize the ref
+          newAngleRef.current = Math.random() * Math.PI;
+          while (
+            (newAngleRef.current > Math.PI / 6 &&
+              newAngleRef.current < (Math.PI * 5) / 6) ||
+            (newAngleRef.current > (Math.PI * 7) / 6 &&
+              newAngleRef.current < (Math.PI * 11) / 6)
+          ) {
+            newAngleRef.current = Math.random() * 2 * Math.PI;
+          }
+          handleChangeBallDirectionFour(
+            newBallPositionRef.current.x,
+            newBallPositionRef.current.y,
+            newAngleRef.current,
+            username
+          );
+        }
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         drawFour(canvasParams);
 
@@ -228,16 +226,16 @@ const Game = ({
         );
 
         // Check for score
-        checkLoseConditionFour(
-          canvasParams,
-          canvas,
-          leftScoreRef,
-          rightScoreRef,
-          gameStartedRef,
-          endGameFour,
-          username,
-          handleRefetchPlayers
-        );
+        // checkLoseConditionFour(
+        //   canvasParams,
+        //   canvas,
+        //   leftScoreRef,
+        //   rightScoreRef,
+        //   gameStartedRef,
+        //   endGameFour,
+        //   username,
+        //   handleRefetchPlayers
+        // );
 
         // Change score
         changeScoreFour(
@@ -367,25 +365,13 @@ const Game = ({
         // setStartCountdown(true);
       } else if (message[0] === "/refetchPlayers") {
         onGoingGame.refetch();
-      } else if (message[0] === "/end") {
-        onGoingGame.refetch();
-        leftScoreRef.current = 0;
-        rightScoreRef.current = 0;
-        gameStartedRef.current = false;
-        isFirstTime.current = true;
-        leftUserTop.current = dummyPlayer;
-        leftUserBottom.current = dummyPlayer;
-        rightUserTop.current = dummyPlayer;
-        rightUserBottom.current = dummyPlayer;
       }
     }
-  }, [newNotif()?.data]);
-
-  useEffect(() => {
     if (gameMsg()) {
       const gameMsge = gameMsg()?.data;
       const parsedMessage = JSON.parse(gameMsge);
       const message = parsedMessage.message.split(" ");
+      console.log(message);
       if (message[0] === "/move") {
         const paddleY = parseInt(message[1]);
         const playerMoved = message[2];
@@ -417,6 +403,7 @@ const Game = ({
           x: parseInt(message[1]),
           y: parseInt(message[2]),
         };
+        newAngleRef.current = parseFloat(message[3]);
         if (
           canvasRef.current &&
           (newBallPositionRef.current.x < canvasRef.current.width / 6 ||
@@ -424,10 +411,19 @@ const Game = ({
         ) {
           isFirstTime.current = false;
         }
-        newAngleRef.current = parseFloat(message[3]); // Update the ref
+      } else if (message[0] === "/end") {
+        onGoingGame.refetch();
+        leftScoreRef.current = 0;
+        rightScoreRef.current = 0;
+        gameStartedRef.current = false;
+        isFirstTime.current = true;
+        leftUserTop.current = dummyPlayer;
+        leftUserBottom.current = dummyPlayer;
+        rightUserTop.current = dummyPlayer;
+        rightUserBottom.current = dummyPlayer;
       }
     }
-  }, [gameMsg()?.data]);
+  }, [gameMsg()?.data, newNotif()]);
 
   return (
     <>

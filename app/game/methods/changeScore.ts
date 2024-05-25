@@ -63,11 +63,7 @@ function changeScoreFour(
     x: number,
     y: number,
     angle: number,
-    user: string,
-    leftUserTop: string,
-    leftUserBottom: string,
-    rightUserTop: string,
-    rightUserBottom: string
+    user: string
   ) => void,
   handleEnemyScoreFour: (
     score: number,
@@ -95,6 +91,7 @@ function changeScoreFour(
     newBallPositionRef.current.x < -50 ||
     newBallPositionRef.current.x > canvas.width + 50
   ) {
+    console.log("enemyAngle");
     isFirstTime.current = true;
     if (newBallPositionRef.current.x < -50) {
       rightScoreRef.current = rightScoreRef.current + 1;
@@ -102,45 +99,34 @@ function changeScoreFour(
       leftScoreRef.current = leftScoreRef.current + 1;
     }
     newBallPositionRef.current.x = canvas.width / 2;
-    if (
-      (username === leftUserTop.current?.username &&
-        newBallPositionRef.current.x < -50) ||
-      (username === rightUserTop.current?.username &&
-        newBallPositionRef.current.x > canvas.width + 50)
+    newBallPositionRef.current.x = canvas.width / 2;
+    newAngleRef.current = Math.random() * 2 * Math.PI;
+    while (
+      (newAngleRef.current > Math.PI / 6 &&
+        newAngleRef.current < (Math.PI * 5) / 6) ||
+      (newAngleRef.current > (Math.PI * 7) / 6 &&
+        newAngleRef.current < (Math.PI * 11) / 6)
     ) {
-      newBallPositionRef.current.x = canvas.width / 2;
       newAngleRef.current = Math.random() * 2 * Math.PI;
-      while (
-        (newAngleRef.current > Math.PI / 6 &&
-          newAngleRef.current < (Math.PI * 5) / 6) ||
-        (newAngleRef.current > (Math.PI * 7) / 6 &&
-          newAngleRef.current < (Math.PI * 11) / 6)
-      ) {
-        newAngleRef.current = Math.random() * 2 * Math.PI;
-      }
-      handleChangeBallDirectionFour(
-        newBallPositionRef.current.x,
-        newBallPositionRef.current.y,
-        newAngleRef.current,
-        username,
-        leftUserTop.current?.username || "",
-        leftUserBottom.current?.username || "",
-        rightUserTop.current?.username || "",
-        rightUserBottom.current?.username || ""
-      );
-
-      handleEnemyScoreFour(
-        username === rightUserTop.current?.username ||
-          username === rightUserBottom.current?.username
-          ? leftScoreRef.current
-          : rightScoreRef.current,
-        username,
-        leftUserTop.current?.username || "",
-        leftUserBottom.current?.username || "",
-        rightUserTop.current?.username || "",
-        rightUserBottom.current?.username || ""
-      );
     }
+    handleChangeBallDirectionFour(
+      newBallPositionRef.current.x,
+      newBallPositionRef.current.y,
+      newAngleRef.current,
+      username
+    );
+
+    handleEnemyScoreFour(
+      username === rightUserTop.current?.username ||
+        username === rightUserBottom.current?.username
+        ? leftScoreRef.current
+        : rightScoreRef.current,
+      username,
+      leftUserTop.current?.username || "",
+      leftUserBottom.current?.username || "",
+      rightUserTop.current?.username || "",
+      rightUserBottom.current?.username || ""
+    );
   }
 }
 

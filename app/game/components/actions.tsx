@@ -32,12 +32,8 @@ const Actions = ({
   const isEnemyReadyRef = useRef(false);
   const { mutate: surrenderGame } = useSurrenderGame();
   const { mutate: leaveGame } = useLeaveGame();
-  const {
-    handleSurrender,
-    handleSurrenderFour,
-    handleStartGameFour,
-    handleRefetchPlayers,
-  } = useInvitationSocket();
+  const { handleSurrender, handleSurrenderFour, handleRefetchPlayers } =
+    useInvitationSocket();
 
   return (
     <div className="w-full h-fit flex flex-col justify-center items-center">
@@ -86,17 +82,7 @@ const Actions = ({
             <Button
               onClick={() => {
                 surrenderGame();
-                handleSurrenderFour(
-                  username,
-                  userLeftTop,
-                  userRightTop,
-                  userLeftBottom,
-                  userRightBottom,
-                  username === userRightTop || username === userRightBottom
-                    ? "left"
-                    : "right",
-                  gameId
-                );
+                handleSurrenderFour();
               }}
               className="w-1/2 mt-4"
             >
