@@ -38,8 +38,12 @@ const Game = ({ type }: { type: string }) => {
 
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
 
-  const { handleMovePaddle, handleChangeBallDirection, handleEnemyScore } =
-    useGameSocket();
+  const {
+    gameMsg,
+    handleMovePaddle,
+    handleChangeBallDirection,
+    handleEnemyScore,
+  } = useGameSocket();
   const { newNotif, handleStartGame } = useInvitationSocket();
   const user_id = getCookie("user_id") || "";
   const { data: user } = useGetUser(user_id || "0");
@@ -62,46 +66,28 @@ const Game = ({ type }: { type: string }) => {
   }
 
   useEffect(() => {
-    const notif = newNotif();
-    if (notif) {
-      const parsedMessage = JSON.parse(notif.data);
+    const gameMsge = gameMsg();
+    if (gameMsge) {
+      const parsedMessage = JSON.parse(gameMsge.data);
       const message = parsedMessage?.message.split(" ");
-      // console.log(message);
-      if (message[0] === "/show") {
-        gameStartedRef.current = true;
-        isFirstTime.current = true;
-        if (leftUser?.username === onGoingGame.data?.game?.user1?.username) {
-          if (canvasRef.current) {
-            const enemyX =
-              canvasRef.current?.width - newBallPositionRef.current.x;
-            const enemyY = newBallPositionRef.current.y;
-            const enemyAngle = Math.PI - newAngleRef.current;
-            handleChangeBallDirection(
-              enemyX,
-              enemyY,
-              enemyAngle,
-              rightUser?.username || ""
-            );
-          }
+      console.log(parsedMessage.message);
+      if (message[0] === "/move") {
+        const sender = message[2];
+        if (sender !== username) {
+          PaddleRightYRef.current = parseInt(message[1]);
         }
-        handleStartGame(
-          onGoingGame.data?.game?.user1?.username,
-          onGoingGame.data?.game?.user2?.username
-        );
-        // onGoingGame.refetch();
-      } else if (message[0] === "/start") {
-        onGoingGame.refetch();
-      } else if (message[0] === "/move") {
-        PaddleRightYRef.current = parseInt(message[1]);
       } else if (message[0] === "/ballDirection") {
-        newBallPositionRef.current = {
-          x: parseInt(message[1]),
-          y: parseInt(message[2]),
-        };
-        if (newAngleRef.current !== 0) {
-          isFirstTime.current = false;
+        const sender = message[4];
+        if (sender !== username) {
+          newBallPositionRef.current = {
+            x: parseInt(message[1]),
+            y: parseInt(message[2]),
+          };
+          if (newAngleRef.current !== 0) {
+            isFirstTime.current = false;
+          }
+          newAngleRef.current = parseFloat(message[3]);
         }
-        newAngleRef.current = parseFloat(message[3]);
       } else if (message[0] === "/score") {
         message[1] === leftUser?.username
           ? (leftScoreRef.current = parseInt(message[2]))
@@ -115,7 +101,23 @@ const Game = ({ type }: { type: string }) => {
         onGoingGame.refetch();
       }
     }
-  }, [newNotif()?.data]);
+    const notif = newNotif();
+    if (notif) {
+      const parsedMessage = JSON.parse(notif.data);
+      const message = parsedMessage?.message.split(" ");
+      // console.log(parsedMessage.message);
+      if (message[0] === "/show") {
+        gameStartedRef.current = true;
+        isFirstTime.current = true;
+        // onGoingGame.refetch();
+      } else if (message[0] === "/start") {
+        onGoingGame.refetch();
+      } else if (message[0] === "/end") {
+        gameStartedRef.current = false;
+        onGoingGame.refetch();
+      }
+    }
+  }, [newNotif()?.data, gameMsg()?.data]);
 
   useEffect(() => {
     if (onGoingGame.data?.game?.user1 === undefined) {
@@ -227,12 +229,7 @@ const Game = ({ type }: { type: string }) => {
           draw(canvasParams, ctx);
 
           // move paddles
-          movePaddlesOnline(
-            canvasParams,
-            handleMovePaddle,
-            rightUser,
-            username
-          );
+          movePaddlesOnline(canvasParams, handleMovePaddle);
           // console.log("move paddle" + movePaddleRef.current);
 
           // Check for collision with left paddle
