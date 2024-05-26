@@ -292,7 +292,6 @@ const Game = ({
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = "white";
             ctx.font = "20px Arial";
-            console.log("clicked");
             handleStartGameFour(
               username,
               leftUserTop.current?.username || "",
@@ -371,7 +370,6 @@ const Game = ({
       const gameMsge = gameMsg()?.data;
       const parsedMessage = JSON.parse(gameMsge);
       const message = parsedMessage.message.split(" ");
-      console.log(message);
       if (message[0] === "/move") {
         const paddleY = parseInt(message[1]);
         const playerMoved = message[2];
