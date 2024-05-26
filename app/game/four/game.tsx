@@ -100,8 +100,6 @@ const Game = ({
     let x = canvas.width / 2;
     let y = canvas.height / 2;
 
-    isFirstTime.current = true;
-
     const paddleHeight = 50;
     const paddleWidth = 10;
     paddleRightTopYRef.current = (canvas.height - paddleHeight) / 4;
@@ -414,7 +412,6 @@ const Game = ({
         leftScoreRef.current = 0;
         rightScoreRef.current = 0;
         gameStartedRef.current = false;
-        isFirstTime.current = true;
         leftUserTop.current = dummyPlayer;
         leftUserBottom.current = dummyPlayer;
         rightUserTop.current = dummyPlayer;

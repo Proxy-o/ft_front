@@ -70,7 +70,6 @@ const Game = ({ type }: { type: string }) => {
     if (gameMsge) {
       const parsedMessage = JSON.parse(gameMsge.data);
       const message = parsedMessage?.message.split(" ");
-      console.log(parsedMessage.message);
       if (message[0] === "/move") {
         const sender = message[2];
         if (sender !== username) {
@@ -83,19 +82,20 @@ const Game = ({ type }: { type: string }) => {
             x: parseInt(message[1]),
             y: parseInt(message[2]),
           };
-          if (newAngleRef.current !== 0) {
+          if (
+            canvasRef.current &&
+            (newBallPositionRef.current.x < canvasRef.current.width / 6 ||
+              newBallPositionRef.current.x > (canvasRef.current.width * 5) / 6)
+          ) {
             isFirstTime.current = false;
           }
           newAngleRef.current = parseFloat(message[3]);
         }
       } else if (message[0] === "/score") {
-        message[1] === leftUser?.username
-          ? (leftScoreRef.current = parseInt(message[2]))
-          : (rightScoreRef.current = parseInt(message[2]));
-        message[3] === leftUser?.username
-          ? (leftScoreRef.current = parseInt(message[4]))
-          : (rightScoreRef.current = parseInt(message[4]));
         isFirstTime.current = true;
+        if (message[2] !== username) {
+          leftScoreRef.current = parseInt(message[1]);
+        }
       } else if (message[0] === "/end") {
         gameStartedRef.current = false;
         onGoingGame.refetch();
@@ -108,7 +108,7 @@ const Game = ({ type }: { type: string }) => {
       // console.log(parsedMessage.message);
       if (message[0] === "/show") {
         gameStartedRef.current = true;
-        isFirstTime.current = true;
+        // isFirstTime.current = true;
         // onGoingGame.refetch();
       } else if (message[0] === "/start") {
         onGoingGame.refetch();

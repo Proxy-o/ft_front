@@ -14,7 +14,6 @@ export default function useGameSocket() {
 
   const handleMovePaddle = (paddleY: number) => {
     const toSend = "/move " + paddleY;
-    console.log(toSend);
     sendJsonMessage({ message: toSend });
   };
 
@@ -52,14 +51,8 @@ export default function useGameSocket() {
     sendJsonMessage({ message: toSend });
   };
 
-  const handleEnemyScore = (
-    user1: string,
-    score1: number,
-    user2: string,
-    score2: number
-  ) => {
-    const toSend =
-      "/enemyScore " + user1 + " " + score1 + " " + user2 + " " + score2;
+  const handleEnemyScore = (score: number) => {
+    const toSend = "/enemyScore " + score;
     sendJsonMessage({ message: toSend });
   };
 

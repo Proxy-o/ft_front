@@ -10,12 +10,7 @@ function changeScoreOnline(
     angle: number,
     user: string
   ) => void,
-  handleEnemyScore: (
-    user1: string,
-    score: number,
-    user2: string,
-    score2: number
-  ) => void,
+  handleEnemyScore: (score: number) => void,
   rightUser: User | undefined,
   leftUser: User | undefined
 ) {
@@ -28,7 +23,6 @@ function changeScoreOnline(
   } = canvasParams;
   if (canvas === null) return;
   if (newBallPositionRef.current.x < -50) {
-    isFirstTime.current = true;
     rightScoreRef.current = rightScoreRef.current + 1;
     newBallPositionRef.current.x = canvas.width / 2;
     newAngleRef.current = Math.random() * 2 * Math.PI;
@@ -47,12 +41,7 @@ function changeScoreOnline(
       enemyAngle,
       rightUser?.username || ""
     );
-    handleEnemyScore(
-      leftUser?.username || "",
-      leftScoreRef.current,
-      rightUser?.username || "",
-      rightScoreRef.current
-    );
+    handleEnemyScore(rightScoreRef.current);
   }
 }
 
@@ -91,7 +80,6 @@ function changeScoreFour(
     newBallPositionRef.current.x < -50 ||
     newBallPositionRef.current.x > canvas.width + 50
   ) {
-    console.log("enemyAngle");
     isFirstTime.current = true;
     if (newBallPositionRef.current.x < -50) {
       rightScoreRef.current = rightScoreRef.current + 1;

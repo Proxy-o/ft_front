@@ -82,7 +82,7 @@ function draw(canvasParams: canvasParams, ctx: CanvasRenderingContext2D) {
     ctx.fillText("Player", canvas.width / 2 + 150, canvas.height / 2 - 20);
   };
 
-  drawPlayer();
+  // drawPlayer();
   drawMiddleLine();
   drawScore();
   drawBall();
