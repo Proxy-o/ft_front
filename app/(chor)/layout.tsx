@@ -15,9 +15,9 @@ export default function RootLayout({
   }
 
   return (
-    <>
+    <div>
       <SearchFriend />
       {children}
-    </>
+    </div>
   );
 }

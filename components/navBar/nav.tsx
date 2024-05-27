@@ -9,6 +9,7 @@ import {
   GamepadIcon,
   Send,
   Users,
+  UserPlus2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "../ui/button";
@@ -42,15 +43,15 @@ export default function Nav() {
       variant: "ghost",
     },
     {
-      title: "chat",
-      link: "/chat",
-      icon: Send,
-      variant: "ghost",
-    },
-    {
       title: "Profile",
       link: "/profile",
       icon: UserIcon,
+      variant: "ghost",
+    },
+    {
+      title: "chat",
+      link: "/chat",
+      icon: Send,
       variant: "ghost",
     },
 
@@ -58,6 +59,12 @@ export default function Nav() {
       title: "Friends",
       link: "/friends",
       icon: Users,
+      variant: "ghost",
+    },
+    {
+      title: "Requests",
+      link: "/friend_requests",
+      icon: UserPlus2,
       variant: "ghost",
     },
   ];

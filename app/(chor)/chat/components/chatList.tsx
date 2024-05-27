@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { User } from "@/lib/types";
 import ChatFriendCard from "./chatFriendCard";
 import ChatCard from "./chatCard";
@@ -32,10 +32,19 @@ export default function ChatList() {
   };
   const mb = useMediaQuery("(min-width: 768px)");
   const [receiverId, setReceiverId] = useState<number>(0);
-
+  const chatRef = useRef<HTMLDivElement>(null); // Specify the type as React.RefObject<HTMLDivElement>
+  useEffect(() => {
+    if (chatRef.current) {
+      chatRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+        inline: "nearest",
+      });
+    }
+  }, []);
   return (
     <>
-      <div className="relative flex ">
+      <div className="relative flex " ref={chatRef}>
         {receiverId && isSender ? (
           <ChatCard receiver={receiver!} sender={sender} />
         ) : null}
