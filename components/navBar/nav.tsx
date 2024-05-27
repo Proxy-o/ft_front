@@ -69,7 +69,6 @@ export default function Nav() {
 
   const handleLogout = () => {
     logout();
-    router.push("/");
   };
 
   const token = getCookie("refresh");

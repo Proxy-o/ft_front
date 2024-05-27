@@ -20,7 +20,6 @@ import useBlock from "@/app/(chor)/friends/hooks/useBlockUser";
 import useUnBlock from "@/app/(chor)/friends/hooks/useUnBlockUser";
 import useAcceptFriend from "@/app/(chor)/friends/hooks/useAcceptFriend";
 import useLogout from "@/app/(auth)/login/hooks/useLogout";
-import { useRouter } from "next/navigation";
 
 export default function UserInfo({
   user,
@@ -45,7 +44,6 @@ export default function UserInfo({
   const { mutate: acceptFriend } = useAcceptFriend();
   const { data: friends, isSuccess } = useGetFriends(current_user_id);
   const { mutate: logout } = useLogout();
-  const router = useRouter();
 
   const id = user.id;
   const isFriend =
@@ -58,7 +56,6 @@ export default function UserInfo({
 
   const handleLogout = () => {
     logout();
-    router.push("/");
   };
   return (
     <Card className="relative rounded-lg p-6 md:flex max-w-7xl">

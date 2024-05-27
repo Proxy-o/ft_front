@@ -1,9 +1,11 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
 import getCookie from "@/lib/functions/getCookie";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 export default function useLogout() {
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const mutation = useMutation({
     mutationFn: async () => {
@@ -26,6 +28,7 @@ export default function useLogout() {
       queryClient.removeQueries({
         queryKey: ["user"],
       });
+      router.push("/login");
     },
   });
   return mutation;
