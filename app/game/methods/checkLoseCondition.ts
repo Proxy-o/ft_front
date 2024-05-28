@@ -10,11 +10,6 @@ function checkLoseConditionOnline(
   leftUser: User | undefined,
   rightUser: User | undefined,
   onGoingGame: UseQueryResult<{ game: any }, Error>,
-  handleSurrender: (
-    leftUser: string,
-    rightUser: string,
-    game_id: string
-  ) => void,
   endGame: (data: {
     winner: string;
     winnerScore: number;
@@ -32,12 +27,6 @@ function checkLoseConditionOnline(
       loser: rightUser?.id || "",
       loserScore: rightScoreRef.current,
     });
-    handleSurrender(
-      leftUser?.username || "",
-      rightUser?.username || "",
-      onGoingGame.data?.game?.id || ""
-    );
-    toast.error("You have lost the game");
   }
 }
 

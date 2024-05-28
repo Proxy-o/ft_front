@@ -15,6 +15,8 @@ export type canvasParams = {
   isFirstTime: React.MutableRefObject<boolean>;
   rightScoreRef: React.MutableRefObject<number>;
   leftScoreRef: React.MutableRefObject<number>;
+  leftUserRef: React.MutableRefObject<User | undefined>;
+  rightUserRef: React.MutableRefObject<User | undefined>;
 };
 
 export type canvasParamsFour = {

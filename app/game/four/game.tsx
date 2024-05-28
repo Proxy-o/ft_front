@@ -199,6 +199,8 @@ const Game = ({
           );
         }
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw the paddles
         drawFour(canvasParams);
 
         // move paddles

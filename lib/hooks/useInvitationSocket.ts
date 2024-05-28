@@ -23,12 +23,6 @@ export default function useInvitationSocket() {
     sendJsonMessage({ message: toSend });
   };
 
-  const handleStartGame = (user1: string, user2: string) => {
-    const toSend = "/debut " + user1 + " " + user2;
-    // console.log(toSend);
-    sendJsonMessage({ message: toSend });
-  };
-
   const handleStartGameFour = (
     user: string,
     leftTop: string,
@@ -95,7 +89,6 @@ export default function useInvitationSocket() {
     handelSendInvitation,
     newNotif,
     handleAcceptInvitation,
-    handleStartGame,
     handleSurrender,
     handleStartGameFour,
     handleSurrenderFour,

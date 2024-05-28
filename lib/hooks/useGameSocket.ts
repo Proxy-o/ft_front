@@ -12,6 +12,12 @@ export default function useGameSocket() {
     return lastMessage;
   };
 
+  const handleStartGame = (user1: string, user2: string, game_id: string) => {
+    const toSend = "/debut " + user1 + " " + user2 + " " + game_id;
+    // console.log(toSend);
+    sendJsonMessage({ message: toSend });
+  };
+
   const handleMovePaddle = (paddleY: number) => {
     const toSend = "/move " + paddleY;
     sendJsonMessage({ message: toSend });
@@ -80,13 +86,25 @@ export default function useGameSocket() {
     sendJsonMessage({ message: toSend });
   };
 
+  const handleTime = (time: number) => {
+    const toSend = "/time " + time;
+    sendJsonMessage({ message: toSend });
+  };
+
+  const handleDisconnect = () => {
+    sendJsonMessage({ message: "/disconnect" });
+  };
+
   return {
     gameMsg,
+    handleStartGame,
     handleMovePaddle,
     handleChangeBallDirection,
     handleEnemyScore,
     handleMovePaddleFour,
     handleChangeBallDirectionFour,
     handleEnemyScoreFour,
+    handleTime,
+    handleDisconnect,
   };
 }
