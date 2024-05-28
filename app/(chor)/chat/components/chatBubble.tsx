@@ -35,7 +35,7 @@ export default function ChatBubble({
         <AvatarImage
           src={sender.avatar}
           alt="profile image"
-          className="rounded-full size-1"
+          className="rounded-full size-4"
         />
         <AvatarFallback className="rounded-sm size-4 text-xs">R</AvatarFallback>
       </Avatar>

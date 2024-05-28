@@ -13,8 +13,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "../ui/button";
-import useMediaQuery from "@/lib/hooks/useMediaQuery";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import useLogout from "@/app/(auth)/login/hooks/useLogout";
 import { useEffect, useState } from "react";
@@ -30,9 +29,7 @@ import useGetFrdReq from "@/app/(chor)/friends/hooks/useGetFrReq";
 export default function Nav() {
   const { mutate: logout } = useLogout();
   const { theme, setTheme } = useTheme();
-  const router = useRouter();
   const [notification, setNotification] = useState(false);
-  const isCollapsed = useMediaQuery("(max-width: 768px)");
   const path = usePathname();
 
   const links: linksProps[] = [
@@ -74,13 +71,10 @@ export default function Nav() {
     variant: "default",
   };
 
-  const handleLogout = () => {
-    logout();
-  };
-
   const token = getCookie("refresh");
   const id = getCookie("user_id");
   const socketUrl = process.env.NEXT_PUBLIC_CHAT_URL + "2/?refresh=" + token;
+
   const { lastJsonMessage }: { lastJsonMessage: LastMessage } =
     useWebSocket(socketUrl);
   const [showNotif, setShowNotif] = useState(false);
@@ -89,7 +83,6 @@ export default function Nav() {
     id ? id : "0"
   );
   const { data: requests, isSuccess: isSuccessReq } = useGetFrdReq();
-
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -117,12 +110,12 @@ export default function Nav() {
     }
   }, [isSuccessFriends, friends, lastJsonMessage, queryClient, id, showNotif]);
 
+  const handleLogout = () => {
+    logout();
+  };
   if (token)
     return (
-      <div
-        data-collapsed={isCollapsed}
-        className="group flex flex-col gap-4 py-2 h-screen shadow-lg md:w-[8.5rem] "
-      >
+      <div className="group flex flex-col gap-4 py-2 h-screen shadow-lg md:w-[8.5rem] ">
         <nav className="flex flex-col gap-1 px-2 h-full ">
           {links.map((link, index) => (
             <Link
