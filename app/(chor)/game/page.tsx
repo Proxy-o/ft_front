@@ -31,11 +31,16 @@ export default function Page() {
   // );
 
   return (
-    <div className="relative w-full h-full">
+    <div className="relative w-full h-full flex flex-col justify-center  ">
       {/* <GameNav setTab={setTab} tab={tab} /> */}
-      <Card className="w-fit h-fit flex flex-col justify-start items-start p-2 mx-auto mt-12 gap-2">
+      <Card className="  w-fit h-fit flex flex-col justify-center items-center  mx-auto gap-2 p-4">
+        <div className="w-full h-full mb-4 ">
+          <h1 className="mb-2">Invitations</h1>
+
+          <Invitations mode="all" />
+        </div>
         <div className="p-4">Modes</div>
-        <div className="flex flex-row gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 ">
           <Link href="/game/local">
             <div>
               <OneVOne type="local" />
@@ -57,14 +62,8 @@ export default function Page() {
             </div>
           </Link>
         </div>
-        <div className="w-full h-full flex flex-row justify-start items-start gap-4">
-          <div className="w-1/2 h-full flex flex-col justify-start items-start">
-            <GamesTable id={user_id} />
-          </div>
-          <div className="w-1/2 h-full flex flex-col justify-start items-start">
-            <div className="p-4">Invitations</div>
-            <Invitations mode="all" />
-          </div>
+        <div className="w-full h-full flex flex-col md:flex-row  justify-center items-center   gap-4">
+          <GamesTable id={user_id} />
         </div>
       </Card>
       <div className="w-full h-fit flex flex-row justify-start items-start mt-10"></div>

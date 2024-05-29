@@ -61,8 +61,10 @@ const OneVOne = ({ type }: { type: string }) => {
           <div className="h-full w-full">
             <div className="bg-primary h-3 w-3 animate-moveArround"></div>
           </div>
-          <div className="bg-primary h-20 w-3 animate-moveUp"></div>
+          <div className="bg-primary h-20 w-3 animate-moveUp">
+          </div>
         </div>
+
       </div>
       <style jsx>{`
         @keyframes moveDown {
