@@ -54,14 +54,7 @@ function changeScoreFour(
     angle: number,
     user: string
   ) => void,
-  handleEnemyScoreFour: (
-    score: number,
-    user: string,
-    leftUserTop: string,
-    leftUserBottom: string,
-    rightUserTop: string,
-    rightUserBottom: string
-  ) => void,
+  handleEnemyScoreFour: () => void,
   username: string
 ) {
   const {
@@ -74,18 +67,23 @@ function changeScoreFour(
     userLeftBottom: leftUserBottom,
     userRightTop: rightUserTop,
     userRightBottom: rightUserBottom,
+    gameIdRef,
   } = canvasParams;
   if (canvas === null) return;
   if (
-    newBallPositionRef.current.x < -50 ||
-    newBallPositionRef.current.x > canvas.width + 50
+    (newBallPositionRef.current.x < -50 &&
+      ((newBallPositionRef.current.y < canvas.height / 2 &&
+        username === leftUserTop?.current.username) ||
+        (newBallPositionRef.current.y >= canvas.height / 2 &&
+          username === leftUserBottom?.current.username))) ||
+    (newBallPositionRef.current.x > canvas.width + 50 &&
+      ((newBallPositionRef.current.y < canvas.height / 2 &&
+        username === rightUserTop?.current.username) ||
+        (newBallPositionRef.current.y >= canvas.height / 2 &&
+          username === rightUserBottom?.current.username)))
   ) {
+    handleEnemyScoreFour();
     isFirstTime.current = true;
-    if (newBallPositionRef.current.x < -50) {
-      rightScoreRef.current = rightScoreRef.current + 1;
-    } else if (newBallPositionRef.current.x > canvas.width + 50) {
-      leftScoreRef.current = leftScoreRef.current + 1;
-    }
     newBallPositionRef.current.x = canvas.width / 2;
     newBallPositionRef.current.x = canvas.width / 2;
     newAngleRef.current = Math.random() * 2 * Math.PI;
@@ -102,18 +100,6 @@ function changeScoreFour(
       newBallPositionRef.current.y,
       newAngleRef.current,
       username
-    );
-
-    handleEnemyScoreFour(
-      username === rightUserTop.current?.username ||
-        username === rightUserBottom.current?.username
-        ? leftScoreRef.current
-        : rightScoreRef.current,
-      username,
-      leftUserTop.current?.username || "",
-      leftUserBottom.current?.username || "",
-      rightUserTop.current?.username || "",
-      rightUserBottom.current?.username || ""
     );
   }
 }

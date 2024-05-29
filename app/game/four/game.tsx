@@ -225,6 +225,15 @@ const Game = ({
           username
         );
 
+        // Change score
+        changeScoreFour(
+          canvasParams,
+          newAngleRef,
+          handleChangeBallDirectionFour,
+          handleEnemyScoreFour,
+          username
+        );
+
         // Check for score
         // checkLoseConditionFour(
         //   canvasParams,
@@ -236,15 +245,6 @@ const Game = ({
         //   username,
         //   handleRefetchPlayers
         // );
-
-        // Change score
-        changeScoreFour(
-          canvasParams,
-          newAngleRef,
-          handleChangeBallDirectionFour,
-          handleEnemyScoreFour,
-          username
-        );
 
         // Check for collision with the horizontal walls
         checkCollisionWithHorizontalWalls(
@@ -366,6 +366,8 @@ const Game = ({
         onGoingGame.refetch();
       }
     }
+  }, [newNotif()?.data]);
+  useEffect(() => {
     if (gameMsg()) {
       const gameMsge = gameMsg()?.data;
       const parsedMessage = JSON.parse(gameMsge);
@@ -386,17 +388,10 @@ const Game = ({
         }
       } else if (message[0] === "/score") {
         isFirstTime.current = true;
-        const score = parseInt(message[1]);
-        const user = message[2];
-        if (
-          user === leftUserTop.current?.username ||
-          user === leftUserBottom.current?.username
-        ) {
-          rightScoreRef.current = score;
-        } else {
-          leftScoreRef.current = score;
-        }
+        onGoingGame.refetch();
       } else if (message[0] === "/fourBallDirection") {
+        const sender = message[4];
+        if (sender !== username) {
         newBallPositionRef.current = {
           x: parseInt(message[1]),
           y: parseInt(message[2]),
@@ -408,6 +403,7 @@ const Game = ({
             newBallPositionRef.current.x > (canvasRef.current.width * 5) / 6)
         ) {
           isFirstTime.current = false;
+          }
         }
       } else if (message[0] === "/end") {
         onGoingGame.refetch();
@@ -420,8 +416,7 @@ const Game = ({
         rightUserBottom.current = dummyPlayer;
       }
     }
-  }, [gameMsg()?.data, newNotif()]);
-
+  }, [gameMsg()?.data]);
   return (
     <>
       <Players

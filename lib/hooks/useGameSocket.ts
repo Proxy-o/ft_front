@@ -62,27 +62,8 @@ export default function useGameSocket() {
     sendJsonMessage({ message: toSend });
   };
 
-  const handleEnemyScoreFour = (
-    newScore: number,
-    user: string,
-    leftTop: string,
-    leftBottom: string,
-    rightTop: string,
-    rightBottom: string
-  ) => {
-    const toSend =
-      "/fourEnemyScore " +
-      newScore +
-      " " +
-      user +
-      " " +
-      leftTop +
-      " " +
-      leftBottom +
-      " " +
-      rightTop +
-      " " +
-      rightBottom;
+  const handleEnemyScoreFour = () => {
+    const toSend = "/fourEnemyScore ";
     sendJsonMessage({ message: toSend });
   };
 
