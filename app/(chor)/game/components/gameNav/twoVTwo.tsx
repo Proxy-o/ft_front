@@ -6,7 +6,7 @@ const TwoVTwo = () => {
   return (
     <>
       <div
-        className={`w-52 h-52 bg-background flex flex-col justify-center items-center rounded-xl shadow-primary shadow-sm transition duration-300 ease-in-out hover:shadow-lg hover:shadow-primary/20 relative`}
+        className={`w-44 h-44 bg-background flex flex-col justify-center items-center rounded-xl shadow-primary shadow-sm transition duration-300 ease-in-out hover:shadow-lg hover:shadow-primary/20 relative`}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
       >
@@ -31,7 +31,7 @@ const TwoVTwo = () => {
             <div className="bg-primary h-20 w-3 animate-moveDownLeft"></div>
           </div>
           <div className="h-full w-full">
-            <div className="bg-primary h-3 w-3 animate-moveArround"></div>
+            <div className="bg-primary h-[10px] w-[10px] animate-moveArround"></div>
           </div>
           <div className="flex flex-col justify-between items-center h-4/6 w-3">
             <div className="bg-primary h-20 w-3 animate-moveUpRight"></div>
