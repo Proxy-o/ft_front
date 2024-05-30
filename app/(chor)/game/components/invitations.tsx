@@ -1,3 +1,5 @@
+"use client";
+
 import React, { Dispatch, SetStateAction, useEffect } from "react";
 import { Inbox, Swords } from "lucide-react";
 import { CircleOff } from "lucide-react";
@@ -14,9 +16,11 @@ import useAcceptInvitationTournament from "../hooks/useAccepteInvitationTourname
 import { Card } from "@/components/ui/card";
 import Router from "next/router";
 import { useRouter } from "next/navigation";
+import useWebSocket from "react-use-websocket";
+import useInvitationSocket from "@/lib/hooks/useInvitationSocket";
 
 const Invitations = ({ mode }: { mode: string }) => {
-  const { newNotif } = useGameSocket();
+  const { newNotif } = useInvitationSocket();
   const user_id = getCookie("user_id") || "";
   const router = useRouter();
   let invitationsData = useGetInvitations(user_id || "0");
@@ -45,7 +49,14 @@ const Invitations = ({ mode }: { mode: string }) => {
   };
 
   useEffect(() => {
-    invitationsData.refetch();
+    const notif = newNotif();
+    if (notif) {
+      const parsedMessage = JSON.parse(notif.data);
+      const message = parsedMessage?.message.split(" ");
+      if (message[0] === "/notif") {
+        invitationsData.refetch();
+      }
+    }
   }, [newNotif()?.data]);
 
   // Separate invitations by type

@@ -13,7 +13,7 @@ import useGetGames from "../hooks/useGetGames";
 import { Game } from "../types";
 import useIsWinner from "../hooks/useIsWinner";
 import { cn } from "@/lib/utils";
-import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 
 export default function GamesTable({ id }: { id: string }) {

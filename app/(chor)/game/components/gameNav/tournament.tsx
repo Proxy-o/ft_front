@@ -1,3 +1,5 @@
+"use client";
+
 import { Crown, User } from "lucide-react";
 import { useState } from "react";
 import { Separator } from "@radix-ui/react-separator";

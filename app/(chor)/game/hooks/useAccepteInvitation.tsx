@@ -1,5 +1,5 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
-import useGameSocket from "@/lib/hooks/useGameSocket";
+import useInvitationSocket from "@/lib/hooks/useInvitationSocket";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -15,13 +15,15 @@ async function accept(invitationId: string) {
 }
 
 export default function useAcceptInvitation() {
-  const { handleAcceptInvitation } = useGameSocket();
+  const { handleAcceptInvitation } = useInvitationSocket();
   const query = useQueryClient();
   const mutation = useMutation({
     mutationFn: accept,
     onSuccess: (invitationId) => {
       handleAcceptInvitation(invitationId);
       query.invalidateQueries({ queryKey: ["game"] });
+      query.invalidateQueries({ queryKey: ["gameFour"] });
+      query.invalidateQueries({ queryKey: ["invitations"] });
     },
   });
   return mutation;

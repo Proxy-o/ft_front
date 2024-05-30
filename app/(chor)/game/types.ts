@@ -2,7 +2,6 @@ import { User } from "@/lib/types";
 
 export type canvasParams = {
   canvas: HTMLCanvasElement | null;
-  ctx: CanvasRenderingContext2D;
   paddleLeftYRef: React.MutableRefObject<number>;
   paddleRightX: number;
   PaddleRightYRef: React.MutableRefObject<number>;
@@ -11,10 +10,13 @@ export type canvasParams = {
   paddleWidth: number;
   paddleHeight: number;
   ballRadius: number;
-  upPressed: boolean;
-  downPressed: boolean;
+  upPressedRef: React.MutableRefObject<boolean>;
+  downPressedRef: React.MutableRefObject<boolean>;
   isFirstTime: React.MutableRefObject<boolean>;
   rightScoreRef: React.MutableRefObject<number>;
+  leftScoreRef: React.MutableRefObject<number>;
+  leftUserRef: React.MutableRefObject<User | undefined>;
+  rightUserRef: React.MutableRefObject<User | undefined>;
 };
 
 export type canvasParamsFour = {
@@ -24,10 +26,10 @@ export type canvasParamsFour = {
   paddleLeftBottomYRef: React.MutableRefObject<number>;
   paddleRightTopYRef: React.MutableRefObject<number>;
   paddleRightBottomYRef: React.MutableRefObject<number>;
-  userLeftTop: User | undefined;
-  userLeftBottom: User | undefined;
-  userRightTop: User | undefined;
-  userRightBottom: User | undefined;
+  userLeftTop: React.MutableRefObject<User>;
+  userLeftBottom: React.MutableRefObject<User>;
+  userRightTop: React.MutableRefObject<User>;
+  userRightBottom: React.MutableRefObject<User>;
   newBallPositionRef: React.MutableRefObject<{ x: number; y: number }>;
   paddleLeftX: number;
   paddleRightX: number;
@@ -37,4 +39,5 @@ export type canvasParamsFour = {
   isFirstTime: React.MutableRefObject<boolean>;
   rightScoreRef: React.MutableRefObject<number>;
   leftScoreRef: React.MutableRefObject<number>;
+  gameIdRef: React.MutableRefObject<string>;
 };

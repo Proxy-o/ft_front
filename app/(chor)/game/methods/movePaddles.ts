@@ -4,21 +4,21 @@ import { toast } from "sonner";
 
 function movePaddlesOnline(
   canvasParams: canvasParams,
-  handleMovePaddle: (y: number, user: string) => void,
-  rightUser: User | undefined
+  handleMovePaddle: (y: number) => void
 ) {
-  const { canvas, paddleLeftYRef, upPressed, downPressed, paddleHeight } =
+  const { canvas, paddleLeftYRef, upPressedRef, downPressedRef, paddleHeight } =
     canvasParams;
   if (canvas === null) return;
-  if (upPressed && paddleLeftYRef.current > 0) {
+  if (upPressedRef.current && paddleLeftYRef.current > 0) {
     if (paddleLeftYRef.current - 6 < 0) {
       paddleLeftYRef.current = 0;
     } else {
       paddleLeftYRef.current -= 6;
     }
-    handleMovePaddle(paddleLeftYRef.current, rightUser?.username || "");
+    handleMovePaddle(paddleLeftYRef.current);
+    // upPressedRef.current = false;
   } else if (
-    downPressed &&
+    downPressedRef.current &&
     paddleLeftYRef.current < canvas.height - paddleHeight
   ) {
     if (paddleLeftYRef.current + 6 > canvas.height - paddleHeight) {
@@ -26,28 +26,18 @@ function movePaddlesOnline(
     } else {
       paddleLeftYRef.current += 6;
     }
-    handleMovePaddle(paddleLeftYRef.current, rightUser?.username || "");
+    handleMovePaddle(paddleLeftYRef.current);
+    // downPressedRef.current = false;
   }
 }
 
 function movePaddlesFour(
   canvasParams: canvasParamsFour,
-  handleMovePaddleFour: (
-    y: number,
-    user: string,
-    leftUserTop: string,
-    leftUserBottom: string,
-    rightUserTop: string,
-    rightUserBottom: string
-  ) => void,
-  leftUserTop: User | undefined,
-  leftUserBottom: User | undefined,
-  rightUserTop: User | undefined,
-  rightUserBottom: User | undefined,
+  handleMovePaddleFour: (y: number, user: string) => void,
   username: string,
   myPaddleRef: React.MutableRefObject<number>,
-  upPressed: boolean,
-  downPressed: boolean
+  upPressedRef: React.MutableRefObject<boolean>,
+  downPressedRef: React.MutableRefObject<boolean>
 ) {
   const {
     canvas,
@@ -56,9 +46,13 @@ function movePaddlesFour(
     paddleRightTopYRef,
     paddleRightBottomYRef,
     paddleHeight,
+    userLeftTop: leftUserTop,
+    userLeftBottom: leftUserBottom,
+    userRightTop: rightUserTop,
+    userRightBottom: rightUserBottom,
   } = canvasParams;
   if (canvas === null) return;
-  if (upPressed) {
+  if (upPressedRef.current) {
     if (myPaddleRef.current <= canvas.height / 2 - paddleHeight) {
       if (myPaddleRef.current - 6 < 0) {
         myPaddleRef.current = 0;
@@ -72,17 +66,11 @@ function movePaddlesFour(
         myPaddleRef.current -= 6;
       }
     }
-    handleMovePaddleFour(
-      myPaddleRef.current,
-      username,
-      leftUserTop?.username || "",
-      leftUserBottom?.username || "",
-      rightUserTop?.username || "",
-      rightUserBottom?.username || ""
-    );
-  } else if (downPressed) {
+    handleMovePaddleFour(myPaddleRef.current, username);
+    // upPressedRef.current = false;
+  } else if (downPressedRef.current) {
     if (myPaddleRef.current <= canvas.height / 2 - paddleHeight) {
-      if (myPaddleRef.current + 6 > canvas.height / 2 - paddleHeight) {
+      if (myPaddleRef.current + 6 >= canvas.height / 2 - paddleHeight) {
         myPaddleRef.current = canvas.height / 2 - paddleHeight;
       } else {
         myPaddleRef.current += 6;
@@ -94,22 +82,16 @@ function movePaddlesFour(
         myPaddleRef.current += 6;
       }
     }
-    handleMovePaddleFour(
-      myPaddleRef.current,
-      username,
-      leftUserTop?.username || "",
-      leftUserBottom?.username || "",
-      rightUserTop?.username || "",
-      rightUserBottom?.username || ""
-    );
+    handleMovePaddleFour(myPaddleRef.current, username);
+    // downPressedRef.current = false;
   }
-  if (username === rightUserTop?.username)
+  if (username === rightUserTop.current?.username)
     paddleRightTopYRef.current = myPaddleRef.current;
-  if (username === rightUserBottom?.username)
+  if (username === rightUserBottom.current?.username)
     paddleRightBottomYRef.current = myPaddleRef.current;
-  if (username === leftUserTop?.username)
+  if (username === leftUserTop.current?.username)
     paddleLeftTopYRef.current = myPaddleRef.current;
-  if (username === leftUserBottom?.username)
+  if (username === leftUserBottom.current?.username)
     paddleLeftBottomYRef.current = myPaddleRef.current;
 }
 

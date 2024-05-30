@@ -1,10 +1,4 @@
-"use client";
-
 import getCookie from "@/lib/functions/getCookie";
-
-import useGetUser from "../profile/hooks/useGetUser";
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import GamesTable from "../profile/components/gamesTable";
 import OneVOne from "./components/gameNav/oneVOne";
@@ -12,18 +6,10 @@ import TwoVTwo from "./components/gameNav/twoVTwo";
 import TournamentNav from "./components/gameNav/tournament";
 import Invitations from "./components/invitations";
 import Link from "next/link";
+import CheckLogin from "@/components/checkLogin";
+import GameNav from "./components/gameNav/gameNav";
 export default function Page() {
   const user_id = getCookie("user_id") || "";
-  const { data: user, isSuccess, isLoading } = useGetUser(user_id || "0");
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!user && isSuccess) {
-      router.push("/login");
-    }
-  }, [user, isSuccess, router]);
-
-  if (isLoading) return <div>loading...</div>;
 
   // window.addEventListener('offline', () => {
   //     console.log("offline");
@@ -31,7 +17,8 @@ export default function Page() {
   // );
 
   return (
-    <div className="relative w-full h-full flex flex-col justify-center  ">
+    <div className="relative w-full h-full">
+      <CheckLogin />
       {/* <GameNav setTab={setTab} tab={tab} /> */}
       <Card className="  w-fit h-fit flex flex-col justify-center items-center  mx-auto gap-2 p-4">
         <div className="w-full h-full mb-4 ">
