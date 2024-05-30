@@ -17,9 +17,7 @@ import useEndGame from "../hooks/useEndGame";
 import useGameSocket from "@/lib/hooks/useGameSocket";
 import Actions from "../components/actions";
 import useInvitationSocket from "@/lib/hooks/useInvitationSocket";
-import enemyLeftGame from "../methods/enemyLeftGame";
-import { on } from "events";
-import { time } from "console";
+import { enemyLeftGame } from "../methods/enemyLeftGame";
 
 const Game = ({ type }: { type: string }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -239,8 +237,7 @@ const Game = ({ type }: { type: string }) => {
           enemyLeftGameRef,
           gameStartedRef,
           handleTime,
-          endGame,
-          handleDisconnect
+          endGame
         );
       } else {
         // Clear the canvas
@@ -372,10 +369,7 @@ const Game = ({ type }: { type: string }) => {
       } else if (message[0] === "/time") {
         if (message[2] !== username) {
           timeRef.current = parseInt(message[1]);
-          const time = parseInt(message[1]);
-          if (time == timeRef.current) {
-            enemyLeftGameRef.current = false;
-          }
+          enemyLeftGameRef.current = false;
         }
       } else if (message[0] === "/end") {
         gameStartedRef.current = false;
