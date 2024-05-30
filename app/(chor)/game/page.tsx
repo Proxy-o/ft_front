@@ -1,3 +1,4 @@
+"use client";
 import getCookie from "@/lib/functions/getCookie";
 import { Card } from "@/components/ui/card";
 import GamesTable from "../profile/components/gamesTable";
@@ -7,7 +8,8 @@ import TournamentNav from "./components/gameNav/tournament";
 import Invitations from "./components/invitations";
 import Link from "next/link";
 import CheckLogin from "@/components/checkLogin";
-import GameNav from "./components/gameNav/gameNav";
+import { useEffect } from "react";
+
 export default function Page() {
   const user_id = getCookie("user_id") || "";
 

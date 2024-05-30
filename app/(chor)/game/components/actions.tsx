@@ -1,13 +1,10 @@
 import getCookie from "@/lib/functions/getCookie";
-import useGetGame from "../hooks/useGetGames";
 import useSurrenderGame from "../hooks/useSurrender";
 import useLeaveGame from "../hooks/useLeaveGame";
-import useGameSocket from "@/lib/hooks/useGameSocket";
 import { Button } from "@/components/ui/button";
-import useGetUser from "@/app/profile/hooks/useGetUser";
-import { toast } from "sonner";
 import { useRef } from "react";
 import useInvitationSocket from "@/lib/hooks/useInvitationSocket";
+import useGetUser from "../../profile/hooks/useGetUser";
 
 const Actions = ({
   gameStartedRef,

@@ -10,14 +10,14 @@ import { changeScoreOnline } from "../methods/changeScore";
 import checkCollisionWithHorizontalWalls from "../methods/checkCollisionWithHorizontalWalls";
 import { moveBall } from "../methods/moveBall";
 import { User } from "@/lib/types";
-import useGetUser from "@/app/profile/hooks/useGetUser";
 import getCookie from "@/lib/functions/getCookie";
 import useGetGame from "../hooks/useGetGames";
 import useEndGame from "../hooks/useEndGame";
 import useGameSocket from "@/lib/hooks/useGameSocket";
-import Actions from "../../(chor)/game/components/actions";
 import useInvitationSocket from "@/lib/hooks/useInvitationSocket";
 import { enemyLeftGame } from "../methods/enemyLeftGame";
+import useGetUser from "../../profile/hooks/useGetUser";
+import Actions from "../components/actions";
 
 const Game = ({ type }: { type: string }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);

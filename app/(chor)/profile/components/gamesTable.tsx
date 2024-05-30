@@ -1,3 +1,4 @@
+'use client'
 import React from "react";
 import {
   Table,
@@ -17,6 +18,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 
 export default function GamesTable({ id }: { id: string }) {
+  console.log(id)
   const { data: games, isSuccess } = useGetGames(id);
   const isWinner = useIsWinner();
 

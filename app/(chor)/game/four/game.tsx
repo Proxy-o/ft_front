@@ -11,14 +11,14 @@ import useGameSocket from "@/lib/hooks/useGameSocket";
 import { User } from "@/lib/types";
 import useGetFourGame from "../hooks/useGetFourGame";
 import getCookie from "@/lib/functions/getCookie";
-import useGetUser from "@/app/profile/hooks/useGetUser";
 import useEndGameFour from "../hooks/useEndGameFour";
 import Players from "../components/players";
-import Actions from "../../(chor)/game/components/actions";
 import useInvitationSocket from "@/lib/hooks/useInvitationSocket";
 import { on } from "events";
 import { enemyLeftGameFour } from "../methods/enemyLeftGame";
 import useEndGame from "../hooks/useEndGame";
+import useGetUser from "../../profile/hooks/useGetUser";
+import Actions from "../components/actions";
 
 const Game = ({
   gameStartedRef,
