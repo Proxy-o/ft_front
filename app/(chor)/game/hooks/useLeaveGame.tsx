@@ -15,6 +15,7 @@ export default function useLeaveGame() {
     mutationFn: () => leaveGame(),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["gameFour"] });
+      queryClient.invalidateQueries({ queryKey: ["game"] });
     },
   });
   return mutation;
