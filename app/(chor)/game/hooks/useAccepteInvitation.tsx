@@ -11,7 +11,7 @@ async function accept(invitationId: string) {
   if (res.status === 200) {
     toast.success("Invitation accepted");
   }
-  return gameId;
+  return invitationId;
 }
 
 export default function useAcceptInvitation() {
@@ -20,6 +20,7 @@ export default function useAcceptInvitation() {
   const mutation = useMutation({
     mutationFn: accept,
     onSuccess: (invitationId) => {
+      console.log("Invitation accepted", invitationId);
       handleAcceptInvitation(invitationId);
       query.invalidateQueries({ queryKey: ["game"] });
       query.invalidateQueries({ queryKey: ["gameFour"] });
