@@ -72,6 +72,28 @@ export default function useGameSocket() {
     sendJsonMessage({ message: toSend });
   };
 
+  const handleTimeFour = (time: number, user: string) => {
+    const toSend = "/fourTime " + time + " " + user;
+    sendJsonMessage({ message: toSend });
+  };
+
+  const handleTimeResponse = (time: number, user: string) => {
+    const toSend = "/timeResponse " + time + " " + user;
+    sendJsonMessage({ message: toSend });
+  };
+
+  const handleWhoLeftGame = () => {
+    sendJsonMessage({ message: "/whoLeftGame" });
+  };
+
+  const handleUserLeftGame = (user: string) => {
+    sendJsonMessage({ message: "/userLeftGame " + user });
+  };
+
+  const handleStillPlaying = (user: string, whoAsked: string) => {
+    sendJsonMessage({ message: "/stillPlaying " + user + " " + whoAsked });
+  };
+
   const handleDisconnect = () => {
     sendJsonMessage({ message: "/disconnect" });
   };
@@ -87,5 +109,10 @@ export default function useGameSocket() {
     handleEnemyScoreFour,
     handleTime,
     handleDisconnect,
+    handleTimeFour,
+    handleWhoLeftGame,
+    handleUserLeftGame,
+    handleTimeResponse,
+    handleStillPlaying,
   };
 }

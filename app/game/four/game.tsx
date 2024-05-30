@@ -17,6 +17,8 @@ import Players from "../components/players";
 import Actions from "../components/actions";
 import useInvitationSocket from "@/lib/hooks/useInvitationSocket";
 import { on } from "events";
+import { enemyLeftGameFour } from "../methods/enemyLeftGame";
+import useEndGame from "../hooks/useEndGame";
 
 const Game = ({
   gameStartedRef,
@@ -41,6 +43,10 @@ const Game = ({
   const upPressedRef = useRef(false);
   const downPressedRef = useRef(false);
   const gameIdRef = useRef("");
+  const timeRef = useRef(0);
+  const enemyLeftGameRef = useRef(false);
+  const numberOfTimeResponseRef = useRef(0);
+  const stillPlayingUsersRef = useRef<string[]>([]);
   const dummyPlayer: User = {
     username: "player",
     avatar: "none",
@@ -65,6 +71,11 @@ const Game = ({
     handleMovePaddleFour,
     handleChangeBallDirectionFour,
     handleEnemyScoreFour,
+    handleTimeFour,
+    handleTimeResponse,
+    handleWhoLeftGame,
+    handleUserLeftGame,
+    handleStillPlaying,
   } = useGameSocket();
 
   const {
@@ -75,13 +86,15 @@ const Game = ({
     handleStartGameFour,
   } = useInvitationSocket();
 
-  const { mutate: endGameFour } = useEndGameFour();
+  const { mutate: endGame } = useEndGame();
 
   leftUserTop.current = onGoingGame.data?.game?.user1 || dummyPlayer;
   leftUserBottom.current = onGoingGame.data?.game?.user3 || dummyPlayer;
   rightUserTop.current = onGoingGame.data?.game?.user2 || dummyPlayer;
   rightUserBottom.current = onGoingGame.data?.game?.user4 || dummyPlayer;
   gameIdRef.current = onGoingGame.data?.game.id || "";
+  leftScoreRef.current = onGoingGame.data?.game.user1_score || 0;
+  rightScoreRef.current = onGoingGame.data?.game.user2_score || 0;
 
   useEffect(() => {
     setCanvas(canvasRef.current);
@@ -171,6 +184,7 @@ const Game = ({
       userLeftBottom: leftUserBottom,
       userRightTop: rightUserTop,
       userRightBottom: rightUserBottom,
+      gameIdRef,
     };
 
     const drawOnlineOne = () => {
@@ -258,7 +272,15 @@ const Game = ({
         moveBallFour(canvasParams, newAngleRef);
 
         // Check if enemy has left the game
-        // enemyLeftGame();
+        enemyLeftGameFour(
+          canvasParams,
+          timeRef,
+          enemyLeftGameRef,
+          gameStartedRef,
+          handleTimeFour,
+          handleWhoLeftGame,
+          username
+        );
       } else {
         // Clear the canvas
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -392,19 +414,85 @@ const Game = ({
       } else if (message[0] === "/fourBallDirection") {
         const sender = message[4];
         if (sender !== username) {
-        newBallPositionRef.current = {
-          x: parseInt(message[1]),
-          y: parseInt(message[2]),
-        };
-        newAngleRef.current = parseFloat(message[3]);
-        if (
-          canvasRef.current &&
-          (newBallPositionRef.current.x < canvasRef.current.width / 6 ||
-            newBallPositionRef.current.x > (canvasRef.current.width * 5) / 6)
-        ) {
-          isFirstTime.current = false;
+          newBallPositionRef.current = {
+            x: parseInt(message[1]),
+            y: parseInt(message[2]),
+          };
+          newAngleRef.current = parseFloat(message[3]);
+          if (
+            canvasRef.current &&
+            (newBallPositionRef.current.x < canvasRef.current.width / 6 ||
+              newBallPositionRef.current.x > (canvasRef.current.width * 5) / 6)
+          ) {
+            isFirstTime.current = false;
           }
         }
+      } else if (message[0] === "/timeResponse") {
+        const user = message[2];
+        if (user === username) {
+          const time = parseInt(message[1]);
+          numberOfTimeResponseRef.current += 1;
+          if (numberOfTimeResponseRef.current === 4) {
+            timeRef.current = time;
+            enemyLeftGameRef.current = false;
+            numberOfTimeResponseRef.current = 0;
+          }
+        }
+      } else if (message[0] === "/fourTime") {
+        if (gameStartedRef.current)
+          handleTimeResponse(parseInt(message[1]), message[2]);
+      } else if (message[0] === "/whoLeftGame") {
+        const whoAsked = message[1];
+        handleStillPlaying(username, whoAsked);
+      } else if (message[0] === "/stillPlaying") {
+        const user = message[1];
+        const whoAsked = message[2];
+        if (whoAsked === username) {
+          stillPlayingUsersRef.current.push(user);
+          // handleWhoLeftGame();
+          if (stillPlayingUsersRef.current.length === 3) {
+            // find the user who did not respond
+            if (
+              leftUserTop.current.username &&
+              leftUserBottom.current.username &&
+              rightUserTop.current.username &&
+              rightUserBottom.current.username
+            ) {
+              const userWhoDidNotRespond = [
+                leftUserTop.current.username,
+                leftUserBottom.current.username,
+                rightUserTop.current.username,
+                rightUserBottom.current.username,
+              ];
+              stillPlayingUsersRef.current.forEach((user) => {
+                const index = userWhoDidNotRespond.indexOf(user);
+                if (index > -1) {
+                  userWhoDidNotRespond.splice(index, 1);
+                }
+              });
+              console.log(userWhoDidNotRespond[0]);
+              handleUserLeftGame(userWhoDidNotRespond[0] || "");
+              const winner =
+                leftUserTop.current.username === userWhoDidNotRespond[0] ||
+                leftUserBottom.current.username === userWhoDidNotRespond[0]
+                  ? rightUserTop.current.id
+                  : leftUserTop.current.id;
+              const loser =
+                leftUserTop.current.username === userWhoDidNotRespond[0] ||
+                leftUserBottom.current.username === userWhoDidNotRespond[0]
+                  ? leftUserTop.current.id
+                  : rightUserTop.current.id;
+              endGame({
+                winner,
+                winnerScore: 3,
+                loser,
+                loserScore: 0,
+              });
+            }
+          }
+        }
+      } else if (message[0] === "/userLeftGame") {
+        onGoingGame.refetch();
       } else if (message[0] === "/end") {
         onGoingGame.refetch();
         leftScoreRef.current = 0;

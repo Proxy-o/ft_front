@@ -39,4 +39,5 @@ export type canvasParamsFour = {
   isFirstTime: React.MutableRefObject<boolean>;
   rightScoreRef: React.MutableRefObject<number>;
   leftScoreRef: React.MutableRefObject<number>;
+  gameIdRef: React.MutableRefObject<string>;
 };
