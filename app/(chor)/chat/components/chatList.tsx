@@ -44,14 +44,14 @@ export default function ChatList() {
   }, []);
   return (
     <>
-      <div className="relative flex " ref={chatRef}>
+      <div className="relative flex max-w-[60rem] mx-auto" ref={chatRef}>
         {receiverId && isSender ? (
           <ChatCard receiver={receiver!} sender={sender} />
         ) : null}
         {mb || !receiverId ? (
           <div
             className={cn(
-              "flex flex-col    h-screen  overflow-y-auto  p-2",
+              "flex flex-col    overflow-y-auto  p-2",
               !isChatOpen ? "w-full" : "w-[40rem]"
             )}
           >

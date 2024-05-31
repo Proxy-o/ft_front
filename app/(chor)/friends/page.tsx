@@ -29,7 +29,7 @@ export default function Page() {
 
   return (
     user && (
-      <div className="flex gap-1  h-full flex-col p-6">
+      <div className="flex gap-1  h-full flex-col p-6 max-w-[60rem] mx-auto">
         <Link
           href="/friend_requests"
           className={cn(
