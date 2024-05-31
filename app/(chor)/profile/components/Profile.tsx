@@ -50,11 +50,11 @@ export default function Profile({ id }: { id: string }) {
       No User found.
     </div>
   ) : (
-    <>
-      <div className="relative lg:flex justify-center gap-4 p-4 ">
+    <div className="max-w-[60rem] mx-auto  ">
+      <div className="relative lg:flex justify-center gap-4 p-4 w-full  ">
         {isSuccess && (
           <>
-            <div className="flex flex-col gap-4 mb-4 sm:min-w-[40rem] ">
+            <div className="flex flex-col gap-4   w-full ">
               <UserInfo
                 user={data}
                 canEdit={canEdit}
@@ -84,6 +84,6 @@ export default function Profile({ id }: { id: string }) {
           </>
         )}
       </div>
-    </>
+    </div>
   );
 }

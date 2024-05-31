@@ -19,17 +19,12 @@ export default function Page() {
   // );
 
   return (
-    <div className="relative w-full h-full">
+    <div className="relative w-full h-full max-w-[60rem] mx-auto  bg-gre px-4">
       <CheckLogin />
       {/* <GameNav setTab={setTab} tab={tab} /> */}
-      <Card className="  w-fit h-fit flex flex-col justify-center items-center  mx-auto gap-2 p-4">
-        <div className="w-full h-full mb-4 ">
-          <h1 className="mb-2">Invitations</h1>
-
-          <Invitations mode="all" />
-        </div>
-        <div className="p-4">Modes</div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 ">
+      <Card className=" flex flex-col justify-center items-center  mx-auto gap-2 p-4 ">
+        <div className="pb-2">Modes</div>
+        <div className="flex flex-wrap gap-5 justify-center ">
           <Link href="/game/local">
             <div>
               <OneVOne type="local" />
@@ -50,6 +45,10 @@ export default function Page() {
               <TournamentNav />
             </div>
           </Link>
+        </div>
+        <div className="w-full h-full mb-4 ">
+          <h1 className="mb-2">Invitations</h1>
+          <Invitations mode="all" />
         </div>
         <div className="w-full h-full flex flex-col md:flex-row  justify-center items-center   gap-4">
           <GamesTable id={user_id} />

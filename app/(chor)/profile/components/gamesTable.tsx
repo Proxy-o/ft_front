@@ -25,7 +25,7 @@ export default function GamesTable({ id }: { id: string }) {
   return (
     isSuccess && (
       <div className="w-full">
-        <div className="p-4 relative">Completed games</div>
+        <div className="p-4 relative font-semibold">Completed games</div>
         <Card className="w-full">
           <Table>
             <TableHeader className="bg-secondary ">
