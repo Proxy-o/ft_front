@@ -89,7 +89,10 @@ export default function Nav() {
   useEffect(() => {
     setReqNotif(false);
     if (lastJsonMessage?.type === "request") {
-      toast.info("You have a new friend request from " + lastJsonMessage.user);
+      let id = lastJsonMessage.id;
+      toast(
+          <Link  href={`/profile/${id}`}>{"You have a new friend request from " + lastJsonMessage.user}</Link>
+      )
       queryClient.invalidateQueries({
         queryKey: ["requests"],
       });
