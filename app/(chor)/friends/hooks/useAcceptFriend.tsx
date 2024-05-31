@@ -26,16 +26,13 @@ export default function useAcceptFriend() {
       to_accept_id: string;
     }) => acceptFriend(to_accept_id),
     onSuccess: (_, variables) => {
-      queryClient.setQueryData(["requests"], (old: any) => {
-        return old.filter((el: any) => el.id !== variables.to_accept_id);
-      });
-      queryClient.setQueryData(
-        ["friends", variables.user_id.toString()],
-        (old: any) => {
-          if (!old) return [variables.friend];
-          return [...old, variables.friend];
+      queryClient.invalidateQueries(
+        {
+          queryKey: ["requests"],
         }
+        
       );
+  
       toast.success("Friend request accepted");
     },
     onError: (err) => {

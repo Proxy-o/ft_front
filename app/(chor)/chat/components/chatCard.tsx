@@ -28,7 +28,9 @@ export default function ChatCard({
   const receiverId = receiver.id;
   const token = getCookie("refresh");
   const socketUrl = process.env.NEXT_PUBLIC_CHAT_URL + "2/?refresh=" + token;
-  const { sendJsonMessage, lastMessage } = useWebSocket(socketUrl);
+  const { sendJsonMessage, lastMessage } = useWebSocket(socketUrl,{
+    share: true,
+  });
 
   const [hasMore, setHasMore] = useState(true);
   const [message, setMessage] = useState("");
