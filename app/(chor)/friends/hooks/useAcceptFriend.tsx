@@ -30,8 +30,10 @@ export default function useAcceptFriend() {
         {
           queryKey: ["requests"],
         }
-        
       );
+      queryClient.invalidateQueries({
+        queryKey: ["friends", variables.user_id],
+      });
   
       toast.success("Friend request accepted");
     },

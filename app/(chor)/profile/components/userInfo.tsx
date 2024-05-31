@@ -20,6 +20,7 @@ import useBlock from "@/app/(chor)/friends/hooks/useBlockUser";
 import useUnBlock from "@/app/(chor)/friends/hooks/useUnBlockUser";
 import useAcceptFriend from "@/app/(chor)/friends/hooks/useAcceptFriend";
 import useLogout from "@/app/(auth)/login/hooks/useLogout";
+import useReject from "../../friends/hooks/useDeclineReq";
 
 export default function UserInfo({
   user,
@@ -42,6 +43,7 @@ export default function UserInfo({
   const { mutate: unBlock } = useUnBlock();
   const { data: friendReq } = useGetFrdReq();
   const { mutate: acceptFriend } = useAcceptFriend();
+  const { mutate: reject } = useReject();
   const { data: friends, isSuccess } = useGetFriends(current_user_id);
   const { mutate: logout } = useLogout();
 
@@ -155,6 +157,7 @@ export default function UserInfo({
                 </Button>
               ) : (
                 recReqId && (
+                  <>
                   <Button
                     className="mt-6 w-full bg-green-400/20"
                     variant="outline"
@@ -168,6 +171,15 @@ export default function UserInfo({
                   >
                     Accept Request
                   </Button>
+                  <Button
+                    className="mt-6 w-full bg-red-400/20"
+                    variant="outline"
+                    onClick={() => reject(recReqId)}
+                  >
+                    Decline
+                  </Button>
+                                    
+                  </>
                 )
               )}
               {isFriend && (
