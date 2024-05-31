@@ -22,8 +22,8 @@ export default function FriendRequests() {
   const reqCount = filteredData.length;
   return (
     isSuccess && (
-      <Card className=" w-full border h-full    flex flex-col    my-3 p-1   ">
-        <div className="flex w-full justify-center items-center border-b-2 mb-1 p-2">
+      <Card className=" w-full border h-full    flex flex-col    my-3 p-1 ">
+        <div className="flex w-full justify-center items-center border-b-2  py-4">
           Friend Requests
           <p className="border bg-primary mx-2 rounded-full size-6  text-center">
             {reqCount}
