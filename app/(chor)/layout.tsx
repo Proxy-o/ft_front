@@ -15,7 +15,7 @@ export default function RootLayout({
   }
 
   return (
-    <div className="h-full">
+    <div className="">
       <SearchFriend />
       {children}
     </div>

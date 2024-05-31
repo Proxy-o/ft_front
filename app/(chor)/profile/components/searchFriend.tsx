@@ -16,10 +16,10 @@ export default function SearchFriend() {
   };
   return (
     <div
-      className=" mx-auto p-2  relative max-w-[60rem] "
+      className=" mx-auto py-2 m-2 relative max-w-[60rem] "
       onBlur={() => setTimeout(() => setResVisible(false), 200)}
     >
-      <div className=" h-12  w-full ">
+      <div className=" h-12 px-2 w-full ">
         <Search size={20} className="absolute end-4 top-5 " />
         <Input
           placeholder="Search"
