@@ -21,7 +21,6 @@ export default function useVerifyOtp() {
   const info = useMutation({
     mutationFn: async (data: VerifyOTPState) => {
       const res = await verifyOtp(data);
-      console.log(res);
       return res;
     },
     onSuccess: (data) => {
