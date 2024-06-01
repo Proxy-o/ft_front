@@ -21,6 +21,9 @@ import useUnBlock from "@/app/(chor)/friends/hooks/useUnBlockUser";
 import useAcceptFriend from "@/app/(chor)/friends/hooks/useAcceptFriend";
 import useLogout from "@/app/(auth)/login/hooks/useLogout";
 import useReject from "../../friends/hooks/useDeclineReq";
+import useSendInvitation from "../../game/hooks/useSendInvitation";
+import useInvitationSocket from "@/lib/hooks/useInvitationSocket";
+import { useRouter } from "next/navigation";
 
 export default function UserInfo({
   user,
@@ -46,6 +49,9 @@ export default function UserInfo({
   const { mutate: reject } = useReject();
   const { data: friends, isSuccess } = useGetFriends(current_user_id);
   const { mutate: logout } = useLogout();
+  const { mutate: invite } = useSendInvitation();
+  const { handelSendInvitation } = useInvitationSocket();
+  const router = useRouter();
 
   const id = user.id;
   const isFriend =
@@ -158,27 +164,26 @@ export default function UserInfo({
               ) : (
                 recReqId && (
                   <>
-                  <Button
-                    className="mt-6 w-full bg-green-400/20"
-                    variant="outline"
-                    onClick={() =>
-                      acceptFriend({
-                        user_id: current_user_id,
-                        friend: user,
-                        to_accept_id: recReqId,
-                      })
-                    }
-                  >
-                    Accept Request
-                  </Button>
-                  <Button
-                    className="mt-6 w-full bg-red-400/20"
-                    variant="outline"
-                    onClick={() => reject(recReqId)}
-                  >
-                    Decline
-                  </Button>
-                                    
+                    <Button
+                      className="mt-6 w-full bg-green-400/20"
+                      variant="outline"
+                      onClick={() =>
+                        acceptFriend({
+                          user_id: current_user_id,
+                          friend: user,
+                          to_accept_id: recReqId,
+                        })
+                      }
+                    >
+                      Accept Request
+                    </Button>
+                    <Button
+                      className="mt-6 w-full bg-red-400/20"
+                      variant="outline"
+                      onClick={() => reject(recReqId)}
+                    >
+                      Decline
+                    </Button>
                   </>
                 )
               )}
@@ -191,7 +196,18 @@ export default function UserInfo({
                   >
                     Message
                   </Button>
-                  <Button className="mt-6 w-full" variant="outline">
+                  <Button
+                    className="mt-6 w-full"
+                    variant="outline"
+                    onClick={() => {
+                      invite({
+                        userid: id,
+                        gameType: "two",
+                      });
+                      handelSendInvitation(id);
+                      router.push("/game/oneVone")
+                    }}
+                  >
                     Challenge
                   </Button>
                   <Button
