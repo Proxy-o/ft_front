@@ -64,7 +64,7 @@ export default function ChatCard({
     }
     if (
       lastJsonMessage &&
-      (lastJsonMessage as { type: string }).type !== "private_message_delivered"
+      (lastJsonMessage as { type: string }).type === "blocked"
     ) {
       setIsBlocked(true);
     }
