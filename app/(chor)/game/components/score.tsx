@@ -1,11 +1,11 @@
 import { on } from "events";
 import React, { useEffect, useState } from "react";
-import useGetGame from "../hooks/useGetGames";
 import getCookie from "@/lib/functions/getCookie";
 import useGameSocket from "@/lib/hooks/useGameSocket";
 import { User } from "@/lib/types";
-import useGetUser from "@/app/profile/hooks/useGetUser";
 import useGetFourGame from "../hooks/useGetFourGame";
+import useGetUser from "../../profile/hooks/useGetUser";
+import useGetGame from "../hooks/useGetGames";
 
 export default function Score({ type }: { type: string }) {
   const [leftPlayerScore, setLeftPlayerScore] = useState(0);
