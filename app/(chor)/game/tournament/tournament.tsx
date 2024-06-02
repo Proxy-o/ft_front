@@ -8,7 +8,7 @@ import useGetTournament from "../hooks/useGetTournament";
 import InviteFriends from "../components/inviteFriend";
 import useGetUser from "@/app/(chor)/profile/hooks/useGetUser";
 import useGetTournamentGame from "../hooks/useGetGameTournament";
-import Two from "../oneVone/two";
+import Two from "../oneVone/oneVone";
 import Invitations from "../components/invitations";
 import useLeavetournament from "../hooks/useLeaveTournament";
 import useDeleteTournament from "../hooks/useDeleteTournament";

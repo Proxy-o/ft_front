@@ -1,4 +1,4 @@
-import Two from "./two";
+import Two from "./oneVone";
 import { Card } from "@/components/ui/card";
 import Invitations from "../components/invitations";
 import InviteFriends from "../components/inviteFriend";

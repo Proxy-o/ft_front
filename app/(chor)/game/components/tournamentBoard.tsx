@@ -5,11 +5,9 @@ import { Crown } from "lucide-react";
 import useGetTournament from "../hooks/useGetTournament";
 import getCookie from "@/lib/functions/getCookie";
 import { useEffect, useRef, useState } from "react";
-import useUpdateFinal from "../hooks/useUpdateFinal";
 
 const TournamentBoard = () => {
   const user_id = getCookie("user_id") || "";
-  const { mutate: updateFinal } = useUpdateFinal();
   const { tournament } = useGetTournament(user_id);
   console.log("tournamentBoard");
   const semi1 = useRef<any>(null);

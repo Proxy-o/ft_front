@@ -67,20 +67,38 @@ const Game = ({ type }: { type: string }) => {
   const { onGoingGame } = useGetGame(user_id || "0", type);
   const { mutate: endGame } = useEndGame();
 
-  const query = useQueryClient();
-
   userRef.current = user;
 
   const username = user?.username || "";
 
-  rightUser.current =
-    onGoingGame?.data?.game?.user1?.username === username
-      ? onGoingGame?.data?.game?.user2
-      : onGoingGame?.data?.game?.user1;
-  leftUser.current =
-    onGoingGame?.data?.game?.user1?.username === username
-      ? onGoingGame?.data?.game?.user1
-      : onGoingGame?.data?.game?.user2;
+  // rightUser.current =
+  //   onGoingGame?.data?.game?.user1?.username === username
+  //     ? onGoingGame?.data?.game?.user2
+  //     : onGoingGame?.data?.game?.user1;
+  // leftUser.current =
+  //   onGoingGame?.data?.game?.user1?.username === username
+  //     ? onGoingGame?.data?.game?.user1
+  //     : onGoingGame?.data?.game?.user2;
+  // leftScoreRef.current =
+  //   onGoingGame?.data?.game?.user1?.username === username
+  //     ? onGoingGame?.data?.game?.score1 || 0
+  //     : onGoingGame?.data?.game?.score2 || 0;
+  // rightScoreRef.current =
+  //   onGoingGame?.data?.game?.user1?.username === username
+  //     ? onGoingGame?.data?.game?.score2 || 0
+  //     : onGoingGame?.data?.game?.score1 || 0;
+
+  if (onGoingGame?.data?.game?.user1?.username === username) {
+    leftUser.current = onGoingGame?.data?.game?.user1;
+    rightUser.current = onGoingGame?.data?.game?.user2;
+    leftScoreRef.current = onGoingGame?.data?.game?.user1_score;
+    rightScoreRef.current = onGoingGame?.data?.game?.user2_score;
+  } else {
+    leftUser.current = onGoingGame?.data?.game?.user2;
+    rightUser.current = onGoingGame?.data?.game?.user1;
+    leftScoreRef.current = onGoingGame?.data?.game?.user2_score;
+    rightScoreRef.current = onGoingGame?.data?.game?.user1_score;
+  }
 
   controllerUser.current = onGoingGame?.data?.game?.user1;
 
@@ -134,6 +152,7 @@ const Game = ({ type }: { type: string }) => {
       leftScoreRef,
       leftUserRef: leftUser,
       rightUserRef: rightUser,
+      gameIdRef,
     };
 
     const handleKeyEvent = (e: KeyboardEvent) => {
@@ -481,9 +500,7 @@ const Game = ({ type }: { type: string }) => {
         onGoingGame.refetch();
       } else if (message[0] === "/score") {
         isFirstTime.current = true;
-        if (message[2] !== username) {
-          leftScoreRef.current = parseInt(message[1]);
-        }
+        onGoingGame.refetch();
       } else if (message[0] === "/time") {
         if (message[2] !== username) {
           timeRef.current = parseInt(message[1]);
