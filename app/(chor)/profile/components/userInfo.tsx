@@ -24,6 +24,7 @@ import useReject from "../../friends/hooks/useDeclineReq";
 import useSendInvitation from "../../game/hooks/useSendInvitation";
 import useInvitationSocket from "@/lib/hooks/useInvitationSocket";
 import { useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 export default function UserInfo({
   user,
@@ -66,7 +67,12 @@ export default function UserInfo({
     logout();
   };
   return (
-    <Card className="relative rounded-lg p-6 md:flex max-w-7xl">
+    <Card
+      className={cn(
+        "relative rounded-lg p-6 md:flex max-w-7xl",
+        isBlocked && " cursor-not-allowed"
+      )}
+    >
       <div className="absolute top-0 right-0 p-2">
         {isBlocked && blocked_by_current_user ? (
           <Button
@@ -205,7 +211,7 @@ export default function UserInfo({
                         gameType: "two",
                       });
                       handelSendInvitation(id);
-                      router.push("/game/oneVone")
+                      router.push("/game/oneVone");
                     }}
                   >
                     Challenge
