@@ -84,15 +84,15 @@ const Invitations = ({ mode }: { mode: string }) => {
   }
 
   return (
-    <Card className="w-full h-full flex flex-col justify-start items-start p-2 mx-auto gap-2 bg-background">
-      <div className="w-full flex flex-col justify-start items-start space-y-2">
+    <Card className="w-full  h-full flex flex-col justify-start items-center p-2 mx-auto gap-2 bg-background">
+      <div className="w-full flex flex-col justify-center items-center  space-y-2">
         {mode !== "all" && (
           <h1 className="text-4xl mx-auto border-b-2 pl-4 pb-4 w-full text-start">
             Invitations
           </h1>
         )}
         {oneVsOneInvitations.length !== 0 ? (
-          <>
+          <span className="w-full flex  flex-col">
             <h1 className="text-4xl mx-auto">1 vs 1</h1>
             <Separator className="w-full my-4" />
             {oneVsOneInvitations.map((invitation) => {
@@ -100,7 +100,7 @@ const Invitations = ({ mode }: { mode: string }) => {
               return (
                 <div
                   key={invitation.id}
-                  className="border-2 border-secondary rounded-full hover:bg-secondary/60 w-11/12 mr-auto"
+                  className="border-2 border-secondary rounded-lg hover:bg-secondary/60 w-full mr-auto"
                 >
                   <div className="flex flex-row justify-start items-center my-2 mx-auto gap-2">
                     <Avatar className=" mr-2 ml-auto">
@@ -138,7 +138,7 @@ const Invitations = ({ mode }: { mode: string }) => {
                 </div>
               );
             })}
-          </>
+          </span>
         ) : null}
 
         {twoVsTwoInvitations.length !== 0 ? (

@@ -55,7 +55,7 @@ export default function ChatList() {
               !isChatOpen ? "w-full" : "w-[40rem]"
             )}
           >
-            {isSuccess &&
+            {isSuccess && friends.length > 0 ? (
               friends.map((friend: User) => {
                 return (
                   <div
@@ -70,7 +70,12 @@ export default function ChatList() {
                     />
                   </div>
                 );
-              })}
+              })
+            ) : (
+              <div className="w-full text-center h-16 flex justify-center items-center bg-primary/5">
+                You don&apos;t have any friend to chat with
+              </div>
+            )}
           </div>
         ) : (
           <>

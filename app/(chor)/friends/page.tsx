@@ -47,7 +47,7 @@ export default function Page() {
             </p>
           </div>
           <div className="overflow-y-auto">
-            {friendsIsSuccess &&
+            {friendsIsSuccess && friends.length > 0 ? (
               friends.map((friend: User) => {
                 return (
                   <Link
@@ -58,7 +58,12 @@ export default function Page() {
                     <ChatFriendCard friend={friend} setReceiverId={() => {}} />
                   </Link>
                 );
-              })}
+              })
+            ) : (
+              <div className="w-full text-center h-16 flex justify-center items-center bg-primary/5">
+                sorry you don&apos;t have any friends
+              </div>
+            )}
           </div>
         </Card>
       </div>

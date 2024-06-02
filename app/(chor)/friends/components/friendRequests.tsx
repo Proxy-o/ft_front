@@ -30,7 +30,7 @@ export default function FriendRequests() {
           </p>
         </div>
 
-        {reqCount !== 0 && (
+        {reqCount !== 0 ? (
           <>
             {filteredData.map(
               ({ id, from_user }: { id: string; from_user: User }) => (
@@ -75,6 +75,10 @@ export default function FriendRequests() {
               )
             )}
           </>
+        ) : (
+          <div className="w-full text-center h-16 flex justify-center items-center bg-primary/5">
+             You don&apos;t have any requests
+          </div>
         )}
       </Card>
     )
