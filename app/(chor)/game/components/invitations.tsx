@@ -40,9 +40,9 @@ const Invitations = ({ mode }: { mode: string }) => {
     }
   };
 
-  const acceptInvitationTournament = async (invitationId: string) => {
+  const acceptInvitationTournament = (invitationId: string) => {
     try {
-      await acceptInvitationTournamentMutation(invitationId);
+      acceptInvitationTournamentMutation(invitationId);
     } catch (error) {
       console.log(error);
     }

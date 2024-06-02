@@ -7,21 +7,22 @@ async function accept(invitationId: string) {
   const res = await axiosInstance.post("game/accept_invitation_tournament", {
     invitationId,
   });
-  const gameId = res.data.gameId;
+  const tournamentId = res.data.tournamentId;
   if (res.status === 200) {
     toast.success("Invitation accepted");
   }
-  return gameId;
+  return tournamentId;
 }
 
 export default function useAcceptInvitationTournament() {
-  const { handleAcceptInvitation } = useInvitationSocket();
+  const { handleAcceptTournamentInvitation } = useInvitationSocket();
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: accept,
-    onSuccess: (invitationId) => {
+    onSuccess: (tournamentId) => {
       queryClient.invalidateQueries({ queryKey: ["tournament"] });
-      handleAcceptInvitation(invitationId);
+      queryClient.invalidateQueries({ queryKey: ["invitations"] });
+      handleAcceptTournamentInvitation(tournamentId);
     },
   });
   return mutation;

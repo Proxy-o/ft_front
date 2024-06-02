@@ -18,6 +18,7 @@ import useInvitationSocket from "@/lib/hooks/useInvitationSocket";
 import { enemyLeftGame } from "../methods/enemyLeftGame";
 import useGetUser from "../../profile/hooks/useGetUser";
 import Actions from "../components/actions";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Game = ({ type }: { type: string }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -66,6 +67,8 @@ const Game = ({ type }: { type: string }) => {
   const { onGoingGame } = useGetGame(user_id || "0", type);
   const { mutate: endGame } = useEndGame();
 
+  const query = useQueryClient();
+
   userRef.current = user;
 
   const username = user?.username || "";
@@ -81,7 +84,7 @@ const Game = ({ type }: { type: string }) => {
 
   controllerUser.current = onGoingGame?.data?.game?.user1;
 
-  gameIdRef.current = onGoingGame?.data?.game.id || "";
+  gameIdRef.current = onGoingGame?.data?.game?.id || "";
   leftImageRef.current = new Image();
   leftImageRef.current.src = leftUser.current?.avatar || "";
   rightImageRef.current = new Image();
@@ -218,7 +221,6 @@ const Game = ({ type }: { type: string }) => {
           rightScoreRef,
           leftUser.current,
           rightUser.current,
-          onGoingGame,
           endGame,
           gameStartedRef
         );
@@ -376,9 +378,6 @@ const Game = ({ type }: { type: string }) => {
         ctx.restore();
       };
 
-      if (rightUser.current?.username !== undefined) {
-        drawLightningBolt();
-      }
       drawPlayers();
 
       if (rightUser.current?.username !== undefined) {
@@ -398,10 +397,10 @@ const Game = ({ type }: { type: string }) => {
 
           // Check if the click was inside the button
           if (
-            x > canvas.width / 2 - 50 &&
-            x < canvas.width / 2 + 50 &&
-            y > canvas.height - 100 &&
-            y < canvas.height - 60 &&
+            x > canvas.width - 150 &&
+            x < canvas.width &&
+            y > canvas.height - 50 &&
+            y < canvas.height &&
             !clickedRef.current
           ) {
             console.log("clicked");
@@ -437,7 +436,7 @@ const Game = ({ type }: { type: string }) => {
       animate();
       return returnFunction;
     }
-  }, [canvas, onGoingGame.data?.game.user1]);
+  }, [canvas, onGoingGame.data?.game?.user1]);
 
   useEffect(() => {
     const gameMsge = gameMsg();
@@ -503,7 +502,7 @@ const Game = ({ type }: { type: string }) => {
       const message = parsedMessage?.message.split(" ");
       console.log(parsedMessage.message);
 
-      if (message[0] === "/start") {
+      if (message[0] === "/start" || message[0] === "/refetchTournament") {
         onGoingGame.refetch();
       } else if (message[0] === "/end") {
         handleDisconnect();
@@ -514,12 +513,12 @@ const Game = ({ type }: { type: string }) => {
   }, [newNotif()?.data]);
 
   return (
-    <div className="w-full h-fit flex flex-col justify-center items-center">
+    <div className="flex flex-col justify-center items-center">
       <canvas
         ref={canvasRef}
         height="400"
         width="800"
-        className="w-full md:w-5/6 h-[400px] lg:h-[500px] max-w-[800px] bg-black border-2 border-white mx-auto"
+        className="w-full  bg-black border-2 border-white mx-auto"
       ></canvas>
       <Actions
         gameStartedRef={gameStartedRef}

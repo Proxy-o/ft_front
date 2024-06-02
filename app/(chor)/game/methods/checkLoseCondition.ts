@@ -1,5 +1,5 @@
 import { User } from "@/lib/types";
-import { UseQueryResult } from "@tanstack/react-query";
+import { QueryClient, UseQueryResult } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { canvasParamsFour } from "../types";
 
@@ -9,7 +9,6 @@ function checkLoseConditionOnline(
   rightScoreRef: React.MutableRefObject<number>,
   leftUser: User | undefined,
   rightUser: User | undefined,
-  onGoingGame: UseQueryResult<{ game: any }, Error>,
   endGame: (data: {
     winner: string;
     winnerScore: number;
@@ -22,10 +21,10 @@ function checkLoseConditionOnline(
   if (rightScoreRef.current === 3) {
     gameStartedRef.current = false;
     endGame({
-      winner: leftUser?.id || "",
-      winnerScore: leftScoreRef.current,
-      loser: rightUser?.id || "",
-      loserScore: rightScoreRef.current,
+      winner: rightUser?.id || "",
+      winnerScore: rightScoreRef.current,
+      loser: leftUser?.id || "",
+      loserScore: leftScoreRef.current,
     });
   }
 }
