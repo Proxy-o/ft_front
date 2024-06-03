@@ -38,7 +38,7 @@ export default function useAcceptFriend() {
       toast.success("Friend request accepted");
     },
     onError: (err) => {
-      toast.error("Something went wrong");
+      toast.error("You cannot accept this friend request");
     },
   });
   return mutation;
