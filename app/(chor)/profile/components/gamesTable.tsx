@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React from "react";
 import {
   Table,
@@ -59,7 +59,7 @@ export default function GamesTable({ id }: { id: string }) {
                               <AvatarImage
                                 src={game.user1.avatar}
                                 alt="profile image"
-                                className="rounded-full size-4 "
+                                className="rounded-full size-4 hover:scale-110"
                               />
                               <AvatarFallback className="rounded-sm size-4 text-xs bg-primary">
                                 {game.user1.username.slice(0, 1)}
@@ -86,7 +86,7 @@ export default function GamesTable({ id }: { id: string }) {
                                 <AvatarImage
                                   src={game.user3?.avatar}
                                   alt="profile image"
-                                  className="rounded-full size-4 mr-2"
+                                  className="rounded-full size-4 hover:scale-110 mr-2"
                                 />
                                 <AvatarFallback className="rounded-sm size-4 text-xs bg-primary">
                                   {game.user3?.username.slice(0, 1)}
@@ -115,7 +115,7 @@ export default function GamesTable({ id }: { id: string }) {
                               <AvatarImage
                                 src={game.user2.avatar}
                                 alt="profile image"
-                                className="rounded-full size-4 mr-2"
+                                className="rounded-full size-4 hover:scale-110 mr-2"
                               />
                               <AvatarFallback className="rounded-sm size-4 text-xs bg-primary">
                                 {game.user2.username.slice(0, 1)}
@@ -141,7 +141,7 @@ export default function GamesTable({ id }: { id: string }) {
                                 <AvatarImage
                                   src={game.user4?.avatar}
                                   alt="profile image"
-                                  className="rounded-full size-4 mr-2"
+                                  className="rounded-full size-4 hover:scale-110 mr-2"
                                 />
                                 <AvatarFallback className="rounded-sm size-4 text-xs bg-primary">
                                   {game.user4?.username.slice(0, 1)}
