@@ -19,6 +19,8 @@ import { enemyLeftGame } from "../methods/enemyLeftGame";
 import useGetUser from "../../profile/hooks/useGetUser";
 import Actions from "../components/actions";
 import { useQueryClient } from "@tanstack/react-query";
+import useSurrenderGame from "../hooks/useSurrender";
+import useLeaveGame from "../hooks/useLeaveGame";
 
 const Game = ({ type }: { type: string }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -62,31 +64,17 @@ const Game = ({ type }: { type: string }) => {
   } = useGameSocket();
   const { newNotif } = useInvitationSocket();
 
+  const { handleSurrender } = useInvitationSocket();
   const user_id = getCookie("user_id") || "";
   const { data: user } = useGetUser(user_id || "0");
-  const { onGoingGame } = useGetGame(user_id || "0", type);
+  const { mutate: surrenderGame } = useSurrenderGame();
+  const { mutate: leaveGame } = useLeaveGame();
   const { mutate: endGame } = useEndGame();
+  const { onGoingGame } = useGetGame(user_id || "0", type);
 
   userRef.current = user;
 
   const username = user?.username || "";
-
-  // rightUser.current =
-  //   onGoingGame?.data?.game?.user1?.username === username
-  //     ? onGoingGame?.data?.game?.user2
-  //     : onGoingGame?.data?.game?.user1;
-  // leftUser.current =
-  //   onGoingGame?.data?.game?.user1?.username === username
-  //     ? onGoingGame?.data?.game?.user1
-  //     : onGoingGame?.data?.game?.user2;
-  // leftScoreRef.current =
-  //   onGoingGame?.data?.game?.user1?.username === username
-  //     ? onGoingGame?.data?.game?.score1 || 0
-  //     : onGoingGame?.data?.game?.score2 || 0;
-  // rightScoreRef.current =
-  //   onGoingGame?.data?.game?.user1?.username === username
-  //     ? onGoingGame?.data?.game?.score2 || 0
-  //     : onGoingGame?.data?.game?.score1 || 0;
 
   if (onGoingGame?.data?.game?.user1?.username === username) {
     leftUser.current = onGoingGame?.data?.game?.user1;
@@ -114,9 +102,10 @@ const Game = ({ type }: { type: string }) => {
     const ctx = canvas?.getContext("2d");
     if (!ctx) return; // Exit if context is not available
 
-    rightPositionRef.current = canvas.width + 500;
-
     let ballInLeftPaddle = false;
+
+    leftPositionRef.current = -400;
+    rightPositionRef.current = canvas.width + 500;
 
     let ballRadius = 10;
     let x = canvas.width / 2;
@@ -187,9 +176,26 @@ const Game = ({ type }: { type: string }) => {
       isAnimating.current = false;
     }
 
-    const drawOnlineOne = () => {
+    const drawSurrenderButton = () => {
       if (canvas === null) return;
       if (gameStartedRef.current) {
+        ctx.fillStyle = "#ee95DD";
+        ctx.fillRect(canvas.width - 150, canvas.height - 50, 100, 40);
+
+        // Add text to the button
+        ctx.fillStyle = "white";
+        ctx.font = "20px Arial";
+        ctx.fillText("Surrender", canvas.width - 145, canvas.height - 23);
+      }
+    };
+
+    const drawOnlineOne = () => {
+      if (canvas === null) return;
+      if (
+        gameStartedRef.current &&
+        leftUser.current !== undefined &&
+        rightUser.current !== undefined
+      ) {
         if (
           username === controllerUser.current?.username &&
           newAngleRef.current === 0
@@ -220,6 +226,7 @@ const Game = ({ type }: { type: string }) => {
         // draw paddles and ball
         draw(canvasParams, ctx);
 
+        drawSurrenderButton();
         // move paddles
         movePaddlesOnline(canvasParams, handleMovePaddle);
         // console.log("move paddle" + movePaddleRef.current);
@@ -279,6 +286,18 @@ const Game = ({ type }: { type: string }) => {
       }
     };
 
+    const drawLeaveButton = () => {
+      if (canvas === null) return;
+      if (!gameStartedRef.current) {
+        ctx.fillStyle = "#ee95DD";
+        ctx.fillRect(50, canvas.height - 50, 100, 40);
+
+        // Add text to the button
+        ctx.fillStyle = "white";
+        ctx.font = "20px Arial";
+        ctx.fillText("Leave", 75, canvas.height - 23);
+      }
+    };
     const gameNotStarted = () => {
       // Clear the canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -408,40 +427,91 @@ const Game = ({ type }: { type: string }) => {
         ctx.fillStyle = "white";
         ctx.font = "20px Arial";
         ctx.fillText("Start", canvas.width - 125, canvas.height - 23);
-        // Add a click event listener to the canvas
-        canvas.addEventListener("mousedown", (e) => {
-          const rect = canvas.getBoundingClientRect();
-          const x = e.clientX - rect.left;
-          const y = e.clientY - rect.top;
+        drawLeaveButton();
 
-          // Check if the click was inside the button
-          if (
-            x > canvas.width - 150 &&
-            x < canvas.width &&
-            y > canvas.height - 50 &&
-            y < canvas.height &&
-            !clickedRef.current
-          ) {
-            console.log("clicked");
-            // show a message to the user for 3 seconds
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "black";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "white";
-            ctx.font = "20px Arial";
-            handleStartGame(
-              leftUser.current?.username || "",
-              rightUser.current?.username || "",
-              gameIdRef.current
-            );
-            clickedRef.current = true;
-          }
-        });
-        canvas.addEventListener("mouseup", (e) => {
-          clickedRef.current = false;
-        });
+        // Add a click event listener to the canvas
       }
     };
+    canvas.addEventListener("mousedown", (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      // Check if the click was inside the button
+      if (
+        x > canvas.width - 150 &&
+        x < canvas.width &&
+        y > canvas.height - 50 &&
+        y < canvas.height &&
+        !clickedRef.current &&
+        rightUser.current?.username !== undefined &&
+        gameStartedRef.current === false
+      ) {
+        console.log("clicked");
+        // show a message to the user for 3 seconds
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "white";
+        ctx.font = "20px Arial";
+        handleStartGame(
+          leftUser.current?.username || "",
+          rightUser.current?.username || "",
+          gameIdRef.current
+        );
+        clickedRef.current = true;
+      }
+      if (
+        x > canvas.width - 150 &&
+        x < canvas.width &&
+        y > canvas.height - 50 &&
+        y < canvas.height &&
+        !clickedRef.current &&
+        gameStartedRef.current === true
+      ) {
+        console.log("clicked");
+        // show a message to the user for 3 seconds
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "white";
+        ctx.font = "20px Arial";
+        surrenderGame();
+        handleSurrender(
+          leftUser.current?.username || "",
+          rightUser.current?.username || "",
+          gameIdRef.current
+        );
+        clickedRef.current = true;
+      }
+      if (
+        x > 50 &&
+        x < 150 &&
+        y > canvas.height - 50 &&
+        y < canvas.height &&
+        !clickedRef.current &&
+        gameStartedRef.current === false
+      ) {
+        console.log("clicked");
+        // show a message to the user for 3 seconds
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "black";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "white";
+        ctx.font = "20px Arial";
+        leaveGame();
+        handleSurrender(
+          leftUser.current?.username || "",
+          rightUser.current?.username || "",
+          gameIdRef.current
+        );
+      }
+    });
+
+    canvas.addEventListener("mouseup", (e) => {
+      console.log("mouseup");
+      clickedRef.current = false;
+    });
 
     const animate = () => {
       if (canvas === null) return;
@@ -537,15 +607,6 @@ const Game = ({ type }: { type: string }) => {
         width="800"
         className="w-full  bg-black border-2 border-white mx-auto"
       ></canvas>
-      <Actions
-        gameStartedRef={gameStartedRef}
-        type={type}
-        userLeftTop={leftUser.current?.username || ""}
-        userRightTop={rightUser.current?.username || ""}
-        userLeftBottom={""}
-        userRightBottom={""}
-        gameId={onGoingGame.data?.game.id}
-      />
     </div>
   );
 };

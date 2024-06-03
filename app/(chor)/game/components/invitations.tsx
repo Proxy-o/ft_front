@@ -172,7 +172,7 @@ const Invitations = ({ mode }: { mode: string }) => {
                       size={"sm"}
                       onClick={() => {
                         acceptInvitation(invitation.id);
-                        router.push("/game/four");
+                        router.push("/game/twoVtwo");
                       }}
                     >
                       <Swords size={20} />
