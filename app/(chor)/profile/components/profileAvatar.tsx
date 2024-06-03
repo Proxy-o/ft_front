@@ -44,9 +44,14 @@ export default function ProfileAvatar({
           <AvatarImage
             src={user.avatar}
             alt="@profile"
-            className={cn(isBlocked && "filter grayscale")}
+            className={cn(
+              isBlocked && "filter grayscale",
+              "hover:scale-110 rounded-sm w-full h-full"
+            )}
           />
-          <AvatarFallback className="rounded-sm h-40">AV</AvatarFallback>
+          <AvatarFallback className="rounded-sm h-40">
+            {user.username ? user.username[0] : "N"}
+          </AvatarFallback>
         </Avatar>
         <input
           ref={inputFileRef}

@@ -17,19 +17,17 @@ export default function useBlock() {
     mutationFn: ({ to_block, user_id }: { to_block: User; user_id: string }) =>
       block(to_block.id),
     onSuccess: (_, variables) => {
-      queryClient.setQueryData(["friends", variables.user_id], (old: any) => {
-        if (!old) return [variables.to_block];
-        return old.filter((el: any) => el.id !== variables.to_block.id);
+
+      queryClient.invalidateQueries({
+        queryKey: ["friends", variables.user_id],
       });
-      queryClient.setQueryData(["blocked"], (old: any) => {
-        if (!old) return [variables.to_block];
-        return [...old, variables.to_block];
+      queryClient.invalidateQueries({
+        queryKey: ["blocked"],
       });
-      queryClient.setQueryData(["requests"], (old: any) => {
-        return old.filter(
-          (el: any) => el.from_user.id !== variables.to_block.id
-        );
+      queryClient.invalidateQueries({
+        queryKey: ["requests"],
       });
+      
 
       toast.success("blocked successfully");
     },

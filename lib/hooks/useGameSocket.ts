@@ -14,7 +14,6 @@ export default function useGameSocket() {
 
   const handleStartGame = (user1: string, user2: string, game_id: string) => {
     const toSend = "/debut " + user1 + " " + user2 + " " + game_id;
-    // console.log(toSend);
     sendJsonMessage({ message: toSend });
   };
 

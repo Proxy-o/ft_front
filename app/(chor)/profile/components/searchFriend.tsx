@@ -16,11 +16,11 @@ export default function SearchFriend() {
   };
   return (
     <div
-      className=" mx-auto w-9/12 mt-2  relative "
+      className=" mx-auto py-2 m-2 relative max-w-[60rem] "
       onBlur={() => setTimeout(() => setResVisible(false), 200)}
     >
-      <div className=" h-12  w-full ">
-        <Search size={20} className="absolute end-2 top-4 " />
+      <div className=" h-12 px-2 w-full ">
+        <Search size={20} className="absolute end-4 top-5 " />
         <Input
           placeholder="Search"
           className="h-full"
@@ -28,8 +28,7 @@ export default function SearchFriend() {
           onFocus={() => setResVisible(true)}
         />
       </div>
-      <div className=" absolute z-50 w-full dark:bg-black bg-gray-300 top-14">
-        {/* show friend list */}
+      <div className=" absolute z-50 w-full  dark:bg-black bg-gray-300 top-14 p-1 rounded-lg">
         {isSuccess && resVisible && (
           <>
             {isPending ? (

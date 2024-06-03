@@ -29,7 +29,7 @@ export default function Page() {
 
   return (
     user && (
-      <div className="flex gap-1  h-full flex-col p-6">
+      <div className="flex gap-1  h-full flex-col p-6 max-w-[60rem] mx-auto">
         <Link
           href="/friend_requests"
           className={cn(
@@ -40,14 +40,14 @@ export default function Page() {
           Friend Requests
         </Link>
         <Card className=" w-full border    flex flex-col    my-3 p-1 mr-2 ">
-          <div className="flex w-full justify-center items-center border-b-2 mb-1 p-2">
+          <div className="flex w-full justify-center items-center border-b-2  py-4">
             Friends
             <p className="border bg-primary mx-2 rounded-full size-6  text-center">
               {friendCount}
             </p>
           </div>
           <div className="overflow-y-auto">
-            {friendsIsSuccess &&
+            {friendsIsSuccess && friends.length > 0 ? (
               friends.map((friend: User) => {
                 return (
                   <Link
@@ -58,7 +58,12 @@ export default function Page() {
                     <ChatFriendCard friend={friend} setReceiverId={() => {}} />
                   </Link>
                 );
-              })}
+              })
+            ) : (
+              <div className="w-full text-center h-16 flex justify-center items-center bg-primary/5">
+                sorry you don&apos;t have any friends
+              </div>
+            )}
           </div>
         </Card>
       </div>

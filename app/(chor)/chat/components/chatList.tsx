@@ -44,18 +44,18 @@ export default function ChatList() {
   }, []);
   return (
     <>
-      <div className="relative flex " ref={chatRef}>
+      <div className="relative flex max-w-[60rem] mx-auto" ref={chatRef}>
         {receiverId && isSender ? (
           <ChatCard receiver={receiver!} sender={sender} />
         ) : null}
         {mb || !receiverId ? (
           <div
             className={cn(
-              "flex flex-col    h-screen  overflow-y-auto  p-2",
+              "flex flex-col    overflow-y-auto  p-2",
               !isChatOpen ? "w-full" : "w-[40rem]"
             )}
           >
-            {isSuccess &&
+            {isSuccess && friends.length > 0 ? (
               friends.map((friend: User) => {
                 return (
                   <div
@@ -70,7 +70,12 @@ export default function ChatList() {
                     />
                   </div>
                 );
-              })}
+              })
+            ) : (
+              <div className="w-full text-center h-16 flex justify-center items-center bg-primary/5">
+                You don&apos;t have any friend to chat with
+              </div>
+            )}
           </div>
         ) : (
           <>

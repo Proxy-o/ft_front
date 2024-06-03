@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React from "react";
 import {
   Table,
@@ -18,14 +18,13 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 
 export default function GamesTable({ id }: { id: string }) {
-  console.log(id)
   const { data: games, isSuccess } = useGetGames(id);
   const isWinner = useIsWinner();
 
   return (
     isSuccess && (
       <div className="w-full">
-        <div className="p-4 relative">Completed games</div>
+        <div className="p-4 relative font-semibold">Completed games</div>
         <Card className="w-full">
           <Table>
             <TableHeader className="bg-secondary ">
@@ -60,7 +59,7 @@ export default function GamesTable({ id }: { id: string }) {
                               <AvatarImage
                                 src={game.user1.avatar}
                                 alt="profile image"
-                                className="rounded-full size-4 "
+                                className="rounded-full size-4 hover:scale-110"
                               />
                               <AvatarFallback className="rounded-sm size-4 text-xs bg-primary">
                                 {game.user1.username.slice(0, 1)}
@@ -87,7 +86,7 @@ export default function GamesTable({ id }: { id: string }) {
                                 <AvatarImage
                                   src={game.user3?.avatar}
                                   alt="profile image"
-                                  className="rounded-full size-4 mr-2"
+                                  className="rounded-full size-4 hover:scale-110 mr-2"
                                 />
                                 <AvatarFallback className="rounded-sm size-4 text-xs bg-primary">
                                   {game.user3?.username.slice(0, 1)}
@@ -116,7 +115,7 @@ export default function GamesTable({ id }: { id: string }) {
                               <AvatarImage
                                 src={game.user2.avatar}
                                 alt="profile image"
-                                className="rounded-full size-4 mr-2"
+                                className="rounded-full size-4 hover:scale-110 mr-2"
                               />
                               <AvatarFallback className="rounded-sm size-4 text-xs bg-primary">
                                 {game.user2.username.slice(0, 1)}
@@ -142,7 +141,7 @@ export default function GamesTable({ id }: { id: string }) {
                                 <AvatarImage
                                   src={game.user4?.avatar}
                                   alt="profile image"
-                                  className="rounded-full size-4 mr-2"
+                                  className="rounded-full size-4 hover:scale-110 mr-2"
                                 />
                                 <AvatarFallback className="rounded-sm size-4 text-xs bg-primary">
                                   {game.user4?.username.slice(0, 1)}

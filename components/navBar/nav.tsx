@@ -25,6 +25,7 @@ import type { User } from "@/lib/types";
 import useGetFriends from "@/app/(chor)/chat/hooks/useGetFriends";
 import { LastMessage } from "@/app/(chor)/chat/types";
 import useGetFrdReq from "@/app/(chor)/friends/hooks/useGetFrReq";
+import { toast } from "sonner";
 
 export default function Nav() {
   const { mutate: logout } = useLogout();
@@ -86,15 +87,26 @@ export default function Nav() {
   const queryClient = useQueryClient();
 
   useEffect(() => {
+    setReqNotif(false);
+    if (lastJsonMessage?.type === "request") {
+      let id = lastJsonMessage.id;
+      toast(
+          <Link  href={`/profile/${id}`}>{"You have a new friend request from " + lastJsonMessage.user}</Link>
+      )
+      queryClient.invalidateQueries({
+        queryKey: ["requests"],
+      });
+      lastJsonMessage.type = "null";
+    }
     if (isSuccessReq && requests) {
       requests.forEach((request: any) => {
         if (request.to_user.id.toString() === id) setReqNotif(true);
       });
     }
-  }, [isSuccessReq, requests, id]);
+  }, [isSuccessReq, requests, id, lastJsonMessage, queryClient]);
 
   useEffect(() => {
-    if (lastJsonMessage) {
+    if (lastJsonMessage?.type === "private_message") {
       queryClient.invalidateQueries({
         queryKey: ["friends", id],
       });

@@ -28,7 +28,13 @@ export default function ChatCard({
   const receiverId = receiver.id;
   const token = getCookie("refresh");
   const socketUrl = process.env.NEXT_PUBLIC_CHAT_URL + "2/?refresh=" + token;
-  const { sendJsonMessage, lastMessage } = useWebSocket(socketUrl);
+  const { sendJsonMessage, lastMessage, lastJsonMessage } = useWebSocket(
+    socketUrl,
+    {
+      share: true,
+    }
+  );
+  const [isBlocked, setIsBlocked] = useState(false);
 
   const [hasMore, setHasMore] = useState(true);
   const [message, setMessage] = useState("");
@@ -56,7 +62,13 @@ export default function ChatCard({
         queryKey: [`messages_${senderId}_${receiverId}`],
       });
     }
-  }, [lastMessage, queryClient, senderId, receiverId]);
+    if (
+      lastJsonMessage &&
+      (lastJsonMessage as { type: string }).type === "blocked"
+    ) {
+      setIsBlocked(true);
+    }
+  }, [lastMessage, queryClient, senderId, receiverId, lastJsonMessage]);
 
   useEffect(() => {
     readMessages(receiverId).then(() => {
@@ -135,7 +147,10 @@ export default function ChatCard({
         </InfiniteScroll>
       </div>
       <div className="flex justify-between items-center bg-secondary/90 w-full p-2 absolute bottom-0 ">
+        {!isBlocked ? (
+         <>
         <Input
+          disabled={isBlocked}
           placeholder="Type a message"
           value={message}
           className="w-full mr-2 h-14"
@@ -146,13 +161,16 @@ export default function ChatCard({
             }
           }}
         />
-        <Button
-          onClick={handelSendMessage}
-          className="absolute right-6 border-none "
-          variant={"outline"}
-        >
-          <SendHorizonal className="text-primary" size={20} />
-        </Button>
+        
+          <Button
+            onClick={handelSendMessage}
+            className="absolute right-6 border-none "
+            variant={"outline"}
+          >
+            <SendHorizonal className="text-primary" size={20} />
+          </Button>
+          </>
+        ): <h1 className="w-full text-center bg-primary/30 rounded-lg h-full">{(lastJsonMessage as { message: string })?.message} </h1>}
       </div>
     </div>
   );

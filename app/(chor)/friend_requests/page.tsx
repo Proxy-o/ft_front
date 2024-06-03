@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 
 export default function page() {
   return (
-    <div className="h-full p-6 w-full flex flex-col">
+    <div className="h-full p-6 w-full flex flex-col max-w-[60rem] mx-auto">
       <Link
         href="/friends"
         className={cn(

@@ -7,6 +7,7 @@ export interface LastMessage {
   message: string;
   type: string;
   user: string;
+  id: string;
   read?: boolean;
 }
 
