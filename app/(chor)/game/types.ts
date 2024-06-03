@@ -17,6 +17,7 @@ export type canvasParams = {
   leftScoreRef: React.MutableRefObject<number>;
   leftUserRef: React.MutableRefObject<User | undefined>;
   rightUserRef: React.MutableRefObject<User | undefined>;
+  gameIdRef: React.MutableRefObject<string>;
 };
 
 export type canvasParamsFour = {

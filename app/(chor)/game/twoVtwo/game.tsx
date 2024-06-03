@@ -470,7 +470,6 @@ const Game = ({
                   userWhoDidNotRespond.splice(index, 1);
                 }
               });
-              console.log(userWhoDidNotRespond[0]);
               handleUserLeftGame(userWhoDidNotRespond[0] || "");
               const winner =
                 leftUserTop.current.username === userWhoDidNotRespond[0] ||

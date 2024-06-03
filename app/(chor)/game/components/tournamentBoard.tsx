@@ -4,26 +4,26 @@ import { Separator } from "@/components/ui/separator";
 import { Crown } from "lucide-react";
 import useGetTournament from "../hooks/useGetTournament";
 import getCookie from "@/lib/functions/getCookie";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const TournamentBoard = () => {
   const user_id = getCookie("user_id") || "";
-  const [participants, setParticipants] = useState<any[]>([]);
-  const [games, setGames] = useState<any[]>([]);
   const { tournament } = useGetTournament(user_id);
-  useEffect(() => {
-    if (tournament.isSuccess && tournament.data.tournament) {
-      setParticipants(tournament.data.tournament?.participants || []);
-      setGames(tournament.data.tournament.games || []);
-    }
-  }, [tournament.isSuccess]);
+  console.log("tournamentBoard");
+  const semi1 = useRef<any>(null);
+  const semi2 = useRef<any>(null);
+  const final = useRef<any>(null);
+  if (tournament.isSuccess && tournament.data.tournament) {
+    semi1.current = tournament.data.tournament.semi1;
+    semi2.current = tournament.data.tournament.semi2;
+    final.current = tournament.data.tournament.final;
+  }
   if (tournament.isLoading) return "looking for tournament...";
   if (
     (tournament.isSuccess && !tournament.data.tournament) ||
     tournament.data === undefined
   )
     return "no tournament found";
-
   return (
     <Card className="p-4 h-fit w-fit flex flex-col justify-center">
       <div className="mx-auto">Board</div>
@@ -32,22 +32,22 @@ const TournamentBoard = () => {
         <div className="flex flex-col justify-start items-start gap-20 my-auto">
           <Avatar className="">
             <AvatarImage
-              src={participants[0]?.avatar}
+              src={semi1.current?.user1?.avatar}
               alt="profile image"
               className="rounded-xl h-8 w-8"
             />
             <AvatarFallback className="rounded-xl">
-              {participants[0]?.username || "user"}
+              {semi1.current?.user1?.username || "user"}
             </AvatarFallback>
           </Avatar>
           <Avatar className="">
             <AvatarImage
-              src={participants[1]?.avatar}
+              src={semi1.current?.user2?.avatar}
               alt="profile image"
               className="rounded-xl h-8 w-8"
             />
             <AvatarFallback className="rounded-xl">
-              {participants[1]?.username || "user"}
+              {semi1.current?.user2?.username || "user"}
             </AvatarFallback>
           </Avatar>
         </div>
@@ -64,24 +64,24 @@ const TournamentBoard = () => {
         <div className="flex flex-col justify-start items-start my-auto">
           <Avatar className="">
             <AvatarImage
-              src={games[0]?.winner?.avatar}
+              src={semi1.current?.winner?.avatar}
               alt="profile image"
               className="rounded-xl h-8 w-8"
             />
             <AvatarFallback className="rounded-xl">
-              {games[0]?.winner?.username || "user"}
+              {semi1.current?.winner?.username || "user"}
             </AvatarFallback>
           </Avatar>
         </div>
         <div className="flex flex-col justify-center items-center gap-4 my-auto mx-4 py-4">
           <Avatar className="shadow-lg shadow-yellow-500 rounded-xl">
             <AvatarImage
-              src={games[2]?.winner?.avatar}
+              src={final.current?.winner?.avatar}
               alt="profile image"
               className="rounded-xl h-8 w-8"
             />
             <AvatarFallback className="rounded-xl">
-              {games[2]?.winner?.username || "user"}
+              {final.current?.winner?.username || "user"}
             </AvatarFallback>
           </Avatar>
           <Crown size={24} className="text-yellow-500" />
@@ -90,12 +90,12 @@ const TournamentBoard = () => {
         <div className="flex flex-col justify-start items-start my-auto">
           <Avatar className="">
             <AvatarImage
-              src={games[1]?.winner?.avatar}
+              src={semi2.current?.winner?.avatar}
               alt="profile image"
               className="rounded-xl h-8 w-8"
             />
             <AvatarFallback className="rounded-xl">
-              {games[1]?.winner?.username || "user"}
+              {semi2.current?.winner?.username || "user"}
             </AvatarFallback>
           </Avatar>
         </div>
@@ -112,22 +112,22 @@ const TournamentBoard = () => {
         <div className="flex flex-col justify-start items-start gap-20 my-auto">
           <Avatar className="">
             <AvatarImage
-              src={participants[2]?.avatar}
+              src={semi2.current?.user1?.avatar}
               alt="profile image"
               className="rounded-xl h-8 w-8"
             />
             <AvatarFallback className="rounded-xl">
-              {participants[2]?.username || "user"}
+              {semi2.current?.user1?.username || "user"}
             </AvatarFallback>
           </Avatar>
           <Avatar className="">
             <AvatarImage
-              src={participants[3]?.avatar}
+              src={semi2.current?.user2?.avatar}
               alt="profile image"
               className="rounded-xl h-8 w-8"
             />
             <AvatarFallback className="rounded-xl">
-              {participants[3]?.username || "user"}
+              {semi2.current?.user2?.username || "user"}
             </AvatarFallback>
           </Avatar>
         </div>

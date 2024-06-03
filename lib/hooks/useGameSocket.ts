@@ -56,8 +56,8 @@ export default function useGameSocket() {
     sendJsonMessage({ message: toSend });
   };
 
-  const handleEnemyScore = (score: number) => {
-    const toSend = "/enemyScore " + score;
+  const handleEnemyScore = (gameId: string) => {
+    const toSend = "/enemyScore " + gameId;
     sendJsonMessage({ message: toSend });
   };
 

@@ -40,9 +40,9 @@ const Invitations = ({ mode }: { mode: string }) => {
     }
   };
 
-  const acceptInvitationTournament = async (invitationId: string) => {
+  const acceptInvitationTournament = (invitationId: string) => {
     try {
-      await acceptInvitationTournamentMutation(invitationId);
+      acceptInvitationTournamentMutation(invitationId);
     } catch (error) {
       console.log(error);
     }
@@ -172,7 +172,7 @@ const Invitations = ({ mode }: { mode: string }) => {
                       size={"sm"}
                       onClick={() => {
                         acceptInvitation(invitation.id);
-                        router.push("/game/four");
+                        router.push("/game/twoVtwo");
                       }}
                     >
                       <Swords size={20} />

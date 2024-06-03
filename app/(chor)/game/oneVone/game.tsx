@@ -2,7 +2,13 @@
 
 import { useEffect, useRef, useState } from "react";
 import { canvasParams } from "../types";
-import { draw } from "../methods/draw";
+import {
+  draw,
+  drawLeaveButton,
+  drawPlayers,
+  drawStartButton,
+  drawSurrenderButton,
+} from "../methods/draw";
 import { movePaddlesOnline } from "../methods/movePaddles";
 import { changeBallDirectionOnline } from "../methods/changeBallDirection";
 import { checkLoseConditionOnline } from "../methods/checkLoseCondition";
@@ -18,6 +24,11 @@ import useInvitationSocket from "@/lib/hooks/useInvitationSocket";
 import { enemyLeftGame } from "../methods/enemyLeftGame";
 import useGetUser from "../../profile/hooks/useGetUser";
 import Actions from "../components/actions";
+import { useQueryClient } from "@tanstack/react-query";
+import useSurrenderGame from "../hooks/useSurrender";
+import useLeaveGame from "../hooks/useLeaveGame";
+import { start } from "repl";
+import clickListeners from "../methods/eventListeners";
 
 const Game = ({ type }: { type: string }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -61,27 +72,33 @@ const Game = ({ type }: { type: string }) => {
   } = useGameSocket();
   const { newNotif } = useInvitationSocket();
 
+  const { handleSurrender } = useInvitationSocket();
   const user_id = getCookie("user_id") || "";
   const { data: user } = useGetUser(user_id || "0");
-  const { onGoingGame } = useGetGame(user_id || "0", type);
+  const { mutate: surrenderGame } = useSurrenderGame();
+  const { mutate: leaveGame } = useLeaveGame();
   const { mutate: endGame } = useEndGame();
+  const { onGoingGame } = useGetGame(user_id || "0", type);
 
   userRef.current = user;
 
   const username = user?.username || "";
 
-  rightUser.current =
-    onGoingGame?.data?.game?.user1?.username === username
-      ? onGoingGame?.data?.game?.user2
-      : onGoingGame?.data?.game?.user1;
-  leftUser.current =
-    onGoingGame?.data?.game?.user1?.username === username
-      ? onGoingGame?.data?.game?.user1
-      : onGoingGame?.data?.game?.user2;
+  if (onGoingGame?.data?.game?.user1?.username === username) {
+    leftUser.current = onGoingGame?.data?.game?.user1;
+    rightUser.current = onGoingGame?.data?.game?.user2;
+    leftScoreRef.current = onGoingGame?.data?.game?.user1_score;
+    rightScoreRef.current = onGoingGame?.data?.game?.user2_score;
+  } else {
+    leftUser.current = onGoingGame?.data?.game?.user2;
+    rightUser.current = onGoingGame?.data?.game?.user1;
+    leftScoreRef.current = onGoingGame?.data?.game?.user2_score;
+    rightScoreRef.current = onGoingGame?.data?.game?.user1_score;
+  }
 
   controllerUser.current = onGoingGame?.data?.game?.user1;
 
-  gameIdRef.current = onGoingGame?.data?.game.id || "";
+  gameIdRef.current = onGoingGame?.data?.game?.id || "";
   leftImageRef.current = new Image();
   leftImageRef.current.src = leftUser.current?.avatar || "";
   rightImageRef.current = new Image();
@@ -91,11 +108,12 @@ const Game = ({ type }: { type: string }) => {
     setCanvas(canvasRef.current);
     if (canvas === null) return;
     const ctx = canvas?.getContext("2d");
-    if (!ctx) return; // Exit if context is not available
-
-    rightPositionRef.current = canvas.width + 500;
+    if (!ctx) return;
 
     let ballInLeftPaddle = false;
+
+    leftPositionRef.current = -400;
+    rightPositionRef.current = canvas.width + 500;
 
     let ballRadius = 10;
     let x = canvas.width / 2;
@@ -131,6 +149,7 @@ const Game = ({ type }: { type: string }) => {
       leftScoreRef,
       leftUserRef: leftUser,
       rightUserRef: rightUser,
+      gameIdRef,
     };
 
     const handleKeyEvent = (e: KeyboardEvent) => {
@@ -165,265 +184,140 @@ const Game = ({ type }: { type: string }) => {
       isAnimating.current = false;
     }
 
-    const drawOnlineOne = () => {
-      if (canvas === null) return;
-      if (gameStartedRef.current) {
-        if (
-          username === controllerUser.current?.username &&
-          newAngleRef.current === 0
+    const gameStarted = () => {
+      if (
+        username === controllerUser.current?.username &&
+        newAngleRef.current === 0
+      ) {
+        y = Math.random() * (canvas.height - ballRadius * 2) + ballRadius;
+        newBallPositionRef.current = { x, y }; // Initialize the ref
+        newAngleRef.current = Math.random() * Math.PI;
+        while (
+          (newAngleRef.current > Math.PI / 6 &&
+            newAngleRef.current < (Math.PI * 5) / 6) ||
+          (newAngleRef.current > (Math.PI * 7) / 6 &&
+            newAngleRef.current < (Math.PI * 11) / 6)
         ) {
-          y = Math.random() * (canvas.height - ballRadius * 2) + ballRadius;
-          newBallPositionRef.current = { x, y }; // Initialize the ref
-          newAngleRef.current = Math.random() * Math.PI;
-          while (
-            (newAngleRef.current > Math.PI / 6 &&
-              newAngleRef.current < (Math.PI * 5) / 6) ||
-            (newAngleRef.current > (Math.PI * 7) / 6 &&
-              newAngleRef.current < (Math.PI * 11) / 6)
-          ) {
-            newAngleRef.current = Math.random() * 2 * Math.PI;
-          }
-          let enemyX = canvas.width - newBallPositionRef.current.x;
-          let enemyY = newBallPositionRef.current.y;
-          let enemyAngle = Math.PI - newAngleRef.current;
-          handleChangeBallDirection(
-            enemyX,
-            enemyY,
-            enemyAngle,
-            rightUser.current?.username || ""
-          );
+          newAngleRef.current = Math.random() * 2 * Math.PI;
         }
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // draw paddles and ball
-        draw(canvasParams, ctx);
-
-        // move paddles
-        movePaddlesOnline(canvasParams, handleMovePaddle);
-        // console.log("move paddle" + movePaddleRef.current);
-
-        // Check for collision with left paddle
-        changeBallDirectionOnline(
-          canvasParams,
-          newAngleRef,
-          ballInLeftPaddle,
-          handleChangeBallDirection,
-          rightUser.current
+        let enemyX = canvas.width - newBallPositionRef.current.x;
+        let enemyY = newBallPositionRef.current.y;
+        let enemyAngle = Math.PI - newAngleRef.current;
+        handleChangeBallDirection(
+          enemyX,
+          enemyY,
+          enemyAngle,
+          rightUser.current?.username || ""
         );
-
-        // Check for score
-        checkLoseConditionOnline(
-          canvas,
-          leftScoreRef,
-          rightScoreRef,
-          leftUser.current,
-          rightUser.current,
-          onGoingGame,
-          endGame,
-          gameStartedRef
-        );
-
-        // Change score
-        changeScoreOnline(
-          canvasParams,
-          newAngleRef,
-          handleChangeBallDirection,
-          handleEnemyScore,
-          rightUser.current,
-          leftUser.current
-        );
-
-        // Check for collision with the horizontal walls
-        checkCollisionWithHorizontalWalls(
-          canvas,
-          ballRadius,
-          newBallPositionRef,
-          newAngleRef
-        );
-
-        // Move the ball
-        moveBall(canvasParams, user, leftUser.current, newAngleRef);
-
-        // Check if enemy has left the game
-        enemyLeftGame(
-          canvasParams,
-          timeRef,
-          enemyLeftGameRef,
-          gameStartedRef,
-          handleTime,
-          endGame
-        );
-      } else {
-        gameNotStarted();
       }
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // draw paddles and ball
+      draw(canvasParams, ctx);
+
+      drawSurrenderButton(canvasParams, gameStartedRef, ctx);
+      // move paddles
+      movePaddlesOnline(canvasParams, handleMovePaddle);
+      // console.log("move paddle" + movePaddleRef.current);
+
+      // Check for collision with left paddle
+      changeBallDirectionOnline(
+        canvasParams,
+        newAngleRef,
+        ballInLeftPaddle,
+        handleChangeBallDirection,
+        rightUser.current
+      );
+
+      // Check for score
+      checkLoseConditionOnline(
+        canvas,
+        leftScoreRef,
+        rightScoreRef,
+        leftUser.current,
+        rightUser.current,
+        endGame,
+        gameStartedRef
+      );
+
+      // Change score
+      changeScoreOnline(
+        canvasParams,
+        newAngleRef,
+        handleChangeBallDirection,
+        handleEnemyScore,
+        rightUser.current,
+        leftUser.current
+      );
+
+      // Check for collision with the horizontal walls
+      checkCollisionWithHorizontalWalls(
+        canvas,
+        ballRadius,
+        newBallPositionRef,
+        newAngleRef
+      );
+
+      // Move the ball
+      moveBall(canvasParams, user, leftUser.current, newAngleRef);
+
+      // Check if enemy has left the game
+      enemyLeftGame(
+        canvasParams,
+        timeRef,
+        enemyLeftGameRef,
+        gameStartedRef,
+        handleTime,
+        endGame
+      );
     };
 
     const gameNotStarted = () => {
       // Clear the canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      const drawLightningBolt = () => {
-        if (lightninigBoltYRef.current < 0) lightninigBoltYRef.current += 50;
-        // Calculate the center of the canvas width
-        const centerX = canvas.width / 2 - 50;
-        const topY = lightninigBoltYRef.current;
-        const bottomY = canvas.height;
-
-        // Begin a new path
-        ctx.beginPath();
-
-        // Define the points for the lightning bolt shape
-        ctx.moveTo(centerX + 20, topY); // Start at the top center
-
-        // Define the zigzag points down the canvas
-        ctx.lineTo(centerX + 100, topY); // First diagonal down
-        ctx.lineTo(centerX + 95, topY + 120); // First diagonal up
-        ctx.lineTo(centerX + 50, topY + 110); // Second diagonal down
-        ctx.lineTo(centerX + 60, topY + 230);
-        ctx.lineTo(centerX, topY + 220);
-        ctx.lineTo(centerX + 20, topY + 340);
-        ctx.lineTo(centerX - 40, topY + 190);
-        ctx.lineTo(centerX + 20, topY + 200);
-        ctx.lineTo(centerX - 20, topY + 70);
-        ctx.lineTo(centerX + 40, topY + 80);
-        // ctx.lineTo(centerX + 20, bottomY - 10); // Final diagonal to the bottom center
-        // ctx.lineTo(centerX + 100, topY + 100);
-
-        // Close the path
-        ctx.closePath();
-
-        // Set the fill color and fill the shape
-        ctx.fillStyle = "yellow";
-        ctx.fill();
-
-        // Optionally, you can add a stroke to the bolt
-        ctx.lineWidth = 3;
-        ctx.strokeStyle = "orange";
-        ctx.stroke();
-      };
-
-      // Call the function to draw the lightning bolt
-      // drawLightningBolt();
-      const drawPlayers = () => {
-        if (canvas === null) return;
-        if (leftImageRef.current === null) return;
-        if (leftUser.current === undefined) return;
-        // italic and bold
-        if (leftPositionRef.current < 100) leftPositionRef.current += 20;
-        // console.log(userRef.current?.username);
-        ctx.fillStyle = "#ee95DD";
-        ctx.font = "50px bold";
-        ctx.fillText(
-          leftUser.current?.username || "",
-          leftPositionRef.current + 70,
-          50
-        );
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(
-          leftPositionRef.current + 100,
-          canvas.height / 2,
-          100,
-          0,
-          Math.PI * 2
-        );
-        ctx.closePath();
-        ctx.clip();
-
-        // Draw the image inside the clipped path
-        ctx.drawImage(
-          leftImageRef.current,
-          leftPositionRef.current,
-          canvas.height / 2 - 100,
-          200,
-          200
-        );
-
-        // Restore the context state after clipping
-        ctx.restore();
-
-        if (rightImageRef.current === null) return;
-        if (rightPositionRef.current > canvas.width / 2 + 100)
-          rightPositionRef.current -= 20;
-
-        ctx.fillText(
-          rightUser.current?.username || "",
-          rightPositionRef.current + 70,
-          50
-        );
-        ctx.save();
-        ctx.beginPath();
-        ctx.arc(
-          rightPositionRef.current + 100,
-          canvas.height / 2,
-          100,
-          0,
-          Math.PI * 2
-        );
-        ctx.closePath();
-        ctx.clip();
-
-        // Draw the image inside the clipped path
-        ctx.drawImage(
-          rightImageRef.current,
-          rightPositionRef.current,
-          canvas.height / 2 - 100,
-          200,
-          200
-        );
-
-        // Restore the context state after clipping
-        ctx.restore();
-      };
-
-      if (rightUser.current?.username !== undefined) {
-        drawLightningBolt();
-      }
-      drawPlayers();
-
+      drawPlayers(
+        canvasParams,
+        leftUser,
+        rightUser,
+        leftImageRef,
+        rightImageRef,
+        leftPositionRef,
+        rightPositionRef,
+        ctx
+      );
       if (rightUser.current?.username !== undefined) {
         // Draw the button
-        ctx.fillStyle = "#ee95DD";
-        ctx.fillRect(canvas.width - 150, canvas.height - 50, 100, 40);
-
-        // Add text to the button
-        ctx.fillStyle = "white";
-        ctx.font = "20px Arial";
-        ctx.fillText("Start", canvas.width - 125, canvas.height - 23);
-        // Add a click event listener to the canvas
-        canvas.addEventListener("mousedown", (e) => {
-          const rect = canvas.getBoundingClientRect();
-          const x = e.clientX - rect.left;
-          const y = e.clientY - rect.top;
-
-          // Check if the click was inside the button
-          if (
-            x > canvas.width / 2 - 50 &&
-            x < canvas.width / 2 + 50 &&
-            y > canvas.height - 100 &&
-            y < canvas.height - 60 &&
-            !clickedRef.current
-          ) {
-            console.log("clicked");
-            // show a message to the user for 3 seconds
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "black";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "white";
-            ctx.font = "20px Arial";
-            handleStartGame(
-              leftUser.current?.username || "",
-              rightUser.current?.username || "",
-              gameIdRef.current
-            );
-            clickedRef.current = true;
-          }
-        });
-        canvas.addEventListener("mouseup", (e) => {
-          clickedRef.current = false;
-        });
+        drawStartButton(canvasParams, ctx);
+        drawLeaveButton(canvasParams, gameStartedRef, ctx);
       }
     };
+
+    const drawOnlineOne = () => {
+      if (canvas === null) return;
+      if (
+        gameStartedRef.current &&
+        leftUser.current !== undefined &&
+        rightUser.current !== undefined
+      ) {
+        gameStarted();
+      } else {
+        gameNotStarted();
+      }
+    };
+
+    clickListeners(
+      canvasParams,
+      clickedRef,
+      rightUser,
+      leftUser,
+      handleStartGame,
+      handleSurrender,
+      surrenderGame,
+      leaveGame,
+      gameIdRef,
+      gameStartedRef,
+      ctx
+    );
 
     const animate = () => {
       if (canvas === null) return;
@@ -437,7 +331,7 @@ const Game = ({ type }: { type: string }) => {
       animate();
       return returnFunction;
     }
-  }, [canvas, onGoingGame.data?.game.user1]);
+  }, [canvas, onGoingGame.data?.game?.user1]);
 
   useEffect(() => {
     const gameMsge = gameMsg();
@@ -482,9 +376,7 @@ const Game = ({ type }: { type: string }) => {
         onGoingGame.refetch();
       } else if (message[0] === "/score") {
         isFirstTime.current = true;
-        if (message[2] !== username) {
-          leftScoreRef.current = parseInt(message[1]);
-        }
+        onGoingGame.refetch();
       } else if (message[0] === "/time") {
         if (message[2] !== username) {
           timeRef.current = parseInt(message[1]);
@@ -496,6 +388,7 @@ const Game = ({ type }: { type: string }) => {
       }
     }
   }, [gameMsg()?.data]);
+
   useEffect(() => {
     const notif = newNotif();
     if (notif) {
@@ -503,7 +396,7 @@ const Game = ({ type }: { type: string }) => {
       const message = parsedMessage?.message.split(" ");
       console.log(parsedMessage.message);
 
-      if (message[0] === "/start") {
+      if (message[0] === "/start" || message[0] === "/refetchTournament") {
         onGoingGame.refetch();
       } else if (message[0] === "/end") {
         handleDisconnect();
@@ -514,22 +407,13 @@ const Game = ({ type }: { type: string }) => {
   }, [newNotif()?.data]);
 
   return (
-    <div className="w-full h-fit flex flex-col justify-center items-center">
+    <div className="flex flex-col justify-center items-center">
       <canvas
         ref={canvasRef}
         height="400"
         width="800"
-        className="w-full md:w-5/6 h-[400px] lg:h-[500px] max-w-[800px] bg-black border-2 border-white mx-auto"
+        className="w-full  bg-black border-2 border-white mx-auto"
       ></canvas>
-      <Actions
-        gameStartedRef={gameStartedRef}
-        type={type}
-        userLeftTop={leftUser.current?.username || ""}
-        userRightTop={rightUser.current?.username || ""}
-        userLeftBottom={""}
-        userRightBottom={""}
-        gameId={onGoingGame.data?.game.id}
-      />
     </div>
   );
 };

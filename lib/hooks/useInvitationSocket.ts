@@ -85,6 +85,15 @@ export default function useInvitationSocket() {
     sendJsonMessage({ message: toSend });
   };
 
+  const handleAcceptTournamentInvitation = (invitationId: string) => {
+    const toSend = "/acceptTournament " + invitationId;
+    sendJsonMessage({ message: toSend });
+  };
+
+  const handleRefetchTournament = (tournamentId: string) => {
+    sendJsonMessage({ message: "/refetchTournament " + tournamentId });
+  };
+
   return {
     handelSendInvitation,
     newNotif,
@@ -95,5 +104,7 @@ export default function useInvitationSocket() {
     handleRefetchPlayers,
     handleReadyFour,
     handleReadyToStartFour,
+    handleRefetchTournament,
+    handleAcceptTournamentInvitation,
   };
 }

@@ -20,7 +20,6 @@ export default function useAcceptInvitation() {
   const mutation = useMutation({
     mutationFn: accept,
     onSuccess: (invitationId) => {
-      console.log("Invitation accepted", invitationId);
       handleAcceptInvitation(invitationId);
       query.invalidateQueries({ queryKey: ["game"] });
       query.invalidateQueries({ queryKey: ["gameFour"] });
