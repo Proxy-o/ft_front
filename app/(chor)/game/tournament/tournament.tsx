@@ -10,6 +10,7 @@ import useStartTournament from "../hooks/useStartTournament";
 import useGetUser from "@/app/(chor)/profile/hooks/useGetUser";
 import useGetTournamentGame from "../hooks/useGetGameTournament";
 import Two from "../oneVone/two";
+import Invitations from "../components/invitations";
 
 const Tournament = () => {
   const user_id = getCookie("user_id") || "";
@@ -34,6 +35,8 @@ const Tournament = () => {
             </div>
           )}
           <TournamentBoard />
+          <InviteFriends gameType="tournament" />
+          <Invitations mode="tournament" />
           <div className=" w-fit h-fit">
             {data.tournament.creator?.username === user.username &&
               !data.tournament.started && (
