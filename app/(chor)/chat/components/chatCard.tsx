@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import getCookie from "@/lib/functions/getCookie";
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import useWebSocket from "react-use-websocket";
 import useGetMessages from "../hooks/useGetMessages";
 import ChatBubble from "./chatBubble";
@@ -88,9 +88,22 @@ export default function ChatCard({
       (prev) => prev + data?.pages[data.pages.length - 1].results.length
     );
   }, [fetchNextPage, data]);
+  const chatRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (chatRef.current) {
+      chatRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+        inline: "nearest",
+      });
+    }
+  });
 
   return (
-    <div className=" flex flex-col h-screen border-r w-full  relative ">
+    <div
+      className=" flex flex-col h-screen border-r w-full  relative "
+      ref={chatRef}
+    >
       <Link
         className="  flex justify-end md:justify-start ml-2 p-2 shadow-2xl "
         href={`/profile/${receiver.id}`}
@@ -148,29 +161,33 @@ export default function ChatCard({
       </div>
       <div className="flex justify-between items-center bg-secondary/90 w-full p-2 absolute bottom-0 ">
         {!isBlocked ? (
-         <>
-        <Input
-          disabled={isBlocked}
-          placeholder="Type a message"
-          value={message}
-          className="w-full mr-2 h-14"
-          onChange={(e) => setMessage(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              handelSendMessage();
-            }
-          }}
-        />
-        
-          <Button
-            onClick={handelSendMessage}
-            className="absolute right-6 border-none "
-            variant={"outline"}
-          >
-            <SendHorizonal className="text-primary" size={20} />
-          </Button>
+          <>
+            <Input
+              disabled={isBlocked}
+              placeholder="Type a message"
+              value={message}
+              className="w-full mr-2 h-14"
+              onChange={(e) => setMessage(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handelSendMessage();
+                }
+              }}
+            />
+
+            <Button
+              onClick={handelSendMessage}
+              className="absolute right-6 border-none "
+              variant={"outline"}
+            >
+              <SendHorizonal className="text-primary" size={20} />
+            </Button>
           </>
-        ): <h1 className="w-full text-center bg-primary/30 rounded-lg h-full">{(lastJsonMessage as { message: string })?.message} </h1>}
+        ) : (
+          <h1 className="w-full text-center bg-primary/30 rounded-lg h-full">
+            {(lastJsonMessage as { message: string })?.message}{" "}
+          </h1>
+        )}
       </div>
     </div>
   );
