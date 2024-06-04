@@ -52,7 +52,7 @@ export default function ChatList() {
           <div
             className={cn(
               "flex flex-col    overflow-y-auto  p-2",
-              !isChatOpen ? "w-full" : "w-[40rem]"
+              !isChatOpen ? "w-full" : "w-1/3"
             )}
           >
             {isSuccess && friends.length > 0 ? (
