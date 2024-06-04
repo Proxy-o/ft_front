@@ -150,7 +150,7 @@ const Invitations = ({ mode }: { mode: string }) => {
               return (
                 <div
                   key={invitation.id}
-                  className="border-2 border-secondary rounded-full hover:bg-secondary/60 w-11/12 mr-auto"
+                  className="border-2 border-secondary rounded-lg hover:bg-secondary/60 w-full mr-auto"
                 >
                   <div className="flex flex-row justify-start items-center my-2 mx-auto gap-2">
                     <Avatar className=" mr-2 ml-auto">
@@ -200,7 +200,7 @@ const Invitations = ({ mode }: { mode: string }) => {
               return (
                 <div
                   key={invitation.id}
-                  className="border-2 border-secondary rounded-full hover:bg-secondary/60 w-11/12 mr-auto"
+                  className="border-2 border-secondary rounded-lg hover:bg-secondary/60 w-full mr-auto"
                 >
                   <div className="flex flex-row justify-start items-center my-2 mx-auto gap-2">
                     <Avatar className=" mr-2 ml-auto">

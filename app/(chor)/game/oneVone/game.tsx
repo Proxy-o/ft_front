@@ -2,13 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { canvasParams } from "../types";
-import {
-  draw,
-  drawLeaveButton,
-  drawPlayers,
-  drawStartButton,
-  drawSurrenderButton,
-} from "../methods/draw";
+import { draw, drawPlayers } from "../methods/draw";
 import { movePaddlesOnline } from "../methods/movePaddles";
 import { changeBallDirectionOnline } from "../methods/changeBallDirection";
 import { checkLoseConditionOnline } from "../methods/checkLoseCondition";
@@ -23,12 +17,13 @@ import useGameSocket from "@/lib/hooks/useGameSocket";
 import useInvitationSocket from "@/lib/hooks/useInvitationSocket";
 import { enemyLeftGame } from "../methods/enemyLeftGame";
 import useGetUser from "../../profile/hooks/useGetUser";
-import Actions from "../components/actions";
-import { useQueryClient } from "@tanstack/react-query";
 import useSurrenderGame from "../hooks/useSurrender";
 import useLeaveGame from "../hooks/useLeaveGame";
-import { start } from "repl";
-import clickListeners from "../methods/eventListeners";
+import { Button } from "@/components/ui/button";
+import { DoorOpen, Flag, Gamepad } from "lucide-react";
+import Hover from "../components/hover";
+import { Card } from "@/components/ui/card";
+import NoGame from "../components/noGame";
 
 const Game = ({ type }: { type: string }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -103,7 +98,8 @@ const Game = ({ type }: { type: string }) => {
   leftImageRef.current.src = leftUser.current?.avatar || "";
   rightImageRef.current = new Image();
   rightImageRef.current.src = rightUser.current?.avatar || "";
-
+  let bgImage = new Image();
+  bgImage.src = "/game.jpeg";
   useEffect(() => {
     setCanvas(canvasRef.current);
     if (canvas === null) return;
@@ -119,7 +115,7 @@ const Game = ({ type }: { type: string }) => {
     let x = canvas.width / 2;
     let y = canvas.height / 2;
     const paddleHeight = 70;
-    const paddleWidth = 20;
+    const paddleWidth = 10;
 
     paddleLeftYRef.current = (canvas.height - paddleHeight) / 2;
     PaddleRightYRef.current = (canvas.height - paddleHeight) / 2;
@@ -211,11 +207,12 @@ const Game = ({ type }: { type: string }) => {
         );
       }
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-
+      ctx.globalAlpha = 0.5;
+      ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
+      ctx.globalAlpha = 1;
       // draw paddles and ball
       draw(canvasParams, ctx);
 
-      drawSurrenderButton(canvasParams, gameStartedRef, ctx);
       // move paddles
       movePaddlesOnline(canvasParams, handleMovePaddle);
       // console.log("move paddle" + movePaddleRef.current);
@@ -275,6 +272,9 @@ const Game = ({ type }: { type: string }) => {
     const gameNotStarted = () => {
       // Clear the canvas
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.globalAlpha = 0.5;
+      ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
+      ctx.globalAlpha = 1;
       drawPlayers(
         canvasParams,
         leftUser,
@@ -285,11 +285,6 @@ const Game = ({ type }: { type: string }) => {
         rightPositionRef,
         ctx
       );
-      if (rightUser.current?.username !== undefined) {
-        // Draw the button
-        drawStartButton(canvasParams, ctx);
-        drawLeaveButton(canvasParams, gameStartedRef, ctx);
-      }
     };
 
     const drawOnlineOne = () => {
@@ -304,20 +299,6 @@ const Game = ({ type }: { type: string }) => {
         gameNotStarted();
       }
     };
-
-    clickListeners(
-      canvasParams,
-      clickedRef,
-      rightUser,
-      leftUser,
-      handleStartGame,
-      handleSurrender,
-      surrenderGame,
-      leaveGame,
-      gameIdRef,
-      gameStartedRef,
-      ctx
-    );
 
     const animate = () => {
       if (canvas === null) return;
@@ -407,14 +388,80 @@ const Game = ({ type }: { type: string }) => {
   }, [newNotif()?.data]);
 
   return (
-    <div className="flex flex-col justify-center items-center">
-      <canvas
-        ref={canvasRef}
-        height="400"
-        width="800"
-        className="w-full  bg-black border-2 border-white mx-auto"
-      ></canvas>
-    </div>
+    <>
+      <Card className="w-full md:w-5/6 h-[300px] md:h-[400px] max-w-[800px]">
+        {leftUser.current?.username ? (
+          <canvas
+            ref={canvasRef}
+            height="400"
+            width="800"
+            className="w-full h-full"
+          ></canvas>
+        ) : (
+          <NoGame />
+        )}
+      </Card>
+      {leftUser.current?.username && (
+        <div className="w-full md:w-5/6 h-[70] max-w-[800px] flex justify-between items-center mt-4">
+          {!gameStartedRef.current ? (
+            <>
+              <div className="ml-[80px] h-5/6 w-1/6">
+                <Hover hoverText="Leave">
+                  <Button
+                    onClick={() => {
+                      leaveGame();
+                      handleSurrender(
+                        leftUser.current?.username || "",
+                        rightUser.current?.username || "",
+                        gameIdRef.current
+                      );
+                    }}
+                    className="h-full w-full bg-primary"
+                  >
+                    <DoorOpen size={25} />
+                  </Button>
+                </Hover>
+              </div>
+              <div className="mr-[80px] h-5/6 w-1/6">
+                <Hover hoverText="Start">
+                  <Button
+                    onClick={() => {
+                      handleStartGame(
+                        leftUser.current?.username || "",
+                        rightUser.current?.username || "",
+                        gameIdRef.current
+                      );
+                      clickedRef.current = true;
+                    }}
+                    className="h-full w-full bg-primary"
+                  >
+                    <Gamepad size={25} />
+                  </Button>
+                </Hover>
+              </div>
+            </>
+          ) : (
+            <div className="ml-[80px] h-5/6 w-1/6">
+              <Hover hoverText="Surrender">
+                <Button
+                  onClick={() => {
+                    surrenderGame();
+                    handleSurrender(
+                      leftUser.current?.username || "",
+                      rightUser.current?.username || "",
+                      gameIdRef.current
+                    );
+                  }}
+                  className="h-full w-full bg-primary"
+                >
+                  <Flag size={25} />
+                </Button>
+              </Hover>
+            </div>
+          )}
+        </div>
+      )}
+    </>
   );
 };
 

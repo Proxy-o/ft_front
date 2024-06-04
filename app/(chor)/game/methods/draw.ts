@@ -74,14 +74,6 @@ function draw(canvasParams: canvasParams, ctx: CanvasRenderingContext2D) {
     );
   };
 
-  const drawPlayer = () => {
-    if (canvas === null) return;
-    ctx.font = "italic bold 50px Arial";
-    ctx.fillStyle = "#0095DD";
-    // ctx.fillText({ user }, canvas.width / 2 - 150, canvas.height / 2 - 20);
-    ctx.fillText("Player", canvas.width / 2 + 150, canvas.height / 2 - 20);
-  };
-
   // drawPlayer();
   drawMiddleLine();
   drawScore();
@@ -207,23 +199,6 @@ function drawFour(canvasParams: canvasParamsFour) {
   drawLeftPaddleTwo();
 }
 
-const drawLeaveButton = (
-  canvasParams: canvasParams,
-  gameStartedRef: React.MutableRefObject<boolean>,
-  ctx: CanvasRenderingContext2D
-) => {
-  const { canvas } = canvasParams;
-  if (canvas === null) return;
-  if (!gameStartedRef.current) {
-    ctx.fillStyle = "#ee95DD";
-    ctx.fillRect(50, canvas.height - 50, 100, 40);
-
-    // Add text to the button
-    ctx.fillStyle = "white";
-    ctx.font = "20px Arial";
-    ctx.fillText("Leave", 75, canvas.height - 23);
-  }
-};
 const drawPlayers = (
   canvasParams: canvasParams,
   leftUser: React.MutableRefObject<any>,
@@ -305,91 +280,4 @@ const drawPlayers = (
   // Restore the context state after clipping
   ctx.restore();
 };
-const drawLightningBolt = (
-  canvasParams: canvasParams,
-  lightninigBoltYRef: React.MutableRefObject<number>,
-  ctx: CanvasRenderingContext2D
-) => {
-  const { canvas } = canvasParams;
-  if (canvas === null) return;
-  // Move the lightning bolt up the canvas
-  if (lightninigBoltYRef.current < 0) lightninigBoltYRef.current += 50;
-  // Calculate the center of the canvas width
-  const centerX = canvas.width / 2 - 50;
-  const topY = lightninigBoltYRef.current;
-  const bottomY = canvas.height;
-
-  // Begin a new path
-  ctx.beginPath();
-
-  // Define the points for the lightning bolt shape
-  ctx.moveTo(centerX + 20, topY); // Start at the top center
-
-  // Define the zigzag points down the canvas
-  ctx.lineTo(centerX + 100, topY); // First diagonal down
-  ctx.lineTo(centerX + 95, topY + 120); // First diagonal up
-  ctx.lineTo(centerX + 50, topY + 110); // Second diagonal down
-  ctx.lineTo(centerX + 60, topY + 230);
-  ctx.lineTo(centerX, topY + 220);
-  ctx.lineTo(centerX + 20, topY + 340);
-  ctx.lineTo(centerX - 40, topY + 190);
-  ctx.lineTo(centerX + 20, topY + 200);
-  ctx.lineTo(centerX - 20, topY + 70);
-  ctx.lineTo(centerX + 40, topY + 80);
-  // ctx.lineTo(centerX + 20, bottomY - 10); // Final diagonal to the bottom center
-  // ctx.lineTo(centerX + 100, topY + 100);
-
-  // Close the path
-  ctx.closePath();
-
-  // Set the fill color and fill the shape
-  ctx.fillStyle = "yellow";
-  ctx.fill();
-
-  // Optionally, you can add a stroke to the bolt
-  ctx.lineWidth = 3;
-  ctx.strokeStyle = "orange";
-  ctx.stroke();
-};
-const drawStartButton = (
-  canvasParams: canvasParams,
-  ctx: CanvasRenderingContext2D
-) => {
-  const { canvas } = canvasParams;
-  if (canvas === null) return;
-  ctx.fillStyle = "#ee95DD";
-  ctx.fillRect(canvas.width - 150, canvas.height - 50, 100, 40);
-
-  // Add text to the button
-  ctx.fillStyle = "white";
-  ctx.font = "20px Arial";
-  ctx.fillText("Start", canvas.width - 125, canvas.height - 23);
-};
-
-const drawSurrenderButton = (
-  canvasParams: canvasParams,
-  gameStartedRef: React.MutableRefObject<boolean>,
-  ctx: CanvasRenderingContext2D
-) => {
-  const { canvas } = canvasParams;
-  if (canvas === null) return;
-  if (gameStartedRef.current) {
-    ctx.fillStyle = "#ee95DD";
-    ctx.fillRect(canvas.width - 150, canvas.height - 50, 100, 40);
-
-    // Add text to the button
-    ctx.fillStyle = "white";
-    ctx.font = "20px Arial";
-    ctx.fillText("Surrender", canvas.width - 145, canvas.height - 23);
-  }
-};
-
-export {
-  draw,
-  drawFour,
-  drawLeaveButton,
-  drawPlayers,
-  drawLightningBolt,
-  drawStartButton,
-  drawSurrenderButton,
-};
+export { draw, drawFour, drawPlayers };
