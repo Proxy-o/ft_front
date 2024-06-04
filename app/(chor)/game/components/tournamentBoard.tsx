@@ -6,24 +6,18 @@ import useGetTournament from "../hooks/useGetTournament";
 import getCookie from "@/lib/functions/getCookie";
 import { useEffect, useRef, useState } from "react";
 
-const TournamentBoard = () => {
+const TournamentBoard = ({tournament} : {tournament: any}) => {
   const user_id = getCookie("user_id") || "";
-  const { tournament } = useGetTournament(user_id);
+
   console.log("tournamentBoard");
   const semi1 = useRef<any>(null);
   const semi2 = useRef<any>(null);
   const final = useRef<any>(null);
-  if (tournament.isSuccess && tournament.data.tournament) {
-    semi1.current = tournament.data.tournament.semi1;
-    semi2.current = tournament.data.tournament.semi2;
-    final.current = tournament.data.tournament.final;
+  if (tournament) {
+    semi1.current = tournament.semi1;
+    semi2.current = tournament.semi2;
+    final.current = tournament.final;
   }
-  if (tournament.isLoading) return "looking for tournament...";
-  if (
-    (tournament.isSuccess && !tournament.data.tournament) ||
-    tournament.data === undefined
-  )
-    return "no tournament found";
   return (
     <Card className="p-4 h-fit w-fit flex flex-col justify-center">
       <div className="mx-auto">Board</div>

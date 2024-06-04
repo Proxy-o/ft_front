@@ -53,7 +53,7 @@ const Tournament = () => {
             <Two type="tournament" />
           </div>
           {console.log("fetching tournament")}
-          <TournamentBoard />
+          <TournamentBoard tournament={data.tournament} />
           <Button
             onClick={() => {
               leavetournament(data.tournament.id);
