@@ -16,11 +16,12 @@ import useIsWinner from "../hooks/useIsWinner";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
+import TournamentTable from "./tournamentTable";
 
 export default function GamesTable({ id }: { id: string }) {
   const { data: games, isSuccess } = useGetGames(id);
   const isWinner = useIsWinner();
-
+  console.log(games);
   return (
     isSuccess && (
       <div className="w-full">
@@ -187,6 +188,7 @@ export default function GamesTable({ id }: { id: string }) {
               )}
             </TableBody>
           </Table>
+          <TournamentTable userid={id} />
         </Card>
       </div>
     )

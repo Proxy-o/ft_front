@@ -23,7 +23,7 @@ export default function useReject() {
       toast.success("rejected successfully");
     },
     onError: () => {
-      toast.error("Something went wrong");
+      toast.error("You cannot Decline this friend request");
     },
   });
   return mutation;

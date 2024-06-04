@@ -10,6 +10,7 @@ import {
   Send,
   Users,
   UserPlus2,
+  MessageCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "../ui/button";
@@ -91,8 +92,10 @@ export default function Nav() {
     if (lastJsonMessage?.type === "request") {
       let id = lastJsonMessage.id;
       toast(
-          <Link  href={`/profile/${id}`}>{"You have a new friend request from " + lastJsonMessage.user}</Link>
-      )
+        <Link className="w-full text-center" href={`/profile/${id}`}>
+          {"You have a new friend request from " + lastJsonMessage.user}
+        </Link>
+      );
       queryClient.invalidateQueries({
         queryKey: ["requests"],
       });
@@ -110,6 +113,17 @@ export default function Nav() {
       queryClient.invalidateQueries({
         queryKey: ["friends", id],
       });
+      if (path !== "/chat")
+        toast(
+          <Link
+            href={`/profile/${lastJsonMessage.id}`}
+            className="w-full justify-between flex gap-2 text-lg"
+          >
+            {"New message from " + lastJsonMessage.user}
+            <MessageCircle className="h-6 w-6 text-green-400" />
+          </Link>
+        );
+      lastJsonMessage.type = "null";
     }
     if (isSuccessFriends && friends) {
       setShowNotif(false);
