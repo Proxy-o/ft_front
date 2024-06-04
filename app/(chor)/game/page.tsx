@@ -35,7 +35,7 @@ export default function Page() {
               <OneVOne type="two" />
             </div>
           </Link>
-          <Link href="/game/four">
+          <Link href="/game/twoVtwo">
             <div>
               <TwoVTwo />
             </div>
