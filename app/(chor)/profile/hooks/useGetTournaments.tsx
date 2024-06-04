@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 const fetchTournament = async ({ userid }: { userid: string }) => {
   try {
     if (userid === "0") return null;
-    const response = await axiosInstance.get(`/game/tournament/user/${userid}`);
+    const response = await axiosInstance.get(`/game/tournaments/user/${userid}`);
     return response.data;
   } catch (error: any) {
     if (error.response && error.response.status !== 401) {
