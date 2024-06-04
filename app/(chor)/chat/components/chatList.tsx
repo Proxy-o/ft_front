@@ -44,7 +44,10 @@ export default function ChatList() {
   }, []);
   return (
     <>
-      <div className="relative flex max-w-[60rem] mx-auto" ref={chatRef}>
+      <div
+        className="relative flex max-w-[60rem] mx-auto border rounded-sm"
+        ref={chatRef}
+      >
         {receiverId && isSender ? (
           <ChatCard receiver={receiver!} sender={sender} />
         ) : null}
