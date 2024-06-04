@@ -59,68 +59,13 @@ const OneVOne = ({ type }: { type: string }) => {
             hover ? "opacity-100" : "opacity-0"
           } absolute`}
         >
-          <div className="bg-primary h-[68px] w-3 animate-moveDown"></div>
+          <div className="bg-primary h-[68px] w-3 animate-moveDownOne"></div>
           <div className="h-full w-full">
             <div className="bg-primary h-[10px] w-[10px] animate-moveArround"></div>
           </div>
-          <div className="bg-primary  h-[68px] w-3 animate-moveUp">
-          </div>
+          <div className="bg-primary  h-[68px] w-3 animate-moveUpOne"></div>
         </div>
-
       </div>
-      <style jsx>{`
-        @keyframes moveDown {
-          0%,
-          100% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(150%);
-          }
-        }
-
-        .animate-moveDown {
-          animation: moveDown 4s ease-in-out infinite;
-        }
-
-        @keyframes moveUp {
-          0%,
-          100% {
-            transform: translateY(0);
-          }
-          25% {
-            transform: translateY(75%);
-          }
-          50% {
-            transform: translateY(150%);
-          }
-          75% {
-            transform: translateY(75%);
-          }
-        }
-
-        .animate-moveUp {
-          animation: moveUp 4s ease-in-out infinite;
-        }
-        @keyframes moveArround {
-          0%,
-          100% {
-            transform: translateX(0) translateY(0);
-          }
-          25% {
-            transform: translateX(1500%) translateY(700%);
-          }
-          50% {
-            transform: translateX(0%) translateY(1400%);
-          }
-          75% {
-            transform: translateX(1500%) translateY(700%);
-          }
-        }
-        .animate-moveArround {
-          animation: moveArround 4s linear infinite;
-        }
-      `}</style>
     </>
   );
 };

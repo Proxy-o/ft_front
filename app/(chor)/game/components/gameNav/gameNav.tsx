@@ -34,7 +34,7 @@ const GameNav = ({
               id="dropdown"
               className="w-[400px] h-fit flex flex-col justify-start items-start p-2 top-[68px] md:top-[52px] absolute border-secondary border-2 rounded-md shadow-sm shadow-primary bg-background"
             >
-              <Invitations setTab={setTab} />
+              <Invitations mode="all" />
             </div>
           </>
         )}

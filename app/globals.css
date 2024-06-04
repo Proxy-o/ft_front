@@ -74,3 +74,271 @@
     }
   }
 
+
+
+  .move-down {
+    animation: moveDown 20s ease-in-out;
+  }
+
+  @keyframes moveDown {
+    0% {
+      transform: translateY(0);
+    }
+    0.5% {
+      transform: translateY(10px); /* Adjust for desired movement */
+    }
+    100% {
+      transform: translateY(10px); /* Adjust for desired movement */
+    }
+  }
+
+  @keyframes moveDownOne {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(150%);
+    }
+  }
+
+  .animate-moveDownOne {
+    animation: moveDownOne 4s ease-in-out infinite;
+  }
+
+  @keyframes moveUpOne {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    25% {
+      transform: translateY(75%);
+    }
+    50% {
+      transform: translateY(150%);
+    }
+    75% {
+      transform: translateY(75%);
+    }
+  }
+
+  .animate-moveUpOne {
+    animation: moveUpOne 4s ease-in-out infinite;
+  }
+  @keyframes moveArround {
+    0%,
+    100% {
+      transform: translateX(0) translateY(0);
+    }
+    25% {
+      transform: translateX(1500%) translateY(700%);
+    }
+    50% {
+      transform: translateX(0%) translateY(1400%);
+    }
+    75% {
+      transform: translateX(1500%) translateY(700%);
+    }
+  }
+  .animate-moveArround {
+    animation: moveArround 4s linear infinite;
+  }
+
+  @keyframes moveUpLeft {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    25% {
+      transform: translateY(50%);
+    }
+    50% {
+      transform: translateY(33%);
+    }
+    75% {
+      transform: translateY(20%);
+    }
+  }
+
+  .animate-moveUpLeft {
+    animation: moveUpLeft 4s ease-in-out infinite;
+  }
+
+  @keyframes moveUpRight {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    25% {
+      transform: translateY(50%);
+    }
+    50% {
+      transform: translateY(50%);
+    }
+    75% {
+      transform: translateY(50%);
+    }
+  }
+
+  .animate-moveUpRight {
+    animation: moveUpRight 4s ease-in-out infinite;
+  }
+
+  @keyframes moveDownLeft {
+    0%,
+    100% {
+      transform: translateY(100%);
+    }
+    50% {
+      transform: translateY(75%);
+    }
+    75% {
+      transform: translateY(50%);
+    }
+  }
+
+  .animate-moveDownLeft {
+    animation: moveDownLeft 4s ease-in-out infinite;
+  }
+
+  @keyframes moveDownRight {
+    0%,
+    100% {
+      transform: translateY(100%);
+    }
+    33% {
+      transform: translateY(50%);
+    }
+    50% {
+      transform: translateY(75%);
+    }
+    75% {
+      transform: translateY(50%);
+    }
+  }
+
+  .animate-moveDownRight {
+    animation: moveDownRight 4s ease-in-out infinite;
+  }
+
+  @keyframes moveArround {
+    0%,
+    100% {
+      transform: translateX(0) translateY(0);
+    }
+    25% {
+      transform: translateX(1500%) translateY(700%);
+    }
+    50% {
+      transform: translateX(0%) translateY(1400%);
+    }
+    54% {
+      transform: translateX(300%) translateY(1650%);
+    }
+    75% {
+      transform: translateX(1500%) translateY(700%);
+    }
+  }
+  .animate-moveArround {
+    animation: moveArround 4s linear infinite;
+  }
+
+  @keyframes moveLeft {
+    0% {
+      transform: translateY(0) translateX(0);
+    }
+    1% {
+      transform: translateY(0) translateX(0);
+    }
+    2.5% {
+      transform: translateY(230%) translateX(70%);
+    }
+    10.0% {
+      transform: translateY(230%) translateX(70%);
+    }
+    100% {
+      transform: translateY(230%) translateX(70%);
+    }
+  }
+
+  .animate-moveLeft {
+    animation: moveLeft 30s ease-in-out;
+  }
+
+  @keyframes moveRight {
+    0% {
+      transform: translateY(0) translateX(0);
+    }
+    1% {
+      transform: translateY(0) translateX(0);
+    }
+    2.5% {
+      transform: translateY(-230%) translateX(-70%);
+    }
+    5.0% {
+      transform: translateY(-250%) translateX(-315%);
+    }
+    7.5% {
+      transform: translateY(-250%) translateX(-315%) scale(3);
+    }
+    100% {
+      transform: translateY(-250%) translateX(-315%) scale(3);
+    }
+  }
+
+  .animate-moveRight {
+    animation: moveRight 30s ease-in-out;
+  }
+
+  @keyframes crown {
+    0% {
+      transform: translateY(0);
+    }
+    1% {
+      transform: translateY(0);
+    }
+    5.0% {
+      transform: translateY(0);
+    }
+    7.5% {
+      transform: translateY(-201%) scale(2);
+    }
+    8.0% {
+      transform: translateY(-150%) scale(2);
+    }
+    8.5% {
+      transform: translateY(-201%) scale(2);
+    }
+    9.0% {
+      transform: translateY(-150%) scale(2);
+    }
+    9.5% {
+      transform: translateY(-201%) scale(2);
+    }
+    10.0% {
+      transform: translateY(-150%) scale(2);
+    }
+    100% {
+      transform: translateY(-150%) scale(2);
+    }
+  }
+
+  .animate-crown {
+    animation: crown 30s ease-in-out;
+  }
+
+  @keyframes moveDownTournament {
+    0% {
+      transform: translateY(0);
+    }
+    1% {
+      transform: translateY(100%);
+    }
+    100% {
+      transform: translateY(100%);
+    }
+  }
+
+  .animate-moveDownTournament {
+    animation: moveDownTournament 30s ease-in-out;
+  }
