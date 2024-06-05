@@ -10,6 +10,8 @@ import useGetBlocked from "@/app/(chor)/friends/hooks/useGetBlocked";
 import useGetFriends from "@/app/(chor)/chat/hooks/useGetFriends";
 import ChatCard from "@/app/(chor)/chat/components/chatCard";
 import { UserRoundX, XCircle } from "lucide-react";
+import TournamentTable from "./tournamentTable";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function Profile({ id }: { id: string }) {
   const id_cookie = getCookie("user_id") as string;
@@ -73,7 +75,27 @@ export default function Profile({ id }: { id: string }) {
                   <ChatCard sender={sender} receiver={data} />
                 </div>
               )}
-              {!isBlocked && <GamesTable id={id} />}
+              {!isBlocked && (
+                <Tabs defaultValue="Classic" className="w-full">
+                  <TabsList className="flex ">
+                    <TabsTrigger value="Classic" className="w-full">
+                      Classic
+                    </TabsTrigger>
+                    <TabsTrigger value="2v2" className="w-full">
+                      2v2
+                    </TabsTrigger>
+                    <TabsTrigger value="Tournament" className="w-full">
+                      Tournament
+                    </TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="Classic">
+                    <GamesTable id={id} />
+                  </TabsContent>
+                  <TabsContent value="Tournament">
+                    <TournamentTable userid={id} />
+                  </TabsContent>
+                </Tabs>
+              )}
             </div>
             <div className="flex flex-col gap-4">
               <States />

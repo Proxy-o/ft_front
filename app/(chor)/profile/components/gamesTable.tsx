@@ -16,7 +16,6 @@ import useIsWinner from "../hooks/useIsWinner";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
-import TournamentTable from "./tournamentTable";
 
 export default function GamesTable({ id }: { id: string }) {
   const { data: games, isSuccess } = useGetGames(id);
@@ -188,7 +187,6 @@ export default function GamesTable({ id }: { id: string }) {
               )}
             </TableBody>
           </Table>
-          <TournamentTable userid={id} />
         </Card>
       </div>
     )
