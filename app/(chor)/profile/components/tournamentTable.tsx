@@ -16,23 +16,21 @@ export default function TournamentTable({ userid }: { userid: string }) {
     isSuccess && (
       <div className="w-full">
         <div className="p-4 relative font-semibold">Tournaments</div>
-        <Accordion type="single" collapsible className="no-underline">
+        <Accordion type="single" collapsible>
           {tournaments.map((tournament: any, index: number) => (
-            <AccordionItem
-              value={tournament.id}
-              key={index}
-              className="no-underline"
-            >
-              <AccordionTrigger className="">
-                <div className="flex justify-between items-center border rounded-sm w-full no-underline">
-                  <div className="flex items-center justify-center  gap-4 no-underline">
-                    Creator :
-                    <div className="flex flex-col justify-center items-center no-underline border p-2">
-                      <Avatar className=" size-8">
+            <AccordionItem value={tournament.id} key={index}>
+              <AccordionTrigger className="p-2">
+                <div className="flex justify-between items-center border rounded-lg w-full p-1 gap-1">
+                  <div className="flex items-center justify-center  gap-4 w-1/2 bg-primary/10 rounded-md relative">
+                    <h1 className="w-full  text-center absolute text-5xl opacity-35 hover:scale-110 transition duration-300 ease-in-out blur-sm">
+                      Creator
+                    </h1>
+                    <div className="flex flex-col justify-center items-center p-2 hover:scale-110 transition duration-300 ease-in-out ">
+                      <Avatar className=" size-10">
                         <AvatarImage
                           src={tournament.creator.avatar}
                           alt="profile image"
-                          className="rounded-full size-8"
+                          className="rounded-full size-10"
                         />
                         <AvatarFallback className="rounded-sm size-4 text-xs">
                           R
@@ -42,18 +40,23 @@ export default function TournamentTable({ userid }: { userid: string }) {
                     </div>
                   </div>
                   {!tournament.winner?.avatar && (
-                    <div className="flex items-center justify-center gap-4">
-                      Winner :
-                      <Avatar className=" mr-2 size-8">
-                        <AvatarImage
-                          src={tournament.winner?.avatar}
-                          alt="profile image"
-                          className="rounded-full size-8"
-                        />
-                        <AvatarFallback className="rounded-sm size-4 text-xs">
-                          R
-                        </AvatarFallback>
-                      </Avatar>
+                    <div className="flex items-center justify-center  gap-4 w-1/2 bg-green-600/10 rounded-md relative">
+                      <h1 className="w-full absolute text-5xl opacity-35 hover:scale-110 transition duration-300 ease-in-out blur-sm">
+                        Winner
+                      </h1>
+                      <div className="flex flex-col justify-center items-center p-2 hover:scale-110 transition duration-300 ease-in-out">
+                        <Avatar className=" size-10 ">
+                          <AvatarImage
+                            src={tournament.creator.avatar}
+                            alt="profile image"
+                            className="rounded-full size-10"
+                          />
+                          <AvatarFallback className="rounded-sm size-4 text-xs">
+                            R
+                          </AvatarFallback>
+                        </Avatar>
+                        <h1>{tournament.creator.username}</h1>
+                      </div>
                     </div>
                   )}
                 </div>

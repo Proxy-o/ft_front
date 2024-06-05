@@ -76,7 +76,7 @@ export default function Profile({ id }: { id: string }) {
                 </div>
               )}
               {!isBlocked && (
-                <Tabs defaultValue="Classic" className="w-full">
+                <Tabs defaultValue="Classic" className="w-full mb-2">
                   <TabsList className="flex ">
                     <TabsTrigger value="Classic" className="w-full">
                       Classic
