@@ -76,7 +76,7 @@ export default function Profile({ id }: { id: string }) {
               {!isBlocked && <TabStates id={id} />}
             </div>
             <div className="flex flex-col gap-4">
-              <States />
+              <States id={id} />
               {((!isBlocked && isFriend) || id_cookie == id) && (
                 <FriendList user_id={id} />
               )}

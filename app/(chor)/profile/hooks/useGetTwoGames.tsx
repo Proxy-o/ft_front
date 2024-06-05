@@ -5,7 +5,6 @@ const fetchGames = async ({ id }: { id: string }) => {
   try {
     if (id === "0") return null;
     const response = await axiosInstance.get(`/game/twovtwo/user/${id}`);
-    console.log(response.data);
     return response.data;
   } catch (error: any) {
     if (error.response && error.response.status !== 401) {

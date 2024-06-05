@@ -11,7 +11,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function TournamentTable({ userid }: { userid: string }) {
   const { data: tournaments, isSuccess } = useGetTournaments(userid);
-  console.log(tournaments);
   return (
     isSuccess && (
       <div className="w-full">
@@ -61,7 +60,7 @@ export default function TournamentTable({ userid }: { userid: string }) {
                   )}
                 </div>
               </AccordionTrigger>
-              <AccordionContent>
+              <AccordionContent className=" flex justify-center items-center">
                 <TournamentBoard tournament={tournament} />
               </AccordionContent>
             </AccordionItem>
