@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 const fetchGames = async ({ id }: { id: string }) => {
   try {
     if (id === "0") return null;
-    const response = await axiosInstance.get(`/game/user/${id}`);
+    const response = await axiosInstance.get(`/game/twovtwo/user/${id}`);
     console.log(response.data);
     return response.data;
   } catch (error: any) {
@@ -14,7 +14,7 @@ const fetchGames = async ({ id }: { id: string }) => {
   }
 };
 
-export default function useGetGames(id: string) {
+export default function useGetTwoGames(id: string) {
   const info = useQuery({
     queryKey: ["Games", id],
     queryFn: () => fetchGames({ id }),

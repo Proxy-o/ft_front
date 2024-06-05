@@ -1,14 +1,13 @@
 "use client";
 import getCookie from "@/lib/functions/getCookie";
 import { Card } from "@/components/ui/card";
-import GamesTable from "../profile/components/gamesTable";
 import OneVOne from "./components/gameNav/oneVOne";
 import TwoVTwo from "./components/gameNav/twoVTwo";
 import TournamentNav from "./components/gameNav/tournament";
 import Invitations from "./components/invitations";
 import Link from "next/link";
 import CheckLogin from "@/components/checkLogin";
-import { useEffect } from "react";
+import TabStates from "../profile/components/tabStates";
 
 export default function Page() {
   const user_id = getCookie("user_id") || "";
@@ -51,7 +50,7 @@ export default function Page() {
           <Invitations mode="all" />
         </div>
         <div className=" mt-6 h-full  w-full flex flex-col md:flex-row      gap-4">
-          <GamesTable id={user_id} />
+          <TabStates id={user_id} />
         </div>
       </Card>
     </div>

@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import UserInfo from "./userInfo";
-import GamesTable from "./gamesTable";
 import States from "./states";
 import useGetUser from "../hooks/useGetUser";
 import getCookie from "@/lib/functions/getCookie";
@@ -10,8 +9,7 @@ import useGetBlocked from "@/app/(chor)/friends/hooks/useGetBlocked";
 import useGetFriends from "@/app/(chor)/chat/hooks/useGetFriends";
 import ChatCard from "@/app/(chor)/chat/components/chatCard";
 import { UserRoundX, XCircle } from "lucide-react";
-import TournamentTable from "./tournamentTable";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import TabStates from "./tabStates";
 
 export default function Profile({ id }: { id: string }) {
   const id_cookie = getCookie("user_id") as string;
@@ -75,27 +73,7 @@ export default function Profile({ id }: { id: string }) {
                   <ChatCard sender={sender} receiver={data} />
                 </div>
               )}
-              {!isBlocked && (
-                <Tabs defaultValue="Classic" className="w-full mb-2">
-                  <TabsList className="flex ">
-                    <TabsTrigger value="Classic" className="w-full">
-                      Classic
-                    </TabsTrigger>
-                    <TabsTrigger value="2v2" className="w-full">
-                      2v2
-                    </TabsTrigger>
-                    <TabsTrigger value="Tournament" className="w-full">
-                      Tournament
-                    </TabsTrigger>
-                  </TabsList>
-                  <TabsContent value="Classic">
-                    <GamesTable id={id} />
-                  </TabsContent>
-                  <TabsContent value="Tournament">
-                    <TournamentTable userid={id} />
-                  </TabsContent>
-                </Tabs>
-              )}
+              {!isBlocked && <TabStates id={id} />}
             </div>
             <div className="flex flex-col gap-4">
               <States />
