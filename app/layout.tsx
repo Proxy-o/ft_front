@@ -39,20 +39,7 @@ export default function RootLayout({
             <UserContextProvider>
               <Suspense fallback={<HomeSkel />}>
                 <div className="md:flex relative">
-                  {mb ? (
-                    <Nav />
-                  ) : (
-                    <div className="pl-1  w-fit   absolute z-50  h-6">
-                      <Sheet>
-                        <SheetTrigger>
-                          <Menu size={20} />
-                        </SheetTrigger>
-                        <SheetContent side={"left"} className="w-18 p-0">
-                          <Nav />
-                        </SheetContent>
-                      </Sheet>
-                    </div>
-                  )}
+                  {mb && <Nav />}
                   <main className="border-l-[0.04rem] w-full sm:mx-0 h-screen overflow-auto  md:p-0">
                     {children}
                   </main>
