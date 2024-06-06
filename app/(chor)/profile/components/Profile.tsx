@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
 import UserInfo from "./userInfo";
-import GamesTable from "./gamesTable";
 import States from "./states";
 import useGetUser from "../hooks/useGetUser";
 import getCookie from "@/lib/functions/getCookie";
@@ -10,6 +9,7 @@ import useGetBlocked from "@/app/(chor)/friends/hooks/useGetBlocked";
 import useGetFriends from "@/app/(chor)/chat/hooks/useGetFriends";
 import ChatCard from "@/app/(chor)/chat/components/chatCard";
 import { UserRoundX, XCircle } from "lucide-react";
+import TabStates from "./tabStates";
 
 export default function Profile({ id }: { id: string }) {
   const id_cookie = getCookie("user_id") as string;
@@ -73,10 +73,10 @@ export default function Profile({ id }: { id: string }) {
                   <ChatCard sender={sender} receiver={data} />
                 </div>
               )}
-              {!isBlocked && <GamesTable id={id} />}
+              {!isBlocked && <TabStates id={id} />}
             </div>
             <div className="flex flex-col gap-4">
-              <States />
+              <States id={id} />
               {((!isBlocked && isFriend) || id_cookie == id) && (
                 <FriendList user_id={id} />
               )}
