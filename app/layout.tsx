@@ -8,8 +8,6 @@ import { Suspense, lazy } from "react";
 import HomeSkel from "@/components/skeletons/homeSkel";
 import dynamic from "next/dynamic";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu } from "lucide-react";
 import { UserContextProvider } from "@/lib/providers/UserContextProvider";
 import { Toaster } from "@/components/ui/sonner";
 

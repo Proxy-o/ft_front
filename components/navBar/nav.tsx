@@ -134,7 +134,15 @@ export default function Nav() {
         }
       });
     }
-  }, [isSuccessFriends, friends, lastJsonMessage, queryClient, id, showNotif]);
+  }, [
+    path,
+    isSuccessFriends,
+    friends,
+    lastJsonMessage,
+    queryClient,
+    id,
+    showNotif,
+  ]);
 
   const handleLogout = () => {
     logout();

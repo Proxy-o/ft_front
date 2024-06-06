@@ -3,7 +3,6 @@ import getCookie from "@/lib/functions/getCookie";
 import SearchFriend from "./profile/components/searchFriend";
 import { useRouter } from "next/navigation";
 import MobilNav from "@/components/navBar/mobilNav";
-import Nav from "@/components/navBar/nav";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
 
