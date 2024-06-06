@@ -28,32 +28,34 @@ export default function SearchFriend() {
           onFocus={() => setResVisible(true)}
         />
       </div>
-      <div className=" absolute z-50 w-full  dark:bg-black bg-gray-300 top-14 p-1 rounded-lg">
-        {isSuccess && resVisible && (
-          <>
-            {isPending ? (
-              <div>Loading...</div>
-            ) : (
-              data && (
-                <div>
-                  {data.map((friend: User) => (
-                    <Link
-                      key={friend.id}
-                      className="cursor-pointer"
-                      href={`/profile/${friend.id.toString()}`}
-                    >
-                      <ChatFriendCard
-                        friend={friend}
-                        setReceiverId={() => {}}
-                      />
-                    </Link>
-                  ))}
-                </div>
-              )
-            )}
-          </>
-        )}
-      </div>
+      {data && data.length > 0 && (
+        <div className=" absolute z-50 w-full  dark:bg-black bg-gray-300 top-14 p-1 rounded-lg">
+          {isSuccess && resVisible && (
+            <>
+              {isPending ? (
+                <div>Loading...</div>
+              ) : (
+                data && (
+                  <div>
+                    {data.map((friend: User) => (
+                      <Link
+                        key={friend.id}
+                        className="cursor-pointer"
+                        href={`/profile/${friend.id.toString()}`}
+                      >
+                        <ChatFriendCard
+                          friend={friend}
+                          setReceiverId={() => {}}
+                        />
+                      </Link>
+                    ))}
+                  </div>
+                )
+              )}
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 }
