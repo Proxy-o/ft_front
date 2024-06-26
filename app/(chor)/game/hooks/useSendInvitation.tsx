@@ -1,6 +1,7 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
 import getCookie from "@/lib/functions/getCookie";
 import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 const user_id = getCookie("user_id") || "";
 
@@ -53,7 +54,9 @@ const invite = async ({
 export default function useSendInvitation() {
   const mutation = useMutation({
     mutationFn: invite,
-    onSuccess: () => {},
+    onSuccess: () => {
+      toast.success("Invitation sent");
+    },
   });
   return mutation;
 }
