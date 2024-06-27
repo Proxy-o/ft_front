@@ -9,8 +9,6 @@ import { Card } from "@/components/ui/card";
 import useInvitationSocket from "@/lib/hooks/useInvitationSocket";
 
 const InviteFriends = ({ gameType }: { gameType: string }) => {
-  const { handelSendInvitation } = useInvitationSocket();
-
   const user_id = getCookie("user_id");
 
   const friends = useGetFriends(user_id || "0");
@@ -52,7 +50,6 @@ const InviteFriends = ({ gameType }: { gameType: string }) => {
                           userid: friend.id,
                           gameType: gameType,
                         });
-                        handelSendInvitation(friend.id);
                       }}
                     >
                       <Sword size={20} />

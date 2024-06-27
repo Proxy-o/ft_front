@@ -19,11 +19,21 @@ import { enemyLeftGameFour } from "../methods/enemyLeftGame";
 import useEndGame from "../hooks/useEndGame";
 import useGetUser from "../../profile/hooks/useGetUser";
 import Actions from "../components/actions";
+import NoGameFour from "../components/noGameFour";
+import { Button } from "@/components/ui/button";
+import useLeaveGame from "../hooks/useLeaveGame";
+import useSurrenderGame from "../hooks/useSurrender";
+import { toast } from "sonner";
+import { time } from "console";
 
 const Game = ({
   gameStartedRef,
+  setGameChange,
+  onGoingGame,
 }: {
   gameStartedRef: React.MutableRefObject<boolean>;
+  setGameChange: React.Dispatch<React.SetStateAction<boolean>>;
+  onGoingGame: any;
 }) => {
   const playerReadyRef = useRef(0);
   const isFirstTime = useRef(true);
@@ -47,12 +57,18 @@ const Game = ({
   const enemyLeftGameRef = useRef(false);
   const numberOfTimeResponseRef = useRef(0);
   const stillPlayingUsersRef = useRef<string[]>([]);
+  const state = useRef("none");
   const dummyPlayer: User = {
     username: "player",
     avatar: "none",
     id: "",
   };
 
+  if (!gameStartedRef.current) {
+    timeRef.current = 0;
+    newAngleRef.current = 0;
+    enemyLeftGameRef.current = false;
+  }
   const leftUserTop = useRef<User>(dummyPlayer);
   const leftUserBottom = useRef<User>(dummyPlayer);
   const rightUserTop = useRef<User>(dummyPlayer);
@@ -62,10 +78,14 @@ const Game = ({
   const { data: user } = useGetUser(user_id || "0");
   const username: string = user?.username || "";
 
-  const { onGoingGame } = useGetFourGame(user_id || "0");
 
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
 
+  const { mutate: surrenderGame } = useSurrenderGame();
+
+  const { mutate: endGameFour } = useEndGameFour();
+
+  const { mutate: leaveGame } = useLeaveGame();
   const {
     gameMsg,
     handleMovePaddleFour,
@@ -189,145 +209,98 @@ const Game = ({
 
     const drawOnlineOne = () => {
       if (canvas === null) return;
-      if (gameStartedRef.current) {
-        if (
-          username === leftUserTop.current?.username &&
-          newAngleRef.current === 0
+      if (
+        username === leftUserTop.current?.username &&
+        newAngleRef.current === 0
+      ) {
+        y = Math.random() * (canvas.height - ballRadius * 2) + ballRadius;
+        newBallPositionRef.current = { x, y }; // Initialize the ref
+        newAngleRef.current = Math.random() * Math.PI;
+        while (
+          (newAngleRef.current > Math.PI / 6 &&
+            newAngleRef.current < (Math.PI * 5) / 6) ||
+          (newAngleRef.current > (Math.PI * 7) / 6 &&
+            newAngleRef.current < (Math.PI * 11) / 6)
         ) {
-          y = Math.random() * (canvas.height - ballRadius * 2) + ballRadius;
-          newBallPositionRef.current = { x, y }; // Initialize the ref
-          newAngleRef.current = Math.random() * Math.PI;
-          while (
-            (newAngleRef.current > Math.PI / 6 &&
-              newAngleRef.current < (Math.PI * 5) / 6) ||
-            (newAngleRef.current > (Math.PI * 7) / 6 &&
-              newAngleRef.current < (Math.PI * 11) / 6)
-          ) {
-            newAngleRef.current = Math.random() * 2 * Math.PI;
-          }
-          handleChangeBallDirectionFour(
-            newBallPositionRef.current.x,
-            newBallPositionRef.current.y,
-            newAngleRef.current,
-            username
-          );
+          newAngleRef.current = Math.random() * 2 * Math.PI;
         }
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // Draw the paddles
-        drawFour(canvasParams);
-
-        // move paddles
-        movePaddlesFour(
-          canvasParams,
-          handleMovePaddleFour,
-          username,
-          myPaddleRef,
-          upPressedRef,
-          downPressedRef
-        );
-
-        // Check for collision with left paddle
-        changeBallDirectionFour(
-          canvasParams,
-          newAngleRef,
-          ballInLeftPaddle,
-          myPaddleRef,
-          paddleRightX,
-          ballInRightPaddle,
-          handleChangeBallDirectionFour,
+        handleChangeBallDirectionFour(
+          newBallPositionRef.current.x,
+          newBallPositionRef.current.y,
+          newAngleRef.current,
           username
         );
-
-        // Change score
-        changeScoreFour(
-          canvasParams,
-          newAngleRef,
-          handleChangeBallDirectionFour,
-          handleEnemyScoreFour,
-          username
-        );
-
-        // Check for score
-        // checkLoseConditionFour(
-        //   canvasParams,
-        //   canvas,
-        //   leftScoreRef,
-        //   rightScoreRef,
-        //   gameStartedRef,
-        //   endGameFour,
-        //   username,
-        //   handleRefetchPlayers
-        // );
-
-        // Check for collision with the horizontal walls
-        checkCollisionWithHorizontalWalls(
-          canvas,
-          ballRadius,
-          newBallPositionRef,
-          newAngleRef
-        );
-
-        // Move the ball
-        moveBallFour(canvasParams, newAngleRef);
-
-        // Check if enemy has left the game
-        enemyLeftGameFour(
-          canvasParams,
-          timeRef,
-          enemyLeftGameRef,
-          gameStartedRef,
-          handleTimeFour,
-          handleWhoLeftGame,
-          username
-        );
-      } else {
-        // Clear the canvas
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // Draw the button
-        ctx.fillStyle = "blue";
-        ctx.fillRect(50, 50, 100, 40); // Adjust coordinates and dimensions as needed
-
-        // Add text to the button
-        ctx.fillStyle = "white";
-        ctx.font = "20px Arial";
-        ctx.fillText("Click Me", 65, 80); // Adjust text position as needed
-        // Add a click event listener to the canvas
-        canvas.addEventListener("click", (e) => {
-          const rect = canvas.getBoundingClientRect();
-          const x = e.clientX - rect.left;
-          const y = e.clientY - rect.top;
-
-          // Check if the click was inside the button
-          if (
-            x >= 50 &&
-            x <= 150 &&
-            y >= 50 &&
-            y <= 90 &&
-            !clickedRef.current
-          ) {
-            // show a message to the user for 3 seconds
-
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "black";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "white";
-            ctx.font = "20px Arial";
-            handleStartGameFour(
-              username,
-              leftUserTop.current?.username || "",
-              leftUserBottom.current?.username || "",
-              rightUserTop.current?.username || "",
-              rightUserBottom.current?.username || ""
-            );
-            clickedRef.current = true;
-          }
-        });
-        canvas.addEventListener("mouseup", (e) => {
-          clickedRef.current = false;
-        });
       }
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw the paddles
+      drawFour(canvasParams);
+
+      // move paddles
+      movePaddlesFour(
+        canvasParams,
+        handleMovePaddleFour,
+        username,
+        myPaddleRef,
+        upPressedRef,
+        downPressedRef
+      );
+
+      // Check for collision with left paddle
+      changeBallDirectionFour(
+        canvasParams,
+        newAngleRef,
+        ballInLeftPaddle,
+        myPaddleRef,
+        paddleRightX,
+        ballInRightPaddle,
+        handleChangeBallDirectionFour,
+        username
+      );
+
+      // Change score
+      changeScoreFour(
+        canvasParams,
+        newAngleRef,
+        handleChangeBallDirectionFour,
+        handleEnemyScoreFour,
+        username
+      );
+
+      // Check for score
+      checkLoseConditionFour(
+        canvasParams,
+        canvas,
+        leftScoreRef,
+        rightScoreRef,
+        gameStartedRef,
+        endGameFour,
+        username,
+        handleRefetchPlayers,
+        setGameChange
+      );
+
+      // Check for collision with the horizontal walls
+      checkCollisionWithHorizontalWalls(
+        canvas,
+        ballRadius,
+        newBallPositionRef,
+        newAngleRef
+      );
+
+      // Move the ball
+      moveBallFour(canvasParams, newAngleRef);
+
+      // Check if enemy has left the game
+      enemyLeftGameFour(
+        canvasParams,
+        timeRef,
+        enemyLeftGameRef,
+        gameStartedRef,
+        handleTimeFour,
+        handleWhoLeftGame,
+        username
+      );
     };
 
     const animate = () => {
@@ -345,6 +318,7 @@ const Game = ({
     return returnFunction;
   }, [
     canvas,
+    gameStartedRef.current,
     onGoingGame.data?.game.user1,
     onGoingGame.data?.game.user2,
     onGoingGame.data?.game.user3,
@@ -371,17 +345,17 @@ const Game = ({
           );
         }
       } else if (message[0] === "/startFour") {
+        timeRef.current = 0;
+        newAngleRef.current = 0;
+        enemyLeftGameRef.current = false;
+        isFirstTime.current = true;
         gameStartedRef.current = true;
         playerReadyRef.current = 0;
+        onGoingGame.refetch();
       } else if (message[0] === "/start") {
         // invitaionsData.refetch();
         onGoingGame.refetch();
-        handleRefetchPlayers(
-          leftUserTop.current?.username || "",
-          leftUserBottom.current?.username || "",
-          rightUserTop.current?.username || "",
-          rightUserBottom.current?.username || ""
-        );
+        handleRefetchPlayers(onGoingGame.data?.game.user1.id || "");
         isFirstTime.current = true;
         // setStartCountdown(true);
       } else if (message[0] === "/refetchPlayers") {
@@ -444,6 +418,33 @@ const Game = ({
       } else if (message[0] === "/whoLeftGame") {
         const whoAsked = message[1];
         handleStillPlaying(username, whoAsked);
+      } else if (message[0] === "/fourSurrender") {
+        const surrenderer = message[1];
+        if (surrenderer !== username) {
+          if (
+            username === leftUserTop.current.username ||
+            username === leftUserBottom.current.username
+          ) {
+            if (
+              surrenderer === rightUserTop.current.username ||
+              surrenderer === rightUserBottom.current.username
+            ) {
+              toast.warning("Your opponent has surrendered");
+            } else {
+              toast.warning("You have surrendered");
+            }
+          } else {
+            if (
+              surrenderer === leftUserTop.current.username ||
+              surrenderer === leftUserBottom.current.username
+            ) {
+              toast.warning("Your opponent has surrendered");
+            } else {
+              toast.warning("You have surrendered");
+            }
+          }
+          setGameChange(false);
+        }
       } else if (message[0] === "/stillPlaying") {
         const user = message[1];
         const whoAsked = message[2];
@@ -493,42 +494,72 @@ const Game = ({
       } else if (message[0] === "/userLeftGame") {
         onGoingGame.refetch();
       } else if (message[0] === "/end") {
-        onGoingGame.refetch();
         leftScoreRef.current = 0;
         rightScoreRef.current = 0;
         gameStartedRef.current = false;
-        leftUserTop.current = dummyPlayer;
-        leftUserBottom.current = dummyPlayer;
-        rightUserTop.current = dummyPlayer;
-        rightUserBottom.current = dummyPlayer;
+        newAngleRef.current = 0;
+        setGameChange(false);
+        onGoingGame.refetch();
       }
     }
   }, [gameMsg()?.data]);
   return (
     <>
-      <Players
-        topLeft={leftUserTop}
-        topRight={rightUserTop}
-        bottomLeft={leftUserBottom}
-        bottomRight={rightUserBottom}
-        username={username}
-      />
-      <canvas
-        ref={canvasRef}
-        height="400"
-        width="800"
-        className="w-full md:w-5/6 h-[400px] lg:h-[500px] max-w-[800px] bg-black border-2 border-white mx-auto"
-      ></canvas>
-      {/* {children} */}
-      <Actions
-        gameStartedRef={gameStartedRef}
-        type="four"
-        userLeftTop={leftUserTop.current.username || ""}
-        userRightTop={rightUserTop.current.username || ""}
-        userLeftBottom={leftUserBottom.current.username || ""}
-        userRightBottom={rightUserBottom.current.username || ""}
-        gameId={onGoingGame.data?.game.id}
-      />
+      {!gameStartedRef.current && (
+        <NoGameFour
+          topLeft={leftUserTop}
+          topRight={rightUserTop}
+          bottomLeft={leftUserBottom}
+          bottomRight={rightUserBottom}
+          state={state}
+        />
+      )}
+      {gameStartedRef.current && (
+        <canvas
+          ref={canvasRef}
+          height="400"
+          width="800"
+          className={`w-full md:w-5/6  max-w-[800px] bg-black border-2 border-white mx-auto`}
+        ></canvas>
+      )}
+      {!gameStartedRef.current ? (
+        <div className="w-full flex flex-row justify-center items-center gap-4">
+          <Button
+            onClick={() => {
+              playerReadyRef.current = 0;
+
+              handleStartGameFour(
+                username,
+                leftUserTop.current?.username || "",
+                leftUserBottom.current?.username || "",
+                rightUserBottom.current?.username || "",
+                rightUserTop.current?.username || ""
+              );
+            }}
+            className="w-1/4 mt-4"
+          >
+            Start Game
+          </Button>
+          <Button
+            onClick={() => {
+              leaveGame();
+              handleRefetchPlayers(onGoingGame.data?.game.id || "");
+            }}
+            className="w-1/4 mt-4"
+          >
+            Leave Game
+          </Button>
+        </div>
+      ) : (
+        <Button
+          onClick={() => {
+            surrenderGame();
+          }}
+          className="w-1/2 mt-4"
+        >
+          Surrender
+        </Button>
+      )}
     </>
   );
 };

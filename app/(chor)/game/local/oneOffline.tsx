@@ -4,6 +4,9 @@ import React, { useRef, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import CountDown from "../components/contDown";
 import Score from "../components/score";
+import { Card } from "@/components/ui/card";
+import NoGame from "../components/noGame";
+import { toast } from "sonner";
 
 const OneOffline = () => {
   const [startCountdown, setStartCountdown] = useState(false);
@@ -17,6 +20,10 @@ const OneOffline = () => {
   const rightScoreRef = useRef(0);
   const animationFrameId = useRef(0); // To keep track of the animation frame ID
   const isAnimating = useRef(false);
+  const state = useRef<string>("local");
+
+  let bgImage = new Image();
+  bgImage.src = "/game.jpeg";
 
   useEffect(() => {
     if (!gameStarted) return; // Exit if game is not started
@@ -270,23 +277,52 @@ const OneOffline = () => {
     }
     function checkLoseConditionOffline() {
       if (canvas === null) return;
+      if (leftScoreRef.current === 10) {
+        state.current = "left";
+      } else if (rightScoreRef.current === 10) {
+        state.current = "right";
+      }
       if (leftScoreRef.current === 10 || rightScoreRef.current === 10) {
         rightScoreRef.current = 0;
         leftScoreRef.current = 0;
         setGameStarted(false);
         setStartCountdown(false);
-        if (leftScoreRef.current === 10) {
-          // alert("Left player wins!");
-        } else if (rightScoreRef.current === 10) {
-          // alert("Right player wins!");
-        }
       }
     }
+
+    const gameNotStarted = () => {
+      // Clear the canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.globalAlpha = 0.5;
+      ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
+      ctx.globalAlpha = 1;
+    };
+
+    const drawScore = () => {
+      if (canvas === null) return;
+      // italic and bold
+      ctx.font = "italic bold 50px Arial";
+      ctx.fillStyle = "#0095DD";
+      ctx.fillText(
+        "" + leftScoreRef.current,
+        canvas.width / 2 - 150,
+        canvas.height / 2 - 20
+      );
+      ctx.fillText(
+        "" + rightScoreRef.current,
+        canvas.width / 2 + 150,
+        canvas.height / 2 - 20
+      );
+    };
 
     const drawOfflineOne = () => {
       if (canvas === null) return;
       if (!gameStarted) return;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw the background
+      gameNotStarted();
+      drawScore();
       drawBall();
       drawRightPaddle();
       drawLeftPaddle();
@@ -336,40 +372,44 @@ const OneOffline = () => {
   }, [gameStarted]);
 
   return (
-    <div className="w-full h-fit flex flex-col justify-center items-center">
-      <h1 className="text-4xl">Ping Pong</h1>
-      <br />
-      <Score leftPlayerScore={leftScore} rightPlayerScore={rightScore} />
-
-      {startCountdown ? (
-        gameStarted ? (
-          <>
-            <div className="w-[800px] h-fit">
-              <canvas
-                ref={canvasRef}
-                height="400"
-                width="800"
-                className="w-full md:w-5/6 h-[400px] lg:h-[500px] max-w-[800px] bg-black border-2 border-white mx-auto"
-              ></canvas>
-            </div>
-          </>
-        ) : (
-          <CountDown
-            setGameStarted={setGameStarted}
-            setStartCountdown={setStartCountdown}
-          />
-        )
+    <>
+      {gameStarted ? (
+        <>
+          <Card className="w-full h-[300px] md:h-[400px] mt-3">
+            <canvas
+              ref={canvasRef}
+              height="400"
+              width="800"
+              className="w-full h-full"
+            ></canvas>
+          </Card>
+          <Button
+            onClick={() => {
+              rightScoreRef.current = 0;
+              leftScoreRef.current = 0;
+              setGameStarted(false);
+            }}
+            className="w-1/2 mt-4 mx-auto"
+          >
+            End Game
+          </Button>
+        </>
       ) : (
-        <Button
-          onClick={() => {
-            setStartCountdown(true);
-          }}
-          className="w-1/2 mt-4"
-        >
-          Start Game
-        </Button>
+        <>
+          <Card className="w-full h-[300px] md:h-[400px] mt-3 rounded-lg">
+            <NoGame state={state} />
+          </Card>
+          <Button
+            onClick={() => {
+              setGameStarted(true);
+            }}
+            className="w-1/2 mt-4 mx-auto"
+          >
+            Start Game
+          </Button>
+        </>
       )}
-    </div>
+    </>
   );
 };
 

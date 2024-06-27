@@ -1,7 +1,20 @@
 import { Button } from "@/components/ui/button";
+import { User } from "@/lib/types";
 import { useEffect, useRef, useState } from "react";
 
-const NoGame = ({ state }: { state: React.MutableRefObject<string> }) => {
+const NoGameFour = ({
+  topLeft,
+  topRight,
+  bottomLeft,
+  bottomRight,
+  state,
+}: {
+  topLeft: React.MutableRefObject<User>;
+  topRight: React.MutableRefObject<User>;
+  bottomLeft: React.MutableRefObject<User>;
+  bottomRight: React.MutableRefObject<User>;
+  state: React.MutableRefObject<string>;
+}) => {
   const atext = useRef<string>("Invite a friend to play");
 
   const letterIndex = useRef(0);
@@ -41,23 +54,31 @@ const NoGame = ({ state }: { state: React.MutableRefObject<string> }) => {
       }}
     >
       <div className="text-white text-3xl m-auto text-container">{text}</div>
+      <div>
+        <div>{topLeft.current.username}</div>
+        <div>{topRight.current.username}</div>
+        <div>{bottomLeft.current.username}</div>
+        <div>{bottomRight.current.username}</div>
+      </div>
       {state.current !== "none" &&
         state.current !== "left" &&
         state.current !== "right" &&
         state.current !== "local" && (
-          <Button
-            className="m-auto"
-            onClick={() => {
-              state.current = "none";
-              setText("");
-              letterIndex.current = 0;
-            }}
-          >
-            Play again
-          </Button>
+          <>
+            <Button
+              className="m-auto"
+              onClick={() => {
+                state.current = "none";
+                setText("");
+                letterIndex.current = 0;
+              }}
+            >
+              Play again
+            </Button>
+          </>
         )}
     </div>
   );
 };
 
-export default NoGame;
+export default NoGameFour;

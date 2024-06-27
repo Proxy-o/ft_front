@@ -10,7 +10,7 @@ export default function Page() {
       <CheckLogin />
       <div className={`flex flex-col w-full h-full justify-start items-center`}>
         <Card className="w-11/12 max-w-[900px] h-fit flex flex-col justify-center items-start p-2 pb-8 mx-auto mt-12 gap-2">
-          <div className="w-full">
+          <div className="w-full h-[400px] lg:h-[500px]">
             <Four />
           </div>
           <div className="w-full h-full flex flex-col md:flex-row justify-start items-start p-2 gap-4">

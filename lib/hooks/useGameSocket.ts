@@ -89,6 +89,11 @@ export default function useGameSocket() {
     sendJsonMessage({ message: "/userLeftGame " + user });
   };
 
+  const handleSurrenderFour = () => {
+    const toSend = "/fourSurrender";
+    sendJsonMessage({ message: toSend });
+  };
+
   const handleStillPlaying = (user: string, whoAsked: string) => {
     sendJsonMessage({ message: "/stillPlaying " + user + " " + whoAsked });
   };
@@ -113,5 +118,6 @@ export default function useGameSocket() {
     handleUserLeftGame,
     handleTimeResponse,
     handleStillPlaying,
+    handleSurrenderFour,
   };
 }

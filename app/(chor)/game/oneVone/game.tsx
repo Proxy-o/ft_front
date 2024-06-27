@@ -348,7 +348,6 @@ const Game = ({ type }: { type: string }) => {
             gameIdRef.current
           );
           timeRef.current = 0;
-          console.log("game started");
         }
         gameStartedRef.current = true;
         // isFirstTime.current = true;
@@ -361,6 +360,8 @@ const Game = ({ type }: { type: string }) => {
           timeRef.current = parseInt(message[1]);
           enemyLeftGameRef.current = false;
         }
+      } else if (message[0] === "/refetchPlayers") {
+        onGoingGame.refetch();
       } else if (message[0] === "/surrender") {
         if (message[1] !== username) {
           state.current = "surrendered";
