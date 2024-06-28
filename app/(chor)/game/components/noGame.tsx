@@ -12,6 +12,8 @@ const NoGame = ({ state }: { state: React.MutableRefObject<string> }) => {
       atext.current = "You won";
     } else if (state.current === "lose") {
       atext.current = "You lose";
+    } else if (state.current === "surrender") {
+      atext.current = "Your teammate has surrendered";
     } else if (state.current === "surrendered") {
       atext.current = "Your enemy has surrendered";
     } else if (state.current === "none") {
@@ -22,6 +24,8 @@ const NoGame = ({ state }: { state: React.MutableRefObject<string> }) => {
       atext.current = "The right player wins the game";
     } else if (state.current === "local") {
       atext.current = "Start a local game";
+    } else if (state.current === "tournament") {
+      atext.current = "Join a tournament";
     }
     setTimeout(() => {
       if (letterIndex.current < atext.current.length) {
@@ -33,18 +37,21 @@ const NoGame = ({ state }: { state: React.MutableRefObject<string> }) => {
 
   return (
     <div
-      className="w-full h-full bg-black flex flex-col rounded-lg"
+      className="w-full h-[350px] md:h-[400px] flex flex-col rounded-lg"
       style={{
         backgroundImage: "url('/game.jpeg')",
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
     >
-      <div className="text-white text-3xl m-auto text-container">{text}</div>
+      <div className="text-white text-xl md:text-3xl m-auto text-container">
+        {text}
+      </div>
       {state.current !== "none" &&
         state.current !== "left" &&
         state.current !== "right" &&
-        state.current !== "local" && (
+        state.current !== "local" &&
+        state.current !== "tournament" && (
           <Button
             className="m-auto"
             onClick={() => {

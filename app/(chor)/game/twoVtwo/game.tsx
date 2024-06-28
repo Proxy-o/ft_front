@@ -9,31 +9,30 @@ import { movePaddlesFour } from "../methods/movePaddles";
 import { drawFour } from "../methods/draw";
 import useGameSocket from "@/lib/hooks/useGameSocket";
 import { User } from "@/lib/types";
-import useGetFourGame from "../hooks/useGetFourGame";
 import getCookie from "@/lib/functions/getCookie";
 import useEndGameFour from "../hooks/useEndGameFour";
-import Players from "../components/players";
 import useInvitationSocket from "@/lib/hooks/useInvitationSocket";
-import { on } from "events";
 import { enemyLeftGameFour } from "../methods/enemyLeftGame";
 import useEndGame from "../hooks/useEndGame";
 import useGetUser from "../../profile/hooks/useGetUser";
-import Actions from "../components/actions";
 import NoGameFour from "../components/noGameFour";
 import { Button } from "@/components/ui/button";
 import useLeaveGame from "../hooks/useLeaveGame";
 import useSurrenderGame from "../hooks/useSurrender";
-import { toast } from "sonner";
-import { time } from "console";
+import { on } from "events";
+import { DoorOpen, Flag, Gamepad } from "lucide-react";
+import Hover from "../components/hover";
 
 const Game = ({
   gameStartedRef,
   setGameChange,
   onGoingGame,
+  state,
 }: {
   gameStartedRef: React.MutableRefObject<boolean>;
   setGameChange: React.Dispatch<React.SetStateAction<boolean>>;
   onGoingGame: any;
+  state: React.MutableRefObject<string>;
 }) => {
   const playerReadyRef = useRef(0);
   const isFirstTime = useRef(true);
@@ -49,7 +48,6 @@ const Game = ({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationFrameId = useRef(0);
   const isAnimating = useRef(false);
-  const clickedRef = useRef(false);
   const upPressedRef = useRef(false);
   const downPressedRef = useRef(false);
   const gameIdRef = useRef("");
@@ -57,7 +55,6 @@ const Game = ({
   const enemyLeftGameRef = useRef(false);
   const numberOfTimeResponseRef = useRef(0);
   const stillPlayingUsersRef = useRef<string[]>([]);
-  const state = useRef("none");
   const dummyPlayer: User = {
     username: "player",
     avatar: "none",
@@ -77,7 +74,6 @@ const Game = ({
   const user_id = getCookie("user_id") || "";
   const { data: user } = useGetUser(user_id || "0");
   const username: string = user?.username || "";
-
 
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
 
@@ -149,8 +145,8 @@ const Game = ({
     if (username === leftUserBottom.current?.username)
       myPaddleRef.current = paddleLeftBottomYRef.current;
 
-    const paddleLeftX = 25;
-    const paddleRightX = canvas.width - 25 - paddleWidth;
+    const paddleLeftX = 0;
+    const paddleRightX = canvas.width - paddleWidth;
 
     const handleKeyEvent = (e: KeyboardEvent) => {
       if (e.key === "ArrowUp" || e.key === "ArrowDown") {
@@ -429,22 +425,23 @@ const Game = ({
               surrenderer === rightUserTop.current.username ||
               surrenderer === rightUserBottom.current.username
             ) {
-              toast.warning("Your opponent has surrendered");
+              state.current = "surrendered";
             } else {
-              toast.warning("You have surrendered");
+              state.current = "surrender";
             }
           } else {
             if (
               surrenderer === leftUserTop.current.username ||
               surrenderer === leftUserBottom.current.username
             ) {
-              toast.warning("Your opponent has surrendered");
+              state.current = "surrendered";
             } else {
-              toast.warning("You have surrendered");
+              state.current = "surrender";
             }
           }
-          setGameChange(false);
         }
+        onGoingGame.refetch();
+        gameStartedRef.current = false;
       } else if (message[0] === "/stillPlaying") {
         const user = message[1];
         const whoAsked = message[2];
@@ -524,41 +521,47 @@ const Game = ({
       )}
       {!gameStartedRef.current ? (
         <div className="w-full flex flex-row justify-center items-center gap-4">
-          <Button
-            onClick={() => {
-              playerReadyRef.current = 0;
+          <Hover hoverText="Start">
+            <Button
+              onClick={() => {
+                playerReadyRef.current = 0;
 
-              handleStartGameFour(
-                username,
-                leftUserTop.current?.username || "",
-                leftUserBottom.current?.username || "",
-                rightUserBottom.current?.username || "",
-                rightUserTop.current?.username || ""
-              );
-            }}
-            className="w-1/4 mt-4"
-          >
-            Start Game
-          </Button>
-          <Button
-            onClick={() => {
-              leaveGame();
-              handleRefetchPlayers(onGoingGame.data?.game.id || "");
-            }}
-            className="w-1/4 mt-4"
-          >
-            Leave Game
-          </Button>
+                handleStartGameFour(
+                  username,
+                  leftUserTop.current?.username || "",
+                  leftUserBottom.current?.username || "",
+                  rightUserBottom.current?.username || "",
+                  rightUserTop.current?.username || ""
+                );
+              }}
+              className="h-full w-full"
+            >
+              <Gamepad size={25} />
+            </Button>
+          </Hover>
+          <Hover hoverText="Leave">
+            <Button
+              onClick={() => {
+                leaveGame();
+                handleRefetchPlayers(onGoingGame.data?.game.id || "");
+              }}
+              className="h-full w-full"
+            >
+              <DoorOpen size={25} />
+            </Button>
+          </Hover>
         </div>
       ) : (
-        <Button
-          onClick={() => {
-            surrenderGame();
-          }}
-          className="w-1/2 mt-4"
-        >
-          Surrender
-        </Button>
+        <Hover hoverText="Start">
+          <Button
+            onClick={() => {
+              surrenderGame();
+            }}
+            className="h-full w-full"
+          >
+            <Flag size={25} />
+          </Button>
+        </Hover>
       )}
     </>
   );

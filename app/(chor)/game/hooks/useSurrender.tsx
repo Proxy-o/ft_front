@@ -7,13 +7,12 @@ import { toast } from "sonner";
 const surrenderGame = async () => {
   try {
     const res = await axiosInstance.post("/game/surrender");
-    console.log(res);
-    if (res.status === 204)
-      toast.warning("your opponent has already surrendered");
-    else toast.warning("You have surrendered");
+    console.log(res.data.gameId);
+    return res.data.gameId;
   } catch (error) {
     console.log(error);
   }
+  return "";
 };
 
 export default function useSurrenderGame() {
@@ -21,8 +20,8 @@ export default function useSurrenderGame() {
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: () => surrenderGame(),
-    onSuccess: () => {
-      handleSurrenderFour();
+    onSuccess: (gameId) => {
+      handleSurrenderFour(gameId);
       queryClient.invalidateQueries({ queryKey: ["game"] });
     },
   });

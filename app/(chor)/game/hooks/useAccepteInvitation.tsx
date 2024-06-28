@@ -8,7 +8,6 @@ async function accept(invitationId: string) {
     invitationId,
   });
   const gameId = res.data.gameId;
-  toast.success("game id is " + gameId);
   if (res.status === 200) {
     toast.success("Invitation accepted");
   }

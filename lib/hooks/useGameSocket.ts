@@ -89,8 +89,8 @@ export default function useGameSocket() {
     sendJsonMessage({ message: "/userLeftGame " + user });
   };
 
-  const handleSurrenderFour = () => {
-    const toSend = "/fourSurrender";
+  const handleSurrenderFour = (gameid: string) => {
+    const toSend = "/fourSurrender " + gameid;
     sendJsonMessage({ message: toSend });
   };
 

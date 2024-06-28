@@ -124,9 +124,9 @@ const Game = ({ type }: { type: string }) => {
     rightScoreRef.current = 0;
     leftScoreRef.current = 0;
 
-    const paddleLeftX = 35;
+    const paddleLeftX = 0;
 
-    const paddleRightX = canvas.width - 35 - paddleWidth;
+    const paddleRightX = canvas.width - paddleWidth;
     let canvasParams: canvasParams = {
       canvas,
       paddleLeftYRef,
@@ -403,7 +403,7 @@ const Game = ({ type }: { type: string }) => {
 
   return (
     <>
-      <Card className="w-full h-[300px] md:h-[400px]">
+      <Card className="w-full h-[350px] md:h-[400px]">
         {leftUser.current?.username ? (
           <canvas
             ref={canvasRef}
@@ -416,7 +416,7 @@ const Game = ({ type }: { type: string }) => {
         )}
       </Card>
       {leftUser.current?.username && (
-        <div className="w-full md:w-5/6 h-[70] max-w-[800px] flex justify-between items-center mt-4">
+        <div className="w-full md:w-5/6 h-[70px] max-w-[800px] flex justify-between items-center mt-4">
           {!gameStartedRef.current ? (
             <>
               <div className="ml-[80px] h-5/6 w-1/6">
@@ -456,7 +456,6 @@ const Game = ({ type }: { type: string }) => {
             </>
           ) : (
             <div className="ml-[80px] h-5/6 w-1/6">
-              <Hover hoverText="Surrender">
                 <Button
                   onClick={() => {
                     surrenderGame();
@@ -470,7 +469,6 @@ const Game = ({ type }: { type: string }) => {
                 >
                   <Flag size={25} />
                 </Button>
-              </Hover>
             </div>
           )}
         </div>

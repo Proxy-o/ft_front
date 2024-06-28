@@ -9,8 +9,11 @@ export default function Page() {
     <>
       <CheckLogin />
       <div className={`flex flex-col w-full h-full justify-start items-center`}>
-        <Card className="w-11/12 max-w-[900px] h-fit flex flex-col justify-center items-start pb-8 mx-auto mt-12 gap-2 p-2">
-          <div className="w-full">
+        <h1 className="text-2xl md:text-4xl mx-auto text-purple-600 font-extrabold">
+          one Vs one
+        </h1>
+        <Card className="w-11/12 max-w-[900px] h-fit flex flex-col justify-center items-start pb-8 mx-auto gap-4 p-4">
+          <div className="w-full h-fit">
             <Two type="two" />
           </div>
         </Card>
