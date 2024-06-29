@@ -7,22 +7,32 @@ import { toast } from "sonner";
 const surrenderGame = async () => {
   try {
     const res = await axiosInstance.post("/game/surrender");
-    console.log(res.data.gameId);
-    return res.data.gameId;
+    const returnData = {
+      gameId: res.data.gameId,
+      tournamentId: res.data.tournamentId,
+    };
+    return returnData;
   } catch (error) {
     console.log(error);
   }
-  return "";
+  return null;
 };
 
 export default function useSurrenderGame() {
   const { handleSurrenderFour } = useGameSocket();
+  const { handleRefetchTournament } = useInvitationSocket();
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: () => surrenderGame(),
-    onSuccess: (gameId) => {
-      handleSurrenderFour(gameId);
+    onSuccess: (data) => {
+      handleSurrenderFour(data?.gameId);
+
+      if (data?.tournamentId) {
+        handleRefetchTournament(data?.tournamentId);
+      }
       queryClient.invalidateQueries({ queryKey: ["game"] });
+      queryClient.invalidateQueries({ queryKey: ["gameFour"] });
+      queryClient.invalidateQueries({ queryKey: ["tournament"] });
     },
   });
   return mutation;

@@ -456,19 +456,19 @@ const Game = ({ type }: { type: string }) => {
             </>
           ) : (
             <div className="ml-[80px] h-5/6 w-1/6">
-                <Button
-                  onClick={() => {
-                    surrenderGame();
-                    handleSurrender(
-                      leftUser.current?.username || "",
-                      rightUser.current?.username || "",
-                      gameIdRef.current
-                    );
-                  }}
-                  className="h-full w-full bg-primary"
-                >
-                  <Flag size={25} />
-                </Button>
+              <Button
+                onClick={() => {
+                  surrenderGame();
+                  handleSurrender(
+                    leftUser.current?.username || "",
+                    rightUser.current?.username || "",
+                    gameIdRef.current
+                  );
+                }}
+                className="h-full w-full bg-primary"
+              >
+                <Flag size={25} />
+              </Button>
             </div>
           )}
         </div>
