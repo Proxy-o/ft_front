@@ -10,6 +10,7 @@ import useGetFriends from "@/app/(chor)/chat/hooks/useGetFriends";
 import ChatCard from "@/app/(chor)/chat/components/chatCard";
 import { UserRoundX, XCircle } from "lucide-react";
 import TabStates from "./tabStates";
+import { Card } from "@/components/ui/card";
 
 export default function Profile({ id }: { id: string }) {
   const id_cookie = getCookie("user_id") as string;
@@ -50,7 +51,7 @@ export default function Profile({ id }: { id: string }) {
       No User found.
     </div>
   ) : (
-    <div className="max-w-[60rem] mx-auto  ">
+    <Card className="max-w-[60rem] mx-auto  ">
       <div className="relative lg:flex justify-center gap-4 p-4 w-full  ">
         {isSuccess && (
           <>
@@ -84,6 +85,6 @@ export default function Profile({ id }: { id: string }) {
           </>
         )}
       </div>
-    </div>
+    </Card>
   );
 }
