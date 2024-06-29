@@ -21,6 +21,7 @@ const OneOffline = () => {
   const animationFrameId = useRef(0); // To keep track of the animation frame ID
   const isAnimating = useRef(false);
   const state = useRef<string>("local");
+  const ai = useRef<boolean>(false);
 
   let bgImage = new Image();
   bgImage.src = "/game.jpeg";
@@ -77,9 +78,9 @@ const OneOffline = () => {
           upPressed = true;
         } else if (e.key === "ArrowDown") {
           downPressed = true;
-        } else if (e.key === "w") {
+        } else if (e.key === "w" && !ai.current) {
           wPressed = true;
-        } else if (e.key === "s") {
+        } else if (e.key === "s" && !ai.current) {
           sPressed = true;
         }
       } else if (e.type === "keyup") {
@@ -87,9 +88,9 @@ const OneOffline = () => {
           upPressed = false;
         } else if (e.key === "ArrowDown") {
           downPressed = false;
-        } else if (e.key === "w") {
+        } else if (e.key === "w" && !ai.current) {
           wPressed = false;
-        } else if (e.key === "s") {
+        } else if (e.key === "s" && !ai.current) {
           sPressed = false;
         }
       }
@@ -206,17 +207,33 @@ const OneOffline = () => {
     function movePaddlesOffline() {
       if (canvas === null) return;
       if (upPressed) {
-        if (paddleRightY - 12 > 0) {
-          paddleRightY -= 12; // Move right paddle up
+        if (!ai.current) {
+          if (paddleRightY - 12 > 0) {
+            paddleRightY -= 12; // Move right paddle up
+          } else {
+            paddleRightY = 0;
+          }
         } else {
-          paddleRightY = 0;
+          if (paddleLeftY - 12 > 0) {
+            paddleLeftY -= 12; // Move left paddle down
+          } else {
+            paddleLeftY = 0;
+          }
         }
       }
       if (downPressed) {
-        if (paddleRightY + paddleHeight + 12 < canvas.height) {
-          paddleRightY += 12; // Move right paddle down
+        if (!ai.current) {
+          if (paddleRightY + paddleHeight + 12 < canvas.height) {
+            paddleRightY += 12; // Move right paddle down
+          } else {
+            paddleRightY = canvas.height - paddleHeight;
+          }
         } else {
-          paddleRightY = canvas.height - paddleHeight;
+          if (paddleLeftY + paddleHeight + 12 < canvas.height) {
+            paddleLeftY += 12; // Move left paddle up
+          } else {
+            paddleLeftY = canvas.height - paddleHeight;
+          }
         }
       }
       if (wPressed) {
@@ -327,6 +344,25 @@ const OneOffline = () => {
       drawRightPaddle();
       drawLeftPaddle();
 
+      if (ai.current) {
+        if (newBallPositionRef.current.y < paddleRightY + paddleHeight / 8) {
+          if (paddleRightY - 12 > 0) {
+            paddleRightY -= 3; // Move right paddle up
+          } else {
+            paddleRightY = 0;
+          }
+        } else if (
+          newBallPositionRef.current.y >
+          paddleRightY + (paddleHeight * 7) / 8
+        ) {
+          if (paddleRightY + paddleHeight + 12 < canvas.height) {
+            paddleRightY += 3; // Move right paddle down
+          } else {
+            paddleRightY = canvas.height - paddleHeight;
+          }
+        }
+      }
+
       // Move paddles
       movePaddlesOffline();
 
@@ -405,7 +441,16 @@ const OneOffline = () => {
             }}
             className="w-1/2 mt-4 mx-auto"
           >
-            Start Game
+            play with friend
+          </Button>
+          <Button
+            onClick={() => {
+              setGameStarted(true);
+              ai.current = true;
+            }}
+            className="w-1/2 mt-4 mx-auto"
+          >
+            play with AI
           </Button>
         </>
       )}
