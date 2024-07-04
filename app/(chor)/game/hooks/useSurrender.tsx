@@ -1,25 +1,38 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
+import useGameSocket from "@/lib/hooks/useGameSocket";
+import useInvitationSocket from "@/lib/hooks/useInvitationSocket";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 const surrenderGame = async () => {
   try {
     const res = await axiosInstance.post("/game/surrender");
-    console.log(res);
-    if (res.status === 204)
-      toast.warning("your opponent has already surrendered");
-    else toast.warning("You have surrendered");
+    const returnData = {
+      gameId: res.data.gameId,
+      tournamentId: res.data.tournamentId,
+    };
+    return returnData;
   } catch (error) {
     console.log(error);
   }
+  return null;
 };
 
 export default function useSurrenderGame() {
+  const { handleSurrenderFour } = useGameSocket();
+  const { handleRefetchTournament } = useInvitationSocket();
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: () => surrenderGame(),
-    onSuccess: () => {
+    onSuccess: (data) => {
+      handleSurrenderFour(data?.gameId);
+
+      if (data?.tournamentId) {
+        handleRefetchTournament(data?.tournamentId);
+      }
       queryClient.invalidateQueries({ queryKey: ["game"] });
+      queryClient.invalidateQueries({ queryKey: ["gameFour"] });
+      queryClient.invalidateQueries({ queryKey: ["tournament"] });
     },
   });
   return mutation;

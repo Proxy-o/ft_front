@@ -9,19 +9,22 @@ export default function Page() {
     <>
       <CheckLogin />
       <div className={`flex flex-col w-full h-full justify-start items-center`}>
-        <Card className="w-11/12 max-w-[900px] h-fit flex flex-col justify-center items-start p-2 pb-8 mx-auto mt-12 gap-2">
-          <div className="w-full">
+        <h1 className="text-2xl md:text-4xl mx-auto text-purple-600 font-extrabold">
+          one Vs one
+        </h1>
+        <Card className="w-11/12 max-w-[900px] h-fit flex flex-col justify-center items-start pb-8 mx-auto gap-4 p-4">
+          <div className="w-full h-fit">
             <Two type="two" />
           </div>
-          <div className="w-full h-full flex flex-col md:flex-row justify-start items-start p-2 gap-4">
-            <div className="w-full md:w-1/2 h-full flex flex-col justify-start items-start gap-2">
-              <Invitations mode="two" />
-            </div>
-            <div className="w-full md:w-1/2 h-full gap-2">
-              <InviteFriends gameType="two" />
-            </div>
-          </div>
         </Card>
+        <div className="w-11/12 h-fit max-w-[900px] flex flex-col md:flex-row justify-start items-start gap-2 mt-4">
+          <div className="w-full md:w-1/2 h-full flex flex-col justify-start items-start">
+            <Invitations mode="two" />
+          </div>
+          <div className="w-full md:w-1/2 h-full mb-8">
+            <InviteFriends gameType="two" />
+          </div>
+        </div>
       </div>
     </>
   );

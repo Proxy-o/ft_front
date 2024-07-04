@@ -51,10 +51,9 @@ const Game = ({ type }: { type: string }) => {
   const rightImageRef = useRef<CanvasImageSource | null>(null);
   const leftPositionRef = useRef<number>(-400);
   const rightPositionRef = useRef<number>(0);
-  const lightninigBoltYRef = useRef<number>(-2500);
+  const state = useRef<string>("none");
 
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
-  const [gameStarted, setGameStarted] = useState<boolean>(false);
 
   const {
     gameMsg,
@@ -125,9 +124,9 @@ const Game = ({ type }: { type: string }) => {
     rightScoreRef.current = 0;
     leftScoreRef.current = 0;
 
-    const paddleLeftX = 35;
+    const paddleLeftX = 0;
 
-    const paddleRightX = canvas.width - 35 - paddleWidth;
+    const paddleRightX = canvas.width - paddleWidth;
     let canvasParams: canvasParams = {
       canvas,
       paddleLeftYRef,
@@ -349,11 +348,9 @@ const Game = ({ type }: { type: string }) => {
             gameIdRef.current
           );
           timeRef.current = 0;
-          console.log("game started");
         }
         gameStartedRef.current = true;
         // isFirstTime.current = true;
-        setGameStarted((prev) => !prev);
         onGoingGame.refetch();
       } else if (message[0] === "/score") {
         isFirstTime.current = true;
@@ -363,7 +360,24 @@ const Game = ({ type }: { type: string }) => {
           timeRef.current = parseInt(message[1]);
           enemyLeftGameRef.current = false;
         }
+      } else if (message[0] === "/refetchPlayers") {
+        onGoingGame.refetch();
+      } else if (message[0] === "/surrender") {
+        if (message[1] !== username) {
+          state.current = "surrendered";
+        } else {
+          state.current = "none";
+        }
+        gameStartedRef.current = false;
+        onGoingGame.refetch();
       } else if (message[0] === "/end") {
+        if (leftScoreRef.current == 3) {
+          state.current = "win";
+        } else if (rightScoreRef.current == 3) {
+          state.current = "lose";
+        } else {
+          state.current = "none";
+        }
         gameStartedRef.current = false;
         onGoingGame.refetch();
       }
@@ -389,7 +403,7 @@ const Game = ({ type }: { type: string }) => {
 
   return (
     <>
-      <Card className="w-full md:w-5/6 h-[300px] md:h-[400px] max-w-[800px]">
+      <Card className="w-full h-[350px] md:h-[400px]">
         {leftUser.current?.username ? (
           <canvas
             ref={canvasRef}
@@ -398,11 +412,11 @@ const Game = ({ type }: { type: string }) => {
             className="w-full h-full"
           ></canvas>
         ) : (
-          <NoGame />
+          <NoGame state={state} />
         )}
       </Card>
       {leftUser.current?.username && (
-        <div className="w-full md:w-5/6 h-[70] max-w-[800px] flex justify-between items-center mt-4">
+        <div className="w-full md:w-5/6 h-[70px] max-w-[800px] flex justify-between items-center mt-4">
           {!gameStartedRef.current ? (
             <>
               <div className="ml-[80px] h-5/6 w-1/6">
@@ -442,21 +456,19 @@ const Game = ({ type }: { type: string }) => {
             </>
           ) : (
             <div className="ml-[80px] h-5/6 w-1/6">
-              <Hover hoverText="Surrender">
-                <Button
-                  onClick={() => {
-                    surrenderGame();
-                    handleSurrender(
-                      leftUser.current?.username || "",
-                      rightUser.current?.username || "",
-                      gameIdRef.current
-                    );
-                  }}
-                  className="h-full w-full bg-primary"
-                >
-                  <Flag size={25} />
-                </Button>
-              </Hover>
+              <Button
+                onClick={() => {
+                  surrenderGame();
+                  handleSurrender(
+                    leftUser.current?.username || "",
+                    rightUser.current?.username || "",
+                    gameIdRef.current
+                  );
+                }}
+                className="h-full w-full bg-primary"
+              >
+                <Flag size={25} />
+              </Button>
             </div>
           )}
         </div>

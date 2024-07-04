@@ -28,7 +28,6 @@ const Hover = (props: any) => {
         )}
         {children}
       </div>
-      <style jsx>{``}</style>
     </>
   );
 };
