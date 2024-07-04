@@ -11,16 +11,16 @@ async function accept(invitationId: string) {
   if (res.status === 200) {
     toast.success("Invitation accepted");
   }
-  return invitationId;
+  return gameId;
 }
 
 export default function useAcceptInvitation() {
-  const { handleAcceptInvitation } = useInvitationSocket();
+  const { handleRefetchPlayers } = useInvitationSocket();
   const query = useQueryClient();
   const mutation = useMutation({
     mutationFn: accept,
-    onSuccess: (invitationId) => {
-      handleAcceptInvitation(invitationId);
+    onSuccess: (gameId) => {
+      handleRefetchPlayers(gameId);
       query.invalidateQueries({ queryKey: ["game"] });
       query.invalidateQueries({ queryKey: ["gameFour"] });
       query.invalidateQueries({ queryKey: ["invitations"] });

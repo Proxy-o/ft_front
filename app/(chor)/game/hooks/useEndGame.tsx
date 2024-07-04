@@ -40,7 +40,6 @@ export default function useEndGame() {
       queryClient.invalidateQueries({ queryKey: ["game"] });
       queryClient.invalidateQueries({ queryKey: ["tournament"] });
       queryClient.invalidateQueries({ queryKey: ["tournamentGame"] });
-      console.log("refetching tournament", tournamentId);
       if (tournamentId) {
         handleRefetchTournament(tournamentId);
       }

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import useGetUser from "@/app/(chor)/profile/hooks/useGetUser";
 import getCookie from "@/lib/functions/getCookie";
+import { Card } from "@/components/ui/card";
 
 export default function Page() {
   const user_id = getCookie("user_id") || "";
@@ -17,8 +18,9 @@ export default function Page() {
     }
   }, [user, isSuccess, router]);
   return (
-    <div className={`flex flex-col w-full h-full justify-start items-center`}>
+    <Card className="w-11/12 max-w-[900px] h-fit flex flex-col justify-center items-start pb-8 mx-auto mt-12 gap-2 p-4">
+      <h1 className="text-4xl m-auto">Ping Pong</h1>
       <OneOffline />
-    </div>
+    </Card>
   );
 }

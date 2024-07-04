@@ -13,7 +13,9 @@ import Invitations from "../components/invitations";
 import useLeavetournament from "../hooks/useLeaveTournament";
 import useDeleteTournament from "../hooks/useDeleteTournament";
 import useInvitationSocket from "@/lib/hooks/useInvitationSocket";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import NoGame from "../components/noGame";
+import { Card } from "@/components/ui/card";
 
 const Tournament = () => {
   const user_id = getCookie("user_id") || "";
@@ -24,6 +26,7 @@ const Tournament = () => {
   const { onGoingGame } = useGetTournamentGame(user_id || "0");
   const tournament = useGetTournament(user_id);
   const { mutate: deleteTournament } = useDeleteTournament();
+  const stateRef = useRef<string>("tournament");
   const {
     data,
     isSuccess,
@@ -45,15 +48,16 @@ const Tournament = () => {
   if (isLoading) return "loading...";
   // if (isSuccess && !data.tournament) return "no tournament found";
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 w-full max-w-[900px] p-2">
+      <Card className="flex flex-col justify-center items-start p-2 mx-auto w-full">
+        <h1 className="text-2xl md:text-4xl mx-auto text-purple-600 font-extrabold">
+          Tournament
+        </h1>
+        {isSuccess && !data.tournament && <NoGame state={stateRef} />}
+        {isSuccess && data.tournament && <Two type="tournament" />}
+      </Card>
       {isSuccess && data.tournament && (
         <>
-          <div className="text-center">
-            <h1 className="text-2xl font-bold">Game on going</h1>
-            <Two type="tournament" />
-          </div>
-          {console.log("fetching tournament")}
-          <TournamentBoard tournament={data.tournament} />
           <Button
             onClick={() => {
               leavetournament(data.tournament.id);
@@ -72,12 +76,16 @@ const Tournament = () => {
           )}
         </>
       )}
+      {isSuccess && data.tournament && (
+        <TournamentBoard tournament={data.tournament} />
+      )}
       {isSuccess && (
         <>
-          <InviteFriends gameType="tournament" />
           <Invitations mode="tournament" />
         </>
       )}
+
+      {isSuccess && data.tournament && <InviteFriends gameType="tournament" />}
       {isSuccess && !data.tournament && (
         <>
           <Button

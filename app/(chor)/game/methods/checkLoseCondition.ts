@@ -42,12 +42,8 @@ function checkLoseConditionFour(
     loserScore: number;
   }) => void,
   username: string,
-  handleRefetchPlayers: (
-    user1: string,
-    user2: string,
-    user3: string,
-    user4: string
-  ) => void
+  handleRefetchPlayers: (gameId: string) => void,
+  setGameChange: React.Dispatch<React.SetStateAction<boolean>>
 ) {
   if (canvas === null) return;
   const {
@@ -57,12 +53,7 @@ function checkLoseConditionFour(
     userRightBottom: rightUserBottom,
   } = canvasParams;
   if (rightScoreRef.current === 3 || leftScoreRef.current === 3) {
-    handleRefetchPlayers(
-      leftUserTop.current?.username || "",
-      rightUserTop.current?.username || "",
-      leftUserBottom.current?.username || "",
-      rightUserBottom.current?.username || ""
-    );
+    handleRefetchPlayers(canvasParams.gameIdRef.current);
     gameStartedRef.current = false;
     if (rightScoreRef.current === 3) {
       if (username === leftUserTop.current?.username) {
@@ -96,6 +87,7 @@ function checkLoseConditionFour(
         toast.error("You have lost the game");
       }
     }
+    setGameChange(false);
   }
 }
 
