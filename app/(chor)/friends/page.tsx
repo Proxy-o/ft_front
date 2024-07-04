@@ -29,7 +29,7 @@ export default function Page() {
 
   return (
     user && (
-      <div className="flex gap-1  h-[calc(100vh-7.3rem)]  flex-col   ">
+      <div className="h-[calc(100vh-7.3rem)]  w-full flex flex-col max-w-[60rem] mx-auto">
 
         <Card className=" w-full border    flex flex-col     p-1 mr-2 h-full overflow-y-auto">
           

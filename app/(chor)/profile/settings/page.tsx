@@ -6,13 +6,16 @@ import getCookie from "@/lib/functions/getCookie";
 import { Button } from "@/components/ui/button";
 import EditProfileForm from "../components/editProfileForm";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card } from "@/components/ui/card";
 
 export default function Page() {
   const userId = getCookie("user_id");
   const { mutate: toggleOTP } = useToggleOTP(userId || "0");
   const { data: user, isSuccess } = useGetUser(userId ?? "0");
   return (
-    <div className="gap-4 w-full h-full flex flex-col justify-center items-center">
+    <Card className="gap-4 w-full h-full flex flex-col justify-center items-center p-4 ">
+      <Card className="flex flex-col gap-2 justify-center items-center h-full  p-4 max-w-lg w-full ">
+
       {isSuccess && user.otp_active && (
 
               <Avatar className=" mr-2 size-48">
@@ -35,7 +38,9 @@ export default function Page() {
           Disable OTP
         </Button>
       </div>
+      </Card>
+
       {isSuccess && <EditProfileForm user={user} />}
-    </div>
+    </Card>
   );
 }
