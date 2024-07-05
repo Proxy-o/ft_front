@@ -57,15 +57,7 @@ export default function LoginForm() {
             </div>
           </div>
           <div className="space-y-2">
-            <div className="flex w-full ">
-              <Label htmlFor="password">Password</Label>
-              <Link
-                className="flex justify-end w-full  text-xs underline "
-                href="#"
-              >
-                Forgot your password?
-              </Link>
-            </div>
+
             <div className="relative">
               <Input
                 name="password"

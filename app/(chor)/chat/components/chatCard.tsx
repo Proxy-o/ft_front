@@ -101,7 +101,7 @@ export default function ChatCard({
 
   return (
     <div
-      className=" flex flex-col h-screen border-r w-full  relative "
+      className=" flex flex-col h-[calc(100vh-3.3rem)] border-r w-full  relative "
       ref={chatRef}
     >
       <Link

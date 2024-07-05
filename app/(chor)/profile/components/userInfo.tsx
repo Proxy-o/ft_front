@@ -69,7 +69,7 @@ export default function UserInfo({
   return (
     <Card
       className={cn(
-        "relative rounded-lg p-6 md:flex max-w-7xl",
+        "relative rounded-lg p-2 md:p-6 md:flex max-w-7xl",
         isBlocked && " cursor-not-allowed"
       )}
     >
@@ -104,13 +104,13 @@ export default function UserInfo({
       <div className=" flex-1 px-6">
         <div className="text-2xl font-bold mt-4 sm:mt-0">{user.username}</div>
 
-        <div className="flex justify-around items-center w-full mt-6">
+        <div className="flex justify-around items-center w-full mt-6 ">
           <TooltipProvider delayDuration={0}>
             <Tooltip delayDuration={0}>
               <TooltipTrigger asChild>
-                <div className="flex flex-col justify-center items-center text-zinc-300/50 hover:text-zinc-300/70">
+                <div className="flex flex-col justify-center items-center ">
                   <Activity className="mb-2" />
-                  <p className="text-sm sm:text-m">{user.status}</p>
+                  <p className={cn("text-sm sm:text-m",user.status === "online" && "text-green-500")}>{user.status}</p>
                 </div>
               </TooltipTrigger>
               <TooltipContent>
@@ -121,8 +121,8 @@ export default function UserInfo({
           <TooltipProvider delayDuration={0}>
             <Tooltip>
               <TooltipTrigger asChild>
-                <div className="flex flex-col justify-center items-center text-zinc-300/50 hover:text-zinc-300/70 ">
-                  <Users className="mb-2" />
+                <div className="flex flex-col justify-center items-center  ">
+                  <Users className="mb-2 ml-1" />
                   <p className="text-sm sm:text-m">{friends?.length}</p>
                 </div>
               </TooltipTrigger>
@@ -134,7 +134,7 @@ export default function UserInfo({
           <TooltipProvider delayDuration={0}>
             <Tooltip>
               <TooltipTrigger asChild>
-                <div className="flex flex-col justify-center items-center text-zinc-300/50 hover:text-zinc-300/70">
+                <div className="flex flex-col justify-center items-center ">
                   <Clock className="mb-2" />
                   <p className="text-sm sm:text-m">
                     {user.date_joined?.split("T")[0]}

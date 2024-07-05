@@ -11,6 +11,7 @@ import {
   Users,
   UserPlus2,
   MessageCircle,
+  AlignRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "../ui/button";
@@ -27,10 +28,17 @@ import useGetFriends from "@/app/(chor)/chat/hooks/useGetFriends";
 import { LastMessage } from "@/app/(chor)/chat/types";
 import useGetFrdReq from "@/app/(chor)/friends/hooks/useGetFrReq";
 import { toast } from "sonner";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
-export default function Nav() {
+export default function MobilNav() {
+  const [popOverOpen, setPopOverOpen] = useState(false);
   const { mutate: logout } = useLogout();
   const { theme, setTheme } = useTheme();
+  const [notification, setNotification] = useState(false);
   const path = usePathname();
 
   const links: linksProps[] = [
@@ -133,23 +141,15 @@ export default function Nav() {
         }
       });
     }
-  }, [
-    path,
-    isSuccessFriends,
-    friends,
-    lastJsonMessage,
-    queryClient,
-    id,
-    showNotif,
-  ]);
+  }, [isSuccessFriends, friends, lastJsonMessage, queryClient, id, showNotif]);
 
   const handleLogout = () => {
     logout();
   };
   if (token)
     return (
-      <div className=" group flex flex-col gap-4 py-2 h-screen shadow-lg md:w-[8.5rem] ">
-        <nav className="flex flex-col gap-1 px-2 h-full ">
+      <div className=" bottom-0  w-full overflow-auto h-18 ">
+        <nav className=" h-full  flex justify-center w-full items-center gap-2 p-2 border-t-2">
           {links.map((link, index) => (
             <Link
               key={index}
@@ -157,66 +157,85 @@ export default function Nav() {
               className={cn(
                 buttonVariants({ variant: link.variant, size: "sm" }),
 
-                "justify-start mb-2"
+                "justify-start "
               )}
             >
               {link.title === "chat" && showNotif ? (
                 <div className="relative">
-                  <link.icon className=" h-6 w-6 " />
+                  <link.icon className=" size-5 " />
                   <span className="h-3 w-3 bg-white rounded-full absolute top-0 right-0 "></span>
                   <span className="h-1 w-1 bg-primary rounded-full absolute top-1 right-1 animate-ping"></span>
                 </div>
+              ) : link.title === "Play" && notification ? (
+                <div className="relative">
+                  <link.icon className=" size-5 " />
+                  <span className="h-3 w-3 bg-white rounded-full absolute top-0 right-0 "></span>
+                  <span className="h-1 w-1 bg-primary rounded-full absolute top-1 right-1 animate-ping "></span>
+                </div>
               ) : link.title === "Requests" && reqNotif ? (
                 <div className="relative">
-                  <link.icon className=" h-6 w-6 " />
+                  <link.icon className=" size-5 " />
                   <span className="h-3 w-3 bg-white rounded-full absolute top-0 right-0 "></span>
                   <span className="h-1 w-1 bg-primary rounded-full absolute top-1 right-1 animate-ping"></span>
                 </div>
               ) : (
-                <link.icon className=" mr-2 h-6 w-6 " />
+                <link.icon
+                  className={cn(
+                    " mr-2 size-5 hover:scale-150",
+                    link.variant === "default" ? "scale-125" : ""
+                  )}
+                />
               )}
-              {link.title}
             </Link>
           ))}
+          <Popover open={popOverOpen} onOpenChange={setPopOverOpen}>
+            <PopoverTrigger>
+              <AlignRight />
+            </PopoverTrigger>
+            <PopoverContent className="w-40">
+              <div
+                className="flex flex-col px-2"
+                onClick={() => setPopOverOpen(false)}
+              >
+                <Link
+                  href="/profile/settings"
+                  className={cn(
+                    buttonVariants({ variant: "ghost", size: "sm" }),
+                    "justify-start mb-2"
+                  )}
+                >
+                  <UserRoundCog className="mr-2 h-6 w-6 " />
+                  Sittings
+                </Link>
+                <Button
+                  variant={"ghost"}
+                  className={cn(
+                    buttonVariants({ variant: "ghost", size: "sm" }),
+                    "justify-start mb-2"
+                  )}
+                  onClick={() => handleLogout()}
+                >
+                  <LogOut className="mr-2 h-6 w-6 " />
+                  logout
+                </Button>
+                <button
+                  onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                  className={cn(
+                    buttonVariants({ variant: "ghost", size: "sm" }),
+                    "justify-start text-primary mb-2"
+                  )}
+                >
+                  {theme === "dark" ? (
+                    <Sun className="mr-2 h-6 w-6 " />
+                  ) : (
+                    <Moon className="mr-2 h-6 w-6 " />
+                  )}
+                  {theme === "dark" ? "Light" : "Dark"}
+                </button>
+              </div>
+            </PopoverContent>
+          </Popover>
         </nav>
-
-        <div className="flex flex-col px-2">
-          <Link
-            href="/profile/settings"
-            className={cn(
-              buttonVariants({ variant: "ghost", size: "sm" }),
-              "justify-start mb-2"
-            )}
-          >
-            <UserRoundCog className="mr-2 h-6 w-6 " />
-            Sittings
-          </Link>
-          <Button
-            variant={"ghost"}
-            className={cn(
-              buttonVariants({ variant: "ghost", size: "sm" }),
-              "justify-start mb-2"
-            )}
-            onClick={() => handleLogout()}
-          >
-            <LogOut className="mr-2 h-6 w-6 " />
-            logout
-          </Button>
-          <button
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-            className={cn(
-              buttonVariants({ variant: "ghost", size: "sm" }),
-              "justify-start text-primary mb-2"
-            )}
-          >
-            {theme === "dark" ? (
-              <Sun className="mr-2 h-6 w-6 " />
-            ) : (
-              <Moon className="mr-2 h-6 w-6 " />
-            )}
-            {theme === "dark" ? "Light" : "Dark"}
-          </button>
-        </div>
       </div>
     );
 }

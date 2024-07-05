@@ -29,23 +29,25 @@ export default function Page() {
 
   return (
     user && (
-      <div className="flex gap-1  h-full flex-col p-6 max-w-[60rem] mx-auto">
-        <Link
-          href="/friend_requests"
-          className={cn(
-            buttonVariants({ variant: "outline", size: "lg" }),
-            " ml-auto"
-          )}
-        >
-          Friend Requests
-        </Link>
-        <Card className=" w-full border    flex flex-col    my-3 p-1 mr-2 ">
+      <div className="h-[calc(100vh-7.3rem)]  w-full flex flex-col max-w-[60rem] mx-auto">
+
+        <Card className=" w-full border    flex flex-col     p-1 mr-2 h-full overflow-y-auto">
+          
           <div className="flex w-full justify-center items-center border-b-2  py-4">
             Friends
             <p className="border bg-primary mx-2 rounded-full size-6  text-center">
               {friendCount}
             </p>
           </div>
+          <Link
+          href="/friend_requests"
+          className={cn(
+            buttonVariants({ variant: "outline", size: "lg" }),
+            " ml-auto mt-2"
+          )}
+        >
+          Friend Requests
+        </Link>
           <div className="overflow-y-auto">
             {friendsIsSuccess && friends.length > 0 ? (
               friends.map((friend: User) => {

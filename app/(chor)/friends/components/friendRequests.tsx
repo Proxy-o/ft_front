@@ -9,6 +9,8 @@ import { CheckCircle, XCircle } from "lucide-react";
 import useAcceptFriend from "../hooks/useAcceptFriend";
 import useReject from "../hooks/useDeclineReq";
 import getCookie from "@/lib/functions/getCookie";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export default function FriendRequests() {
   const { data, isSuccess } = useGetFrdReq();
@@ -22,14 +24,22 @@ export default function FriendRequests() {
   const reqCount = filteredData.length;
   return (
     isSuccess && (
-      <Card className=" w-full border h-full    flex flex-col    my-3 p-1 ">
+      <Card className=" w-full border h-full    flex flex-col     p-1 overflow-auto">
         <div className="flex w-full justify-center items-center border-b-2  py-4">
           Friend Requests
           <p className="border bg-primary mx-2 rounded-full size-6  text-center">
             {reqCount}
           </p>
         </div>
-
+        <Link
+        href="/friends"
+        className={cn(
+          buttonVariants({ variant: "outline", size: "lg" }),
+          " ml-auto my-2"
+        )}
+      >
+        Friends
+      </Link>
         {reqCount !== 0 ? (
           <>
             {filteredData.map(
