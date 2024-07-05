@@ -1,13 +1,12 @@
 "use client";
 
-import React, { use, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import getCookie from "@/lib/functions/getCookie";
 
 import useGetFourGame from "../hooks/useGetFourGame";
 import Game from "./game";
 import useInvitationSocket from "@/lib/hooks/useInvitationSocket";
-import { toast } from "sonner";
 import NoGame from "../components/noGame";
 
 const Four = () => {
@@ -54,7 +53,6 @@ const Four = () => {
     <div className="p-4 flex flex-col mx-auto justify-center w-full h-full">
       {onGoingGame.isSuccess && (
         <>
-          {/* {onGoingGame.data.game.user1 && <Score type="four" />} */}
           {gameChange && (
             <Game
               gameStartedRef={gameStartedRef}

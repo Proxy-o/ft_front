@@ -1,11 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import Invitations from "../invitations";
-import InviteFriends from "../inviteFriend";
-import { SwordsIcon, User, Users } from "lucide-react";
-import FriendList from "@/app/(chor)/friends/components/friendList";
+import { User, Users } from "lucide-react";
 
 const GameNav = ({
   setTab,

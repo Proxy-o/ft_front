@@ -7,6 +7,9 @@ const leavetournament = async (tournamentId: string) => {
     const res = await axiosInstance.post("/game/leaveTournament", {
       tournamentId: tournamentId,
     });
+    if (res.status === 404) {
+      console.log("Tournament not found");
+    }
   } catch (error) {
     console.log(error);
   }

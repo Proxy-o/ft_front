@@ -1,9 +1,8 @@
 "use client";
 
-import React, { Dispatch, SetStateAction, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Inbox, Swords } from "lucide-react";
 import { CircleOff } from "lucide-react";
-import useGameSocket from "@/lib/hooks/useGameSocket";
 import useGetInvitations from "../hooks/useGetInvitations";
 import useDeclineInvitation from "../hooks/useDeclineMutation";
 import useAcceptInvitation from "../hooks/useAccepteInvitation";
@@ -14,9 +13,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import useAcceptInvitationTournament from "../hooks/useAccepteInvitationTournament";
 import { Card } from "@/components/ui/card";
-import Router from "next/router";
 import { useRouter } from "next/navigation";
-import useWebSocket from "react-use-websocket";
 import useInvitationSocket from "@/lib/hooks/useInvitationSocket";
 
 const Invitations = ({ mode }: { mode: string }) => {

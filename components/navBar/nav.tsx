@@ -31,7 +31,6 @@ import { toast } from "sonner";
 export default function Nav() {
   const { mutate: logout } = useLogout();
   const { theme, setTheme } = useTheme();
-  const [notification, setNotification] = useState(false);
   const path = usePathname();
 
   const links: linksProps[] = [
@@ -158,12 +157,6 @@ export default function Nav() {
                   <link.icon className=" h-6 w-6 " />
                   <span className="h-3 w-3 bg-white rounded-full absolute top-0 right-0 "></span>
                   <span className="h-1 w-1 bg-primary rounded-full absolute top-1 right-1 animate-ping"></span>
-                </div>
-              ) : link.title === "Play" && notification ? (
-                <div className="relative">
-                  <link.icon className=" h-6 w-6 " />
-                  <span className="h-3 w-3 bg-white rounded-full absolute top-0 right-0 "></span>
-                  <span className="h-1 w-1 bg-primary rounded-full absolute top-1 right-1 animate-ping "></span>
                 </div>
               ) : link.title === "Requests" && reqNotif ? (
                 <div className="relative">

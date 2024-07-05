@@ -2,7 +2,6 @@ import getCookie from "@/lib/functions/getCookie";
 import useWebSocket from "react-use-websocket";
 
 export default function useGameSocket() {
-  const user_id = getCookie("user_id");
   const token = getCookie("refresh");
   const socketUrl = process.env.NEXT_PUBLIC_GAME_URL + "/?refresh=" + token;
 

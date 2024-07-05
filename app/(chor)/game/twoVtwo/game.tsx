@@ -19,7 +19,6 @@ import NoGameFour from "../components/noGameFour";
 import { Button } from "@/components/ui/button";
 import useLeaveGame from "../hooks/useLeaveGame";
 import useSurrenderGame from "../hooks/useSurrender";
-import { on } from "events";
 import { DoorOpen, Flag, Gamepad } from "lucide-react";
 import Hover from "../components/hover";
 

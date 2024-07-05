@@ -6,7 +6,6 @@ import useGetFriends from "@/app/(chor)/chat/hooks/useGetFriends";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import useSendInvitation from "../hooks/useSendInvitation";
 import { Card } from "@/components/ui/card";
-import useInvitationSocket from "@/lib/hooks/useInvitationSocket";
 
 const InviteFriends = ({ gameType }: { gameType: string }) => {
   const user_id = getCookie("user_id");

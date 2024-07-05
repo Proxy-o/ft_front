@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
-import { Asterisk, Eye, EyeOff, Loader, User } from "lucide-react";
+import { Eye, EyeOff, Loader, User } from "lucide-react";
 import { useState } from "react";
 import useLogin from "../hooks/useLogin";
 

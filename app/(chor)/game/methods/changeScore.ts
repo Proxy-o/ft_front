@@ -14,14 +14,7 @@ function changeScoreOnline(
   rightUser: User | undefined,
   leftUser: User | undefined
 ) {
-  const {
-    canvas,
-    newBallPositionRef,
-    isFirstTime,
-    rightScoreRef,
-    leftScoreRef,
-    gameIdRef,
-  } = canvasParams;
+  const { canvas, newBallPositionRef, gameIdRef } = canvasParams;
   if (canvas === null) return;
   if (newBallPositionRef.current.x < -50) {
     newBallPositionRef.current.x = canvas.width / 2;
@@ -61,8 +54,6 @@ function changeScoreFour(
     canvas,
     newBallPositionRef,
     isFirstTime,
-    rightScoreRef,
-    leftScoreRef,
     userLeftTop: leftUserTop,
     userLeftBottom: leftUserBottom,
     userRightTop: rightUserTop,

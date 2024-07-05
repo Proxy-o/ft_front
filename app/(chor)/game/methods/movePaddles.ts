@@ -1,6 +1,4 @@
-import { User } from "@/lib/types";
 import { canvasParams, canvasParamsFour } from "../types";
-import { toast } from "sonner";
 
 function movePaddlesOnline(
   canvasParams: canvasParams,

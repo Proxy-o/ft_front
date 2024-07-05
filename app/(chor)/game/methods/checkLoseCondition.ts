@@ -1,5 +1,4 @@
 import { User } from "@/lib/types";
-import { QueryClient, UseQueryResult } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { canvasParamsFour } from "../types";
 

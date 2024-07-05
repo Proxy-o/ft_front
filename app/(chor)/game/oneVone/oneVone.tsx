@@ -14,8 +14,6 @@ const Two = ({ type }: { type: string }) => {
     <div className="w-full h-fit flex flex-col justify-center items-center">
       {onGoingGame.isSuccess && (
         <>
-          {/* {onGoingGame.data.game.user1 && <Score type={type} />} */}
-
           <Game type={type} />
         </>
       )}

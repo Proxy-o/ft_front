@@ -15,6 +15,7 @@ const endGameFour = async (data: {
       loser,
       loserScore,
     });
+    return res.data;
   } catch (error) {
     console.log(error);
   }
