@@ -1,11 +1,10 @@
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import Image from "next/image";
 
 export default function Home() {
   return (
     <main className="flex min-h-screen h-full flex-col gap-4  p-2">
-      
-
       <Card className=" flex-1  w-full flex flex-col  items-center gap-10 lg:flex-row p-4 ">
         <div className="flex  flex-col justify-center flex-1 w-full  items-center gap-10">
           <div>
