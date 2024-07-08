@@ -38,7 +38,6 @@ export default function MobilNav() {
   const [popOverOpen, setPopOverOpen] = useState(false);
   const { mutate: logout } = useLogout();
   const { theme, setTheme } = useTheme();
-  const [notification, setNotification] = useState(false);
   const path = usePathname();
 
   const links: linksProps[] = [
@@ -165,12 +164,6 @@ export default function MobilNav() {
                   <link.icon className=" size-5 " />
                   <span className="h-3 w-3 bg-white rounded-full absolute top-0 right-0 "></span>
                   <span className="h-1 w-1 bg-primary rounded-full absolute top-1 right-1 animate-ping"></span>
-                </div>
-              ) : link.title === "Play" && notification ? (
-                <div className="relative">
-                  <link.icon className=" size-5 " />
-                  <span className="h-3 w-3 bg-white rounded-full absolute top-0 right-0 "></span>
-                  <span className="h-1 w-1 bg-primary rounded-full absolute top-1 right-1 animate-ping "></span>
                 </div>
               ) : link.title === "Requests" && reqNotif ? (
                 <div className="relative">
