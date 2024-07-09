@@ -1,10 +1,10 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
 import { useQuery } from "@tanstack/react-query";
 
-const fetchTournament = async ({ userid }: { userid: string }) => {
+const fetchGames = async ({ id }: { id: string }) => {
   try {
-    if (userid === "0") return null;
-    const response = await axiosInstance.get(`/game/tournaments/user/${userid}`);
+    if (id === "0") return null;
+    const response = await axiosInstance.get(`/game/twovtwo/user/${id}`);
     return response.data;
   } catch (error: any) {
     if (error.response && error.response.status !== 401) {
@@ -13,10 +13,10 @@ const fetchTournament = async ({ userid }: { userid: string }) => {
   }
 };
 
-export default function useGetTournaments(userid: string) {
+export default function useGetTwoGames(id: string) {
   const info = useQuery({
-    queryKey: ["Tournament", userid],
-    queryFn: () => fetchTournament({ userid }),
+    queryKey: ["Games", id],
+    queryFn: () => fetchGames({ id }),
   });
   return info;
 }

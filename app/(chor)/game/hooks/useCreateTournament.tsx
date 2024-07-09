@@ -5,6 +5,7 @@ async function CreateTournament(userId: string) {
   const res = await axiosInstance.post("game/createTournament", {
     userId,
   });
+  return res.data;
 }
 
 export default function useCreateTournament(userId: string) {

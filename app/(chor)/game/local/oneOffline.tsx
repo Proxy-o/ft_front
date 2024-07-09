@@ -2,21 +2,15 @@
 
 import React, { useRef, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import CountDown from "../components/contDown";
-import Score from "../components/score";
 import { Card } from "@/components/ui/card";
 import NoGame from "../components/noGame";
-import { toast } from "sonner";
 
 const OneOffline = () => {
-  const [startCountdown, setStartCountdown] = useState(false);
   const newBallPositionRef = useRef({ x: 0, y: 0 }); // Use a ref to store the current state
   const newAngleRef = useRef(0); // Use a ref to store the current state
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [gameStarted, setGameStarted] = useState(false);
-  const [leftScore, setLeftScore] = useState(0);
   const leftScoreRef = useRef(0);
-  const [rightScore, setRightScore] = useState(0);
   const rightScoreRef = useRef(0);
   const animationFrameId = useRef(0); // To keep track of the animation frame ID
   const isAnimating = useRef(false);
@@ -36,8 +30,6 @@ const OneOffline = () => {
 
     rightScoreRef.current = 0;
     leftScoreRef.current = 0;
-    setLeftScore(0);
-    setRightScore(0);
 
     let firstTime = true;
 
@@ -257,7 +249,6 @@ const OneOffline = () => {
       if (newBallPositionRef.current.x < 0) {
         if (newBallPositionRef.current.x < -50) {
           rightScoreRef.current = rightScoreRef.current + 1;
-          setRightScore(rightScoreRef.current);
           x = canvas.width / 2;
           y = Math.random() * (canvas.height - ballRadius * 2) + ballRadius;
           firstTime = true;
@@ -275,7 +266,6 @@ const OneOffline = () => {
       } else if (newBallPositionRef.current.x > canvas.width) {
         if (newBallPositionRef.current.x > canvas.width + 50) {
           leftScoreRef.current = leftScoreRef.current + 1;
-          setLeftScore(leftScoreRef.current);
           x = canvas.width / 2;
           y = Math.random() * (canvas.height - ballRadius * 2) + ballRadius;
           firstTime = true;
@@ -303,8 +293,7 @@ const OneOffline = () => {
         rightScoreRef.current = 0;
         leftScoreRef.current = 0;
         setGameStarted(false);
-        setStartCountdown(false);
-      }
+      } // todo: check if score is working offline
     }
 
     const gameNotStarted = () => {

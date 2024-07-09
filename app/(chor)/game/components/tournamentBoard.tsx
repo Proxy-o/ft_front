@@ -2,14 +2,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Crown } from "lucide-react";
-import useGetTournament from "../hooks/useGetTournament";
-import getCookie from "@/lib/functions/getCookie";
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 
 const TournamentBoard = ({ tournament }: { tournament: any }) => {
-  const user_id = getCookie("user_id") || "";
-
-  console.log("tournamentBoard");
   const semi1 = useRef<any>(null);
   const semi2 = useRef<any>(null);
   const final = useRef<any>(null);

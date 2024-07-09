@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { User } from "@/lib/types";
 import { useEffect, useRef, useState } from "react";
-import Profile from "../../profile/components/Profile";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const NoGameFour = ({
