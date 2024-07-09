@@ -1,6 +1,7 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
 import useInvitationSocket from "@/lib/hooks/useInvitationSocket";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 const endGame = async (data: {
   winner: string;
@@ -16,12 +17,12 @@ const endGame = async (data: {
       loser,
       loserScore,
     });
-    console.log(res.data);
+    toast.success(res.data.message);
     if (res.data.tournamentId) {
       return res.data.tournamentId;
     }
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    toast.error(error.response.data.error);
   }
   return null;
 };

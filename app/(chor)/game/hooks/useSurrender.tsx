@@ -12,8 +12,8 @@ const surrenderGame = async () => {
       tournamentId: res.data.tournamentId,
     };
     return returnData;
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    toast.error(error?.response?.data.error);
   }
   return null;
 };

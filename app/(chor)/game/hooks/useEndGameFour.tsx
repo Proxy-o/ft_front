@@ -1,5 +1,6 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 const endGameFour = async (data: {
   winner: string;
@@ -15,8 +16,8 @@ const endGameFour = async (data: {
       loser,
       loserScore,
     });
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    toast.error(error.response.data.error);
   }
 };
 

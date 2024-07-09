@@ -15,5 +15,6 @@ export default function useCreateTournament(userId: string) {
       queryClient.invalidateQueries({ queryKey: ["tournament", userId] });
     },
   });
+  // todo handle create tournament logic
   return mutation;
 }

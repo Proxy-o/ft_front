@@ -358,7 +358,7 @@ const Game = ({ type }: { type: string }) => {
       } else if (message[0] === "/time") {
         if (message[2] !== username) {
           timeRef.current = parseInt(message[1]);
-          enemyLeftGameRef.current = false;
+          enemyLeftGameRef.current = false; // todo: tournament forfeit status
         }
       } else if (message[0] === "/refetchPlayers") {
         onGoingGame.refetch();
@@ -420,23 +420,6 @@ const Game = ({ type }: { type: string }) => {
           {!gameStartedRef.current ? (
             <>
               <div className="ml-[80px] h-5/6 w-1/6">
-                <Hover hoverText="Leave">
-                  <Button
-                    onClick={() => {
-                      leaveGame();
-                      handleSurrender(
-                        leftUser.current?.username || "",
-                        rightUser.current?.username || "",
-                        gameIdRef.current
-                      );
-                    }}
-                    className="h-full w-full bg-primary"
-                  >
-                    <DoorOpen size={25} />
-                  </Button>
-                </Hover>
-              </div>
-              <div className="mr-[80px] h-5/6 w-1/6">
                 <Hover hoverText="Start">
                   <Button
                     onClick={() => {
@@ -453,6 +436,25 @@ const Game = ({ type }: { type: string }) => {
                   </Button>
                 </Hover>
               </div>
+              {type !== "tournament" && (
+                <div className="mr-[80px] h-5/6 w-1/6">
+                  <Hover hoverText="Leave">
+                    <Button
+                      onClick={() => {
+                        leaveGame();
+                        handleSurrender(
+                          leftUser.current?.username || "",
+                          rightUser.current?.username || "",
+                          gameIdRef.current
+                        );
+                      }}
+                      className="h-full w-full bg-primary"
+                    >
+                      <DoorOpen size={25} />
+                    </Button>
+                  </Hover>
+                </div>
+              )}
             </>
           ) : (
             <div className="ml-[80px] h-5/6 w-1/6">

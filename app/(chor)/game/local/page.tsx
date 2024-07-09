@@ -18,7 +18,7 @@ export default function Page() {
     }
   }, [user, isSuccess, router]);
   return (
-    <Card className="w-11/12 max-w-[900px] h-fit flex flex-col justify-center items-start pb-8 mx-auto mt-12 gap-2 p-4">
+    <Card className="w-11/12 max-w-[900px] flex flex-col justify-center items-start pb-8 mx-auto mt-12 gap-2 p-4">
       <h1 className="text-4xl m-auto">Ping Pong</h1>
       <OneOffline />
     </Card>
