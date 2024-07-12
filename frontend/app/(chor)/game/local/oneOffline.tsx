@@ -420,19 +420,19 @@ const OneOffline = () => {
           </Button>
         </>
       ) : (
-        <>
-          <Card className="w-full h-[300px] md:h-[400px] mt-3 rounded-lg">
+        <div className="flex flex-col items-center w-full">
+          <Card className="w-full">
             <NoGame state={state} />
           </Card>
           <Button
             onClick={() => {
               setGameStarted(true);
             }}
-            className="w-1/2 mt-4 mx-auto"
+            className="w-1/2 mt-4 mx-auto h-10 p-3"
           >
             play with friend
           </Button>
-          <Button
+          {/* <Button
             onClick={() => {
               setGameStarted(true);
               ai.current = true;
@@ -440,8 +440,8 @@ const OneOffline = () => {
             className="w-1/2 mt-4 mx-auto"
           >
             play with AI
-          </Button>
-        </>
+          </Button> */}
+        </div>
       )}
     </>
   );

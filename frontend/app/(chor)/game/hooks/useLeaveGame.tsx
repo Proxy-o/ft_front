@@ -13,12 +13,11 @@ const leaveGame = async () => {
         gameId: res.data.gameId,
         tournamentId: res.data.tournamentId,
       };
+      toast.success(res.data.message); // todo : refetch game when an enemy join tournament
       return returnData;
-    } else if (res.status === 204) {
-      toast.error("You are not in a game");
     }
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    toast.error(error?.response?.data.error);
   }
   return null;
 };
@@ -38,9 +37,6 @@ export default function useLeaveGame() {
       queryClient.invalidateQueries({ queryKey: ["game"] });
       queryClient.invalidateQueries({ queryKey: ["gameFour"] });
       queryClient.invalidateQueries({ queryKey: ["tournament"] });
-    },
-    onError: (error) => {
-      toast.error("Error leaving game");
     },
   });
   return mutation;

@@ -15,6 +15,7 @@ import useAcceptInvitationTournament from "../hooks/useAccepteInvitationTourname
 import { Card } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
 import useInvitationSocket from "@/lib/hooks/useInvitationSocket";
+import { toast } from "sonner";
 
 const Invitations = ({ mode }: { mode: string }) => {
   const { newNotif } = useInvitationSocket();
@@ -52,6 +53,8 @@ const Invitations = ({ mode }: { mode: string }) => {
       const message = parsedMessage?.message.split(" ");
       if (message[0] === "/notif") {
         invitationsData.refetch();
+      } else if (message[0] === "/decline") {
+        toast.error(message[1] + " has declined your invitation");
       }
     }
   }, [newNotif()?.data]);

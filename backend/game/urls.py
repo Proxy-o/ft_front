@@ -13,19 +13,16 @@ urlpatterns = [
     path('endGameFour', views.EndGameFour.as_view()),
     path('surrender', views.Surrender.as_view()),
     path('leaveGame', views.LeaveGame.as_view()),
-
+    
     path('tournament', views.TournamentView.as_view()),
     path('onGoingTournamentGame', views.OnGoingTournamentGame.as_view()),
     path('deleteTournament', views.DeleteTournament.as_view()),
     path('createTournament', views.TournamentView.as_view()),
     path('leaveTournament', views.LeaveTournament.as_view()),
     path('updateFinal', views.UpdateFinal.as_view()),
-    path('accept_invitation_tournament',
-         views.AcceptInvitationTournament.as_view()),
+    path('accept_invitation_tournament', views.AcceptInvitationTournament.as_view()),
     path('start_tournament', views.StartTournament.as_view()),
     # games for a user with a given id
     path('user/<int:user_id>', views.GameView.as_view()),
-    path('twovtwo/user/<int:user_id>', views.TwoVTwoGameView.as_view()),
-    path('tournaments/user/<int:user_id>', views.TournamentsView.as_view()),
-
+    
 ]

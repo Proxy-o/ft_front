@@ -2,6 +2,7 @@ import axiosInstance from "@/lib/functions/axiosInstance";
 import useGameSocket from "@/lib/hooks/useGameSocket";
 import useInvitationSocket from "@/lib/hooks/useInvitationSocket";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 const surrenderGame = async () => {
   try {
@@ -11,8 +12,8 @@ const surrenderGame = async () => {
       tournamentId: res.data.tournamentId,
     };
     return returnData;
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    toast.error(error?.response?.data.error);
   }
   return null;
 };

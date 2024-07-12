@@ -13,42 +13,17 @@ const invite = async ({
   userid: string;
   gameType: string;
 }) => {
-  if (gameType === "two") {
-    try {
-      const res = await axiosInstance.post("game/send_invitation", {
-        sender: user_id,
-        receiver: userid,
-        gameType: "two",
-      });
-      if (res.status === 201) {
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  } else if (gameType === "four") {
-    try {
-      const res = await axiosInstance.post("game/send_invitation", {
-        sender: user_id,
-        receiver: userid,
-        gameType: "four",
-      });
-      if (res.status === 201) {
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  } else if (gameType === "tournament") {
-    try {
-      const res = await axiosInstance.post("game/send_invitation", {
-        sender: user_id,
-        receiver: userid,
-        gameType: "tournament",
-      });
-      if (res.status === 201) {
-      }
-    } catch (error) {
-      console.log(error);
-    }
+  let res;
+  try {
+    res = await axiosInstance.post("game/send_invitation", {
+      sender: user_id,
+      receiver: userid,
+      gameType: gameType,
+    });
+    if (res !== res) throw new Error("Failed to send invitation to user");
+  } catch (error: any) {
+    toast.error(error?.response?.data.error);
+    return "";
   }
   return userid;
 };
@@ -58,6 +33,7 @@ export default function useSendInvitation() {
   const mutation = useMutation({
     mutationFn: invite,
     onSuccess: (userid) => {
+      if (userid === "") return;
       handelSendInvitation(userid);
       toast.success("Invitation sent");
     },

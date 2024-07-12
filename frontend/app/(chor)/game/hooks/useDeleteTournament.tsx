@@ -15,7 +15,7 @@ const deleteTournament = async (tournamentId: string) => {
     console.log(error);
   }
   return tournamentId;
-};
+}; // todo: work on the delete tournament logic
 
 export default function useDeletetournament() {
   const { handleRefetchTournament } = useInvitationSocket();

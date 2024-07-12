@@ -4,14 +4,16 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 async function accept(invitationId: string) {
-  const res = await axiosInstance.post("game/accept_invitation_tournament", {
-    invitationId,
-  });
-  const tournamentId = res.data.tournamentId;
-  if (res.status === 200) {
-    toast.success("Invitation accepted");
+  try {
+    const res = await axiosInstance.post("game/accept_invitation_tournament", {
+      invitationId,
+    });
+    const tournamentId = res.data.tournamentId;
+    toast.success(res.data.message);
+    return tournamentId;
+  } catch (error: any) {
+    toast.error(error?.response?.data.error);
   }
-  return tournamentId;
 }
 
 export default function useAcceptInvitationTournament() {

@@ -54,7 +54,10 @@ class InvitationConsumer(WebsocketConsumer):
             self.handle_refetch_tournament(split)
         elif command == '/acceptTournament':
             self.handle_accept_tournament(split)
+        elif command == '/decline':
+            self.handle_decline(split)
 
+# todo: check if user is friend with sender
     def disconnect(self, close_code):
         if self.user.is_authenticated:
             async_to_sync(self.channel_layer.group_discard)(
@@ -222,6 +225,19 @@ class InvitationConsumer(WebsocketConsumer):
                         'message': f'/refetchTournament {tournament.id} {time}'
                     }
                 )
+
+    def handle_decline(self, split):
+        print("Declining invitation")
+        invitation = Invitation.objects.get(id=split[1])
+        invitation.delete()
+        async_to_sync(self.channel_layer.group_send)(
+            f'inbox_{invitation.sender.username}',
+            {
+                'type': 'send_message',
+                'user': self.user.username,
+                'message': f'/decline {invitation.receiver}'
+            }
+        )
 
 
 class GameConsumer(WebsocketConsumer):
