@@ -15,7 +15,7 @@ const fetchGames = async ({ id }: { id: string }) => {
 
 export default function useGetGames(id: string) {
   const info = useQuery({
-    queryKey: ["Games", id],
+    queryKey: ["Games1v1", id],
     queryFn: () => fetchGames({ id }),
   });
   return info;
