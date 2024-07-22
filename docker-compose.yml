@@ -52,7 +52,8 @@ services:
       context: .
       dockerfile: ./frontend/Dockerfile
     volumes:
-      - ./frontend:/app
+      - ./frontend:/app:cached  # Mount the code directory
+      - /app/node_modules        # Ensure node_modules is not overwritten by host
     networks:
       - mynetwork
 

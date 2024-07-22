@@ -12,6 +12,7 @@ export default function useRegister() {
       password: string;
     }) => {
       const response = await axiosInstance.post("/signup", data);
+      console.log(response.data);
       return response.data;
     },
     onSuccess: (data) => {
@@ -23,8 +24,8 @@ export default function useRegister() {
         toast.error((error as any).response.data.username);
       } else if ((error as any).response.data.email) {
         toast.error((error as any).response.data.email);
-      } else {
-        toast.error("Error creating account");
+      } else if ((error as any).response.data.password) {
+        toast.error((error as any).response.data.password);
       }
     },
   });
