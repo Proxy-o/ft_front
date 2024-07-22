@@ -184,7 +184,6 @@ const Game = ({ type }: { type: string }) => {
         username === controllerUser.current?.username &&
         newAngleRef.current === 0
       ) {
-        y = Math.random() * (canvas.height - ballRadius * 2) + ballRadius;
         newBallPositionRef.current = { x, y }; // Initialize the ref
         newAngleRef.current = Math.random() * Math.PI;
         while (
