@@ -31,11 +31,13 @@ def signup(request):
         data=request.data, context={'request': request})
 
     if serializer.is_valid():
-        user = serializer.save()
         try:
+            print("shiiit")
             validate_password(request.data['password'])
         except Exception as e:
-            return Response({'detail': e}, status=status.HTTP_400_BAD_REQUEST)
+            print(e)
+            return Response({'password': e}, status=status.HTTP_400_BAD_REQUEST)
+        user = serializer.save()
         user.set_password(request.data['password'])
         user.save()
         return Response({'user': serializer.data}, status=200)

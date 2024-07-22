@@ -31,7 +31,6 @@ export default function States({ id }: { id: string }) {
 
   useEffect(() => {
     if (oneIsSuccess && oneGames) {
-      console.log(oneGames.length);
       setStates((prev) => ({
         ...prev,
         classic: {
@@ -60,7 +59,6 @@ export default function States({ id }: { id: string }) {
     }
 
     if (tourIsSuccess && tournament) {
-      console.log(tournament);
       setStates((prev) => ({
         ...prev,
         tournament: {
