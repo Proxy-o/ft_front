@@ -41,6 +41,7 @@ services:
       - ./backend:/app
     env_file:
       - .env
+    stop_grace_period: 1s
     depends_on:
       db:
         condition: service_healthy
@@ -50,6 +51,8 @@ services:
     build:
       context: .
       dockerfile: ./frontend/Dockerfile
+    volumes:
+      - ./frontend:/app
     networks:
       - mynetwork
 
