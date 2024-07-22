@@ -18,6 +18,8 @@ from django.contrib.auth.hashers import make_password
 from game.serializers import GameSerializer
 from game.models import Game
 from django.db.models import Q
+from django.contrib.auth.password_validation import validate_password
+
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
@@ -30,6 +32,10 @@ def signup(request):
 
     if serializer.is_valid():
         user = serializer.save()
+        try:
+            validate_password(request.data['password'])
+        except Exception as e:
+            return Response({'detail': e}, status=status.HTTP_400_BAD_REQUEST)
         user.set_password(request.data['password'])
         user.save()
         return Response({'user': serializer.data}, status=200)
