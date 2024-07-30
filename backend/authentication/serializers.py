@@ -91,8 +91,7 @@ class EditUserSerializer(serializers.ModelSerializer):
 
 class AvatarSerializer(serializers.ModelSerializer):
     
-    avatar = serializers.SerializerMethodField()
-
+    avatar = serializers.ImageField(write_only=True)
 
     class Meta:
         model = User
@@ -103,12 +102,14 @@ class AvatarSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
 
-    def get_avatar(self, obj):
-        if obj.avatar:
-            # Replace 'SERVER_URL' with the actual setting name
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        if instance.avatar:
             server_url = settings.SERVER_URL
-            return f"{server_url}{obj.avatar.url}"
-        return None
+            representation['avatar'] = f"{server_url}{instance.avatar.url}"
+        else:
+            representation['avatar'] = None
+        return representation
 
 
 class VerifyOTPSerializer(serializers.Serializer):
