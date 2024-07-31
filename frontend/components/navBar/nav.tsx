@@ -91,7 +91,8 @@ export default function Nav() {
     if (lastJsonMessage?.type === "request") {
       let id = lastJsonMessage.id;
       toast(
-        <Link className="w-full text-center" href={`/profile/${id}`}>
+        <Link className="w-full text-center flex  items-center gap-4" href={`/profile/${id}`}>
+          <UserPlus2 className="h-6 w-6 text-green-400" />
           {"You have a new friend request from " + lastJsonMessage.user}
         </Link>
       );
