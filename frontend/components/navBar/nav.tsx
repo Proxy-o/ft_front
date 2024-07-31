@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "../ui/button";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import useLogout from "@/app/(auth)/login/hooks/useLogout";
 import { useEffect, useState } from "react";
@@ -34,6 +34,7 @@ export default function Nav() {
   const { mutate: logout } = useLogout();
   const { theme, setTheme } = useTheme();
   const path = usePathname();
+  const router = useRouter();
 
   const links: linksProps[] = [
     {
@@ -77,12 +78,14 @@ export default function Nav() {
   const token = getCookie("refresh");
   const id = getCookie("user_id");
   const socketUrl = process.env.NEXT_PUBLIC_CHAT_URL + "2/?refresh=" + token;
-  const invitationSocketUrl = process.env.NEXT_PUBLIC_INVITATION_URL + "/?refresh=" + token;
+  const invitationSocketUrl =
+    process.env.NEXT_PUBLIC_INVITATION_URL + "/?refresh=" + token;
 
   const { lastJsonMessage }: { lastJsonMessage: LastMessage } =
     useWebSocket(socketUrl);
-  const { lastJsonMessage: invitationLastMessage }: { lastJsonMessage: LastMessage } = 
-    useWebSocket(invitationSocketUrl);
+  const {
+    lastJsonMessage: invitationLastMessage,
+  }: { lastJsonMessage: LastMessage } = useWebSocket(invitationSocketUrl);
   const [showNotif, setShowNotif] = useState(false);
   const [reqNotif, setReqNotif] = useState(false);
   const { data: friends, isSuccess: isSuccessFriends } = useGetFriends(
@@ -92,8 +95,9 @@ export default function Nav() {
   const queryClient = useQueryClient();
   const [gameNotif, setGameNotif] = useState(false);
   const { newNotif } = useInvitationSocket();
-  const {data: invitations, isSuccess: isSuccessInvit} = useGetInvitations(id || "0");
-
+  const { data: invitations, isSuccess: isSuccessInvit } = useGetInvitations(
+    id || "0"
+  );
 
   useEffect(() => {
     setGameNotif(false);
@@ -104,13 +108,16 @@ export default function Nav() {
       const message = parsedMessage.split(" ");
       if (message[0] === "/notif") {
         toast(
-          <Link className="w-full text-center flex  items-center gap-4" href={`/profile/${id}`}>
-            <GamepadIcon className="h-6 w-6 text-primary" />
-            {"You have a new Game Invite from " + sender}
-          </Link>
+          `${sender} has invited you to play`,
+          {
+            icon: <GamepadIcon className="mr-4 " />,
+            action: {
+              label: "Play",
+              onClick: () => router.push(`/game`),
+            },
+          }
         );
-
-      } 
+      }
       queryClient.invalidateQueries({
         queryKey: ["invitations", id],
       });
@@ -121,17 +128,29 @@ export default function Nav() {
         if (invitation.receiver.id.toString() === id) setGameNotif(true);
       });
     }
-  }, [newNotif()?.data , invitations, id]);
+  }, [
+    newNotif()?.data,
+    invitations,
+    id,
+    invitationLastMessage,
+    queryClient,
+    router,
+    isSuccessInvit,
+  ]);
 
   useEffect(() => {
     setReqNotif(false);
     if (lastJsonMessage?.type === "request") {
       let id = lastJsonMessage.id;
       toast(
-        <Link className="w-full text-center flex  items-center gap-4" href={`/profile/${id}`}>
-          <UserPlus2 className="h-6 w-6 text-green-400" />
-          {"You have a new friend request from " + lastJsonMessage.user}
-        </Link>
+`New friend request from ${lastJsonMessage.user}`,
+{
+  icon: <UserPlus2 className="mr-2" />,
+  action: {
+    label: `View`,
+    onClick: () => router.push(`/profile/${id}`)
+  },
+}
       );
       queryClient.invalidateQueries({
         queryKey: ["requests"],
@@ -143,7 +162,7 @@ export default function Nav() {
         if (request.to_user.id.toString() === id) setReqNotif(true);
       });
     }
-  }, [isSuccessReq, requests, id, lastJsonMessage, queryClient]);
+  }, [isSuccessReq, requests, id, lastJsonMessage, queryClient, router]);
 
   useEffect(() => {
     if (lastJsonMessage?.type === "private_message") {
@@ -151,15 +170,14 @@ export default function Nav() {
         queryKey: ["friends", id],
       });
       if (path !== "/chat")
-        toast(
-          <Link
-            href={`/profile/${lastJsonMessage.id}`}
-            className="w-full justify-between flex gap-2 text-lg"
-          >
-            {"New message from " + lastJsonMessage.user}
-            <MessageCircle className="h-6 w-6 text-green-400" />
-          </Link>
-        );
+        toast(`New message from ${lastJsonMessage.user}`, { 
+          icon: <MessageCircle className="mr-2" />,
+          action: {
+            label: 'Messages',
+            onClick: () => router.push(`/chat`)
+          },
+        })
+
       lastJsonMessage.type = "null";
     }
     if (isSuccessFriends && friends) {
@@ -216,8 +234,7 @@ export default function Nav() {
                   <span className="h-3 w-3 bg-white rounded-full absolute top-0 right-0 "></span>
                   <span className="h-1 w-1 bg-primary rounded-full absolute top-1 right-1 animate-ping"></span>
                 </div>
-              ) 
-              : (
+              ) : (
                 <link.icon className=" mr-2 h-6 w-6 " />
               )}
               {link.title}

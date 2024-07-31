@@ -67,6 +67,7 @@ class ChatConsumer(WebsocketConsumer):
                     'type': 'request',
                     'user': self.user.username,
                     "id": self.user.id,
+                    "avatar": self.user.avatar.url,
                 }
             )
 

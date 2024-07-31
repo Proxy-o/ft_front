@@ -9,6 +9,7 @@ export interface LastMessage {
   user: string;
   id: string;
   read?: boolean;
+  avatar?: string;
 }
 
 export interface Message {
