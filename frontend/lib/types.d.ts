@@ -9,6 +9,7 @@ export type User = {
   status?: string;
   date_joined?: string;
   has_unread_messages?: boolean;
+  otp_active?: boolean;
 };
 
 export type t_Game = {

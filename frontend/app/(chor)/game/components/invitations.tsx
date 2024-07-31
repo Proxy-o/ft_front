@@ -14,7 +14,7 @@ import { Separator } from "@/components/ui/separator";
 import useAcceptInvitationTournament from "../hooks/useAccepteInvitationTournament";
 import { Card } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
-import useInvitationSocket from "@/lib/hooks/useInvitationSocket";
+import useInvitationSocket from "@/app/(chor)/game/hooks/useInvitationSocket";
 import { toast } from "sonner";
 
 const Invitations = ({ mode }: { mode: string }) => {

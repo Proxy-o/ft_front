@@ -1,6 +1,7 @@
 import axios from "axios";
 import getCookie from "./getCookie";
 import authService from "./authService";
+import { redirect } from "next/navigation";
 
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BACKEND_URL + "/api",
@@ -27,8 +28,7 @@ axiosInstance.interceptors.response.use(
     const originalRequest = error.config;
     if (
       error.response &&
-      error.response.status === 401 &&
-      !originalRequest._retry
+      error.response.status === 401 
     ) {
       originalRequest._retry = true;
       const isRefreshSuccessful = await authService.refreshToken();
@@ -36,6 +36,7 @@ axiosInstance.interceptors.response.use(
         return axiosInstance(originalRequest);
       }
     }
+
 
     return Promise.reject(error);
   }
