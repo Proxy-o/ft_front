@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "../ui/button";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import useLogout from "@/app/(auth)/login/hooks/useLogout";
 import { useEffect, useState } from "react";
@@ -33,13 +33,16 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import useInvitationSocket from "@/app/(chor)/game/hooks/useInvitationSocket";
+import useGetInvitations from "@/app/(chor)/game/hooks/useGetInvitations";
 
 export default function MobilNav() {
   const [popOverOpen, setPopOverOpen] = useState(false);
   const { mutate: logout } = useLogout();
   const { theme, setTheme } = useTheme();
   const path = usePathname();
-
+  const router = useRouter();
+  
   const links: linksProps[] = [
     {
       title: "Play",
@@ -82,9 +85,12 @@ export default function MobilNav() {
   const token = getCookie("refresh");
   const id = getCookie("user_id");
   const socketUrl = process.env.NEXT_PUBLIC_CHAT_URL + "2/?refresh=" + token;
+  const invitationSocketUrl = process.env.NEXT_PUBLIC_INVITATION_URL + "/?refresh=" + token;
 
   const { lastJsonMessage }: { lastJsonMessage: LastMessage } =
     useWebSocket(socketUrl);
+  const { lastJsonMessage: invitationLastMessage }: { lastJsonMessage: LastMessage } = 
+    useWebSocket(invitationSocketUrl);
   const [showNotif, setShowNotif] = useState(false);
   const [reqNotif, setReqNotif] = useState(false);
   const { data: friends, isSuccess: isSuccessFriends } = useGetFriends(
@@ -92,7 +98,40 @@ export default function MobilNav() {
   );
   const { data: requests, isSuccess: isSuccessReq } = useGetFrdReq();
   const queryClient = useQueryClient();
+  const [gameNotif, setGameNotif] = useState(false);
+  const { newNotif } = useInvitationSocket();
+  const {data: invitations, isSuccess: isSuccessInvit} = useGetInvitations(id || "0");
 
+
+  useEffect(() => {
+    setGameNotif(false);
+    const parsedMessage = invitationLastMessage?.message;
+    const sender = invitationLastMessage?.user;
+
+    if (parsedMessage) {
+      const message = parsedMessage.split(" ");
+      if (message[0] === "/notif") {
+        toast(
+          <Button variant="ghost" className="w-full text-center flex  items-center gap-4 m-0" onClick={() => {
+            router.push(`/game`);
+          }}>
+            <GamepadIcon className="h-6 w-6 text-primary" />
+            {"You have a new Game Invite from " + sender}
+          </Button>
+        );
+
+      } 
+      queryClient.invalidateQueries({
+        queryKey: ["invitations", id],
+      });
+      invitationLastMessage.message = "";
+    }
+    if (isSuccessInvit && invitations) {
+      invitations.forEach((invitation: any) => {
+        if (invitation.receiver.id.toString() === id) setGameNotif(true);
+      });
+    }
+  }, [newNotif()?.data , invitations, id]);
   useEffect(() => {
     setReqNotif(false);
     if (lastJsonMessage?.type === "request") {
