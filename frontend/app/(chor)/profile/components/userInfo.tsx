@@ -22,7 +22,7 @@ import useAcceptFriend from "@/app/(chor)/friends/hooks/useAcceptFriend";
 import useLogout from "@/app/(auth)/login/hooks/useLogout";
 import useReject from "../../friends/hooks/useDeclineReq";
 import useSendInvitation from "../../game/hooks/useSendInvitation";
-import useInvitationSocket from "@/lib/hooks/useInvitationSocket";
+import useInvitationSocket from "@/app/(chor)/game/hooks/useInvitationSocket";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 

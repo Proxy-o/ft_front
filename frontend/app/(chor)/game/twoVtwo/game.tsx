@@ -7,11 +7,11 @@ import checkCollisionWithHorizontalWalls from "../methods/checkCollisionWithHori
 import { moveBallFour } from "../methods/moveBall";
 import { movePaddlesFour } from "../methods/movePaddles";
 import { drawFour } from "../methods/draw";
-import useGameSocket from "@/lib/hooks/useGameSocket";
+import useGameSocket from "@/app/(chor)/game/hooks/useGameSocket";
 import { User } from "@/lib/types";
 import getCookie from "@/lib/functions/getCookie";
 import useEndGameFour from "../hooks/useEndGameFour";
-import useInvitationSocket from "@/lib/hooks/useInvitationSocket";
+import useInvitationSocket from "@/app/(chor)/game/hooks/useInvitationSocket";
 import { enemyLeftGameFour } from "../methods/enemyLeftGame";
 import useEndGame from "../hooks/useEndGame";
 import useGetUser from "../../profile/hooks/useGetUser";

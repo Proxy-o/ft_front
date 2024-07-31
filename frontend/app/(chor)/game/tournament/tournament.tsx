@@ -12,7 +12,7 @@ import Two from "../oneVone/oneVone";
 import Invitations from "../components/invitations";
 import useLeavetournament from "../hooks/useLeaveTournament";
 import useDeleteTournament from "../hooks/useDeleteTournament";
-import useInvitationSocket from "@/lib/hooks/useInvitationSocket";
+import useInvitationSocket from "@/app/(chor)/game/hooks/useInvitationSocket";
 import { useEffect, useRef } from "react";
 import NoGame from "../components/noGame";
 import { Card } from "@/components/ui/card";

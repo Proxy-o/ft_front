@@ -6,6 +6,7 @@ import { toast } from "sonner";
 const editUser = async (user: User) => {
   try {
     // remove avatar from user object
+  console.log("info", info);
     delete user.avatar;
     const response = await axiosInstance.put(`/user/${user.id}`, user);
     return response.data;
@@ -25,9 +26,7 @@ export default function useEditUser() {
       return res;
     },
     onSuccess: (_, user) => {
-      queryClient.setQueryData(["user", user.id.toString()], (old: any) => {
-        return { ...old, ...user };
-      });
+      queryClient.setQueryData(["user", user.id], user);
       if (!_)
         return toast.error("An error occurred while updating your profile");
       toast.success("Profile updated successfully");

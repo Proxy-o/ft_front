@@ -6,7 +6,7 @@ import getCookie from "@/lib/functions/getCookie";
 
 import useGetFourGame from "../hooks/useGetFourGame";
 import Game from "./game";
-import useInvitationSocket from "@/lib/hooks/useInvitationSocket";
+import useInvitationSocket from "@/app/(chor)/game/hooks/useInvitationSocket";
 import NoGame from "../components/noGame";
 
 const Four = () => {
