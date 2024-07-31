@@ -206,9 +206,17 @@ class UserDetail(APIView):
             user, data=request.data, partial=True, context={'request': request})
 
         if serializer.is_valid():
-            serializer.update(user, serializer.validated_data)
+            if 'password' in serializer.validated_data:
+                try:
+                    validate_password(serializer.validated_data['password'])
+                except Exception as e:
+                    return Response({'password': e}, status=status.HTTP_400_BAD_REQUEST)
+                user.set_password(serializer.validated_data['password'])
+                user.save()
+            serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 
     def delete(self, request, pk, format=None):
         user = self.get_object(pk)
