@@ -4,18 +4,11 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 const editUser = async (user: User) => {
-  try {
-    // remove avatar from user object
+
     delete user.avatar;
-    console.log("user", user);
     const response = await axiosInstance.put(`/user/${user.id}`, user);
-    console.log("response", response);
     return response.data;
-  } catch (error: any) {
-    if (error.response && error.response.status !== 401) {
-      throw new Error(error.response.data.message);
-    }
-  }
+  
 };
 
 export default function useEditUser() {
@@ -23,8 +16,7 @@ export default function useEditUser() {
 
   const info = useMutation({
     mutationFn: async (info: User) => {
-    console.log("info", info);
-
+      
       const res = await editUser(info);
       return res;
     },
@@ -35,8 +27,18 @@ export default function useEditUser() {
       toast.success("Profile updated successfully");
     },
     onError: (err) => {
-      console.log("err", err);
-      toast.error(err.message);
+      if (err.response.data.username) {
+        toast.error(err.response.data.username[0]);
+      }
+      else if (err.response.data.email) {
+        toast.error(err.response.data.email[0]);
+      }
+      else if (err.response.data.password) {
+        toast.error(err.response.data.password[0]);
+      }
+      else {
+        toast.error("An error occurred while updating your profile");
+      }
     },
   });
   return info;
