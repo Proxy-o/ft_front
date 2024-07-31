@@ -74,11 +74,11 @@ class InvitationConsumer(WebsocketConsumer):
     def handle_notif(self, split):
         import datetime
         time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        sender = split[1]
+
         receiver = User.objects.get(id=split[2])
         async_to_sync(self.channel_layer.group_send)(
             f'inbox_{receiver.username}',
-            {'type': 'send_message', 'user': self.user.username, 'message': ' '.join(split) + ' ' + time}
+            {'type': 'send_message', 'user': self.user.username, 'message': ' '.join(split) + ' '}
         )
 
     def handle_accept(self, split):

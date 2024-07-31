@@ -27,6 +27,8 @@ import useGetFriends from "@/app/(chor)/chat/hooks/useGetFriends";
 import { LastMessage } from "@/app/(chor)/chat/types";
 import useGetFrdReq from "@/app/(chor)/friends/hooks/useGetFrReq";
 import { toast } from "sonner";
+import useInvitationSocket from "@/app/(chor)/game/hooks/useInvitationSocket";
+import useGetInvitations from "@/app/(chor)/game/hooks/useGetInvitations";
 
 export default function Nav() {
   const { mutate: logout } = useLogout();
@@ -75,9 +77,12 @@ export default function Nav() {
   const token = getCookie("refresh");
   const id = getCookie("user_id");
   const socketUrl = process.env.NEXT_PUBLIC_CHAT_URL + "2/?refresh=" + token;
+  const invitationSocketUrl = process.env.NEXT_PUBLIC_INVITATION_URL + "/?refresh=" + token;
 
   const { lastJsonMessage }: { lastJsonMessage: LastMessage } =
     useWebSocket(socketUrl);
+  const { lastJsonMessage: invitationLastMessage }: { lastJsonMessage: LastMessage } = 
+    useWebSocket(invitationSocketUrl);
   const [showNotif, setShowNotif] = useState(false);
   const [reqNotif, setReqNotif] = useState(false);
   const { data: friends, isSuccess: isSuccessFriends } = useGetFriends(
@@ -85,6 +90,38 @@ export default function Nav() {
   );
   const { data: requests, isSuccess: isSuccessReq } = useGetFrdReq();
   const queryClient = useQueryClient();
+  const [gameNotif, setGameNotif] = useState(false);
+  const { newNotif } = useInvitationSocket();
+  const {data: invitations, isSuccess: isSuccessInvit} = useGetInvitations(id || "0");
+
+
+  useEffect(() => {
+    setGameNotif(false);
+    const parsedMessage = invitationLastMessage?.message;
+    const sender = invitationLastMessage?.user;
+
+    if (parsedMessage) {
+      const message = parsedMessage.split(" ");
+      if (message[0] === "/notif") {
+        toast(
+          <Link className="w-full text-center flex  items-center gap-4" href={`/profile/${id}`}>
+            <GamepadIcon className="h-6 w-6 text-primary" />
+            {"You have a new Game Invite from " + sender}
+          </Link>
+        );
+
+      } 
+      queryClient.invalidateQueries({
+        queryKey: ["invitations", id],
+      });
+      invitationLastMessage.message = "";
+    }
+    if (isSuccessInvit && invitations) {
+      invitations.forEach((invitation: any) => {
+        if (invitation.receiver.id.toString() === id) setGameNotif(true);
+      });
+    }
+  }, [newNotif()?.data , invitations, id]);
 
   useEffect(() => {
     setReqNotif(false);
@@ -173,7 +210,14 @@ export default function Nav() {
                   <span className="h-3 w-3 bg-white rounded-full absolute top-0 right-0 "></span>
                   <span className="h-1 w-1 bg-primary rounded-full absolute top-1 right-1 animate-ping"></span>
                 </div>
-              ) : (
+              ) : link.title === "Play" && gameNotif ? (
+                <div className="relative">
+                  <link.icon className=" h-6 w-6 " />
+                  <span className="h-3 w-3 bg-white rounded-full absolute top-0 right-0 "></span>
+                  <span className="h-1 w-1 bg-primary rounded-full absolute top-1 right-1 animate-ping"></span>
+                </div>
+              ) 
+              : (
                 <link.icon className=" mr-2 h-6 w-6 " />
               )}
               {link.title}
