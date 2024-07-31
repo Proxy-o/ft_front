@@ -83,8 +83,9 @@ class EditUserSerializer(serializers.ModelSerializer):
         instance.last_name = validated_data.get(
             'last_name', instance.last_name)
         instance.email = validated_data.get('email', instance.email)
-        instance.password = make_password(
-            validated_data.get('password', instance.password))
+        if 'password' in validated_data:
+            instance.password = make_password(
+                validated_data.get('password'))
         instance.save()
         return instance
 
