@@ -9,8 +9,8 @@ export default function useInvitationSocket() {
 
   const { sendJsonMessage, lastMessage } = useWebSocket(socketUrl);
 
-  const handelSendInvitation = (receiver: string) => {
-    const toSend = "/notif " + user_id + " " + receiver;
+  const handelSendInvitation = (receiver: string, gameType: string) => {
+    const toSend = "/notif " + user_id + " " + receiver + " " + gameType;
     sendJsonMessage({ message: toSend });
   };
 
