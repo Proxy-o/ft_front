@@ -6,9 +6,9 @@ import { toast } from "sonner";
 const editUser = async (user: User) => {
   try {
     // remove avatar from user object
-  console.log("info", info);
     delete user.avatar;
     const response = await axiosInstance.put(`/user/${user.id}`, user);
+    console.log("response", response);
     return response.data;
   } catch (error: any) {
     if (error.response && error.response.status !== 401) {
@@ -21,8 +21,10 @@ export default function useEditUser() {
   const queryClient = useQueryClient();
 
   const info = useMutation({
-    mutationFn: async (user: User) => {
-      const res = await editUser(user);
+    mutationFn: async (info: User) => {
+    console.log("info", info);
+
+      const res = await editUser(info);
       return res;
     },
     onSuccess: (_, user) => {
@@ -32,6 +34,7 @@ export default function useEditUser() {
       toast.success("Profile updated successfully");
     },
     onError: (err) => {
+      console.log("err", err);
       toast.error(err.message);
     },
   });
