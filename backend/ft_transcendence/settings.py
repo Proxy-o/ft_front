@@ -28,7 +28,7 @@ SECRET_KEY = os.environ["SECRET_KEY"]
 DEBUG = True
 
 ALLOWED_HOSTS = ['10.12.12.4', 'localhost', '127.0.0.1', '10.13.9.17', '10.13.1.12'
-                 '10.12.7.1', '10.12.9.15', "10.13.10.13","10.13.2.17"]
+                 '10.12.7.1', '10.12.9.15', "10.13.10.13","10.13.2.13","10.13.2.17"]
 
 # Application definition
 
@@ -163,7 +163,7 @@ AUTH_USER_MODEL = 'authentication.User'  # new
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'authentication.customJWTAuthentication.CustomJWTAuthentication',
     ],
 
 }
@@ -181,12 +181,14 @@ SIMPLE_JWT = {
 # Cors
 INSTALLED_APPS += ['corsheaders']
 MIDDLEWARE += ['corsheaders.middleware.CorsMiddleware']
-# CORS_ORIGIN_WHITELIST = [
-#     'http://localhost:3000',
-#     'http://10.12.13.5:3000',
-# ]
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3000',
+    'http://10.12.13.5:3000',
+    'http://10.13.2.13:3000'
+]
 
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_CREDENTIALS = True
+# CORS_ORIGIN_ALLOW_ALL = True
 
 # for live reload in development
 if DEBUG:
@@ -201,3 +203,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/'
 
 SERVER_URL = os.getenv('SERVER_URL', 'http://localhost:8000')
+
+

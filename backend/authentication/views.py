@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 import pyotp
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 
 from rest_framework.response import Response
 from rest_framework import status
@@ -19,23 +19,24 @@ from game.serializers import GameSerializer
 from game.models import Game
 from django.db.models import Q
 from django.contrib.auth.password_validation import validate_password
-
-
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from authentication.customJWTAuthentication import CustomJWTAuthentication
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
+
 @api_view(['POST'])
+@authentication_classes([])  # No authentication required
+@permission_classes([])  # No permissions required
 def signup(request):
     serializer = UserSerializer(
         data=request.data, context={'request': request})
 
     if serializer.is_valid():
         try:
-            print("shiiit")
             validate_password(request.data['password'])
         except Exception as e:
-            print(e)
             return Response({'password': e}, status=status.HTTP_400_BAD_REQUEST)
         user = serializer.save()
         user.set_password(request.data['password'])
@@ -62,13 +63,26 @@ class Login(TokenObtainPairView):
 
         response = super().post(request, *args, **kwargs)
 
+        # Get the token from the response
+        token = response.data.get('access')
+
+        # Create an HttpOnly cookie with the token
+        response.set_cookie(
+            'access',
+            token,
+            max_age=36000,
+            expires=36000,
+            httponly=True,
+            # secure=True,  # Use secure=True if your site is served over HTTPS
+            # samesite='None'  # Adjust as needed, could also be 'Strict' or 'None'
+        )
+        print("sotered")
+        # Add user data to the response
         user_serializer = UserSerializer(user, context={'request': request})
         user_data = user_serializer.data
-
         response.data['user'] = user_data
 
         return response
-
 
 @api_view(['POST'])
 def verifyOTPView(request):
@@ -180,20 +194,21 @@ class UserDetail(APIView):
     """
     Retrieve, update or delete a user instance
     """
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [
-        permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+    # permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
+    authentication_classes = [CustomJWTAuthentication]
 
     def get_object(self, pk):
         try:
             obj = User.objects.get(pk=pk)
-            self.check_object_permissions(self.request, obj)
+            # self.check_object_permissions(self.request, obj)
             return obj
         except User.DoesNotExist:
             return Http404
 
     def get(self, request, pk, format=None):
+        print("okokokok")
         user = self.get_object(pk)
+        print(request.COOKIES)
         if user is Http404:
             return Response(status=status.HTTP_404_NOT_FOUND)
         

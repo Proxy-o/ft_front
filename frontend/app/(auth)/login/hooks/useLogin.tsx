@@ -7,10 +7,11 @@ export const setLoginCookie = (data: any) => {
   date.setTime(date.getTime() + 30 * 24 * 60 * 60 * 1000); // 30 days
   var expires = "; expires=" + date.toUTCString();
   // add same site and secure
-  document.cookie = "access=" + data.access + expires + "; path=/";
-  document.cookie = "refresh=" + data.refresh + expires + "; path=/";
+  // document.cookie = "access=" + data.access + expires + "; path=/" + "; h"
+  // document.cookie = "refresh=" + data.refresh + expires + "; path=/";
   document.cookie = "logged_in=yes" + expires + "; path=/";
   document.cookie = "user_id=" + data.user.id + expires + "; path=/";
+  
 };
 
 export default function useLogin() {
@@ -18,7 +19,9 @@ export default function useLogin() {
   const mutation = useMutation({
     mutationFn: async (data: { username: string; password: string }) => {
       try {
+        console.log("hahah");
         const response = await axiosInstance.post("/login", data);
+        console.log(response.data);
         return response.data;
       } catch (error: any) {
         if (error.response) {
