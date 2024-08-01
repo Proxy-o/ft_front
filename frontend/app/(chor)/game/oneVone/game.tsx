@@ -24,6 +24,7 @@ import { DoorOpen, Flag, Gamepad } from "lucide-react";
 import Hover from "../components/hover";
 import { Card } from "@/components/ui/card";
 import NoGame from "../components/noGame";
+import PreGame from "../components/preGame";
 
 const Game = ({ type }: { type: string }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -293,9 +294,10 @@ const Game = ({ type }: { type: string }) => {
         rightUser.current !== undefined
       ) {
         gameStarted();
-      } else {
-        gameNotStarted();
       }
+      //  else {
+      //   gameNotStarted();
+      // }
     };
 
     const animate = () => {
@@ -348,8 +350,13 @@ const Game = ({ type }: { type: string }) => {
           );
           timeRef.current = 0;
         }
+        newAngleRef.current = 0;
+        if (canvasRef.current && !gameStartedRef.current) {
+        newBallPositionRef.current = { x: canvasRef.current?.width / 2 || 0, y: canvasRef.current?.height / 2 || 0 };
+        }
+        isFirstTime.current = true;
         gameStartedRef.current = true;
-        // isFirstTime.current = true;
+        
         onGoingGame.refetch();
       } else if (message[0] === "/score") {
         isFirstTime.current = true;
@@ -404,22 +411,36 @@ const Game = ({ type }: { type: string }) => {
     <>
       <Card className="w-full h-[350px] md:h-[400px]">
         {leftUser.current?.username ? (
-          <canvas
+          <>
+            <canvas
             ref={canvasRef}
             height="400"
             width="800"
-            className="w-full h-full"
-          ></canvas>
+            className={`w-full h-full ${gameStartedRef.current ? "block" : "hidden"}`}
+            ></canvas>
+            <div
+              className={`w-full h-full flex justify-center items-center ${
+                gameStartedRef.current ? "hidden" : "block"
+              }`}
+              style={{
+                backgroundImage: "url('/game.jpeg')",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+              }}
+              >
+              <PreGame leftUser={leftUser} rightUser={rightUser} />
+            </div>
+          
+              </>
         ) : (
           <NoGame state={state} />
         )}
       </Card>
-      {leftUser.current?.username && (
+      {rightUser.current?.username && (
         <div className="w-full md:w-5/6 h-[70px] max-w-[800px] flex justify-between items-center mt-4">
           {!gameStartedRef.current ? (
             <>
               <div className="ml-[80px] h-5/6 w-1/6">
-                <Hover hoverText="Start">
                   <Button
                     onClick={() => {
                       handleStartGame(
@@ -431,14 +452,12 @@ const Game = ({ type }: { type: string }) => {
                     }}
                     className="h-full w-full bg-primary"
                   >
-                    <Gamepad size={25} />
+                    <Gamepad size={25} /> {" "} Start
                   </Button>
-                </Hover>
               </div>
               {type !== "tournament" && (
                 <div className="mr-[80px] h-5/6 w-1/6">
-                  <Hover hoverText="Leave">
-                    <Button
+                      <Button
                       onClick={() => {
                         leaveGame();
                         handleSurrender(
@@ -449,9 +468,9 @@ const Game = ({ type }: { type: string }) => {
                       }}
                       className="h-full w-full bg-primary"
                     >
-                      <DoorOpen size={25} />
+                      <DoorOpen size={25} /> {" "} Leave
                     </Button>
-                  </Hover>
+
                 </div>
               )}
             </>
@@ -468,7 +487,7 @@ const Game = ({ type }: { type: string }) => {
                 }}
                 className="h-full w-full bg-primary"
               >
-                <Flag size={25} />
+                <Flag size={25} /> {" "} Surrender
               </Button>
             </div>
           )}

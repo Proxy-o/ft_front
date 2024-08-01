@@ -10,14 +10,14 @@ function moveBall(
   const { newBallPositionRef, isFirstTime } = canvasParams;
   if (isFirstTime.current == true) {
     if (user?.username === leftUser?.username)
-      newBallPositionRef.current.x += Math.cos(newAngleRef.current) * 3;
-    else newBallPositionRef.current.x -= Math.cos(newAngleRef.current) * 3;
-    newBallPositionRef.current.y += Math.sin(newAngleRef.current) * 3;
+      newBallPositionRef.current.x += Math.cos(newAngleRef.current) * 10;
+    else newBallPositionRef.current.x -= Math.cos(newAngleRef.current) * 10;
+    newBallPositionRef.current.y += Math.sin(newAngleRef.current) * 10;
   } else {
     if (user?.username === leftUser?.username)
-      newBallPositionRef.current.x += Math.cos(newAngleRef.current) * 8;
-    else newBallPositionRef.current.x -= Math.cos(newAngleRef.current) * 8;
-    newBallPositionRef.current.y += Math.sin(newAngleRef.current) * 8;
+      newBallPositionRef.current.x += Math.cos(newAngleRef.current) * 15;
+    else newBallPositionRef.current.x -= Math.cos(newAngleRef.current) * 15;
+    newBallPositionRef.current.y += Math.sin(newAngleRef.current) * 15;
   }
 }
 

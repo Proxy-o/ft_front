@@ -19,6 +19,7 @@ function checkLoseConditionOnline(
   if (canvas === null) return;
   if (rightScoreRef.current === 3) {
     gameStartedRef.current = false;
+    toast.warning("3");
     endGame({
       winner: rightUser?.id || "",
       winnerScore: rightScoreRef.current,
@@ -55,6 +56,7 @@ function checkLoseConditionFour(
     handleRefetchPlayers(canvasParams.gameIdRef.current);
     gameStartedRef.current = false;
     if (rightScoreRef.current === 3) {
+      setGameChange(false);
       if (username === leftUserTop.current?.username) {
         endGameFour({
           winner: rightUserTop.current?.id || "",
@@ -72,6 +74,7 @@ function checkLoseConditionFour(
     }
     if (leftScoreRef.current === 3) {
       if (username === rightUserTop.current?.username) {
+        setGameChange(false);
         endGameFour({
           winner: leftUserTop.current?.id || "",
           winnerScore: leftScoreRef.current,
@@ -86,7 +89,6 @@ function checkLoseConditionFour(
         toast.error("You have lost the game");
       }
     }
-    setGameChange(false);
   }
 }
 

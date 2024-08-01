@@ -50,9 +50,7 @@ const Tournament = () => {
   return (
     <div className="flex flex-col gap-4 w-full max-w-[900px] p-2">
       <Card className="flex flex-col justify-center items-start p-2 mx-auto w-full">
-        <h1 className="text-2xl md:text-4xl mx-auto text-purple-600 font-extrabold">
-          Tournament
-        </h1>
+        
         {isSuccess && !data.tournament && <NoGame state={stateRef} />}
         {isSuccess && data.tournament && <Two type="tournament" />}
       </Card>

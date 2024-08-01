@@ -29,8 +29,9 @@ function enemyLeftGame(
     // console.log("current time: " + time.current + "seconds: " + seconds);
     handleTime(time.current);
   } else {
-    if (seconds - time.current > 1) {
+    if (seconds - time.current > 2) {
       toast.error("Enemy left the game");
+      toast.warning("2");
       endGame({
         winner: leftUserRef.current?.id || "",
         winnerScore: 3,
@@ -72,7 +73,7 @@ function enemyLeftGameFour(
     // console.log("current time: " + time.current + "seconds: " + seconds);
     handleTimeFour(time.current, username);
   } else {
-    if (seconds - time.current > 1 && gameStartedRef.current) {
+    if (seconds - time.current > 2 && gameStartedRef.current) {
       gameStartedRef.current = false;
       handleWhoLeftGame();
     }

@@ -48,7 +48,7 @@ class InvitationConsumer(WebsocketConsumer):
             self.handle_ready_four(split)
         elif command == '/readyToStartFour':
             self.handle_ready_to_start_four(split)
-        elif command == '/surrender': # todo: fix surrender in tournament
+        elif command == '/surrender': # todo: fix surrender in tournament    done, to be tested
             self.handle_surrender(split)
         elif command == '/refetchTournament':
             self.handle_refetch_tournament(split)
@@ -57,7 +57,7 @@ class InvitationConsumer(WebsocketConsumer):
         elif command == '/decline':
             self.handle_decline(split)
 
-# todo: check if user is friend with sender
+# todo: check if user is friend with sender     done, to be tested
     def disconnect(self, close_code):
         if self.user.is_authenticated:
             async_to_sync(self.channel_layer.group_discard)(
