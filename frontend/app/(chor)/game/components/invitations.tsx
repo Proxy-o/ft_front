@@ -81,7 +81,11 @@ const Invitations = ({ mode }: { mode: string }) => {
     }
   } else {
     if (invitations.length === 0) {
-      return (<></>)
+      return (<div className="w-full h-full flex flex-col justify-center items-center mx-auto gap-2">
+        <h1 className="text-4xl mx-auto w-full text-start">
+          No invitations
+        </h1>
+      </div>);
     }
   }
   return (
