@@ -3,6 +3,9 @@ import { useMutation } from "@tanstack/react-query";
 
 const searchFriend = async (data: { slug: string }) => {
   try {
+    if (data.slug.length < 1) {
+      return [];
+    }
     const response = await axiosInstance.get(`/friends/search/${data.slug}`);
     return response.data;
   } catch (error: any) {
