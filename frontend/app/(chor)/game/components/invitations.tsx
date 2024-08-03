@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { Check, Inbox, Swords, X } from "lucide-react";
-import { CircleOff } from "lucide-react";
+import { Check, X } from "lucide-react";
 import useGetInvitations from "../hooks/useGetInvitations";
 import useDeclineInvitation from "../hooks/useDeclineMutation";
 import useAcceptInvitation from "../hooks/useAccepteInvitation";
@@ -15,7 +14,6 @@ import { Card } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
 import useInvitationSocket from "@/app/(chor)/game/hooks/useInvitationSocket";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
 
 const Invitations = ({ mode }: { mode: string }) => {
   const { newNotif } = useInvitationSocket();
