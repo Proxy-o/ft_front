@@ -17,7 +17,7 @@ import { Button, buttonVariants } from "../ui/button";
 import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import useLogout from "@/app/(auth)/login/hooks/useLogout";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import getCookie from "@/lib/functions/getCookie";
 import useWebSocket from "react-use-websocket";
 import { linksProps } from "./types";
@@ -29,9 +29,10 @@ import useGetFrdReq from "@/app/(chor)/friends/hooks/useGetFrReq";
 import { toast } from "sonner";
 import useInvitationSocket from "@/app/(chor)/game/hooks/useInvitationSocket";
 import useGetInvitations from "@/app/(chor)/game/hooks/useGetInvitations";
+import { get } from "http";
+import { log } from "console";
 
 export default function Nav() {
-  console.log("Nav");
   const { mutate: logout } = useLogout();
   const { theme, setTheme } = useTheme();
   const path = usePathname();
@@ -76,8 +77,9 @@ export default function Nav() {
     variant: "default",
   };
 
-  const token = getCookie("logged_in");
+  const token = getCookie("refresh");
   const id = getCookie("user_id");
+  const logged_in = getCookie("logged_in");
 
   const socketUrl = process.env.NEXT_PUBLIC_CHAT_URL + "2/?refresh=" + token;
   const invitationSocketUrl =
@@ -102,6 +104,12 @@ export default function Nav() {
   );
 
   useEffect(() => {
+    if (logged_in != "yes" && path != "/login" && path != "/register") {
+      return logout();
+    }
+  }, [logged_in, router, logout, path]);
+
+  useEffect(() => {
     setGameNotif(false);
     const parsedMessage = invitationLastMessage?.message;
     const sender = invitationLastMessage?.user;
@@ -109,16 +117,13 @@ export default function Nav() {
     if (parsedMessage) {
       const message = parsedMessage.split(" ");
       if (message[0] === "/notif") {
-        toast(
-          `${sender} has invited you to play`,
-          {
-            icon: <GamepadIcon className="mr-4 " />,
-            action: {
-              label: "Play",
-              onClick: () => router.push(`/game`),
-            },
-          }
-        );
+        toast(`${sender} has invited you to play`, {
+          icon: <GamepadIcon className="mr-4 " />,
+          action: {
+            label: "Play",
+            onClick: () => router.push(`/game`),
+          },
+        });
       }
       queryClient.invalidateQueries({
         queryKey: ["invitations", id],
@@ -144,16 +149,13 @@ export default function Nav() {
     setReqNotif(false);
     if (lastJsonMessage?.type === "request") {
       let id = lastJsonMessage.id;
-      toast(
-`New friend request from ${lastJsonMessage.user}`,
-{
-  icon: <UserPlus2 className="mr-2" />,
-  action: {
-    label: `View`,
-    onClick: () => router.push(`/profile/${id}`)
-  },
-}
-      );
+      toast(`New friend request from ${lastJsonMessage.user}`, {
+        icon: <UserPlus2 className="mr-2" />,
+        action: {
+          label: `View`,
+          onClick: () => router.push(`/profile/${id}`),
+        },
+      });
       queryClient.invalidateQueries({
         queryKey: ["requests"],
       });
@@ -172,13 +174,13 @@ export default function Nav() {
         queryKey: ["friends", id],
       });
       if (path !== "/chat")
-        toast(`New message from ${lastJsonMessage.user}`, { 
+        toast(`New message from ${lastJsonMessage.user}`, {
           icon: <MessageCircle className="mr-2" />,
           action: {
-            label: 'Messages',
-            onClick: () => router.push(`/chat`)
+            label: "Messages",
+            onClick: () => router.push(`/chat`),
           },
-        })
+        });
 
       lastJsonMessage.type = "null";
     }
@@ -204,7 +206,8 @@ export default function Nav() {
   const handleLogout = () => {
     logout();
   };
-  if (token)
+
+  if (path != "/login" && path != "/register")
     return (
       <div className=" group flex flex-col gap-4 py-2 h-screen shadow-lg md:w-[8.5rem] ">
         <nav className="flex flex-col gap-1 px-2 h-full ">

@@ -78,7 +78,7 @@ class Login(TokenObtainPairView):
             expires=36000,
             httponly=True,
             # secure=True,  # Use secure=True if your site is served over HTTPS
-            # samesite='None'  # Adjust as needed, could also be 'Strict' or 'None'
+            samesite='lax'  # Adjust as needed, could also be 'Strict' or 'None'
         )
         response.set_cookie(
             'refresh',
@@ -87,7 +87,7 @@ class Login(TokenObtainPairView):
             expires=36000,
             httponly=False,
             # secure=True,  # Use secure=True if your site is served over HTTPS
-            # samesite='None'  # Adjust as needed, could also be 'Strict' or 'None'
+            samesite='lax'  # Adjust as needed, could also be 'Strict' or 'None'
         )
 
         # Add user data to the response

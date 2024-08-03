@@ -4,12 +4,13 @@ import "./globals.css";
 import TanstackProvider from "@/lib/providers/TanstackProvider";
 
 const inter = Inter({ subsets: ["latin"] });
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useEffect, useState } from "react";
 import HomeSkel from "@/components/skeletons/homeSkel";
 import dynamic from "next/dynamic";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
 import { UserContextProvider } from "@/lib/providers/UserContextProvider";
 import { Toaster } from "@/components/ui/sonner";
+import { usePathname } from "next/navigation";
 
 const ThemeProvider = dynamic(() => import("@/lib/providers/ThemeProvider"), {
   ssr: false,
@@ -22,6 +23,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const mb = useMediaQuery("(min-width: 768px)");
+  const [showNav, setShowNav] = useState<boolean>(false);
+  const path = usePathname();
+  useEffect(() => {
+    if (mb && path != "login" && path != "register") {
+      setShowNav(true);
+    }
+  }
+  , [path, mb]);
+  
+  
 
   return (
     <html lang="en">
@@ -37,7 +48,7 @@ export default function RootLayout({
             <UserContextProvider>
               <Suspense fallback={<HomeSkel />}>
                 <div className="md:flex relative">
-                  {mb && <Nav />}
+                  {showNav && <Nav />}
                   <main className="border-l-[0.04rem] w-full sm:mx-0 h-screen overflow-auto  md:p-0">
                     {children}
                   </main>

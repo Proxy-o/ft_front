@@ -14,7 +14,6 @@ const authService = {
       var date = new Date();
       date.setTime(date.getTime() + 30 * 24 * 60 * 60 * 1000); // 30 days
       var expires = "; expires=" + date.toUTCString();
-      document.cookie = "access=" + access + expires + "; path=/";
       document.cookie = "refresh=" + refresh + expires + "; path=/";
 
       return true;
