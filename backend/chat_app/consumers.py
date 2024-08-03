@@ -17,6 +17,7 @@ class ChatConsumer(WebsocketConsumer):
         self.user_inbox = None
 
     def connect(self):
+        print("soooooooeckt yaaaaabi")
         self.user = self.scope['user']
         self.user_inbox = f'inbox_{self.user.id}'
         # connection has to be accepted
@@ -48,7 +49,7 @@ class ChatConsumer(WebsocketConsumer):
         message = text_data_json['message']
 
         if not self.user.is_authenticated:
-            # print("User is not authenticated")
+            print("User is not authenticated")
             return
 
         if message.startswith('/request'):

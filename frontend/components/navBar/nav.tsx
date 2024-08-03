@@ -113,6 +113,8 @@ export default function Nav() {
     if (parsedMessage) {
       const message = parsedMessage.split(" ");
       if (message[0] === "/notif") {
+        if (!path.startsWith("/game")) {
+
         toast(`${sender} has invited you to play`, {
           icon: <GamepadIcon className="mr-4 " />,
           action: {
@@ -120,6 +122,7 @@ export default function Nav() {
             onClick: () => router.push(`/game`),
           },
         });
+      }
       }
       queryClient.invalidateQueries({
         queryKey: ["invitations", id],
@@ -138,12 +141,14 @@ export default function Nav() {
     queryClient,
     router,
     isSuccessInvit,
+    path
   ]);
 
   useEffect(() => {
     setReqNotif(false);
     if (lastJsonMessage?.type === "request") {
       let id = lastJsonMessage.id;
+      if (path != "/friend_requests")
       toast(`New friend request from ${lastJsonMessage.user}`, {
         icon: <UserPlus2 className="mr-2" />,
         action: {
@@ -161,14 +166,14 @@ export default function Nav() {
         if (request.to_user.id.toString() === id) setReqNotif(true);
       });
     }
-  }, [isSuccessReq, requests, id, lastJsonMessage, queryClient, router]);
+  }, [isSuccessReq, requests, id, lastJsonMessage, queryClient, router, path]);
 
   useEffect(() => {
     if (lastJsonMessage?.type === "private_message") {
       queryClient.invalidateQueries({
         queryKey: ["friends", id],
       });
-      if (path !== "/chat")
+      if (path != "/chat")
         toast(`New message from ${lastJsonMessage.user}`, {
           icon: <MessageCircle className="mr-2" />,
           action: {
