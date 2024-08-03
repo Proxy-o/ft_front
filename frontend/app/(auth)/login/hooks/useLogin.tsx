@@ -9,9 +9,8 @@ export const setLoginCookie = (data: any) => {
   // add same site and secure
   // document.cookie = "access=" + data.access + expires + "; path=/" + "; h"
   // document.cookie = "refresh=" + data.refresh + expires + "; path=/";
-  document.cookie = "logged_in=yes" + expires + "; path=/";
-  document.cookie = "user_id=" + data.user.id + expires + "; path=/";
-  
+  document.cookie = "logged_in=yes" + expires + "; path=/" + "; SameSite=lax; ";
+  document.cookie = "user_id=" + data.user.id + expires + "; path=/" + "; SameSite=lax; ";
 };
 
 export default function useLogin() {

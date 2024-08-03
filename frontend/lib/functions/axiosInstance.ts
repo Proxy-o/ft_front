@@ -23,25 +23,24 @@ const axiosInstance = axios.create({
 //   }
 // );
 
-// axiosInstance.interceptors.response.use(
-//   (response) => {
-//     return response;
-//   },
-//   async (error) => {
-//     const originalRequest = error.config;
-//     if (
-//       error.response &&
-//       error.response.status === 401 
-//     ) {
-//       originalRequest._retry = true;
-//       const isRefreshSuccessful = await authService.refreshToken();
-//       if (isRefreshSuccessful) {
-//         return axiosInstance(originalRequest);
-//       }
-//     }
+axiosInstance.interceptors.response.use(
+  (response) => {
+    return response;
+  },
+  async (error) => {
+    if (
+      error.response &&
+      error.response.status === 401 
+    ) {
+    //  remove logged_in cookie
+      document.cookie = "logged_in=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      document.cookie = "user_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      document.cookie = "refresh=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    
+    }
 
 
-//     return Promise.reject(error);
-//   }
-// );
+    return Promise.reject(error);
+  }
+);
 export default axiosInstance;
