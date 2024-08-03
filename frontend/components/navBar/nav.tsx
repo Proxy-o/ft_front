@@ -31,6 +31,7 @@ import useInvitationSocket from "@/app/(chor)/game/hooks/useInvitationSocket";
 import useGetInvitations from "@/app/(chor)/game/hooks/useGetInvitations";
 
 export default function Nav() {
+  console.log("Nav");
   const { mutate: logout } = useLogout();
   const { theme, setTheme } = useTheme();
   const path = usePathname();
@@ -75,8 +76,9 @@ export default function Nav() {
     variant: "default",
   };
 
-  const token = getCookie("refresh");
+  const token = getCookie("logged_in");
   const id = getCookie("user_id");
+
   const socketUrl = process.env.NEXT_PUBLIC_CHAT_URL + "2/?refresh=" + token;
   const invitationSocketUrl =
     process.env.NEXT_PUBLIC_INVITATION_URL + "/?refresh=" + token;
