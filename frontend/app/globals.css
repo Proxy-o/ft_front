@@ -342,3 +342,47 @@
   .animate-moveDownTournament {
     animation: moveDownTournament 30s ease-in-out;
   }
+
+  @keyframes sckeliton {
+    0% {
+        background-position: 600% 0;
+    }
+    100% {
+        background-position: -400% 0;
+    }
+  }
+  .sckeliton {
+    background-position: 500% 0;
+    background-size: 1000% 100%;
+    animation: sckeliton 30s linear infinite;
+  }
+
+  @keyframes sckeliton2 {
+    0% {
+        background-position: -500% 0;
+    }
+    100% {
+        background-position: 500% 0;
+    }
+  }
+
+  .sckeliton2 {
+    background-position: 500% 0;
+    background-size: 1000% 100%;
+    animation: sckeliton2 30s linear infinite;
+  }
+
+  @keyframes getBigger {
+    0% {
+        transform: scale(0.1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+.animate-getBigger {
+    animation: getBigger 0.7s ease-in-out forwards;
+}

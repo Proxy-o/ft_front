@@ -14,7 +14,7 @@ const TournamentBoard = ({ tournament }: { tournament: any }) => {
     final.current = tournament.final;
   }
   return (
-    <Card className="p-4 px-20 h-fit w-full flex flex-col justify-center">
+    <Card className="p-4 h-fit w-full flex flex-col justify-center">
       <div className="mx-auto">Board</div>
       <Separator className="w-full h-[2px] my-4" />
       <div className="flex flex-row ">
@@ -30,7 +30,6 @@ const TournamentBoard = ({ tournament }: { tournament: any }) => {
                 {semi1.current?.user1?.username || "user"}
               </AvatarFallback>
             </Avatar>
-            <h3>{semi1.current?.user1?.username || ""}</h3>
           </div>
           <div>
             <Avatar className="w-12 h-12">
@@ -43,7 +42,6 @@ const TournamentBoard = ({ tournament }: { tournament: any }) => {
                 {semi1.current?.user2?.username || "user"}
               </AvatarFallback>
             </Avatar>
-            <h3>{semi1.current?.user2?.username || ""}</h3>
           </div>
         </div>
         <div className="flex flex-col justify-start items-start gap-[116px] my-auto py-4 w-full">
@@ -67,7 +65,6 @@ const TournamentBoard = ({ tournament }: { tournament: any }) => {
               {semi1.current?.winner?.username || "user"}
             </AvatarFallback>
           </Avatar>
-          <h3>{semi1.current?.winner?.username || ""}</h3>
         </div>
         <div className="flex flex-col justify-center items-center gap-4 my-auto mx-4 py-4">
           <Avatar className="shadow-lg shadow-yellow-500 rounded-xl w-12 h-12">
@@ -80,7 +77,6 @@ const TournamentBoard = ({ tournament }: { tournament: any }) => {
               {final.current?.winner?.username || "user"}
             </AvatarFallback>
           </Avatar>
-          <h3>{final.current?.winner?.username || ""}</h3>
           <Crown size={24} className="text-yellow-500" />
           <div className="w-8 h-8"></div>
         </div>
@@ -95,7 +91,6 @@ const TournamentBoard = ({ tournament }: { tournament: any }) => {
               {semi2.current?.winner?.username || "user"}
             </AvatarFallback>
           </Avatar>
-          <h3>{semi2.current?.winner?.username || ""}</h3>
         </div>
         <div className="flex flex-col justify-start items-start gap-[118px] my-auto w-full">
           <Separator className="w-full h-[2px] bg-green-400" />
@@ -119,7 +114,6 @@ const TournamentBoard = ({ tournament }: { tournament: any }) => {
                 {semi2.current?.user1?.username || "user"}
               </AvatarFallback>
             </Avatar>
-            <h3>{semi2.current?.user1?.username || ""}</h3>
           </div>
           <div>
             <Avatar className="w-12 h-12">
@@ -132,7 +126,6 @@ const TournamentBoard = ({ tournament }: { tournament: any }) => {
                 {semi2.current?.user2?.username || "user"}
               </AvatarFallback>
             </Avatar>
-            <h3>{semi2.current?.user2?.username || ""}</h3>
           </div>
         </div>
       </div>

@@ -2,12 +2,10 @@ import Four from "./twoVtwo";
 import { Card } from "@/components/ui/card";
 import Invitations from "../components/invitations";
 import InviteFriends from "../components/inviteFriend";
-import CheckLogin from "@/components/checkLogin";
 
 export default function Page() {
   return (
     <>
-      <CheckLogin />
       <div className="flex flex-col w-11/12  h-full justify-start items-center max-w-[900px] mx-auto gap-4">
         <h1 className="text-2xl md:text-4xl mx-auto text-purple-600 font-extrabold">
           Four Players Game
