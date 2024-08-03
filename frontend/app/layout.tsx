@@ -26,7 +26,8 @@ export default function RootLayout({
   const [showNav, setShowNav] = useState<boolean>(false);
   const path = usePathname();
   useEffect(() => {
-    if (mb && path != "login" && path != "register") {
+    console.log("path", path);
+    if (mb && path != "/login" && path != "/register") {
       setShowNav(true);
     }
   }
