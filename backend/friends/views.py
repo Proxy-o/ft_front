@@ -10,6 +10,7 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.decorators import authentication_classes
 from rest_framework import permissions
 from chat_app.models import Message
+from authentication.customJWTAuthentication import CustomJWTAuthentication
 from .models import Friend_Request
 User = get_user_model()
 
@@ -89,6 +90,7 @@ def delete_friend_request(request, pk):
 
 
 @ api_view(['GET'])
+# @ authentication_classes([CustomJWTAuthentication])
 def get_friend_requests(request):
     friend_requests = Friend_Request.objects.filter(Q(from_user=request.user) | Q(
         to_user=request.user)).order_by('timestamp').reverse()

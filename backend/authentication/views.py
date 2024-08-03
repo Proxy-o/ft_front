@@ -65,6 +65,10 @@ class Login(TokenObtainPairView):
 
         # Get the token from the response
         token = response.data.get('access')
+        # remove the token from the response
+        response.data.pop('access')
+    
+        refresh = response.data.get('refresh')        
 
         # Create an HttpOnly cookie with the token
         response.set_cookie(
@@ -76,7 +80,16 @@ class Login(TokenObtainPairView):
             # secure=True,  # Use secure=True if your site is served over HTTPS
             # samesite='None'  # Adjust as needed, could also be 'Strict' or 'None'
         )
-        print("sotered")
+        response.set_cookie(
+            'refresh',
+            refresh,
+            max_age=36000,
+            expires=36000,
+            httponly=False,
+            # secure=True,  # Use secure=True if your site is served over HTTPS
+            # samesite='None'  # Adjust as needed, could also be 'Strict' or 'None'
+        )
+
         # Add user data to the response
         user_serializer = UserSerializer(user, context={'request': request})
         user_data = user_serializer.data

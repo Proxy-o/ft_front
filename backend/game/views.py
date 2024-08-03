@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 from django.contrib.auth import get_user_model
 from .serializers import GameSerializer, TournamentSerializer, InvitationSerializer
 from rest_framework import permissions
-from rest_framework_simplejwt.authentication import JWTAuthentication
+from authentication.customJWTAuthentication import CustomJWTAuthentication
 from .consumers import WebsocketConsumer
 from asgiref.sync import async_to_sync
 from django.shortcuts import get_object_or_404
@@ -21,7 +21,7 @@ User = get_user_model()
 
 class InvitationView(APIView):
     permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [CustomJWTAuthentication]
 
     def get(self, request):
         # print("get invitation")
@@ -55,7 +55,7 @@ class InvitationView(APIView):
 class GetInvitationsView(APIView):
     # get all invitations for the user
     permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [CustomJWTAuthentication]
 
     def get(self, request):
         # print("get invitations")
@@ -90,7 +90,7 @@ def joinGame(player1, player2, type):
 
 class AcceptInvitationView(APIView):
     permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [CustomJWTAuthentication]
 
     def post(self, request):
         # print("accept invitation")
@@ -124,7 +124,7 @@ class AcceptInvitationView(APIView):
 
 class DeclineInvitationView(APIView):
     permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [CustomJWTAuthentication]
 
     def post(self, request):
         # print("decline invitation")
@@ -159,7 +159,7 @@ def createGame(player1, player2, type):
 
 class OnGoingGame(APIView):
     permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [CustomJWTAuthentication]
 
     def get(self, request):
         # print("get ongoing game")
@@ -175,7 +175,7 @@ class OnGoingGame(APIView):
 
 class OnGoingTournamentGame(APIView):
     permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [CustomJWTAuthentication]
 
     def get(self, request):
         # print("get ongoing tournament game")
@@ -201,7 +201,7 @@ class OnGoingTournamentGame(APIView):
 
 class OnGoingFourGame(APIView):
     permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [CustomJWTAuthentication]
 
     def get(self, request):
         # print("get ongoing four game")
@@ -217,7 +217,7 @@ class OnGoingFourGame(APIView):
 
 class CreateGameFour(APIView):
     permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [CustomJWTAuthentication]
 
     def post(self, request):
         # print("create game four")
@@ -236,7 +236,7 @@ class CreateGameFour(APIView):
 
 class OnGoingFourGame(APIView):
     permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [CustomJWTAuthentication]
 
     def get(self, request):
         # print("get ongoing four game")
@@ -252,7 +252,7 @@ class OnGoingFourGame(APIView):
 
 class EndGame(APIView):
     permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [CustomJWTAuthentication]
 
     def post(self, request):
         # print("end game")
@@ -302,7 +302,7 @@ class EndGame(APIView):
 
 class EndGameFour(APIView):
     permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [CustomJWTAuthentication]
 
     def post(self, request):
         # print("end game four")
@@ -324,7 +324,7 @@ class EndGameFour(APIView):
 
 class Surrender(APIView):
     permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [CustomJWTAuthentication]
 
     def send_message(self, event):
         # print("send message")
@@ -382,7 +382,7 @@ class Surrender(APIView):
 
 class LeaveGame(APIView):
     permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [CustomJWTAuthentication]
 
     def post(self, request):
         print("leave game")
@@ -451,7 +451,7 @@ class LeaveGame(APIView):
 
 class TournamentView(APIView):
     permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [CustomJWTAuthentication]
 
     def get(self, request):
         # print("get tournament")
@@ -486,7 +486,7 @@ class TournamentView(APIView):
 
 class DeleteTournament(APIView):
     permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [CustomJWTAuthentication]
 
     def post(self, request):
         print("delete tournament")
@@ -507,7 +507,7 @@ class DeleteTournament(APIView):
 
 class LeaveTournament(APIView):
     permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [CustomJWTAuthentication]
 
     def post(self, request):
         # print("leave tournament")
@@ -547,7 +547,7 @@ class LeaveTournament(APIView):
 
 class UpdateFinal(APIView):
     permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [CustomJWTAuthentication]
 
     def post(self, request):
         # print("update final")
@@ -564,7 +564,7 @@ class UpdateFinal(APIView):
         return Response({'message': 'Final updated', 'tournamentId': tournament.id}, status=status.HTTP_200_OK)
 # class InviteToTournament(APIView):
 #     permission_classes = [permissions.IsAuthenticated]
-#     authentication_classes = [JWTAuthentication]
+#     authentication_classes = [CustomJWTAuthentication]
 
 #     def post(self, request):
 #         # print("invite to tournament")
@@ -589,7 +589,7 @@ class UpdateFinal(APIView):
 
 class AcceptInvitationTournament(APIView):
     permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [CustomJWTAuthentication]
 
     def post(self, request):
         # print("accept invitation tournament")
@@ -636,7 +636,7 @@ class AcceptInvitationTournament(APIView):
 
 class StartTournament(APIView):
     permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [CustomJWTAuthentication]
 
     def post(self, request):
         # print("start tournament")
@@ -663,7 +663,7 @@ class StartTournament(APIView):
 
 class GameView(APIView):
     permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [CustomJWTAuthentication]
 
     def get(self, request, user_id):
         user = get_object_or_404(User, id=user_id)
@@ -678,7 +678,7 @@ class GameView(APIView):
 
 class TwoVTwoGameView(APIView):
     permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [CustomJWTAuthentication]
 
     def get(self, request, user_id):
         user = get_object_or_404(User, id=user_id)
@@ -693,7 +693,7 @@ class TwoVTwoGameView(APIView):
 
 class TournamentsView(APIView):
     permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    authentication_classes = [CustomJWTAuthentication]
 
     def get(self, request, user_id):
         user = get_object_or_404(User, id=user_id)
