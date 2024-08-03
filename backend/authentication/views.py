@@ -147,20 +147,22 @@ class CustomTokenRefreshView(TokenRefreshView):
 
 
 class CustomLogoutView(APIView):
+    authentication_classes = []
     def post(self, request, *args, **kwargs):
         refresh_token = request.data.get('refresh')
 
-        if not refresh_token:
-            return Response({'detail': 'No refresh token provided'}, status=status.HTTP_400_BAD_REQUEST)
-
-        try:
+        if  refresh_token:
             token = RefreshToken(refresh_token)
             token.blacklist()
 
-        except Exception as e:
-            return Response({'detail': 'Invalid refresh token'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # remove the token from the response
+        response = Response({'detail': 'Logout successful'}, status=status.HTTP_200_OK)
+        response.delete_cookie('access')
+        response.delete_cookie('refresh')
+        return response
+        
 
-        return Response({'detail': 'Logout successful'}, status=status.HTTP_200_OK)
 
 
 # upload avatar
