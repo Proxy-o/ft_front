@@ -33,7 +33,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import useInvitationSocket from "@/app/(chor)/game/hooks/useInvitationSocket";
 import useGetInvitations from "@/app/(chor)/game/hooks/useGetInvitations";
 
 export default function MobilNav() {
@@ -42,7 +41,7 @@ export default function MobilNav() {
   const { theme, setTheme } = useTheme();
   const path = usePathname();
   const router = useRouter();
-  
+
   const links: linksProps[] = [
     {
       title: "Play",
@@ -85,12 +84,14 @@ export default function MobilNav() {
   const token = getCookie("refresh");
   const id = getCookie("user_id");
   const socketUrl = process.env.NEXT_PUBLIC_CHAT_URL + "2/?refresh=" + token;
-  const invitationSocketUrl = process.env.NEXT_PUBLIC_INVITATION_URL + "/?refresh=" + token;
+  const invitationSocketUrl =
+    process.env.NEXT_PUBLIC_INVITATION_URL + "/?refresh=" + token;
 
   const { lastJsonMessage }: { lastJsonMessage: LastMessage } =
     useWebSocket(socketUrl);
-  const { lastJsonMessage: invitationLastMessage }: { lastJsonMessage: LastMessage } = 
-    useWebSocket(invitationSocketUrl);
+  const {
+    lastJsonMessage: invitationLastMessage,
+  }: { lastJsonMessage: LastMessage } = useWebSocket(invitationSocketUrl);
   const [showNotif, setShowNotif] = useState(false);
   const [reqNotif, setReqNotif] = useState(false);
   const { data: friends, isSuccess: isSuccessFriends } = useGetFriends(
@@ -99,9 +100,9 @@ export default function MobilNav() {
   const { data: requests, isSuccess: isSuccessReq } = useGetFrdReq();
   const queryClient = useQueryClient();
   const [gameNotif, setGameNotif] = useState(false);
-  const { newNotif } = useInvitationSocket();
-  const {data: invitations, isSuccess: isSuccessInvit} = useGetInvitations(id || "0");
-
+  const { data: invitations, isSuccess: isSuccessInvit } = useGetInvitations(
+    id || "0"
+  );
 
   useEffect(() => {
     setGameNotif(false);
@@ -111,16 +112,23 @@ export default function MobilNav() {
     if (parsedMessage) {
       const message = parsedMessage.split(" ");
       if (message[0] === "/notif") {
-        toast(
-          <Button variant="ghost" className="w-full text-center flex  items-center gap-4 m-0" onClick={() => {
-            router.push(`/game`);
-          }}>
-            <GamepadIcon className="h-6 w-6 text-primary" />
-            {"You have a new Game Invite from " + sender}
-          </Button>
-        );
-
-      } 
+        // if path not start with /game
+        console.log(path);
+        if (!path.startsWith("/game")) {
+          toast(
+            <Button
+              variant="ghost"
+              className="w-full text-center flex  items-center gap-4 m-0"
+              onClick={() => {
+                router.push(`/game`);
+              }}
+            >
+              <GamepadIcon className="h-6 w-6 text-primary" />
+              {"You have a new Game Invite from " + sender}
+            </Button>
+          );
+        }
+      }
       queryClient.invalidateQueries({
         queryKey: ["invitations", id],
       });
@@ -131,17 +139,30 @@ export default function MobilNav() {
         if (invitation.receiver.id.toString() === id) setGameNotif(true);
       });
     }
-  }, [newNotif()?.data , invitations, id]);
+  }, [
+    invitations,
+    id,
+    isSuccessInvit,
+    invitationLastMessage,
+    queryClient,
+    router,
+    path,
+  ]);
+
   useEffect(() => {
     setReqNotif(false);
     if (lastJsonMessage?.type === "request") {
       let id = lastJsonMessage.id;
-      toast(
-        <Link className="w-full text-center flex  items-center gap-4" href={`/profile/${id}`}>
-          <UserPlus2 className="h-6 w-6 text-green-400" />
-          {"You have a new friend request from " + lastJsonMessage.user}
-        </Link>
-      );
+      if (path != "/friend_requests")
+        toast(
+          <Link
+            className="w-full text-center flex  items-center gap-4"
+            href={`/profile/${id}`}
+          >
+            <UserPlus2 className="h-6 w-6 text-green-400" />
+            {"You have a new friend request from " + lastJsonMessage.user}
+          </Link>
+        );
       queryClient.invalidateQueries({
         queryKey: ["requests"],
       });
@@ -152,14 +173,14 @@ export default function MobilNav() {
         if (request.to_user.id.toString() === id) setReqNotif(true);
       });
     }
-  }, [isSuccessReq, requests, id, lastJsonMessage, queryClient]);
+  }, [isSuccessReq, requests, id, lastJsonMessage, queryClient, path]);
 
   useEffect(() => {
     if (lastJsonMessage?.type === "private_message") {
       queryClient.invalidateQueries({
         queryKey: ["friends", id],
       });
-      if (path !== "/chat")
+      if (path != "/chat")
         toast(
           <Link
             href={`/profile/${lastJsonMessage.id}`}
@@ -180,7 +201,15 @@ export default function MobilNav() {
         }
       });
     }
-  }, [isSuccessFriends, friends, lastJsonMessage, queryClient, id, showNotif]);
+  }, [
+    isSuccessFriends,
+    friends,
+    lastJsonMessage,
+    queryClient,
+    id,
+    showNotif,
+    path,
+  ]);
 
   const handleLogout = () => {
     logout();
@@ -208,6 +237,12 @@ export default function MobilNav() {
               ) : link.title === "Requests" && reqNotif ? (
                 <div className="relative">
                   <link.icon className=" size-5 " />
+                  <span className="h-3 w-3 bg-white rounded-full absolute top-0 right-0 "></span>
+                  <span className="h-1 w-1 bg-primary rounded-full absolute top-1 right-1 animate-ping"></span>
+                </div>
+              ) : link.title === "Play" && gameNotif ? (
+                <div className="relative">
+                  <link.icon className=" h-6 w-6 " />
                   <span className="h-3 w-3 bg-white rounded-full absolute top-0 right-0 "></span>
                   <span className="h-1 w-1 bg-primary rounded-full absolute top-1 right-1 animate-ping"></span>
                 </div>
