@@ -29,8 +29,7 @@ import useGetFrdReq from "@/app/(chor)/friends/hooks/useGetFrReq";
 import { toast } from "sonner";
 import useInvitationSocket from "@/app/(chor)/game/hooks/useInvitationSocket";
 import useGetInvitations from "@/app/(chor)/game/hooks/useGetInvitations";
-import { get } from "http";
-import { log } from "console";
+
 
 export default function Nav() {
   const { mutate: logout } = useLogout();
@@ -81,6 +80,12 @@ export default function Nav() {
   const id = getCookie("user_id");
   const logged_in = getCookie("logged_in");
 
+  useEffect(() => {
+    if (logged_in != "yes" && path != "/login" && path != "/register") {
+      return logout();
+    }
+  }, [logged_in, router, logout, path]);
+
   const socketUrl = process.env.NEXT_PUBLIC_CHAT_URL + "2/?refresh=" + token;
   const invitationSocketUrl =
     process.env.NEXT_PUBLIC_INVITATION_URL + "/?refresh=" + token;
@@ -103,11 +108,6 @@ export default function Nav() {
     id || "0"
   );
 
-  useEffect(() => {
-    if (logged_in != "yes" && path != "/login" && path != "/register") {
-      return logout();
-    }
-  }, [logged_in, router, logout, path]);
 
   useEffect(() => {
     setGameNotif(false);
@@ -207,7 +207,6 @@ export default function Nav() {
     logout();
   };
 
-  if (path != "/login" && path != "/register")
     return (
       <div className=" group flex flex-col gap-4 py-2 h-screen shadow-lg md:w-[8.5rem] ">
         <nav className="flex flex-col gap-1 px-2 h-full ">
