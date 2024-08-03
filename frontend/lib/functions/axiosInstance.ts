@@ -33,9 +33,9 @@ axiosInstance.interceptors.response.use(
       error.response.status === 401 
     ) {
     //  remove logged_in cookie
-      document.cookie = "logged_in=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-      document.cookie = "user_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-      document.cookie = "refresh=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      document.cookie = "logged_in=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=lax;";
+      document.cookie = "user_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=lax;";
+      document.cookie = "refresh=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=lax;";
     
     }
 

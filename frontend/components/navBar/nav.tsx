@@ -88,7 +88,7 @@ export default function Nav() {
 
   const socketUrl = process.env.NEXT_PUBLIC_CHAT_URL + "2/?refresh=" + token;
   const invitationSocketUrl =
-    process.env.NEXT_PUBLIC_INVITATION_URL + "/?refresh=" + token;
+    process.env.NEXT_PUBLIC_INVITATION_URL + "?refresh=" + token;
 
   const { lastJsonMessage }: { lastJsonMessage: LastMessage } =
     useWebSocket(socketUrl);
@@ -103,7 +103,6 @@ export default function Nav() {
   const { data: requests, isSuccess: isSuccessReq } = useGetFrdReq();
   const queryClient = useQueryClient();
   const [gameNotif, setGameNotif] = useState(false);
-  const { newNotif } = useInvitationSocket();
   const { data: invitations, isSuccess: isSuccessInvit } = useGetInvitations(
     id || "0"
   );
@@ -136,7 +135,6 @@ export default function Nav() {
       });
     }
   }, [
-    newNotif()?.data,
     invitations,
     id,
     invitationLastMessage,

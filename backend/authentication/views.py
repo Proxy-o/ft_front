@@ -149,18 +149,26 @@ class CustomTokenRefreshView(TokenRefreshView):
 class CustomLogoutView(APIView):
     authentication_classes = []
     def post(self, request, *args, **kwargs):
-        refresh_token = request.data.get('refresh')
+        try :
+            refresh_token = request.data.get('refresh')
 
-        if  refresh_token:
-            token = RefreshToken(refresh_token)
-            token.blacklist()
+
+            if  refresh_token:
+                token = RefreshToken(refresh_token)
+                token.blacklist()
+        except Exception as e:
+            response = Response({'detail': 'Logout successful'}, status=status.HTTP_200_OK)
+        if request.COOKIES.get('access') or request.COOKIES.get('refresh'):
+            response = Response({'detail': 'Logout successful'}, status=status.HTTP_200_OK)
+            response.delete_cookie('access')
+            response.delete_cookie('refresh')
+        return response
 
         
-        # remove the token from the response
-        response = Response({'detail': 'Logout successful'}, status=status.HTTP_200_OK)
-        response.delete_cookie('access')
-        response.delete_cookie('refresh')
-        return response
+
+            # If the refresh token is invalid, return a success response
+            
+   
         
 
 
