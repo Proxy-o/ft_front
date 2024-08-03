@@ -25,10 +25,14 @@ export default function RootLayout({
   const mb = useMediaQuery("(min-width: 768px)");
   const [showNav, setShowNav] = useState<boolean>(false);
   const path = usePathname();
+
   useEffect(() => {
-    console.log("path", path);
     if (mb && path != "/login" && path != "/register") {
       setShowNav(true);
+    }
+    else 
+    {
+      setShowNav(false);
     }
   }
   , [path, mb]);
