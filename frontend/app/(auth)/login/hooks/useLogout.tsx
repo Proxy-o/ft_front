@@ -13,14 +13,14 @@ export default function useLogout() {
       const data = {
         refresh: getCookie("refresh"),
       };
+      // document.cookie =
+      // "access=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=lax;";
+      // document.cookie =
+      // "refresh=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=lax;";
       document.cookie =
-      "access=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=None;";
+      "logged_in=no;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=lax;";
       document.cookie =
-      "refresh=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=None;";
-      document.cookie =
-      "logged_in=no;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=None;";
-      document.cookie =
-      "user_id=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=None;";
+      "user_id=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=lax;";
       const response = await axiosInstance.post("/logout", data);
 
       return response.data;
