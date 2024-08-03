@@ -11,7 +11,6 @@ export const setLoginCookie = (data: any) => {
   // document.cookie = "refresh=" + data.refresh + expires + "; path=/";
   document.cookie = "logged_in=yes" + expires + "; path=/" + ";  ";
   document.cookie = "user_id=" + data.user.id + expires + "; path=/" + ";  ";
-  console.log("success");
 
 };
 
@@ -20,9 +19,7 @@ export default function useLogin() {
   const mutation = useMutation({
     mutationFn: async (data: { username: string; password: string }) => {
       try {
-        console.log("hahah");
         const response = await axiosInstance.post("/login", data);
-        console.log(response.data);
         return response.data;
       } catch (error: any) {
         if (error.response) {
