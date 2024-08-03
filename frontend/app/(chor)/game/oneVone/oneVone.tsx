@@ -11,7 +11,7 @@ const Two = ({ type }: { type: string }) => {
   const { onGoingGame } = useGetGame(user_id || "0", type);
 
   return (
-    <div className="w-full h-fit flex flex-col justify-center items-center">
+    <div className="w-full h-full flex flex-col justify-center items-center">
       {onGoingGame.isSuccess && (
         <>
           <Game type={type} />

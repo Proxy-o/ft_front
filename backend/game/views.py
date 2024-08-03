@@ -41,6 +41,9 @@ class InvitationView(APIView):
         except User.DoesNotExist:
             return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 
+        # check if the receiver is already is a friend
+        if receiver not in sender.friends.all():
+            return Response({'error': 'This user is not your friend'}, status=status.HTTP_403_FORBIDDEN)
         previousInvitations = Invitation.objects.filter(
             receiver=receiver, sender=sender, type=type).last()
         if previousInvitations and (previousInvitations.is_accepted != True and previousInvitations.is_accepted != False):
@@ -103,6 +106,8 @@ class AcceptInvitationView(APIView):
 
         if invitation.receiver != user:
             return Response({'error': 'You are not the receiver of this invitation'}, status=status.HTTP_403_FORBIDDEN)
+        if invitation.sender not in user.friends.all():
+            return Response({'error': 'This user is not your friend'}, status=status.HTTP_403_FORBIDDEN)
         game = Game.objects.filter(Q(user1=user) | Q(user2=user) | Q(
             user3=user) | Q(user4=user)).filter(winner=None).filter(type=invitation.type).last()
         if game:
@@ -601,6 +606,9 @@ class AcceptInvitationTournament(APIView):
         if not invitation:
             return Response({'error': 'Invitation not found'}, status=status.HTTP_404_NOT_FOUND)
         sender = invitation.sender
+        # if the sender is not a friend
+        if sender not in user.friends.all():
+            return Response({'error': 'This user is not your friend'}, status=status.HTTP_403_FORBIDDEN)
         invitation.is_accepted = True
         invitation.save()
         tournament = Tournament.objects.filter(

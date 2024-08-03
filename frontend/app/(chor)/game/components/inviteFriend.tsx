@@ -1,6 +1,6 @@
 "use client";
 
-import { Sword } from "lucide-react";
+import { Sword, UserRoundSearch } from "lucide-react";
 import getCookie from "@/lib/functions/getCookie";
 import useGetFriends from "@/app/(chor)/chat/hooks/useGetFriends";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -12,6 +12,10 @@ const InviteFriends = ({ gameType }: { gameType: string }) => {
 
   const friends = useGetFriends(user_id || "0");
 
+  const data: [{ id: string; username: string; avatar: string; status:string }] = friends.data || [];
+
+  const onlineUsers = data.filter((user) => user.status === "online");
+
   const { mutate: invite } = useSendInvitation();
 
   return (
@@ -20,25 +24,27 @@ const InviteFriends = ({ gameType }: { gameType: string }) => {
         <h1 className="text-4xl mx-auto border-b-2 pl-4 pb-4 w-full text-start">
           Defy a friend
         </h1>
-        <div className="flex flex-col w-full items-center mt-5 justify-between">
-          {friends.data &&
-            friends.data.map(
+        <div className="flex flex-col w-full items-center justify-between pt-4">
+          {onlineUsers.length ? (
+            onlineUsers.map(
               (friend: { id: string; username: string; avatar: string }) => {
+                
                 return (
                   <div
                     key={friend.id}
                     className="flex flex-row justify-between w-3/4 mx-5 items-center"
                   >
                     <div className="flex flex-row items-center">
-                      <Avatar className=" mr-2">
+                      <Avatar className=" mr-2 relative">
                         <AvatarImage
                           src={friend.avatar}
                           alt="profile image"
-                          className="rounded-full h-8 w-8"
+                          className="rounded-md h-8 w-8 bg-primary"
                         />
                         <AvatarFallback className="rounded-sm">
                           PF
                         </AvatarFallback>
+                        <div className="absolute bottom-2 right-0 w-2 h-2 rounded-full"></div>
                       </Avatar>
                       <h1 className="ml-2">{friend.username}</h1>
                     </div>
@@ -56,7 +62,13 @@ const InviteFriends = ({ gameType }: { gameType: string }) => {
                   </div>
                 );
               }
-            )}
+            )
+          ) : (
+            <h1 className="flex gap-2 text-md mt-2 text-primary/70">
+            <UserRoundSearch />
+            You have no friends
+          </h1>
+          )}
         </div>
       </div>
     </Card>

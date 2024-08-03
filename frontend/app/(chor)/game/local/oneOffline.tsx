@@ -293,7 +293,7 @@ const OneOffline = () => {
         rightScoreRef.current = 0;
         leftScoreRef.current = 0;
         setGameStarted(false);
-      } // todo: check if score is working offline
+      }
     }
 
     const gameNotStarted = () => {

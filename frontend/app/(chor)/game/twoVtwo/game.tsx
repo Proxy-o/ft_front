@@ -21,6 +21,7 @@ import useLeaveGame from "../hooks/useLeaveGame";
 import useSurrenderGame from "../hooks/useSurrender";
 import { DoorOpen, Flag, Gamepad } from "lucide-react";
 import Hover from "../components/hover";
+import { toast } from "sonner";
 
 const Game = ({
   gameStartedRef,
@@ -478,6 +479,8 @@ const Game = ({
                 leftUserBottom.current.username === userWhoDidNotRespond[0]
                   ? leftUserTop.current.id
                   : rightUserTop.current.id;
+
+                  toast.warning("1")
               endGame({
                 winner,
                 winnerScore: 3,

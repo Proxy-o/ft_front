@@ -13,7 +13,7 @@ const leaveGame = async () => {
         gameId: res.data.gameId,
         tournamentId: res.data.tournamentId,
       };
-      toast.success(res.data.message); // todo : refetch game when an enemy join tournament
+      toast.success(res.data.message); // todo : refetch game when an enemy join tournament   done, to be tested
       return returnData;
     }
   } catch (error: any) {

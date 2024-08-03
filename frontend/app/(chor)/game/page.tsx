@@ -6,7 +6,6 @@ import TwoVTwo from "./components/gameNav/twoVTwo";
 import TournamentNav from "./components/gameNav/tournament";
 import Invitations from "./components/invitations";
 import Link from "next/link";
-import CheckLogin from "@/components/checkLogin";
 import TabStates from "../profile/components/tabStates";
 
 export default function Page() {
@@ -19,7 +18,6 @@ export default function Page() {
 
   return (
     <div className="relative w-full max-w-[60rem] mx-auto   ">
-      <CheckLogin />
       {/* <GameNav setTab={setTab} tab={tab} /> */}
       <Card className=" flex flex-col justify-center items-center  mx-auto gap-2 p-4 h-full ">
         <div className="pb-2  w-full">Modes</div>

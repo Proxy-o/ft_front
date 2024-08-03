@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { Inbox, Swords } from "lucide-react";
+import { Check, Inbox, Swords, X } from "lucide-react";
 import { CircleOff } from "lucide-react";
 import useGetInvitations from "../hooks/useGetInvitations";
 import useDeclineInvitation from "../hooks/useDeclineMutation";
@@ -9,13 +9,13 @@ import useAcceptInvitation from "../hooks/useAccepteInvitation";
 import getCookie from "@/lib/functions/getCookie";
 import { Invitation } from "@/lib/types";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Separator } from "@/components/ui/separator";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import useAcceptInvitationTournament from "../hooks/useAccepteInvitationTournament";
 import { Card } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
 import useInvitationSocket from "@/app/(chor)/game/hooks/useInvitationSocket";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 const Invitations = ({ mode }: { mode: string }) => {
   const { newNotif } = useInvitationSocket();
@@ -81,178 +81,182 @@ const Invitations = ({ mode }: { mode: string }) => {
       oneVsOneInvitations.length = 0;
       twoVsTwoInvitations.length = 0;
     }
+  } else {
+    if (invitations.length === 0) {
+      return (<></>)
+    }
   }
-
   return (
-    <Card className="w-full  h-full flex flex-col justify-start items-center p-2 mx-auto gap-2 bg-background">
+    <div className="w-full  h-full flex flex-col justify-start items-center mx-auto gap-2">
       <div className="w-full flex flex-col justify-center items-center  space-y-2">
+        <Card className="w-full flex flex-col p-2">
         {mode !== "all" && (
-          <h1 className="text-4xl mx-auto border-b-2 pl-4 pb-4 w-full text-start">
+          <h1 className="text-4xl mx-auto w-full text-start">
             Invitations
           </h1>
         )}
         {oneVsOneInvitations.length !== 0 ? (
-          <span className="w-full flex  flex-col">
-            <h1 className="text-4xl mx-auto">1 vs 1</h1>
-            <Separator className="w-full my-4" />
-            {oneVsOneInvitations.map((invitation) => {
+          <>
+            <h1 className="text-xl mx-auto pb-2">1 vs 1</h1>
+            {oneVsOneInvitations.map((invitation,index) => {
               const date = new Date(invitation.timestamp);
               return (
                 <div
-                  key={invitation.id}
-                  className="border-2 border-secondary rounded-lg hover:bg-secondary/60 w-full mr-auto"
+                key={invitation.id}
+                className="w-full mr-auto p-2 border-t"
                 >
-                  <div className="flex flex-row justify-start items-center my-2 mx-auto gap-2">
-                    <Avatar className=" mr-2 ml-auto">
+                  <div className="flex flex-row justify-between items-center mx-auto gap-2 w-10/12">
+                    <div className="flex flex-row justify-start items-center gap-2">
+
+                    <Avatar className=" mr-2">
                       <AvatarImage
                         src={invitation.sender.avatar}
                         alt="profile image"
-                        className="rounded-xl h-8 w-8"
-                      />
-                      <AvatarFallback className="rounded-xl">PF</AvatarFallback>
+                        className="rounded-md h-8 w-8"
+                        />
+                      <AvatarFallback className="rounded-md">PF</AvatarFallback>
                     </Avatar>
                     <div className="flex flex-col justify-start items-start ml-2">
                       <h1>{invitation.sender.username}</h1>
                       <p className="text-xs text-primary/70">
-                        {date.toLocaleString()}
+                        {date.getHours()}:{date.getMinutes()}
                       </p>
                     </div>
+                        </div>
+                        <div className="flex flex-row justify-end items-center gap-2">
+                          
                     <Button
-                      className="rounded-xl"
+                      // className="rounded-md bg-primary hover:bg-secondary hover:text-primary hover:border-primary border-2  border-primary mr-2"
                       size={"sm"}
                       onClick={() => {
                         acceptInvitation(invitation.id);
                         router.push("/game/oneVone");
                       }}
-                    >
-                      <Swords size={20} />
+                      >
+                      <Check size={20} />
                     </Button>
                     <Button
-                      className="rounded-xl bg-secondary hover:bg-background mr-auto"
+                      variant={"secondary"}
                       size={"sm"}
                       onClick={() => declineMutation(invitation.id)}
-                    >
-                      <CircleOff size={20} />
+                      >
+                      <X size={20} />
                     </Button>
+                      </div>
                   </div>
                 </div>
               );
             })}
-          </span>
+            </>
         ) : null}
-
         {twoVsTwoInvitations.length !== 0 ? (
           <>
-            <h1 className="text-4xl mx-auto">2 vs 2</h1>
-            <Separator className="w-full my-4" />
+            <h1 className="text-xl mx-auto pb-2">2 vs 2</h1>
             {twoVsTwoInvitations.map((invitation) => {
               const date = new Date(invitation.timestamp);
               return (
                 <div
-                  key={invitation.id}
-                  className="border-2 border-secondary rounded-lg hover:bg-secondary/60 w-full mr-auto"
+                key={invitation.id}
+                className="gap-2 w-full mr-auto p-2 border-t"
                 >
-                  <div className="flex flex-row justify-start items-center my-2 mx-auto gap-2">
-                    <Avatar className=" mr-2 ml-auto">
-                      <AvatarImage
-                        src={invitation.sender.avatar}
-                        alt="profile image"
-                        className="rounded-xl h-8 w-8"
-                      />
-                      <AvatarFallback className="rounded-xl">PF</AvatarFallback>
-                    </Avatar>
-                    <div className="flex flex-col justify-start items-start ml-2">
-                      <h1>{invitation.sender.username}</h1>
-                      <p className="text-xs text-primary/70">
-                        {date.toLocaleString()}
-                      </p>
+                  <div className="flex flex-row justify-between items-center mx-auto gap-2 w-10/12">
+                    <div className="flex flex-row justify-start items-center gap-2">
+                      <Avatar className=" mr-2">
+                        <AvatarImage
+                          src={invitation.sender.avatar}
+                          alt="profile image"
+                          className="rounded-md h-8 w-8"
+                          />
+                        <AvatarFallback className="rounded-md">PF</AvatarFallback>
+                      </Avatar>
+                      <div className="flex flex-col justify-start items-start ml-2">
+                        <h1>{invitation.sender.username}</h1>
+                        <p className="text-xs text-primary/70">
+                          {date.toLocaleString()}
+                        </p>
+                      </div>
                     </div>
-                    <Button
-                      className="rounded-xl"
-                      size={"sm"}
-                      onClick={() => {
-                        acceptInvitation(invitation.id);
-                        router.push("/game/twoVtwo");
-                      }}
-                    >
-                      <Swords size={20} />
-                    </Button>
-                    <Button
-                      className="rounded-xl bg-secondary hover:bg-background mr-auto"
-                      size={"sm"}
-                      onClick={() => declineMutation(invitation.id)}
-                    >
-                      <CircleOff size={20} />
-                    </Button>
+                    <div className="flex flex-row justify-end items-center gap-2">
+                      <Button
+                        // className="rounded-md bg-primary hover:bg-secondary hover:text-primary hover:border-primary border-2  border-primary mr-2"
+                        size={"sm"}
+                        onClick={() => {
+                          acceptInvitation(invitation.id);
+                          router.push("/game/twoVtwo");
+                        }}
+                        >
+                        <Check size={20} />
+                      </Button>
+                      <Button
+                        variant={"secondary"}
+                        size={"sm"}
+                        onClick={() => declineMutation(invitation.id)}
+                        >
+                        <X size={20} />
+                      </Button>
+                    </div>
                   </div>
                 </div>
               );
             })}
-          </>
+        </>
         ) : null}
-
         {tournamentInvitations.length !== 0 ? (
-          <>
-            <h1 className="text-4xl mx-auto">Tournament</h1>
-            <Separator className="w-full my-4" />
-            {tournamentInvitations.map((invitation) => {
-              const date = new Date(invitation.timestamp);
-              return (
-                <div
-                  key={invitation.id}
-                  className="border-2 border-secondary rounded-lg hover:bg-secondary/60 w-full mr-auto"
-                >
-                  <div className="flex flex-row justify-start items-center my-2 mx-auto gap-2">
-                    <Avatar className=" mr-2 ml-auto">
-                      <AvatarImage
-                        src={invitation.sender.avatar}
-                        alt="profile image"
-                        className="rounded-xl h-8 w-8"
-                      />
-                      <AvatarFallback className="rounded-xl">PF</AvatarFallback>
-                    </Avatar>
-                    <div className="flex flex-col justify-start items-start ml-2">
-                      <h1>{invitation.sender.username}</h1>
-                      <p className="text-xs text-primary/70">
-                        {date.toLocaleString()}
-                      </p>
+        <>
+        <h1 className="text-xl mx-auto pb-2">Tournament</h1>
+          {tournamentInvitations.map((invitation) => {
+            const date = new Date(invitation.timestamp);
+            return (
+              <div
+              key={invitation.id}
+              className="gap-2 w-full mr-auto p-2  border-t"
+              >
+                  <div className="flex flex-row justify-between items-center my-2 mx-auto gap-2 w-10/12">
+                    <div className="flex flex-row justify-start items-center gap-2">
+                      <Avatar className=" mr-2">
+                        <AvatarImage
+                          src={invitation.sender.avatar}
+                          alt="profile image"
+                          className="rounded-md h-8 w-8"
+                          />
+                        <AvatarFallback className="rounded-md">PF</AvatarFallback>
+                      </Avatar>
+                      <div className="flex flex-col justify-start items-start ml-2">
+                        <h1>{invitation.sender.username}</h1>
+                        <p className="text-xs text-primary/70">
+                          {date.toLocaleString()}
+                        </p>
+                      </div>
                     </div>
-                    <Button
-                      className="rounded-xl"
-                      size={"sm"}
-                      onClick={() => {
-                        acceptInvitationTournament(invitation.id);
-                        router.push("/game/tournament");
-                      }}
-                    >
-                      <Swords size={20} />
-                    </Button>
-                    <Button
-                      className="rounded-xl bg-secondary hover:bg-background mr-auto"
-                      size={"sm"}
-                      onClick={() => declineMutation(invitation.id)}
-                    >
-                      <CircleOff size={20} />
-                    </Button>
+                    <div className="flex flex-row justify-end items-center gap-2">
+                      <Button
+                        // className="rounded-md bg-primary hover:bg-secondary hover:text-primary hover:border-primary border-2  border-primary mr-2"
+                        size={"sm"}
+                        onClick={() => {
+                          acceptInvitationTournament(invitation.id);
+                          router.push("/game/tournament");
+                        }}
+                        >
+                        <Check size={20} />
+                      </Button>
+                      <Button
+                        variant={"secondary"}
+                        size={"sm"}
+                        onClick={() => declineMutation(invitation.id)}
+                        >
+                        <X size={20} />
+                      </Button>
+                    </div>
                   </div>
                 </div>
               );
             })}
           </>
-        ) : null}
-
-        {((invitations.length === 0 && mode === "all") ||
-          (oneVsOneInvitations.length === 0 && mode === "two") ||
-          (twoVsTwoInvitations.length === 0 && mode === "four") ||
-          (tournamentInvitations.length === 0 && mode === "tournament")) && (
-          <h1 className="flex gap-2 text-md mt-2 ml-4 text-primary/70">
-            <Inbox />
-            No invitations
-          </h1>
-        )}
+          ) : null}
+          </Card>
       </div>
-    </Card>
+    </div>
   );
-};
+}
 
 export default Invitations;
