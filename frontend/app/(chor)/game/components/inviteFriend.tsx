@@ -36,7 +36,7 @@ const InviteFriends = ({ gameType }: { gameType: string }) => {
                 return (
                   <div
                     key={friend.id}
-                    className="flex flex-row justify-between items-center w-10/12 items-start"
+                    className="flex flex-row justify-between w-10/12 items-start"
                   >
                     <div className="flex flex-row items-center justify-center cursor-pointer h-full gap-4"
                       onClick={() => {

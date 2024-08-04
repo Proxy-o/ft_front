@@ -153,7 +153,6 @@ const Invitations = ({ mode }: { mode: string }) => {
         {twoVsTwoInvitations.length !== 0 ? (
           <>
             {twoVsTwoInvitations.map((invitation) => {
-              const date = new Date(invitation.timestamp);
               return (
                 <div
                 key={invitation.id}
@@ -204,7 +203,6 @@ const Invitations = ({ mode }: { mode: string }) => {
         {tournamentInvitations.length !== 0 ? (
         <>
           {tournamentInvitations.map((invitation) => {
-            const date = new Date(invitation.timestamp);
             return (
               <div
               key={invitation.id}
