@@ -31,7 +31,7 @@ class User(AbstractUser):
         ('google', 'Google'),
     ]
     registration_method = models.CharField(
-        max_length=10,
+        max_length=30,
         choices=REGISTRATION_CHOICES,
         default='credentials',
     )

@@ -46,3 +46,4 @@ websocket-client==1.7.0
 whitenoise==6.4.0
 zope.interface==6.1
 psycopg2==2.9.3
+requests==2.32.3
