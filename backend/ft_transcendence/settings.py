@@ -206,4 +206,7 @@ MEDIA_URL = '/'
 
 SERVER_URL = os.getenv('SERVER_URL', 'http://localhost:8000')
 
-
+# AUTH0
+BASE_FRONTEND_URL = os.environ.get('FRONT_URL', default='http://localhost:3000')
+FT_CLIENT_ID = os.environ.get('FT_CLIENT_ID')
+FT_CLIENT_SECRET = os.environ.get('FT_CLIENT_ID')
