@@ -44,10 +44,16 @@ class InvitationView(APIView):
         # check if the receiver is already is a friend
         if receiver not in sender.friends.all():
             return Response({'error': 'This user is not your friend'}, status=status.HTTP_403_FORBIDDEN)
-        previousInvitations = Invitation.objects.filter(
-            receiver=receiver, sender=sender, type=type).last()
+        previousInvitations = Invitation.objects.filter((Q(sender=sender) & Q(receiver=receiver) & Q(
+            is_accepted=None)) | (Q(sender=receiver) & Q(receiver=sender) & Q(is_accepted=None))).last()
         if previousInvitations and (previousInvitations.is_accepted != True and previousInvitations.is_accepted != False):
-            return Response({'error': 'invitation alredy sent'}, status=status.HTTP_200_OK)
+            return Response({'error': 'invitation alredy sent'}, status=status.HTTP_403_FORBIDDEN)
+        sender_game = Game.objects.filter(Q(user1=sender) | Q(user2=sender) | Q(user3=sender) | Q(
+            user4=sender)).filter(winner=None).filter(type=type).last()
+        receiver_game = Game.objects.filter(Q(user1=receiver) | Q(user2=receiver) | Q(user3=receiver) | Q(
+            user4=receiver)).filter(winner=None).filter(type=type).last()
+        if sender_game or receiver_game:
+            return Response({'error': 'Player already in a game'}, status=status.HTTP_403_FORBIDDEN)
         invitation = Invitation(sender=sender, receiver=receiver, type=type)
         invitation.save()
 

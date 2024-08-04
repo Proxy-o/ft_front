@@ -47,22 +47,6 @@ const NoGame = ({ state }: { state: React.MutableRefObject<string> }) => {
       <div className="text-white text-xl md:text-3xl m-auto text-container">
         {text}
       </div>
-      {state.current !== "none" &&
-        state.current !== "left" &&
-        state.current !== "right" &&
-        state.current !== "local" &&
-        state.current !== "tournament" && (
-          <Button
-            className="m-auto"
-            onClick={() => {
-              state.current = "none";
-              setText("");
-              letterIndex.current = 0;
-            }}
-          >
-            Play again
-          </Button>
-        )}
     </div>
   );
 };
