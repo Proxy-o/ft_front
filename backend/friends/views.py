@@ -36,6 +36,9 @@ def get_friends(request, userId):
 def search_users(request, search_query):
     if not search_query:
         return Response({'detail': 'Search query is empty'}, status=status.HTTP_400_BAD_REQUEST)
+    # if no alphanumeric characters in search query
+    if not any(char.isalnum() for char in search_query):
+        return Response({'detail': 'Search query is invalid'}, status=status.HTTP_400_BAD_REQUEST)
     users = User.objects.filter(
         Q(username__icontains=search_query) | Q(
             first_name__icontains=search_query) | Q(last_name__icontains=search_query))
