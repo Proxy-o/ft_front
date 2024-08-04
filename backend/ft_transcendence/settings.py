@@ -27,8 +27,8 @@ SECRET_KEY = os.environ["SECRET_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['10.12.12.4', 'localhost', '10.13.2.16', '10.13.9.17', '10.13.1.12'
-                 '10.12.7.1', '10.12.9.15', "10.13.10.13","10.13.2.16","10.13.2.17"]
+ALLOWED_HOSTS = ['10.12.12.4', 'localhost', '10.13.1.17', '10.13.9.17', '10.13.1.12'
+                 '10.12.7.1', '10.12.9.15', "10.13.10.13","10.13.1.17","10.13.2.17"]
 
 # Application definition
 
@@ -184,8 +184,8 @@ MIDDLEWARE += ['corsheaders.middleware.CorsMiddleware']
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
     'http://10.12.13.5:3000',
-    'http://10.13.2.16:3000',
-    'http://10.13.2.16:3000',
+    'http://10.13.1.17:3000',
+    'http://10.13.1.17:3000',
     
 ]
 
@@ -209,4 +209,4 @@ SERVER_URL = os.getenv('SERVER_URL', 'http://localhost:8000')
 # AUTH0
 BASE_FRONTEND_URL = os.environ.get('FRONT_URL', default='http://localhost:3000')
 FT_CLIENT_ID = os.environ.get('FT_CLIENT_ID')
-FT_CLIENT_SECRET = os.environ.get('FT_CLIENT_ID')
+FT_CLIENT_SECRET = os.environ.get('FT_CLIENT_SECRET')

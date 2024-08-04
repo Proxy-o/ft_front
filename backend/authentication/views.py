@@ -1,10 +1,12 @@
 from django.contrib.auth.models import User
 import pyotp
+from urllib.parse import urlencode
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
-
+from django.conf import settings
+from django.shortcuts import redirect
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, serializers
 from .serializers import UserSerializer, AvatarSerializer, VerifyOTPSerializer, EditUserSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
@@ -21,6 +23,7 @@ from django.db.models import Q
 from django.contrib.auth.password_validation import validate_password
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from authentication.customJWTAuthentication import CustomJWTAuthentication
+from authentication.ft_utils import google_get_access_token, google_get_user_info, generate_tokens_for_user
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -271,3 +274,69 @@ class UserGames(APIView):
         user = get_object_or_404(User, pk=pk)
         # games the user participated in
         games = Game.objects.filter(Q(user1=user) | Q(user2=user) | Q(user3=user) | Q(user4=user))
+        
+
+
+# 0auth 2.0
+
+
+
+class FtLoginApi( APIView):
+    authentication_classes = []
+    class InputSerializer(serializers.Serializer):
+        code = serializers.CharField(required=False)
+        error = serializers.CharField(required=False)
+
+    def get(self, request, *args, **kwargs):
+        input_serializer = self.InputSerializer(data=request.GET)
+        input_serializer.is_valid(raise_exception=True)
+        print("input_serializer", input_serializer)
+
+        validated_data = input_serializer.validated_data
+
+        code = validated_data.get('code')
+        error = validated_data.get('error')
+
+        login_url = f'{settings.BASE_FRONTEND_URL}/login'
+    
+        # if error or not code:
+        #     params = urlencode({'error': error})
+        #     return redirect(f'{login_url}?{params}')
+
+        redirect_uri = f'{settings.BASE_FRONTEND_URL}/google/'
+        access_token = google_get_access_token(code=code, 
+                                               redirect_uri=redirect_uri)
+
+        user_data = google_get_user_info(access_token=access_token)
+
+        # try:
+        #     user = User.objects.get(email=user_data['email'])
+        #     access_token, refresh_token = generate_tokens_for_user(user)
+        #     response_data = {
+        #         'user': UserSerializer(user).data,
+        #         'access_token': str(access_token),
+        #         'refresh_token': str(refresh_token)
+        #     }
+        #     return Response(response_data)
+        # except User.DoesNotExist:
+        #     username = user_data['email'].split('@')[0]
+        #     first_name = user_data.get('given_name', '')
+        #     last_name = user_data.get('family_name', '')
+
+        #     user = User.objects.create(
+        #         username=username,
+        #         email=user_data['email'],
+        #         first_name=first_name,
+        #         last_name=last_name,
+        #         registration_method='google',
+        #         phone_no=None,
+        #         referral=None
+        #     )
+         
+        #     access_token, refresh_token = generate_tokens_for_user(user)
+        #     response_data = {
+        #         'user': UserSerializer(user).data,
+        #         'access_token': str(access_token),
+        #         'refresh_token': str(refresh_token)
+        #     }
+        #     return Response(response_data)
