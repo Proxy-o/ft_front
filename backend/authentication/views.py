@@ -228,7 +228,6 @@ class UserDetail(APIView):
             return Http404
 
     def get(self, request, pk, format=None):
-        print("okokokok")
         user = self.get_object(pk)
         print(request.COOKIES)
         if user is Http404:

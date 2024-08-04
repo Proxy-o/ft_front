@@ -11,8 +11,9 @@ def upload_to(instance, filename):
 def get_default_avatar():
     return 'images/default_avatar.jpg'
 
-
 class User(AbstractUser):
+    username = models.CharField(max_length=10, unique=True)
+    
     avatar = models.ImageField(
         upload_to=upload_to, default=get_default_avatar)
     status = models.CharField(max_length=100, blank=True)
