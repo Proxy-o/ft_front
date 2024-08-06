@@ -6,7 +6,6 @@ from rest_framework.exceptions import AuthenticationFailed
 
 class CustomJWTAuthentication(JWTAuthentication):
     def authenticate(self, request):
-        print("authenticating")
         cookie_token = request.COOKIES.get('access')
         print(cookie_token)
         if cookie_token:

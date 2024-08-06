@@ -23,7 +23,7 @@ export default function RootLayout({
       <div
         className={cn(
           "flex w-full  overflow-auto",
-          !mb && "h-[calc(100vh-3.3rem)]"
+          !mb && "h-[calc(100vh-3.7rem)]"
         )}
       >
         <div className="w-full h-full ">
