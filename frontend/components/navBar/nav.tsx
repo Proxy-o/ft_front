@@ -116,15 +116,19 @@ export default function Nav() {
       const message = parsedMessage.split(" ");
       if (message[0] === "/notif") {
         if (!path.startsWith("/game")) {
-
-        toast(`${sender} has invited you to play`, {
-          icon: <GamepadIcon className="mr-4 " />,
-          action: {
-            label: "Play",
-            onClick: () => router.push(`/game`),
-          },
-        });
-      }
+          toast(
+            <Button
+              variant="ghost"
+              className="w-full text-center flex  items-center gap-4 m-0"
+              onClick={() => {
+                router.push(`/game`);
+              }}
+            >
+              <GamepadIcon className="h-6 w-6 text-primary" />
+              {"You have a new Game Invite from " + sender}
+            </Button>
+          );
+        }
       }
       queryClient.invalidateQueries({
         queryKey: ["invitations", id],
@@ -139,12 +143,13 @@ export default function Nav() {
   }, [
     invitations,
     id,
+    isSuccessInvit,
     invitationLastMessage,
     queryClient,
     router,
-    isSuccessInvit,
-    path
+    path,
   ]);
+
 
   useEffect(() => {
     setReqNotif(false);
@@ -175,12 +180,12 @@ export default function Nav() {
       queryClient.invalidateQueries({
         queryKey: ["friends", id],
       });
-      if (path != "/chat")
+      if (path.startsWith("chat"))
         toast(`New message from ${lastJsonMessage.user}`, {
           icon: <MessageCircle className="mr-2" />,
           action: {
             label: "Messages",
-            onClick: () => router.push(`/chat`),
+            onClick: () => router.push(`/chat/${lastJsonMessage.id}`),
           },
         });
 
