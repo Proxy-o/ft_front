@@ -1,9 +1,9 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
 const fetchGames = async ({ id, pageParam }: { id: string, pageParam: string }) => {
   try {
-    if (id === "0") return null;
+    if (id === "0" || !pageParam) return null;
     const response = await axiosInstance.get(`/game/user/${id}?page=${pageParam}`);
     return response.data;
   } catch (error: any) {
@@ -19,7 +19,11 @@ export default function useGetGames(id: string) {
     queryFn: ({ pageParam }) => fetchGames({id, pageParam }),
     initialPageParam: `1`,
     getNextPageParam: (lastPage) => {
-      return "2";
+      if (lastPage.next) {
+        return lastPage.next.split("=").pop();
+      }
+      return false;
+      
     },
   });
   return info;

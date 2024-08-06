@@ -11,6 +11,7 @@ import ChatCard from "@/app/(chor)/chat/components/chatCard";
 import { UserRoundX, XCircle } from "lucide-react";
 import TabStates from "./tabStates";
 import { Card } from "@/components/ui/card";
+import useGetStates from "../hooks/useGateState";
 
 export default function Profile({ id }: { id: string }) {
   const id_cookie = getCookie("user_id") as string;
@@ -29,7 +30,6 @@ export default function Profile({ id }: { id: string }) {
   });
 
   const logged_in = getCookie("logged_in");
-
   const canEdit = logged_in === "yes" && id === id_cookie ? true : false;
   const chatRef = useRef<HTMLDivElement>(null); // Specify the type as React.RefObject<HTMLDivElement>
 
@@ -74,15 +74,14 @@ export default function Profile({ id }: { id: string }) {
                   <ChatCard sender={sender} receiver={data} />
                 </div>
               )}
+              <div className="">{!isBlocked && <TabStates id={id} />}</div>
             </div>
             <div className="flex flex-col gap-4 mb-6">
-              {/* <States id={id} /> */}
+              <States id={id} />
               {((!isBlocked && isFriend) || id_cookie == id) && (
                 <FriendList user_id={id} />
               )}
             </div>
-            {!isBlocked && <TabStates id={id} />}
-            
           </>
         )}
       </div>

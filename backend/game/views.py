@@ -672,7 +672,7 @@ class StartTournament(APIView):
 
 
 class UserGamesPagination(PageNumberPagination):
-    page_size = 2
+    page_size = 1
     
 class UserGames(APIView):
     """
@@ -685,7 +685,7 @@ class UserGames(APIView):
     
     def get(self, request, user_id, format=None):
         user = get_object_or_404(User, pk=user_id)
-        games = Game.objects.filter(Q(user1=user) | Q(user2=user) | Q(user3=user) | Q(user4=user))
+        games = Game.objects.filter(Q(user1=user) | Q(user2=user)).filter(type='two').exclude(winner=None).order_by('timestamp').reverse()
         paginator = self.pagination_class()
         paginated_games = paginator.paginate_queryset(games, request)
         
@@ -737,3 +737,63 @@ class TournamentsView(APIView):
             tournaments, many=True, context={'request': request})
         
         return paginator.get_paginated_response(serializer.data)
+
+
+class GamesStates(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [CustomJWTAuthentication]
+
+# send win loses for 1v1 2v2 and tournament
+    def oneVoneState(user_id):
+        user = get_object_or_404(User, id=user_id)
+        games = Game.objects.filter(Q(user1=user) | Q(user2=user)).filter(type='two')
+        wins = 0
+        loses = 0
+        for game in games:
+            if game.winner == user:
+                wins += 1
+            else:
+                loses += 1
+        return wins, loses
+
+    def twoVtwoState(user_id):
+        user = get_object_or_404(User, id=user_id)
+        games = Game.objects.filter(Q(user1=user) | Q(user2=user) | Q(user3=user) | Q(user4=user)).filter(type='four')
+        wins = 0
+        loses = 0
+        for game in games:
+            if game.winner == user:
+                wins += 1
+            else:
+                loses += 1
+        return wins, loses
+    
+    def tournamentState(user_id):
+        user = get_object_or_404(User, id=user_id)
+        tournaments = Tournament.objects.filter(
+            (Q(user1=user)) |
+            (Q(user2=user)) |
+            (Q(user3=user)) |
+            (Q(user4=user))
+        ).exclude(final=None)
+        wins = 0
+        loses = 0
+        for tournament in tournaments:
+            if tournament.winner == user:
+                wins += 1
+            else:
+                loses += 1
+        return wins, loses
+    
+    def get(self, request, user_id):
+        oneVoneWins, oneVoneLoses = GamesStates.oneVoneState(user_id)
+        twoVtwoWins, twoVtwoLoses = GamesStates.twoVtwoState(user_id)
+        tournamentWins, tournamentLoses = GamesStates.tournamentState(user_id)
+        return Response({
+            'oneVoneWins': oneVoneWins,
+            'oneVoneLoses': oneVoneLoses,
+            'twoVtwoWins': twoVtwoWins,
+            'twoVtwoLoses': twoVtwoLoses,
+            'tournamentWins': tournamentWins,
+            'tournamentLoses': tournamentLoses
+        }, status=status.HTTP_200_OK)
