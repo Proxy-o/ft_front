@@ -34,9 +34,16 @@ export default function States({ id }: { id: string }) {
       setStates((prev) => ({
         ...prev,
         classic: {
-          wins: oneGames?.filter((game: any) => game.winner.id === Number(id))
-            .length,
-          total: oneGames.length,
+          wins: oneGames.pages.map((page: any) => {
+            if (!page.results) {
+              return 0;
+            }
+
+            return page.results.filter((game: any) => game.winner.id === Number(id))
+              .length;
+          }
+          ).reduce((acc: number, curr: number) => acc + curr, 0),
+          total: oneGames.pages[0].count,
           get defeats() {
             return this.total - this.wins;
           },
@@ -48,9 +55,14 @@ export default function States({ id }: { id: string }) {
       setStates((prev) => ({
         ...prev,
         twoVtwo: {
-          wins: twoGames?.filter((game: any) => game.winner.id === Number(id))
-            .length,
-          total: twoGames.length,
+          wins: twoGames.pages.map((page: any) => {
+            return page.results.filter((game: any) => game.winner.id === Number(id))
+              .length;
+          }
+          ).reduce((acc: number, curr: number) => acc + curr, 0)
+
+            ,
+          total: twoGames.pages[0].count,
           get defeats() {
             return this.total - this.wins;
           },

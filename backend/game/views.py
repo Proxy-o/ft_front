@@ -14,6 +14,7 @@ from asgiref.sync import async_to_sync
 from django.shortcuts import get_object_or_404
 from channels.layers import get_channel_layer
 import datetime
+from rest_framework.pagination import PageNumberPagination
 import json
 
 User = get_user_model()
@@ -669,24 +670,35 @@ class StartTournament(APIView):
         return Response({'message': 'Tournament started'}, status=status.HTTP_200_OK)
 
 
-class GameView(APIView):
+
+class UserGamesPagination(PageNumberPagination):
+    page_size = 2
+    
+class UserGames(APIView):
+    """
+    Retrieve all games of a user
+    """
     permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [CustomJWTAuthentication]
 
-    def get(self, request, user_id):
-        user = get_object_or_404(User, id=user_id)
-        if request.user in user.blocked.all():
-            return Response({'detail': 'You are blocked by this user'}, status=status.HTTP_400_BAD_REQUEST)
-        games = Game.objects.filter(((Q(user1=user) | Q(user2=user) | Q(user3=user) | Q(
-            user4=user)) & Q(type='two'))).exclude(winner=None).order_by('timestamp').reverse()
-        serializer = GameSerializer(
-            games, many=True, context={'request': request})
-        return Response(serializer.data)
+    pagination_class = UserGamesPagination
+    
+    
+    def get(self, request, user_id, format=None):
+        user = get_object_or_404(User, pk=user_id)
+        games = Game.objects.filter(Q(user1=user) | Q(user2=user) | Q(user3=user) | Q(user4=user))
+        paginator = self.pagination_class()
+        paginated_games = paginator.paginate_queryset(games, request)
+        
+        serializer = GameSerializer(paginated_games, many=True)
 
+        return paginator.get_paginated_response(serializer.data)
+        
 
 class TwoVTwoGameView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     authentication_classes = [CustomJWTAuthentication]
+    pagination_class = UserGamesPagination
+    
 
     def get(self, request, user_id):
         user = get_object_or_404(User, id=user_id)
@@ -694,26 +706,34 @@ class TwoVTwoGameView(APIView):
             return Response({'detail': 'You are blocked by this user'}, status=status.HTTP_400_BAD_REQUEST)
         games = Game.objects.filter(((Q(user1=user) | Q(user2=user) | Q(user3=user) | Q(
             user4=user)) & Q(type='four'))).exclude(winner=None).order_by('timestamp').reverse()
+        paginator = self.pagination_class()
+        paginated_games = paginator.paginate_queryset(games, request)
+        
         serializer = GameSerializer(
-            games, many=True, context={'request': request})
-        return Response(serializer.data)
-
+            paginated_games, many=True, context={'request': request})
+        
+        return paginator.get_paginated_response(serializer.data)
+        
 
 class TournamentsView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     authentication_classes = [CustomJWTAuthentication]
+    pagination_class = UserGamesPagination
 
     def get(self, request, user_id):
         user = get_object_or_404(User, id=user_id)
-        print(user)
         if request.user in user.blocked.all():
             return Response({'detail': 'You are blocked by this user'}, status=status.HTTP_400_BAD_REQUEST)
+        
         tournaments = Tournament.objects.filter(
             (Q(user1=user)) |
             (Q(user2=user)) |
             (Q(user3=user)) |
             (Q(user4=user))
         ).exclude(final=None).order_by('timestamp').reverse()
+        paginator = self.pagination_class()
+        paginated_tournaments = paginator.paginate_queryset(tournaments, request)
         serializer = TournamentSerializer(
             tournaments, many=True, context={'request': request})
-        return Response(serializer.data)
+        
+        return paginator.get_paginated_response(serializer.data)

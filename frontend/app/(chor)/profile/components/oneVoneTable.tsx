@@ -4,11 +4,11 @@ import useGetGames from "../hooks/useGetGames";
 import GamesState from "./gamesState";
 
 export default function OneVoneTable({ id }: { id: string }) {
-  const { data: games, isSuccess } = useGetGames(id);
-
+  const { data, isSuccess } = useGetGames(id);
+console.log(data)
   return (
     isSuccess && (
-      <GamesState games={games} user_id={id} />
+      <GamesState games={data.pages[0].results} user_id={id} />
     )
   );
 }

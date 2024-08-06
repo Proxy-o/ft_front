@@ -1,10 +1,10 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 
-const fetchGames = async ({ id }: { id: string }) => {
+const fetchGames = async ({ id, pageParam }: { id: string, pageParam: string }) => {
   try {
     if (id === "0") return null;
-    const response = await axiosInstance.get(`/game/user/${id}`);
+    const response = await axiosInstance.get(`/game/user/${id}?page=${pageParam}`);
     return response.data;
   } catch (error: any) {
     if (error.response && error.response.status !== 401) {
@@ -14,9 +14,14 @@ const fetchGames = async ({ id }: { id: string }) => {
 };
 
 export default function useGetGames(id: string) {
-  const info = useQuery({
-    queryKey: ["Games1v1", id],
-    queryFn: () => fetchGames({ id }),
+  const info = useInfiniteQuery({
+    queryKey: [`games_${id}`],
+    queryFn: ({ pageParam }) => fetchGames({id, pageParam }),
+    initialPageParam: `1`,
+    getNextPageParam: (lastPage) => {
+      return "2";
+    },
   });
   return info;
 }
+

@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-import pyotp
+from rest_framework.pagination import PageNumberPagination
 from urllib.parse import urlencode
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
@@ -263,17 +263,10 @@ class UserDetail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class UserGames(APIView):
-    """
-    Retrieve all games of a user
-    """
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request, pk, format=None):
-        user = get_object_or_404(User, pk=pk)
-        # games the user participated in
-        games = Game.objects.filter(Q(user1=user) | Q(user2=user) | Q(user3=user) | Q(user4=user))
+
+        
+        
         
 
 
