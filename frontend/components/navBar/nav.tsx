@@ -89,7 +89,9 @@ export default function Nav() {
     process.env.NEXT_PUBLIC_INVITATION_URL + "?refresh=" + token;
 
   const { lastJsonMessage }: { lastJsonMessage: LastMessage } =
-    useWebSocket(socketUrl);
+    useWebSocket(socketUrl,    {
+      share: true,
+    });
   const {
     lastJsonMessage: invitationLastMessage,
   }: { lastJsonMessage: LastMessage,  } = useWebSocket(invitationSocketUrl);
