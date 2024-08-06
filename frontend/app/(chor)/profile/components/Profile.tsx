@@ -74,14 +74,15 @@ export default function Profile({ id }: { id: string }) {
                   <ChatCard sender={sender} receiver={data} />
                 </div>
               )}
-              {!isBlocked && <TabStates id={id} />}
             </div>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 mb-6">
               <States id={id} />
               {((!isBlocked && isFriend) || id_cookie == id) && (
                 <FriendList user_id={id} />
               )}
             </div>
+            {!isBlocked && <TabStates id={id} />}
+            
           </>
         )}
       </div>

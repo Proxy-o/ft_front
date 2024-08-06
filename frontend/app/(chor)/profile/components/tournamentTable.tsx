@@ -10,13 +10,14 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function TournamentTable({ userid }: { userid: string }) {
-  const { data: tournaments, isSuccess } = useGetTournaments(userid);
+  const { data, isSuccess } = useGetTournaments(userid);
+console.log(data)
   return (
     isSuccess && (
       <div className="w-full">
         <div className="p-4 relative font-semibold">Tournaments</div>
         <Accordion type="single" collapsible>
-          {tournaments.map((tournament: any, index: number) => (
+          { data.pages &&  data.pages[0].results.map((tournament: any, index: number) => (
             <AccordionItem value={tournament.id} key={index}>
               <AccordionTrigger className="p-2">
                 <div className="flex justify-between items-center border rounded-lg w-full p-1 gap-1">

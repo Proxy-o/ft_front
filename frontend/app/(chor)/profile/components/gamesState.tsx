@@ -38,7 +38,7 @@ export default function GamesState({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {games.length > 0 ? (
+            {games && games.length > 0 ? (
               games.map((game: Game, index: number) => (
                 <TableRow key={index}>
                   <TableCell className="text-center">
