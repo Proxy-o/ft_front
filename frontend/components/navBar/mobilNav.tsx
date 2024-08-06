@@ -114,8 +114,6 @@ export default function MobilNav() {
     if (parsedMessage) {
       const message = parsedMessage.split(" ");
       if (message[0] === "/notif") {
-        // if path not start with /game
-        console.log(path);
         if (!path.startsWith("/game")) {
           toast(
             <Button
@@ -156,15 +154,13 @@ export default function MobilNav() {
     if (lastJsonMessage?.type === "request") {
       let id = lastJsonMessage.id;
       if (path != "/friend_requests")
-        toast(
-          <Link
-            className="w-full text-center flex  items-center gap-4"
-            href={`/profile/${id}`}
-          >
-            <UserPlus2 className="h-6 w-6 text-green-400" />
-            {"You have a new friend request from " + lastJsonMessage.user}
-          </Link>
-        );
+      toast(`New friend request from ${lastJsonMessage.user}`, {
+        icon: <UserPlus2 className="mr-2" />,
+        action: {
+          label: `View`,
+          onClick: () => router.push(`/profile/${id}`),
+        },
+      });
       queryClient.invalidateQueries({
         queryKey: ["requests"],
       });
@@ -175,23 +171,22 @@ export default function MobilNav() {
         if (request.to_user.id.toString() === id) setReqNotif(true);
       });
     }
-  }, [isSuccessReq, requests, id, lastJsonMessage, queryClient, path]);
+  }, [isSuccessReq, requests, id, lastJsonMessage, queryClient, router, path]);
 
   useEffect(() => {
     if (lastJsonMessage?.type === "private_message") {
       queryClient.invalidateQueries({
         queryKey: ["friends", id],
       });
-      if (path != "/chat")
-        toast(
-          <Link
-            href={`/profile/${lastJsonMessage.id}`}
-            className="w-full justify-between flex gap-2 text-lg"
-          >
-            {"New message from " + lastJsonMessage.user}
-            <MessageCircle className="h-6 w-6 text-green-400" />
-          </Link>
-        );
+      if (!path.startsWith("chat"))
+        toast(`New message from ${lastJsonMessage.user}`, {
+          icon: <MessageCircle className="mr-2" />,
+          action: {
+            label: "Messages",
+            onClick: () => router.push(`/chat/${lastJsonMessage.id}`),
+          },
+        });
+
       lastJsonMessage.type = "null";
     }
     if (isSuccessFriends && friends) {
@@ -204,13 +199,14 @@ export default function MobilNav() {
       });
     }
   }, [
+    path,
     isSuccessFriends,
     friends,
     lastJsonMessage,
     queryClient,
     id,
     showNotif,
-    path,
+    router,
   ]);
 
   const handleLogout = () => {
