@@ -5,6 +5,7 @@ const fetchGames = async ({ id, pageParam }: { id: string, pageParam: string }) 
   try {
     if (id === "0") return null;
     const response = await axiosInstance.get(`/game/twovtwo/user/${id}?page=${pageParam}`);
+    console.log(response.data)
     return response.data;
   } catch (error: any) {
     if (error.response && error.response.status !== 401) {
