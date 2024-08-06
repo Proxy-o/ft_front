@@ -21,7 +21,6 @@ import useSurrenderGame from "../hooks/useSurrender";
 import useLeaveGame from "../hooks/useLeaveGame";
 import { Button } from "@/components/ui/button";
 import { DoorOpen, Flag, Gamepad } from "lucide-react";
-import Hover from "../components/hover";
 import { Card } from "@/components/ui/card";
 import NoGame from "../components/noGame";
 import PreGame from "../components/preGame";
@@ -33,14 +32,13 @@ const Game = ({ type }: { type: string }) => {
   const isFirstTime = useRef<boolean>(true);
   const paddleLeftYRef = useRef<number>(0);
   const PaddleRightYRef = useRef<number>(0);
-  const newBallPositionRef = useRef({ x: 0, y: 0 });
+  const newBallPositionRef = useRef({ x: 20000, y: 20000 });
   const newAngleRef = useRef<number>(0);
   const leftScoreRef = useRef<number>(0);
   const rightScoreRef = useRef<number>(0);
   const upPressedRef = useRef<boolean>(false);
   const downPressedRef = useRef<boolean>(false);
   const gameStartedRef = useRef<boolean>(false);
-  const clickedRef = useRef<boolean>(false);
   const leftUser = useRef<User | undefined>(undefined);
   const rightUser = useRef<User | undefined>(undefined);
   const controllerUser = useRef<User | undefined>(undefined);
@@ -48,12 +46,12 @@ const Game = ({ type }: { type: string }) => {
   const enemyLeftGameRef = useRef<boolean>(false);
   const gameIdRef = useRef<string>("");
   const userRef = useRef<User | undefined>(undefined);
-  const leftImageRef = useRef<CanvasImageSource | null>(null);
-  const rightImageRef = useRef<CanvasImageSource | null>(null);
-  const leftPositionRef = useRef<number>(-400);
-  const rightPositionRef = useRef<number>(0);
   const state = useRef<string>("none");
-
+  const ballInLeftPaddle = useRef<boolean>(false);
+  const bgImage = useRef<HTMLImageElement>(new Image());
+  bgImage.current.src = "/game.jpeg";
+  const rendered = useRef<number>(0);
+  console.log("rendered", rendered.current++);
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
 
   const {
@@ -62,7 +60,6 @@ const Game = ({ type }: { type: string }) => {
     handleChangeBallDirection,
     handleEnemyScore,
     handleTime,
-    handleDisconnect,
     handleStartGame,
   } = useGameSocket();
   const { newNotif } = useInvitationSocket();
@@ -94,28 +91,21 @@ const Game = ({ type }: { type: string }) => {
   controllerUser.current = onGoingGame?.data?.game?.user1;
 
   gameIdRef.current = onGoingGame?.data?.game?.id || "";
-  leftImageRef.current = new Image();
-  leftImageRef.current.src = leftUser.current?.avatar || "";
-  rightImageRef.current = new Image();
-  rightImageRef.current.src = rightUser.current?.avatar || "";
-  let bgImage = new Image();
-  bgImage.src = "/game.jpeg";
+
   useEffect(() => {
-    setCanvas(canvasRef.current);
+    if (canvas === null && canvasRef.current) {
+      setCanvas(canvasRef.current);
+    }
     if (canvas === null) return;
     const ctx = canvas?.getContext("2d");
     if (!ctx) return;
 
-    let ballInLeftPaddle = false;
-
-    leftPositionRef.current = -400;
-    rightPositionRef.current = canvas.width + 500;
 
     let ballRadius = 10;
     let x = canvas.width / 2;
     let y = canvas.height / 2;
-    const paddleHeight = 70;
-    const paddleWidth = 10;
+    const paddleHeight = 600;
+    const paddleWidth = 30;
 
     paddleLeftYRef.current = (canvas.height - paddleHeight) / 2;
     PaddleRightYRef.current = (canvas.height - paddleHeight) / 2;
@@ -126,8 +116,8 @@ const Game = ({ type }: { type: string }) => {
     leftScoreRef.current = 0;
 
     const paddleLeftX = 0;
-
     const paddleRightX = canvas.width - paddleWidth;
+
     let canvasParams: canvasParams = {
       canvas,
       paddleLeftYRef,
@@ -207,16 +197,16 @@ const Game = ({ type }: { type: string }) => {
       }
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.globalAlpha = 0.5;
-      ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
+      ctx.drawImage(bgImage.current, 0, 0, canvas.width, canvas.height);
       ctx.globalAlpha = 1;
       // draw paddles and ball
       draw(canvasParams, ctx);
 
       // move paddles
       movePaddlesOnline(canvasParams, handleMovePaddle);
-      // console.log("move paddle" + movePaddleRef.current);
+      // // console.log("move paddle" + movePaddleRef.current);
 
-      // Check for collision with left paddle
+      // // Check for collision with left paddle
       changeBallDirectionOnline(
         canvasParams,
         newAngleRef,
@@ -255,7 +245,8 @@ const Game = ({ type }: { type: string }) => {
       );
 
       // Move the ball
-      moveBall(canvasParams, user, leftUser.current, newAngleRef);
+      if (newAngleRef.current !== 0)
+        moveBall(canvasParams, user, leftUser.current, newAngleRef);
 
       // Check if enemy has left the game
       enemyLeftGame(
@@ -287,14 +278,14 @@ const Game = ({ type }: { type: string }) => {
     };
 
     const drawOnlineOne = () => {
-      if (canvas === null) return;
-      if (
-        gameStartedRef.current &&
-        leftUser.current !== undefined &&
-        rightUser.current !== undefined
-      ) {
-        gameStarted();
-      }
+        if (canvas === null) return;
+        if (
+          gameStartedRef.current &&
+          leftUser.current !== undefined &&
+          rightUser.current !== undefined
+        ) {
+          gameStarted();
+        }
       //  else {
       //   gameNotStarted();
       // }
@@ -304,15 +295,15 @@ const Game = ({ type }: { type: string }) => {
       if (canvas === null) return;
 
       drawOnlineOne();
-      animationFrameId.current = requestAnimationFrame(animate);
-    };
-
-    if (!isAnimating.current) {
+        animationFrameId.current = requestAnimationFrame(animate);
+      };
+      
+      if (!isAnimating.current) {
       isAnimating.current = true;
       animate();
       return returnFunction;
     }
-  }, [canvas, onGoingGame.data?.game?.user1]);
+  }, [canvas, gameStartedRef.current]);
 
   useEffect(() => {
     const gameMsge = gameMsg();
@@ -349,18 +340,21 @@ const Game = ({ type }: { type: string }) => {
             gameIdRef.current
           );
           timeRef.current = 0;
+          gameStartedRef.current = true;
+          newBallPositionRef.current = { x: 20000, y: 20000 };
+          newAngleRef.current = 0;
+          isFirstTime.current = true;
+          ballInLeftPaddle.current = false;
+          upPressedRef.current = false;
+          downPressedRef.current = false;
+          leftScoreRef.current = 0;
+          rightScoreRef.current = 0;
+          enemyLeftGameRef.current = false
         }
-        newAngleRef.current = 0;
-        if (canvasRef.current && !gameStartedRef.current) {
-        newBallPositionRef.current = { x: canvasRef.current?.width / 2 || 0, y: canvasRef.current?.height / 2 || 0 };
-        }
-        isFirstTime.current = true;
-        gameStartedRef.current = true;
-        
-        onGoingGame.refetch();
+        // onGoingGame.refetchr();
       } else if (message[0] === "/score") {
         isFirstTime.current = true;
-        onGoingGame.refetch();
+        // onGoingGame.refetch();
       } else if (message[0] === "/time") {
         if (message[2] !== username) {
           timeRef.current = parseInt(message[1]);
@@ -400,7 +394,6 @@ const Game = ({ type }: { type: string }) => {
       if (message[0] === "/start" || message[0] === "/refetchTournament") {
         onGoingGame.refetch();
       } else if (message[0] === "/end") {
-        handleDisconnect();
         gameStartedRef.current = false;
         onGoingGame.refetch();
       }
@@ -412,24 +405,28 @@ const Game = ({ type }: { type: string }) => {
       <Card className="w-full h-[350px] md:h-[400px]">
         {leftUser.current?.username ? (
           <>
+          { gameStartedRef.current ? (
             <canvas
             ref={canvasRef}
             height="400"
             width="800"
-            className={`w-full h-full ${gameStartedRef.current ? "block" : "hidden"}`}
+            className={`w-full h-full`}
             ></canvas>
+          ) : (
             <div
-              className={`w-full h-full flex justify-center items-center ${
-                gameStartedRef.current ? "hidden" : "block"
-              }`}
-              style={{
-                backgroundImage: "url('/game.jpeg')",
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-              }}
-              >
+            className={`w-full h-full flex justify-center items-center ${
+              gameStartedRef.current ? "hidden" : "block"
+            }`}
+            style={{
+              backgroundImage: "url('/game.jpeg')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+            >
               <PreGame leftUser={leftUser} rightUser={rightUser} />
             </div>
+          )
+              }
           
               </>
         ) : (
@@ -448,7 +445,6 @@ const Game = ({ type }: { type: string }) => {
                         rightUser.current?.username || "",
                         gameIdRef.current
                       );
-                      clickedRef.current = true;
                     }}
                     className="h-full w-full bg-primary"
                   >

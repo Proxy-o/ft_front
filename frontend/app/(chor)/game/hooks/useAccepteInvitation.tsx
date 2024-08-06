@@ -24,8 +24,8 @@ export default function useAcceptInvitation() {
     mutationFn: accept,
     onSuccess: (gameId) => {
       handleRefetchPlayers(gameId);
-      query.invalidateQueries({ queryKey: ["game"] });
-      query.invalidateQueries({ queryKey: ["gameFour"] });
+      // query.invalidateQueries({ queryKey: ["game"] });
+      // query.invalidateQueries({ queryKey: ["gameFour"] });
       query.invalidateQueries({ queryKey: ["invitations"] });
     },
   });

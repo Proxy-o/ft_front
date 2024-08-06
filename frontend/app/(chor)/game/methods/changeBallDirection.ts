@@ -4,7 +4,7 @@ import { canvasParams, canvasParamsFour } from "../types";
 function changeBallDirectionOnline(
   canvasParams: canvasParams,
   newAngleRef: React.MutableRefObject<number>,
-  ballInLeftPaddle: boolean,
+  ballInLeftPaddle: React.MutableRefObject<boolean>,
   handleChangeBallDirection: (
     x: number,
     y: number,
@@ -32,7 +32,7 @@ function changeBallDirectionOnline(
       paddleLeftYRef.current + paddleHeight
   ) {
     isFirstTime.current = false;
-    if (!ballInLeftPaddle) {
+    if (!ballInLeftPaddle.current) {
       let ballPositionOnPaddle =
         newBallPositionRef.current.y - paddleLeftYRef.current;
       let ballPercentageOnPaddle = ballPositionOnPaddle / paddleHeight;
@@ -55,10 +55,10 @@ function changeBallDirectionOnline(
         enemyAngle,
         rightUser?.username || ""
       );
-      ballInLeftPaddle = true;
+      ballInLeftPaddle.current = true;
     }
   } else {
-    ballInLeftPaddle = false;
+    ballInLeftPaddle.current = false;
   }
 }
 
