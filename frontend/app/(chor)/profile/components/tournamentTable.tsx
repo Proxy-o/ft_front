@@ -11,7 +11,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function TournamentTable({ userid }: { userid: string }) {
   const { data, isSuccess } = useGetTournaments(userid);
-console.log(data)
   return (
     isSuccess && (
       <div className="w-full">

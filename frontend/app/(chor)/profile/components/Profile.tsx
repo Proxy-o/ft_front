@@ -76,7 +76,7 @@ export default function Profile({ id }: { id: string }) {
               )}
             </div>
             <div className="flex flex-col gap-4 mb-6">
-              <States id={id} />
+              {/* <States id={id} /> */}
               {((!isBlocked && isFriend) || id_cookie == id) && (
                 <FriendList user_id={id} />
               )}
