@@ -1,5 +1,4 @@
 import json
-
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 from .models import Message
@@ -17,7 +16,7 @@ class ChatConsumer(WebsocketConsumer):
         self.user_inbox = None
 
     def connect(self):
-        print("soooooooeckt yaaaaabi")
+        print("***************connected")
         self.user = self.scope['user']
         self.user_inbox = f'inbox_{self.user.id}'
         # connection has to be accepted
@@ -34,6 +33,7 @@ class ChatConsumer(WebsocketConsumer):
             User.objects.filter(id=self.user.id).update(status='online')
 
     def disconnect(self, close_code):
+        print("***************disconnected")
         if self.user.is_authenticated:
             # -------------------- new --------------------
             # delete the user inbox for private messages
@@ -44,16 +44,18 @@ class ChatConsumer(WebsocketConsumer):
             # set the status of the user to offline in the database
             User.objects.filter(id=self.user.id).update(status='offline')
 
+
+    
+
+
     def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
 
         if not self.user.is_authenticated:
-            print("User is not authenticated")
             return
 
         if message.startswith('/request'):
-            # send a notif to the user that a request has been recieved
             split = message.split(' ', 2)
             target_id = split[1]
             try:
@@ -102,6 +104,15 @@ class ChatConsumer(WebsocketConsumer):
                     'type': 'blocked',
                     'target': target_id,
                     'message': "You are not friend with this user",
+                }))
+                return
+
+            
+            if len(target_msg) > 1000 or len(target_msg) < 1:
+                self.send(json.dumps({
+                    'type': 'blocked',
+                    'target': target_id,
+                    'message': "Message must be between 1 and 1000 characters",
                 }))
                 return
 
