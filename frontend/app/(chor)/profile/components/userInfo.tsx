@@ -193,7 +193,7 @@ export default function UserInfo({
                   </Button>
                   {sendReqId && (
                     <Button
-                      className="mt-6 w-full bg-blue-500"
+                      className="mt-6 w-full bg-red-400/20"
                       variant="outline"
                       onClick={() => {
                         console.log(recReqId);

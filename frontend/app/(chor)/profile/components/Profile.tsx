@@ -11,7 +11,6 @@ import ChatCard from "@/app/(chor)/chat/components/chatCard";
 import { UserRoundX, XCircle } from "lucide-react";
 import TabStates from "./tabStates";
 import { Card } from "@/components/ui/card";
-import useGetStates from "../hooks/useGateState";
 
 export default function Profile({ id }: { id: string }) {
   const id_cookie = getCookie("user_id") as string;
