@@ -4,7 +4,6 @@ from . import views
 urlpatterns = [
     path('signup', views.signup, name='signup'),
     path('login', views.Login.as_view()),
-    path('ft_login', views.FtLoginApi.as_view()),
     path('logout', views.CustomLogoutView.as_view()),
     path('refresh', views.CustomTokenRefreshView.as_view()),
     path('verify_otp', views.verifyOTPView, name='verify_otp'),
