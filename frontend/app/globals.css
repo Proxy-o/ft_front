@@ -343,34 +343,7 @@
     animation: moveDownTournament 30s ease-in-out;
   }
 
-  @keyframes sckeliton {
-    0% {
-        background-position: 600% 0;
-    }
-    100% {
-        background-position: -400% 0;
-    }
-  }
-  .sckeliton {
-    background-position: 500% 0;
-    background-size: 1000% 100%;
-    animation: sckeliton 30s linear infinite;
-  }
 
-  @keyframes sckeliton2 {
-    0% {
-        background-position: -500% 0;
-    }
-    100% {
-        background-position: 500% 0;
-    }
-  }
-
-  .sckeliton2 {
-    background-position: 500% 0;
-    background-size: 1000% 100%;
-    animation: sckeliton2 30s linear infinite;
-  }
 
   @keyframes getBigger {
     0% {
@@ -385,4 +358,34 @@
 }
 .animate-getBigger {
     animation: getBigger 0.7s ease-in-out forwards;
+}
+
+
+  
+@keyframes sckeliton {
+	from {
+		background-position: 40% 0;
+	}
+    to {
+		background-position: -160% 0;
+    }
+}
+
+.sckeliton2 {
+  background-image: linear-gradient(270deg, hsl(300, 76%, 72%), hsl(300, 0%, 20%), hsl(300, 0%, 20%),hsl(300, 0%, 20%),hsl(300, 0%, 20%),hsl(300, 0%, 20%), hsl(300, 76%, 72%));
+	background-size: 200% 200%;
+  background-position: 50% 0;
+	animation: sckeliton2 2s ease-in-out infinite;
+}
+
+
+
+
+
+
+.sckeliton {
+	background-image: linear-gradient(270deg, hsl(300, 76%, 72%), hsl(300, 0%, 20%), hsl(300, 0%, 20%),hsl(300, 0%, 20%),hsl(300, 0%, 20%),hsl(300, 0%, 20%), hsl(300, 76%, 72%));
+	background-size: 200% 200%;
+  background-position: 50% 0;
+	animation: sckeliton 2s ease-in-out infinite;
 }

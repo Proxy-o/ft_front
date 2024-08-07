@@ -44,7 +44,6 @@ export default function Page() {
           </Link>
         </div>
         <div className="w-full  ">
-          <h1 className="my-2">Invitations</h1>
           <Invitations mode="all" />
         </div>
         <div className=" mt-6 h-full  w-full flex flex-col md:flex-row      gap-4">

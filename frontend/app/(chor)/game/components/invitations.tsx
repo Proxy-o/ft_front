@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { Check, X } from "lucide-react";
+import { Check, Inbox, X } from "lucide-react";
 import useGetInvitations from "../hooks/useGetInvitations";
 import useDeclineInvitation from "../hooks/useDeclineMutation";
 import useAcceptInvitation from "../hooks/useAccepteInvitation";
@@ -79,53 +79,56 @@ const Invitations = ({ mode }: { mode: string }) => {
       oneVsOneInvitations.length = 0;
       twoVsTwoInvitations.length = 0;
     }
-  } else {
-    if (invitations.length === 0) {
-      return (<></>)
-    }
   }
   return (
     <div className="w-full  h-full flex flex-col justify-start items-center mx-auto gap-2">
       <div className="w-full flex flex-col justify-center items-center  space-y-2">
         <Card className="w-full flex flex-col p-2">
-        {mode !== "all" && (
-          <h1 className="text-4xl mx-auto w-full text-start">
+          <div className="w-full text-center text-lg font-bold pb-2">
             Invitations
-          </h1>
-        )}
+          </div>
+          {((mode === "all" && invitations.length === 0) ||
+            (mode === "tournament" && tournamentInvitations.length === 0) ||
+            (mode === "four" && twoVsTwoInvitations.length === 0) ||
+            (mode === "two" && oneVsOneInvitations.length === 0)) &&
+            <div className="flex flex-row justify-center items-center gap-2 text-primary border-t p-2">
+              <Inbox size={30} />
+              No invitationsg
+              </div>
+              }
         {oneVsOneInvitations.length !== 0 ? (
           <>
-            <h1 className="text-xl mx-auto pb-2">1 vs 1</h1>
             {oneVsOneInvitations.map((invitation,index) => {
-              const date = new Date(invitation.timestamp);
               return (
                 <div
                 key={invitation.id}
-                className="w-full mr-auto p-2 border-t"
+                className="w-full mr-auto pt-2 border-t"
                 >
                   <div className="flex flex-row justify-between items-center mx-auto gap-2 w-10/12">
-                    <div className="flex flex-row justify-start items-center gap-2">
+                    <div className="flex flex-row justify-start items-center gap-2 w-full">
 
-                    <Avatar className=" mr-2">
-                      <AvatarImage
-                        src={invitation.sender.avatar}
-                        alt="profile image"
-                        className="rounded-md h-8 w-8"
-                        />
-                      <AvatarFallback className="rounded-md">PF</AvatarFallback>
-                    </Avatar>
-                    <div className="flex flex-col justify-start items-start ml-2">
-                      <h1>{invitation.sender.username}</h1>
-                      <p className="text-xs text-primary/70">
-                        {date.getHours()}:{date.getMinutes()}
-                      </p>
-                    </div>
+                      <Avatar className=" mr-2">
+                        <AvatarImage
+                          src={invitation.sender.avatar}
+                          alt="profile image"
+                          className="rounded-md h-8 w-8"
+                          />
+                        <AvatarFallback className="rounded-md">PF</AvatarFallback>
+                      </Avatar>
+                      <div className="flex flex-col justify-between items-start ml-2 w-full">
+                        <div className="flex flex-row items-center gap-2  w-full">
+                          <h1>{invitation.sender.username}</h1>
+                          <p className="flex text-lg text-primary font-bold mx-auto items-center">
+                            1 vs 1
+                          </p>
                         </div>
+                      </div>
+                    </div>
                         <div className="flex flex-row justify-end items-center gap-2">
                           
                     <Button
                       // className="rounded-md bg-primary hover:bg-secondary hover:text-primary hover:border-primary border-2  border-primary mr-2"
-                      size={"sm"}
+                      size={"xs"}
                       onClick={() => {
                         acceptInvitation(invitation.id);
                         router.push("/game/oneVone");
@@ -135,7 +138,7 @@ const Invitations = ({ mode }: { mode: string }) => {
                     </Button>
                     <Button
                       variant={"secondary"}
-                      size={"sm"}
+                      size={"xs"}
                       onClick={() => declineMutation(invitation.id)}
                       >
                       <X size={20} />
@@ -149,9 +152,7 @@ const Invitations = ({ mode }: { mode: string }) => {
         ) : null}
         {twoVsTwoInvitations.length !== 0 ? (
           <>
-            <h1 className="text-xl mx-auto pb-2">2 vs 2</h1>
             {twoVsTwoInvitations.map((invitation) => {
-              const date = new Date(invitation.timestamp);
               return (
                 <div
                 key={invitation.id}
@@ -169,8 +170,8 @@ const Invitations = ({ mode }: { mode: string }) => {
                       </Avatar>
                       <div className="flex flex-col justify-start items-start ml-2">
                         <h1>{invitation.sender.username}</h1>
-                        <p className="text-xs text-primary/70">
-                          {date.toLocaleString()}
+                        <p className="text-xs text-primary font-bold">
+                          2 vs 2
                         </p>
                       </div>
                     </div>
@@ -201,9 +202,7 @@ const Invitations = ({ mode }: { mode: string }) => {
         ) : null}
         {tournamentInvitations.length !== 0 ? (
         <>
-        <h1 className="text-xl mx-auto pb-2">Tournament</h1>
           {tournamentInvitations.map((invitation) => {
-            const date = new Date(invitation.timestamp);
             return (
               <div
               key={invitation.id}
@@ -221,8 +220,8 @@ const Invitations = ({ mode }: { mode: string }) => {
                       </Avatar>
                       <div className="flex flex-col justify-start items-start ml-2">
                         <h1>{invitation.sender.username}</h1>
-                        <p className="text-xs text-primary/70">
-                          {date.toLocaleString()}
+                        <p className="text-xs text-primary font-bold">
+                          Tournament
                         </p>
                       </div>
                     </div>
