@@ -73,7 +73,7 @@ function enemyLeftGameFour(
     // console.log("current time: " + time.current + "seconds: " + seconds);
     handleTimeFour(time.current, username);
   } else {
-    if (seconds - time.current > 2 && gameStartedRef.current) {
+    if (seconds - time.current > 4 && gameStartedRef.current) {
       gameStartedRef.current = false;
       handleWhoLeftGame();
     }
