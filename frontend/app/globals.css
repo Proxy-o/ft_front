@@ -371,10 +371,19 @@
     }
 }
 
+@keyframes sckeliton2 {
+  from {
+    background-position: -140% 0;
+  }
+    to {
+    background-position: 60% 0;
+    }
+}
+
 .sckeliton2 {
-  background-image: linear-gradient(270deg, hsl(300, 76%, 72%), hsl(300, 0%, 20%), hsl(300, 0%, 20%),hsl(300, 0%, 20%),hsl(300, 0%, 20%),hsl(300, 0%, 20%), hsl(300, 76%, 72%));
+  background-image: linear-gradient(270deg, rgb(239 68 68 / var(--tw-bg-opacity)), hsl(300, 0%, 20%), hsl(300, 0%, 20%),hsl(300, 0%, 20%),hsl(300, 0%, 20%),hsl(300, 0%, 20%), rgb(239 68 68 / var(--tw-bg-opacity)));
 	background-size: 200% 200%;
-  background-position: 50% 0;
+  background-position: -140% 0;
 	animation: sckeliton2 2s ease-in-out infinite;
 }
 
@@ -384,7 +393,7 @@
 
 
 .sckeliton {
-	background-image: linear-gradient(270deg, hsl(300, 76%, 72%), hsl(300, 0%, 20%), hsl(300, 0%, 20%),hsl(300, 0%, 20%),hsl(300, 0%, 20%),hsl(300, 0%, 20%), hsl(300, 76%, 72%));
+  background-image: linear-gradient(270deg, rgb(59 130 246 / var(--tw-bg-opacity)) , hsl(300, 0%, 20%), hsl(300, 0%, 20%),hsl(300, 0%, 20%),hsl(300, 0%, 20%),hsl(300, 0%, 20%), rgb(59 130 246 / var(--tw-bg-opacity)) );
 	background-size: 200% 200%;
   background-position: 50% 0;
 	animation: sckeliton 2s ease-in-out infinite;

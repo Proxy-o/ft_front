@@ -313,10 +313,7 @@ const Game = ({
     }
 
     return returnFunction;
-  }, [
-    canvas,
-    gameStartedRef.current,
-  ]);
+  }, [canvas, gameStartedRef.current]);
 
   useEffect(() => {
     if (newNotif()) {
@@ -476,7 +473,7 @@ const Game = ({
                 leftUserBottom.current.username === userWhoDidNotRespond[0]
                   ? leftUserTop.current.id
                   : rightUserTop.current.id;
-    // alert("3");
+              // alert("3");
               endGame({
                 winner,
                 winnerScore: 3,
@@ -500,18 +497,32 @@ const Game = ({
   }, [gameMsg()?.data]);
   return (
     <>
-      {!gameStartedRef.current && (
-        leftUserTop.current || leftUserBottom.current || rightUserTop.current || rightUserBottom.current ? (
-          <PreGame
-            leftUserTop={leftUserTop.current}
-            leftUserBottom={leftUserBottom.current}
-            rightUserTop={rightUserTop.current}
-            rightUserBottom={rightUserBottom.current}
-          />
+      {!gameStartedRef.current &&
+        (leftUserTop.current ||
+        leftUserBottom.current ||
+        rightUserTop.current ||
+        rightUserBottom.current ? (
+          <div
+            className={`w-full h-full flex justify-center items-center ${
+              gameStartedRef.current ? "hidden" : "block"
+            }`}
+            style={{
+              backgroundImage: "url('/game.jpeg')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+            }}
+          >
+            <PreGame
+              type="four"
+              leftUserTop={leftUserTop.current}
+              leftUserBottom={leftUserBottom.current}
+              rightUserTop={rightUserTop.current}
+              rightUserBottom={rightUserBottom.current}
+            />
+          </div>
         ) : (
           <NoGameFour state={state} />
-        )
-      )}
+        ))}
       {gameStartedRef.current && (
         <canvas
           ref={canvasRef}
@@ -522,42 +533,42 @@ const Game = ({
       )}
       {!gameStartedRef.current ? (
         <div className="w-full flex flex-row justify-center items-center gap-4">
-            <Button
-              onClick={() => {
-                playerReadyRef.current = 0;
-
-                handleStartGameFour(
-                  username,
-                  leftUserTop.current?.username || "",
-                  leftUserBottom.current?.username || "",
-                  rightUserBottom.current?.username || "",
-                  rightUserTop.current?.username || ""
-                );
-              }}
-              className="h-full w-full"
-            >
-              <Gamepad size={25} />
-            </Button>
-            <Button
-              onClick={() => {
-                leaveGame();
-                handleRefetchPlayers(onGoingGame.data?.game.id || "");
-              }}
-              className="h-full w-full"
-            >
-              <DoorOpen size={25} />
-            </Button>
-        </div>
-      ) : (
           <Button
             onClick={() => {
-              surrenderGame();
+              playerReadyRef.current = 0;
+
+              handleStartGameFour(
+                username,
+                leftUserTop.current?.username || "",
+                leftUserBottom.current?.username || "",
+                rightUserBottom.current?.username || "",
+                rightUserTop.current?.username || ""
+              );
             }}
             className="h-full w-full"
           >
-            <Flag size={25} />
-            Surrender
+            <Gamepad size={25} />
           </Button>
+          <Button
+            onClick={() => {
+              leaveGame();
+              handleRefetchPlayers(onGoingGame.data?.game.id || "");
+            }}
+            className="h-full w-full"
+          >
+            <DoorOpen size={25} />
+          </Button>
+        </div>
+      ) : (
+        <Button
+          onClick={() => {
+            surrenderGame();
+          }}
+          className="h-full w-full"
+        >
+          <Flag size={25} />
+          Surrender
+        </Button>
       )}
     </>
   );
