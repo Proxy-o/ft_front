@@ -26,13 +26,3 @@ class User(AbstractUser):
     otpauth_url = models.CharField(max_length=225, blank=True, null=True)
     otp_base32 = models.CharField(max_length=255, null=True)
     qr_code = models.ImageField(upload_to="qrcode/", blank=True, null=True)
-    # OAuth 2.0
-    REGISTRATION_CHOICES = [
-        ('credentials', 'credentials'),
-        ('google', 'Google'),
-    ]
-    registration_method = models.CharField(
-        max_length=30,
-        choices=REGISTRATION_CHOICES,
-        default='credentials',
-    )

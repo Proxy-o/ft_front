@@ -176,7 +176,7 @@ export default function Nav() {
       queryClient.invalidateQueries({
         queryKey: ["friends", id],
       });
-      if (path.startsWith("chat"))
+      if (!path.startsWith("/chat"))
         toast(`New message from ${lastJsonMessage.user}`, {
           icon: <MessageCircle className="mr-2" />,
           action: {
