@@ -16,14 +16,9 @@ from .permissions import IsOwnerOrReadOnly
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.parsers import MultiPartParser, FormParser
-from django.contrib.auth.hashers import make_password
-from game.serializers import GameSerializer
-from game.models import Game
 from django.db.models import Q
 from django.contrib.auth.password_validation import validate_password
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from authentication.customJWTAuthentication import CustomJWTAuthentication
-from authentication.ft_utils import google_get_access_token, google_get_user_info, generate_tokens_for_user
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
