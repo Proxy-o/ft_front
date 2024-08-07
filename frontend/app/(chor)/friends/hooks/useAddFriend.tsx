@@ -20,7 +20,7 @@ export default function useAddFriend() {
   const queryClient = useQueryClient();
   const token = getCookie("refresh");
   const socketUrl = process.env.NEXT_PUBLIC_CHAT_URL + "2/?refresh=" + token;
-  const { sendJsonMessage } = useWebSocket(socketUrl,    {
+  const { sendJsonMessage } = useWebSocket(socketUrl, {
     share: true,
   });
   const info = useMutation({
