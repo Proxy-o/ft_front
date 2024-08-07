@@ -29,15 +29,10 @@ export default function RootLayout({
   useEffect(() => {
     if (mb && path != "/login" && path != "/register") {
       setShowNav(true);
-    }
-    else 
-    {
+    } else {
       setShowNav(false);
     }
-  }
-  , [path, mb]);
-  
-  
+  }, [path, mb]);
 
   return (
     <html lang="en">
@@ -57,7 +52,7 @@ export default function RootLayout({
                   <main className="border-l-[0.04rem] w-full sm:mx-0 h-screen overflow-auto  md:p-0">
                     {children}
                   </main>
-                  <Toaster />
+                  <Toaster duration={1000} />
                 </div>
               </Suspense>
             </UserContextProvider>
