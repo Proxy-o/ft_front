@@ -48,10 +48,8 @@ const Game = ({ type }: { type: string }) => {
   const userRef = useRef<User | undefined>(undefined);
   const state = useRef<string>("none");
   const ballInLeftPaddle = useRef<boolean>(false);
-  const bgImage = useRef<HTMLImageElement>(new Image());
-  bgImage.current.src = "/game.jpeg";
-  const rendered = useRef<number>(0);
-  console.log("rendered", rendered.current++);
+  const bgImage = useRef<HTMLImageElement | null>(null);
+
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
 
   const {
@@ -100,12 +98,11 @@ const Game = ({ type }: { type: string }) => {
     const ctx = canvas?.getContext("2d");
     if (!ctx) return;
 
-
     let ballRadius = 10;
     let x = canvas.width / 2;
     let y = canvas.height / 2;
-    const paddleHeight = 600;
-    const paddleWidth = 30;
+    const paddleHeight = 60;
+    const paddleWidth = 15;
 
     paddleLeftYRef.current = (canvas.height - paddleHeight) / 2;
     PaddleRightYRef.current = (canvas.height - paddleHeight) / 2;
@@ -195,6 +192,12 @@ const Game = ({ type }: { type: string }) => {
           rightUser.current?.username || ""
         );
       }
+
+      if (bgImage.current === null) {
+        bgImage.current = new Image();
+        bgImage.current.src = "/game.jpeg";
+      }
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.globalAlpha = 0.5;
       ctx.drawImage(bgImage.current, 0, 0, canvas.width, canvas.height);
@@ -223,7 +226,8 @@ const Game = ({ type }: { type: string }) => {
         leftUser.current,
         rightUser.current,
         endGame,
-        gameStartedRef
+        gameStartedRef,
+        setCanvas
       );
 
       // Change score
@@ -259,33 +263,15 @@ const Game = ({ type }: { type: string }) => {
       );
     };
 
-    const gameNotStarted = () => {
-      // Clear the canvas
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.globalAlpha = 0.5;
-      ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
-      ctx.globalAlpha = 1;
-      drawPlayers(
-        canvasParams,
-        leftUser,
-        rightUser,
-        leftImageRef,
-        rightImageRef,
-        leftPositionRef,
-        rightPositionRef,
-        ctx
-      );
-    };
-
     const drawOnlineOne = () => {
-        if (canvas === null) return;
-        if (
-          gameStartedRef.current &&
-          leftUser.current !== undefined &&
-          rightUser.current !== undefined
-        ) {
-          gameStarted();
-        }
+      if (canvas === null) return;
+      if (
+        gameStartedRef.current &&
+        leftUser.current !== undefined &&
+        rightUser.current !== undefined
+      ) {
+        gameStarted();
+      }
       //  else {
       //   gameNotStarted();
       // }
@@ -295,15 +281,15 @@ const Game = ({ type }: { type: string }) => {
       if (canvas === null) return;
 
       drawOnlineOne();
-        animationFrameId.current = requestAnimationFrame(animate);
-      };
-      
-      if (!isAnimating.current) {
+      animationFrameId.current = requestAnimationFrame(animate);
+    };
+
+    if (!isAnimating.current) {
       isAnimating.current = true;
       animate();
       return returnFunction;
     }
-  }, [canvas, gameStartedRef.current]);
+  }, [gameStartedRef.current, canvas, canvasRef.current]);
 
   useEffect(() => {
     const gameMsge = gameMsg();
@@ -349,12 +335,12 @@ const Game = ({ type }: { type: string }) => {
           downPressedRef.current = false;
           leftScoreRef.current = 0;
           rightScoreRef.current = 0;
-          enemyLeftGameRef.current = false
+          enemyLeftGameRef.current = false;
+          onGoingGame.refetch();
         }
-        // onGoingGame.refetchr();
       } else if (message[0] === "/score") {
         isFirstTime.current = true;
-        // onGoingGame.refetch();
+        onGoingGame.refetch();
       } else if (message[0] === "/time") {
         if (message[2] !== username) {
           timeRef.current = parseInt(message[1]);
@@ -369,22 +355,21 @@ const Game = ({ type }: { type: string }) => {
           state.current = "none";
         }
         gameStartedRef.current = false;
+        setCanvas(null);
         onGoingGame.refetch();
       } else if (message[0] === "/end") {
-        if (leftScoreRef.current == 3) {
+        if (leftScoreRef.current >= 3) {
           state.current = "win";
-        } else if (rightScoreRef.current == 3) {
+        } else if (rightScoreRef.current < 3) {
           state.current = "lose";
         } else {
           state.current = "none";
         }
         gameStartedRef.current = false;
+        setCanvas(null);
         onGoingGame.refetch();
       }
     }
-  }, [gameMsg()?.data]);
-
-  useEffect(() => {
     const notif = newNotif();
     if (notif) {
       const parsedMessage = JSON.parse(notif.data);
@@ -398,37 +383,35 @@ const Game = ({ type }: { type: string }) => {
         onGoingGame.refetch();
       }
     }
-  }, [newNotif()?.data]);
+  }, [gameMsg()?.data, newNotif()?.data]);
 
   return (
     <>
       <Card className="w-full h-[350px] md:h-[400px]">
         {leftUser.current?.username ? (
           <>
-          { gameStartedRef.current ? (
-            <canvas
-            ref={canvasRef}
-            height="400"
-            width="800"
-            className={`w-full h-full`}
-            ></canvas>
-          ) : (
-            <div
-            className={`w-full h-full flex justify-center items-center ${
-              gameStartedRef.current ? "hidden" : "block"
-            }`}
-            style={{
-              backgroundImage: "url('/game.jpeg')",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-            }}
-            >
-              <PreGame leftUser={leftUser} rightUser={rightUser} />
-            </div>
-          )
-              }
-          
-              </>
+            {gameStartedRef.current ? (
+              <canvas
+                ref={canvasRef}
+                height="400"
+                width="800"
+                className={`w-full h-full`}
+              ></canvas>
+            ) : (
+              <div
+                className={`w-full h-full flex justify-center items-center ${
+                  gameStartedRef.current ? "hidden" : "block"
+                }`}
+                style={{
+                  backgroundImage: "url('/game.jpeg')",
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                }}
+              >
+                <PreGame leftUser={leftUser} rightUser={rightUser} />
+              </div>
+            )}
+          </>
         ) : (
           <NoGame state={state} />
         )}
@@ -438,9 +421,26 @@ const Game = ({ type }: { type: string }) => {
           {!gameStartedRef.current ? (
             <>
               <div className="ml-[80px] h-5/6 w-1/6">
+                <Button
+                  onClick={() => {
+                    handleStartGame(
+                      leftUser.current?.username || "",
+                      rightUser.current?.username || "",
+                      gameIdRef.current
+                    );
+                  }}
+                  className="h-full w-full bg-primary"
+                >
+                  <Gamepad size={25} />
+                  Start
+                </Button>
+              </div>
+              {type !== "tournament" && (
+                <div className="mr-[80px] h-5/6 w-1/6">
                   <Button
                     onClick={() => {
-                      handleStartGame(
+                      leaveGame();
+                      handleSurrender(
                         leftUser.current?.username || "",
                         rightUser.current?.username || "",
                         gameIdRef.current
@@ -448,25 +448,9 @@ const Game = ({ type }: { type: string }) => {
                     }}
                     className="h-full w-full bg-primary"
                   >
-                    <Gamepad size={25} /> {" "} Start
+                    <DoorOpen size={25} />
+                    Leave
                   </Button>
-              </div>
-              {type !== "tournament" && (
-                <div className="mr-[80px] h-5/6 w-1/6">
-                      <Button
-                      onClick={() => {
-                        leaveGame();
-                        handleSurrender(
-                          leftUser.current?.username || "",
-                          rightUser.current?.username || "",
-                          gameIdRef.current
-                        );
-                      }}
-                      className="h-full w-full bg-primary"
-                    >
-                      <DoorOpen size={25} /> {" "} Leave
-                    </Button>
-
                 </div>
               )}
             </>
@@ -474,6 +458,7 @@ const Game = ({ type }: { type: string }) => {
             <div className="ml-[80px] h-5/6 w-1/6">
               <Button
                 onClick={() => {
+                  setCanvas(null);
                   surrenderGame();
                   handleSurrender(
                     leftUser.current?.username || "",
@@ -483,7 +468,8 @@ const Game = ({ type }: { type: string }) => {
                 }}
                 className="h-full w-full bg-primary"
               >
-                <Flag size={25} /> {" "} Surrender
+                <Flag size={25} />
+                Surrender
               </Button>
             </div>
           )}

@@ -448,7 +448,7 @@ const Game = ({
         if (whoAsked === username) {
           stillPlayingUsersRef.current.push(user);
           // handleWhoLeftGame();
-          if (stillPlayingUsersRef.current.length === 3) {
+          if (stillPlayingUsersRef.current.length === 4) {
             // find the user who did not respond
             if (
               leftUserTop.current.username &&
@@ -479,8 +479,7 @@ const Game = ({
                 leftUserBottom.current.username === userWhoDidNotRespond[0]
                   ? leftUserTop.current.id
                   : rightUserTop.current.id;
-
-                  toast.warning("1")
+    // alert("3");
               endGame({
                 winner,
                 winnerScore: 3,

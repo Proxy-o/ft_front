@@ -14,12 +14,14 @@ function checkLoseConditionOnline(
     loser: string;
     loserScore: number;
   }) => void,
-  gameStartedRef: React.MutableRefObject<boolean>
+  gameStartedRef: React.MutableRefObject<boolean>,
+  setCanvas: React.Dispatch<React.SetStateAction<HTMLCanvasElement | null>>
 ) {
   if (canvas === null) return;
-  if (rightScoreRef.current === 3) {
+  if (rightScoreRef.current >= 3) {
     gameStartedRef.current = false;
-    toast.warning("3");
+    setCanvas(null);
+    // alert("1");
     endGame({
       winner: rightUser?.id || "",
       winnerScore: rightScoreRef.current,
@@ -55,7 +57,7 @@ function checkLoseConditionFour(
   if (rightScoreRef.current === 3 || leftScoreRef.current === 3) {
     handleRefetchPlayers(canvasParams.gameIdRef.current);
     gameStartedRef.current = false;
-    if (rightScoreRef.current === 3) {
+    if (rightScoreRef.current >= 3) {
       setGameChange(false);
       if (username === leftUserTop.current?.username) {
         endGameFour({
@@ -72,7 +74,7 @@ function checkLoseConditionFour(
         toast.success("You have won the game");
       }
     }
-    if (leftScoreRef.current === 3) {
+    if (leftScoreRef.current < 3) {
       if (username === rightUserTop.current?.username) {
         setGameChange(false);
         endGameFour({

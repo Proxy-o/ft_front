@@ -31,7 +31,7 @@ function enemyLeftGame(
   } else {
     if (seconds - time.current > 2) {
       toast.error("Enemy left the game");
-      toast.warning("2");
+    // alert("2");
       endGame({
         winner: leftUserRef.current?.id || "",
         winnerScore: 3,
