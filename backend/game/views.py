@@ -572,8 +572,20 @@ class UpdateFinal(APIView):
             return Response({'error': 'No ongoing tournament found'}, status=status.HTTP_204_NO_CONTENT)
         if tournament.semi1.winner and not tournament.final.user1:
             tournament.final.user1 = tournament.semi1.winner
+            if (tournament.final.user2 == tournament.user1 and tournament.user1_left) or (tournament.final.user2 == tournament.user2 and tournament.user2_left)or (tournament.final.user2 == tournament.user3 and tournament.user3_left)or (tournament.final.user2 == tournament.user4 and tournament.user4_left):
+                tournament.final.winner = tournament.final.user1
+                tournament.winner = tournament.final.winner
+                tournament.final.save()
+                tournament.save()
+                return Response({'message': 'Tournament ended', 'tournamentId': tournament.id}, status=status.HTTP_200_OK)
         if tournament.semi2.winner and not tournament.final.user2:
             tournament.final.user2 = tournament.semi2.winner
+            if (tournament.final.user1 == tournament.user1 and tournament.user1_left) or (tournament.final.user1 == tournament.user2 and tournament.user2_left)or (tournament.final.user1 == tournament.user3 and tournament.user3_left)or (tournament.final.user1 == tournament.user4 and tournament.user4_left):
+                tournament.final.winner = tournament.final.user2
+                tournament.winner = tournament.final.winner
+                tournament.final.save()
+                tournament.save()
+                return Response({'message': 'Tournament ended', 'tournamentId': tournament.id}, status=status.HTTP_200_OK)
         tournament.final.save()
         tournament.save()
         return Response({'message': 'Final updated', 'tournamentId': tournament.id}, status=status.HTTP_200_OK)

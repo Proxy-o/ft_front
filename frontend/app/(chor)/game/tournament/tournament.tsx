@@ -48,53 +48,57 @@ const Tournament = () => {
   if (isLoading) return "loading...";
   // if (isSuccess && !data.tournament) return "no tournament found";
   return (
-    <div className="flex flex-col gap-4 w-full max-w-[900px] p-2">
-      <Card className="flex flex-col justify-center items-start p-2 mx-auto w-full">
-        
-        {isSuccess && !data.tournament && <NoGame state={stateRef} />}
-        {isSuccess && data.tournament && <Two type="tournament" />}
+    <div className="flex flex-col p-4 lg:flex-row w-full h-full lg:justify-center items-center lg:items-start gap-2">
+      <Card className="w-11/12 max-w-[900px] h-fit flex flex-col justify-center items-start gap-4 p-4">
+      <div className="w-full h-fit">
+            <Two type="tournament" />
+          </div>
       </Card>
-      {isSuccess && data.tournament && (
-        <>
-          <Button
-            onClick={() => {
-              leavetournament(data.tournament.id);
-            }}
-          >
-            Leave Tournament
-          </Button>
-          {data.tournament.creator?.username === user.username && (
+      <div className="flex flex-col gap-4 w-full min-w-80 lg:max-w-[350px] lg:mr-auto">
+        {isSuccess && data.tournament && (
+          <>
             <Button
-              onMouseDown={() => {
-                deleteTournament(data.tournament.id);
+              onClick={() => {
+                leavetournament(data.tournament.id);
               }}
             >
-              Delete Tournament
+              Leave Tournament
             </Button>
-          )}
-        </>
-      )}
-      {isSuccess && data.tournament && (
-        <TournamentBoard tournament={data.tournament} />
-      )}
-      {isSuccess && (
-        <>
-          <Invitations mode="tournament" />
-        </>
-      )}
+            {data.tournament.creator?.username === user.username && (
+              <Button
+                onMouseDown={() => {
+                  deleteTournament(data.tournament.id);
+                }}
+              >
+                Delete Tournament
+              </Button>
+            )}
+          </>
+        )}
+        {isSuccess && data.tournament && (
+          <TournamentBoard tournament={data.tournament} />
+        )}
+        {isSuccess && (
+          <>
+            <Invitations mode="tournament" />
+          </>
+        )}
 
-      {isSuccess && data.tournament && <InviteFriends gameType="tournament" />}
-      {isSuccess && !data.tournament && (
-        <>
-          <Button
-            onClick={() => {
-              createTournament(user_id);
-            }}
-          >
-            Create Tournament
-          </Button>
-        </>
-      )}
+        {isSuccess && data.tournament && (
+          <InviteFriends gameType="tournament" />
+        )}
+        {isSuccess && !data.tournament && (
+          <>
+            <Button
+              onClick={() => {
+                createTournament(user_id);
+              }}
+            >
+              Create Tournament
+            </Button>
+          </>
+        )}
+      </div>
     </div>
   );
 };
