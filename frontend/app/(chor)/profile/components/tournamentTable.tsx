@@ -16,7 +16,6 @@ export default function TournamentTable({ userid }: { userid: string }) {
   const games = data?.pages.map((page) => page.results).flat();
   const [haseMore, setHasMore] = React.useState(true);
   React.useEffect(() => {
-    console.log(data);
     if (data) {
       setHasMore(data.pages[data.pages.length - 1].next ? true : false);
     }

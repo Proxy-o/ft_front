@@ -1,4 +1,4 @@
- import axiosInstance from "@/lib/functions/axiosInstance";
+import axiosInstance from "@/lib/functions/axiosInstance";
 import { User } from "@/lib/types";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -17,7 +17,6 @@ export default function useBlock() {
     mutationFn: ({ to_block, user_id }: { to_block: User; user_id: string }) =>
       block(to_block.id),
     onSuccess: (_, variables) => {
-
       queryClient.invalidateQueries({
         queryKey: ["friends", variables.user_id],
       });
@@ -27,7 +26,6 @@ export default function useBlock() {
       queryClient.invalidateQueries({
         queryKey: ["requests"],
       });
-      
 
       toast.success("blocked successfully");
     },
