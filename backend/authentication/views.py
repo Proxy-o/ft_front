@@ -28,7 +28,6 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-
 @api_view(['POST'])
 @authentication_classes([])  # No authentication required
 @permission_classes([])  # No permissions required
@@ -70,8 +69,8 @@ class Login(TokenObtainPairView):
         token = response.data.get('access')
         # remove the token from the response
         response.data.pop('access')
-    
-        refresh = response.data.get('refresh')        
+
+        refresh = response.data.get('refresh')
 
         # Create an HttpOnly cookie with the token
         response.set_cookie(
@@ -93,13 +92,13 @@ class Login(TokenObtainPairView):
             samesite='None'  # Adjust as needed, could also be 'Strict' or 'None'
         )
 
-
         # Add user data to the response
         user_serializer = UserSerializer(user, context={'request': request})
         user_data = user_serializer.data
         response.data['user'] = user_data
 
         return response
+
 
 @api_view(['POST'])
 def verifyOTPView(request):
@@ -152,11 +151,13 @@ class CustomTokenRefreshView(TokenRefreshView):
 
 class CustomLogoutView(APIView):
     authentication_classes = []
+
     def post(self, request, *args, **kwargs):
-        response = Response({'detail': 'Successfully logged out'}, status=status.HTTP_200_OK)
-        try :
+        response = Response(
+            {'detail': 'Successfully logged out'}, status=status.HTTP_200_OK)
+        try:
             refresh_token = request.data.get('refresh')
-            if  refresh_token:
+            if refresh_token:
                 token = RefreshToken(refresh_token)
                 token.blacklist()
         except Exception as e:
@@ -166,13 +167,7 @@ class CustomLogoutView(APIView):
             response.delete_cookie('refresh')
         return response
 
-        
-
-            # If the refresh token is invalid, return a success response
-            
-   
-        
-
+        # If the refresh token is invalid, return a success response
 
 
 # upload avatar
@@ -235,7 +230,7 @@ class UserDetail(APIView):
         print(request.COOKIES)
         if user is Http404:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        
+
         serializer = UserSerializer(user, context={'request': request})
         return Response(serializer.data)
 
@@ -255,7 +250,6 @@ class UserDetail(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
 
     def delete(self, request, pk, format=None):
         user = self.get_object(pk)
@@ -263,73 +257,4 @@ class UserDetail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-
-
-        
-        
-        
-
-
 # 0auth 2.0
-
-
-
-class FtLoginApi( APIView):
-    authentication_classes = []
-    class InputSerializer(serializers.Serializer):
-        code = serializers.CharField(required=False)
-        error = serializers.CharField(required=False)
-
-    def get(self, request, *args, **kwargs):
-        input_serializer = self.InputSerializer(data=request.GET)
-        input_serializer.is_valid(raise_exception=True)
-        print("input_serializer", input_serializer)
-
-        validated_data = input_serializer.validated_data
-
-        code = validated_data.get('code')
-        error = validated_data.get('error')
-
-        login_url = f'{settings.BASE_FRONTEND_URL}/login'
-    
-        # if error or not code:
-        #     params = urlencode({'error': error})
-        #     return redirect(f'{login_url}?{params}')
-
-        redirect_uri = f'{settings.BASE_FRONTEND_URL}/google/'
-        access_token = google_get_access_token(code=code, 
-                                               redirect_uri=redirect_uri)
-
-        user_data = google_get_user_info(access_token=access_token)
-
-        # try:
-        #     user = User.objects.get(email=user_data['email'])
-        #     access_token, refresh_token = generate_tokens_for_user(user)
-        #     response_data = {
-        #         'user': UserSerializer(user).data,
-        #         'access_token': str(access_token),
-        #         'refresh_token': str(refresh_token)
-        #     }
-        #     return Response(response_data)
-        # except User.DoesNotExist:
-        #     username = user_data['email'].split('@')[0]
-        #     first_name = user_data.get('given_name', '')
-        #     last_name = user_data.get('family_name', '')
-
-        #     user = User.objects.create(
-        #         username=username,
-        #         email=user_data['email'],
-        #         first_name=first_name,
-        #         last_name=last_name,
-        #         registration_method='google',
-        #         phone_no=None,
-        #         referral=None
-        #     )
-         
-        #     access_token, refresh_token = generate_tokens_for_user(user)
-        #     response_data = {
-        #         'user': UserSerializer(user).data,
-        #         'access_token': str(access_token),
-        #         'refresh_token': str(refresh_token)
-        #     }
-        #     return Response(response_data)

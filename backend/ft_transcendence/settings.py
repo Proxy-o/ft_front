@@ -28,7 +28,7 @@ SECRET_KEY = os.environ["SECRET_KEY"]
 DEBUG = True
 
 ALLOWED_HOSTS = ['10.12.12.4', 'localhost', '10.13.1.18', '10.13.9.17', '10.13.1.12'
-                 '10.12.7.1', '10.12.9.15', "10.13.10.13","10.13.1.18","10.13.2.17"]
+                 '10.12.7.1', '10.12.9.15', "10.13.10.13", "10.13.1.18", "10.13.2.17"]
 
 # Application definition
 
@@ -99,7 +99,7 @@ DATABASES = {
         "PASSWORD": os.environ["POSTGRES_PASSWORD"],
         "HOST": os.environ["POSTGRES_HOST"],
         "PORT": os.environ["POSTGRES_PORT"],
-        
+
     }
 }
 
@@ -177,7 +177,6 @@ SIMPLE_JWT = {
 # end of authentication
 
 
-
 # Cors
 INSTALLED_APPS += ['corsheaders']
 MIDDLEWARE += ['corsheaders.middleware.CorsMiddleware']
@@ -186,7 +185,7 @@ CORS_ORIGIN_WHITELIST = [
     'http://10.12.13.5:3000',
     'http://10.13.1.18:3000',
     'http://10.13.1.18:3000',
-    
+
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -205,8 +204,3 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/'
 
 SERVER_URL = os.getenv('SERVER_URL', 'http://localhost:8000')
-
-# AUTH0
-BASE_FRONTEND_URL = os.environ.get('FRONT_URL', default='http://localhost:3000')
-FT_CLIENT_ID = os.environ.get('FT_CLIENT_ID')
-FT_CLIENT_SECRET = os.environ.get('FT_CLIENT_SECRET')
