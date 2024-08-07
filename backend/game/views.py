@@ -50,10 +50,10 @@ class InvitationView(APIView):
             return Response({'error': 'invitation alredy sent'}, status=status.HTTP_403_FORBIDDEN)
         sender_game = Game.objects.filter(Q(user1=sender) | Q(user2=sender) | Q(user3=sender) | Q(
             user4=sender)).filter(winner=None).filter(type=type).last()
-        receiver_game = Game.objects.filter(Q(user1=receiver) | Q(user2=receiver) | Q(user3=receiver) | Q(
-            user4=receiver)).filter(winner=None).filter(type=type).last()
-        if sender_game or receiver_game:
-            return Response({'error': 'Player already in a game'}, status=status.HTTP_403_FORBIDDEN)
+        # receiver_game = Game.objects.filter(Q(user1=receiver) | Q(user2=receiver) | Q(user3=receiver) | Q(
+        #     user4=receiver)).filter(winner=None).filter(type=type).last()
+        # if sender_game or receiver_game:
+        #     return Response({'error': 'Player already in a game'}, status=status.HTTP_403_FORBIDDEN)
         invitation = Invitation(sender=sender, receiver=receiver, type=type)
         invitation.save()
 
@@ -117,7 +117,11 @@ class AcceptInvitationView(APIView):
         game = Game.objects.filter(Q(user1=user) | Q(user2=user) | Q(
             user3=user) | Q(user4=user)).filter(winner=None).filter(type=invitation.type).last()
         if game:
-            return Response({'error': 'Player already in a game'}, status=status.HTTP_200_OK)
+            if game.type == "two":
+                type = "1 VS 1"
+            elif game.type == "four":
+                type = "2 VS 2"
+            return Response({'error': f'You are already in a {type} game'}, status=status.HTTP_403_FORBIDDEN)
         invitation.is_accepted = True
         invitation.save()
         if invitation.type == "two":

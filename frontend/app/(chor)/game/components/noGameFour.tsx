@@ -1,19 +1,9 @@
 import { Button } from "@/components/ui/button";
-import { User } from "@/lib/types";
 import { useEffect, useRef, useState } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const NoGameFour = ({
-  topLeft,
-  topRight,
-  bottomLeft,
-  bottomRight,
   state,
 }: {
-  topLeft: React.MutableRefObject<User>;
-  topRight: React.MutableRefObject<User>;
-  bottomLeft: React.MutableRefObject<User>;
-  bottomRight: React.MutableRefObject<User>;
   state: React.MutableRefObject<string>;
 }) => {
   const atext = useRef<string>("Invite a friend to play");
@@ -54,65 +44,6 @@ const NoGameFour = ({
         backgroundPosition: "center",
       }}
     >
-      <div className="flex flex-row justify-between">
-        <div className="flex flex-col w-1/2 items-center justify-center">
-          <Avatar className="mx-auto w-fit h-fit">
-            <AvatarImage
-              src={topLeft.current.avatar}
-              alt="profile image"
-              className="rounded-full h-10 md:h-16 w-10 md:w-16"
-            />
-            <AvatarFallback className="rounded-full h-10 md:h-16 w-10 md:w-16 text-xs md:text-base bg-primary">
-              Player
-            </AvatarFallback>
-          </Avatar>
-          <h1 className="">{topLeft.current.username}</h1>
-        </div>
-        <div className="flex flex-col w-1/2 items-center justify-center">
-          <Avatar className="mx-auto w-fit h-fit">
-            <AvatarImage
-              src={topRight.current.avatar}
-              alt="profile image"
-              className="rounded-full h-10 md:h-16 w-10 md:w-16"
-            />
-            <AvatarFallback className="rounded-full h-10 md:h-16 w-10 md:w-16 text-xs md:text-base bg-primary">
-              Player
-            </AvatarFallback>
-          </Avatar>
-          <h1 className="">{topRight.current.username}</h1>
-        </div>
-      </div>
-      {/* <div className="text-white text-xl md:text-3xl m-auto text-container mx-auto">
-        {text}
-      </div> */}
-      <div className="flex flex-row justify-between">
-        <div className="flex flex-col w-1/2 items-center justify-center">
-          <Avatar className="mx-auto w-fit h-fit">
-            <AvatarImage
-              src={bottomLeft.current.avatar}
-              alt="profile image"
-              className="rounded-full h-10 md:h-16 w-10 md:w-16"
-            />
-            <AvatarFallback className="rounded-full h-10 md:h-16 w-10 md:w-16 text-xs md:text-base bg-primary">
-              Player
-            </AvatarFallback>
-          </Avatar>
-          <h1 className="">{bottomLeft.current.username}</h1>
-        </div>
-        <div className="flex flex-col w-1/2 items-center justify-center">
-          <Avatar className="mx-auto w-fit h-fit">
-            <AvatarImage
-              src={bottomRight.current.avatar}
-              alt="profile image"
-              className="rounded-full h-10 md:h-16 w-10 md:w-16"
-            />
-            <AvatarFallback className="rounded-full h-10 md:h-16 w-10 md:w-16 text-xs md:text-base bg-primary">
-              Player
-            </AvatarFallback>
-          </Avatar>
-          <h1 className="">{bottomRight.current.username}</h1>
-        </div>
-      </div>
       {state.current !== "none" &&
         state.current !== "left" &&
         state.current !== "right" &&

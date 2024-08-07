@@ -408,7 +408,7 @@ const Game = ({ type }: { type: string }) => {
                   backgroundPosition: "center",
                 }}
               >
-                <PreGame leftUser={leftUser} rightUser={rightUser} />
+                <PreGame leftUserTop={leftUser.current} rightUserTop={rightUser.current} leftUserBottom={null} rightUserBottom={null} />
               </div>
             )}
           </>

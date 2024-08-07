@@ -22,6 +22,7 @@ import useSurrenderGame from "../hooks/useSurrender";
 import { DoorOpen, Flag, Gamepad } from "lucide-react";
 import Hover from "../components/hover";
 import { toast } from "sonner";
+import PreGame from "../components/preGame";
 
 const Game = ({
   gameStartedRef,
@@ -315,10 +316,6 @@ const Game = ({
   }, [
     canvas,
     gameStartedRef.current,
-    onGoingGame.data?.game.user1,
-    onGoingGame.data?.game.user2,
-    onGoingGame.data?.game.user3,
-    onGoingGame.data?.game.user4,
   ]);
 
   useEffect(() => {
@@ -504,13 +501,16 @@ const Game = ({
   return (
     <>
       {!gameStartedRef.current && (
-        <NoGameFour
-          topLeft={leftUserTop}
-          topRight={rightUserTop}
-          bottomLeft={leftUserBottom}
-          bottomRight={rightUserBottom}
-          state={state}
-        />
+        leftUserTop.current || leftUserBottom.current || rightUserTop.current || rightUserBottom.current ? (
+          <PreGame
+            leftUserTop={leftUserTop.current}
+            leftUserBottom={leftUserBottom.current}
+            rightUserTop={rightUserTop.current}
+            rightUserBottom={rightUserBottom.current}
+          />
+        ) : (
+          <NoGameFour state={state} />
+        )
       )}
       {gameStartedRef.current && (
         <canvas
@@ -522,7 +522,6 @@ const Game = ({
       )}
       {!gameStartedRef.current ? (
         <div className="w-full flex flex-row justify-center items-center gap-4">
-          <Hover hoverText="Start">
             <Button
               onClick={() => {
                 playerReadyRef.current = 0;
@@ -539,8 +538,6 @@ const Game = ({
             >
               <Gamepad size={25} />
             </Button>
-          </Hover>
-          <Hover hoverText="Leave">
             <Button
               onClick={() => {
                 leaveGame();
@@ -550,10 +547,8 @@ const Game = ({
             >
               <DoorOpen size={25} />
             </Button>
-          </Hover>
         </div>
       ) : (
-        <Hover hoverText="Start">
           <Button
             onClick={() => {
               surrenderGame();
@@ -561,8 +556,8 @@ const Game = ({
             className="h-full w-full"
           >
             <Flag size={25} />
+            Surrender
           </Button>
-        </Hover>
       )}
     </>
   );
