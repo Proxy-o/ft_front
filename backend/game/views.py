@@ -380,8 +380,6 @@ class Surrender(APIView):
                 tournament.save()
                 # return Response({'message': 'Tournament ended', 'tournamentId': tournament.id}, status=status.HTTP_200_OK)
         return Response({'message': 'Game ended', 'gameId': game.id, 'tournamentId': tournament.id}, status=status.HTTP_200_OK)
-                    
-            
 
         return Response({'message': 'Game ended'}, status=status.HTTP_200_OK)
 
@@ -670,10 +668,10 @@ class StartTournament(APIView):
         return Response({'message': 'Tournament started'}, status=status.HTTP_200_OK)
 
 
-
 class UserGamesPagination(PageNumberPagination):
     page_size = 1
-    
+
+
 class UserGames(APIView):
     """
     Retrieve all games of a user
@@ -681,24 +679,23 @@ class UserGames(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     pagination_class = UserGamesPagination
-    
-    
+
     def get(self, request, user_id, format=None):
         user = get_object_or_404(User, pk=user_id)
-        games = Game.objects.filter(Q(user1=user) | Q(user2=user)).filter(type='two').exclude(winner=None).order_by('timestamp').reverse()
+        games = Game.objects.filter(Q(user1=user) | Q(user2=user)).filter(
+            type='two').exclude(winner=None).order_by('timestamp').reverse()
         paginator = self.pagination_class()
         paginated_games = paginator.paginate_queryset(games, request)
-        
+
         serializer = GameSerializer(paginated_games, many=True)
 
         return paginator.get_paginated_response(serializer.data)
-        
+
 
 class TwoVTwoGameView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     authentication_classes = [CustomJWTAuthentication]
     pagination_class = UserGamesPagination
-    
 
     def get(self, request, user_id):
         user = get_object_or_404(User, id=user_id)
@@ -708,12 +705,12 @@ class TwoVTwoGameView(APIView):
             user4=user)) & Q(type='four'))).exclude(winner=None).order_by('timestamp').reverse()
         paginator = self.pagination_class()
         paginated_games = paginator.paginate_queryset(games, request)
-        
+
         serializer = GameSerializer(
             paginated_games, many=True, context={'request': request})
-        
+
         return paginator.get_paginated_response(serializer.data)
-        
+
 
 class TournamentsView(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -724,7 +721,7 @@ class TournamentsView(APIView):
         user = get_object_or_404(User, id=user_id)
         if request.user in user.blocked.all():
             return Response({'detail': 'You are blocked by this user'}, status=status.HTTP_400_BAD_REQUEST)
-        
+
         tournaments = Tournament.objects.filter(
             (Q(user1=user)) |
             (Q(user2=user)) |
@@ -732,10 +729,11 @@ class TournamentsView(APIView):
             (Q(user4=user))
         ).exclude(final=None).order_by('timestamp').reverse()
         paginator = self.pagination_class()
-        paginated_tournaments = paginator.paginate_queryset(tournaments, request)
+        paginated_tournaments = paginator.paginate_queryset(
+            tournaments, request)
         serializer = TournamentSerializer(
-            tournaments, many=True, context={'request': request})
-        
+            paginated_tournaments, many=True, context={'request': request})
+
         return paginator.get_paginated_response(serializer.data)
 
 
@@ -746,7 +744,8 @@ class GamesStates(APIView):
 # send win loses for 1v1 2v2 and tournament
     def oneVoneState(user_id):
         user = get_object_or_404(User, id=user_id)
-        games = Game.objects.filter(Q(user1=user) | Q(user2=user)).filter(type='two')
+        games = Game.objects.filter(
+            Q(user1=user) | Q(user2=user)).filter(type='two')
         wins = 0
         loses = 0
         for game in games:
@@ -758,7 +757,8 @@ class GamesStates(APIView):
 
     def twoVtwoState(user_id):
         user = get_object_or_404(User, id=user_id)
-        games = Game.objects.filter(Q(user1=user) | Q(user2=user) | Q(user3=user) | Q(user4=user)).filter(type='four')
+        games = Game.objects.filter(Q(user1=user) | Q(user2=user) | Q(
+            user3=user) | Q(user4=user)).filter(type='four')
         wins = 0
         loses = 0
         for game in games:
@@ -767,7 +767,7 @@ class GamesStates(APIView):
             else:
                 loses += 1
         return wins, loses
-    
+
     def tournamentState(user_id):
         user = get_object_or_404(User, id=user_id)
         tournaments = Tournament.objects.filter(
@@ -784,7 +784,7 @@ class GamesStates(APIView):
             else:
                 loses += 1
         return wins, loses
-    
+
     def get(self, request, user_id):
         oneVoneWins, oneVoneLoses = GamesStates.oneVoneState(user_id)
         twoVtwoWins, twoVtwoLoses = GamesStates.twoVtwoState(user_id)

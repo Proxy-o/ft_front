@@ -88,13 +88,15 @@ export default function Nav() {
   const invitationSocketUrl =
     process.env.NEXT_PUBLIC_INVITATION_URL + "?refresh=" + token;
 
-  const { lastJsonMessage }: { lastJsonMessage: LastMessage } =
-    useWebSocket(socketUrl,    {
+  const { lastJsonMessage }: { lastJsonMessage: LastMessage } = useWebSocket(
+    socketUrl,
+    {
       share: true,
-    });
+    }
+  );
   const {
     lastJsonMessage: invitationLastMessage,
-  }: { lastJsonMessage: LastMessage,  } = useWebSocket(invitationSocketUrl);
+  }: { lastJsonMessage: LastMessage } = useWebSocket(invitationSocketUrl);
   const [showNotif, setShowNotif] = useState(false);
   const [reqNotif, setReqNotif] = useState(false);
   const { data: friends, isSuccess: isSuccessFriends } = useGetFriends(
@@ -116,18 +118,13 @@ export default function Nav() {
       const message = parsedMessage.split(" ");
       if (message[0] === "/notif") {
         if (!path.startsWith("/game")) {
-          toast(
-            <Button
-              variant="ghost"
-              className="w-full text-center flex  items-center gap-4 m-0"
-              onClick={() => {
-                router.push(`/game`);
-              }}
-            >
-              <GamepadIcon className="h-6 w-6 text-primary" />
-              {"You have a new Game Invite from " + sender}
-            </Button>
-          );
+          toast(`${sender} Has invite you to play`, {
+            icon: <GamepadIcon className="mr-2" />,
+            action: {
+              label: `Play`,
+              onClick: () => router.push(`/game`),
+            },
+          });
         }
       }
       queryClient.invalidateQueries({
@@ -150,19 +147,18 @@ export default function Nav() {
     path,
   ]);
 
-
   useEffect(() => {
     setReqNotif(false);
     if (lastJsonMessage?.type === "request") {
       let id = lastJsonMessage.id;
       if (path != "/friend_requests")
-      toast(`New friend request from ${lastJsonMessage.user}`, {
-        icon: <UserPlus2 className="mr-2" />,
-        action: {
-          label: `View`,
-          onClick: () => router.push(`/profile/${id}`),
-        },
-      });
+        toast(`New friend request from ${lastJsonMessage.user}`, {
+          icon: <UserPlus2 className="mr-2" />,
+          action: {
+            label: `View`,
+            onClick: () => router.push(`/profile/${id}`),
+          },
+        });
       queryClient.invalidateQueries({
         queryKey: ["requests"],
       });
