@@ -23,16 +23,16 @@ const invite = async ({
     if (res !== res) throw new Error("Failed to send invitation to user");
   } catch (error: any) {
     toast.error(error?.response?.data.error);
-    return {userid: "", gameType: ""};
+    return { userid: "", gameType: "" };
   }
-  return {userid, gameType};
+  return { userid, gameType };
 };
 
 export default function useSendInvitation() {
   const { handelSendInvitation } = useInvitationSocket();
   const mutation = useMutation({
     mutationFn: invite,
-    onSuccess: ({userid, gameType} : {userid: string, gameType: string}) => {
+    onSuccess: ({ userid, gameType }: { userid: string; gameType: string }) => {
       if (userid === "") return;
       handelSendInvitation(userid, gameType);
       toast.success("Invitation sent");

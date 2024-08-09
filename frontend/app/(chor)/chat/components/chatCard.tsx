@@ -46,6 +46,9 @@ export default function ChatCard({
 
   const hasNoMessages = data?.pages[0].results.length === 0;
   const handelSendMessage = () => {
+    if (message.length < 1) {
+      return;
+    }
     const toSend = "/pm " + receiverId + " " + message;
     sendJsonMessage({ message: toSend });
     queryClient.invalidateQueries({
@@ -101,7 +104,7 @@ export default function ChatCard({
 
   return (
     <div
-      className=" flex flex-col h-[calc(100vh-3.3rem)] border-r w-full  relative "
+      className=" flex flex-col md:h-[calc(100vh-4.3rem)] h-[calc(100vh-7.8rem)] border-r w-full  relative "
       ref={chatRef}
     >
       <Link
@@ -127,7 +130,7 @@ export default function ChatCard({
         </div>
       </Link>
       <div
-        className="  overflow-auto flex flex-col-reverse   scrollbar scrollbar-thumb-primary/10 scrollbar-track-secondary scrollbar-w-2 p-2 pt-4 mb-[72px]"
+        className="  overflow-auto flex flex-col-reverse   scrollbar scrollbar-thumb-primary/10 scrollbar-w-2 p-2 pt-4 mb-[72px]"
         id="scrollableDiv"
       >
         <InfiniteScroll

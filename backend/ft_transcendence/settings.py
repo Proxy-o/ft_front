@@ -99,7 +99,7 @@ DATABASES = {
         "PASSWORD": os.environ["POSTGRES_PASSWORD"],
         "HOST": os.environ["POSTGRES_HOST"],
         "PORT": os.environ["POSTGRES_PORT"],
-        
+
     }
 }
 
@@ -175,7 +175,6 @@ SIMPLE_JWT = {
     "BLACKLIST_AFTER_ROTATION": True,
 }
 # end of authentication
-
 
 
 # Cors

@@ -12,7 +12,6 @@ from .serializers import MessageSerializer
 from rest_framework.response import Response
 from authentication.permissions import IsOwner
 from django.db.models import Q
-from .pagination import ChatPagination
 from django.shortcuts import get_object_or_404
 
 from django.contrib.auth import get_user_model

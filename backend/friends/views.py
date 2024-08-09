@@ -1,16 +1,13 @@
 
 from django.shortcuts import render, get_object_or_404
-from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 from .serializers import FriendRequestSerializer, UserSerializer
 from django.contrib.auth import get_user_model
 from django.db.models import Q
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.decorators import authentication_classes
 from rest_framework import permissions
 from chat_app.models import Message
-from authentication.customJWTAuthentication import CustomJWTAuthentication
 from .models import Friend_Request
 User = get_user_model()
 
@@ -36,6 +33,9 @@ def get_friends(request, userId):
 def search_users(request, search_query):
     if not search_query:
         return Response({'detail': 'Search query is empty'}, status=status.HTTP_400_BAD_REQUEST)
+    # if no alphanumeric characters in search query
+    if not any(char.isalnum() for char in search_query):
+        return Response({'detail': 'Search query is invalid'}, status=status.HTTP_400_BAD_REQUEST)
     users = User.objects.filter(
         Q(username__icontains=search_query) | Q(
             first_name__icontains=search_query) | Q(last_name__icontains=search_query))
@@ -81,7 +81,7 @@ def accept_friend_request(request, pk):
 
 @ api_view(['POST'])
 def delete_friend_request(request, pk):
-    friend_request = Friend_Request.objects.get(pk=pk)
+    friend_request = get_object_or_404(Friend_Request, pk=pk)
     if friend_request.to_user == request.user or friend_request.from_user == request.user:
         friend_request.delete()
         return Response({'detail': 'Friend request declined'}, status=status.HTTP_201_CREATED)
@@ -90,7 +90,6 @@ def delete_friend_request(request, pk):
 
 
 @ api_view(['GET'])
-# @ authentication_classes([CustomJWTAuthentication])
 def get_friend_requests(request):
     friend_requests = Friend_Request.objects.filter(Q(from_user=request.user) | Q(
         to_user=request.user)).order_by('timestamp').reverse()
@@ -111,7 +110,6 @@ def remove_friend(request, pk):
 
 
 @ api_view(['POST'])
-@ authentication_classes([JWTAuthentication])
 @ permission_classes([permissions.IsAuthenticated])
 def block_user(request, pk):
     user = get_object_or_404(User, pk=pk)

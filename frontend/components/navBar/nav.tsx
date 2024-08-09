@@ -88,11 +88,15 @@ export default function Nav() {
   const invitationSocketUrl =
     process.env.NEXT_PUBLIC_INVITATION_URL + "?refresh=" + token;
 
-  const { lastJsonMessage }: { lastJsonMessage: LastMessage } =
-    useWebSocket(socketUrl);
+  const { lastJsonMessage }: { lastJsonMessage: LastMessage } = useWebSocket(
+    socketUrl,
+    {
+      share: true,
+    }
+  );
   const {
     lastJsonMessage: invitationLastMessage,
-  }: { lastJsonMessage: LastMessage,  } = useWebSocket(invitationSocketUrl);
+  }: { lastJsonMessage: LastMessage } = useWebSocket(invitationSocketUrl);
   const [showNotif, setShowNotif] = useState(false);
   const [reqNotif, setReqNotif] = useState(false);
   const { data: friends, isSuccess: isSuccessFriends } = useGetFriends(
@@ -114,15 +118,14 @@ export default function Nav() {
       const message = parsedMessage.split(" ");
       if (message[0] === "/notif") {
         if (!path.startsWith("/game")) {
-
-        toast(`${sender} has invited you to play`, {
-          icon: <GamepadIcon className="mr-4 " />,
-          action: {
-            label: "Play",
-            onClick: () => router.push(`/game`),
-          },
-        });
-      }
+          toast(`${sender} Has invite you to play`, {
+            icon: <GamepadIcon className="mr-2" />,
+            action: {
+              label: `Play`,
+              onClick: () => router.push(`/game`),
+            },
+          });
+        }
       }
       queryClient.invalidateQueries({
         queryKey: ["invitations", id],
@@ -137,11 +140,11 @@ export default function Nav() {
   }, [
     invitations,
     id,
+    isSuccessInvit,
     invitationLastMessage,
     queryClient,
     router,
-    isSuccessInvit,
-    path
+    path,
   ]);
 
   useEffect(() => {
@@ -149,13 +152,13 @@ export default function Nav() {
     if (lastJsonMessage?.type === "request") {
       let id = lastJsonMessage.id;
       if (path != "/friend_requests")
-      toast(`New friend request from ${lastJsonMessage.user}`, {
-        icon: <UserPlus2 className="mr-2" />,
-        action: {
-          label: `View`,
-          onClick: () => router.push(`/profile/${id}`),
-        },
-      });
+        toast(`New friend request from ${lastJsonMessage.user}`, {
+          icon: <UserPlus2 className="mr-2" />,
+          action: {
+            label: `View`,
+            onClick: () => router.push(`/profile/${id}`),
+          },
+        });
       queryClient.invalidateQueries({
         queryKey: ["requests"],
       });
@@ -173,12 +176,12 @@ export default function Nav() {
       queryClient.invalidateQueries({
         queryKey: ["friends", id],
       });
-      if (path != "/chat")
+      if (!path.startsWith("/chat"))
         toast(`New message from ${lastJsonMessage.user}`, {
           icon: <MessageCircle className="mr-2" />,
           action: {
             label: "Messages",
-            onClick: () => router.push(`/chat`),
+            onClick: () => router.push(`/chat/${lastJsonMessage.id}`),
           },
         });
 

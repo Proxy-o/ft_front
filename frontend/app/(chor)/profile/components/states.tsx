@@ -6,84 +6,15 @@ import React, { useEffect, useState } from "react";
 import useGetGames from "../hooks/useGetGames";
 import useGetTwoGames from "../hooks/useGetTwoGames";
 import useGetTournaments from "../hooks/useGetTournaments";
+import useGetStates from "../hooks/useGateState";
 
 export default function States({ id }: { id: string }) {
-  const { data: oneGames, isSuccess: oneIsSuccess } = useGetGames(id);
-  const { data: twoGames, isSuccess: twoIsSuccess } = useGetTwoGames(id);
-  const { data: tournament, isSuccess: tourIsSuccess } = useGetTournaments(id);
-  const [states, setStates] = useState({
-    classic: {
-      wins: 0,
-      defeats: 0,
-      total: 0,
-    },
-    tournament: {
-      wins: 0,
-      defeats: 0,
-      total: 0,
-    },
-    twoVtwo: {
-      wins: 0,
-      defeats: 0,
-      total: 0,
-    },
-  });
+const {data: states , isSuccess} = useGetStates(id);
 
-  useEffect(() => {
-    if (oneIsSuccess && oneGames) {
-      setStates((prev) => ({
-        ...prev,
-        classic: {
-          wins: oneGames?.filter((game: any) => game.winner.id === Number(id))
-            .length,
-          total: oneGames.length,
-          get defeats() {
-            return this.total - this.wins;
-          },
-        },
-      }));
-    }
 
-    if (twoIsSuccess && twoGames) {
-      setStates((prev) => ({
-        ...prev,
-        twoVtwo: {
-          wins: twoGames?.filter((game: any) => game.winner.id === Number(id))
-            .length,
-          total: twoGames.length,
-          get defeats() {
-            return this.total - this.wins;
-          },
-        },
-      }));
-    }
-
-    if (tourIsSuccess && tournament) {
-      setStates((prev) => ({
-        ...prev,
-        tournament: {
-          wins: tournament?.filter(
-            (game: any) => game.winner?.id === Number(id)
-          ).length,
-          total: tournament.length,
-          get defeats() {
-            return this.total - this.wins;
-          },
-        },
-      }));
-    }
-  }, [
-    oneIsSuccess,
-    id,
-    oneGames,
-    twoGames,
-    tournament,
-    tourIsSuccess,
-    twoIsSuccess,
-  ]);
 
   return (
-    <Card className="p-4   h-[22rem]  flex justify-center lg:w-72">
+   isSuccess &&  <Card className="p-4   h-[22rem]  flex justify-center lg:w-72">
       <Tabs defaultValue="Classic" className="w-full">
         <TabsList className="flex ">
           <TabsTrigger value="Classic" className="w-full">
@@ -108,7 +39,7 @@ export default function States({ id }: { id: string }) {
             <SwordsIcon className="text-green-500 mr-2" size={24} />
             Wins
             <div className="flex justify-end  w-full ">
-              {states.classic.wins}
+              {states.oneVoneWins}
             </div>
           </div>
           <Separator className="my-6" />
@@ -116,7 +47,7 @@ export default function States({ id }: { id: string }) {
             <FrownIcon className="text-red-600 mr-2" size={24} />
             Defeats
             <div className="flex justify-end  w-full ">
-              {states.classic.defeats}
+              {states.oneVoneLoses}
             </div>
           </div>
           <Separator className="my-6" />
@@ -124,7 +55,7 @@ export default function States({ id }: { id: string }) {
             <PlusSquare className="text-yellow-400 mr-2" size={24} />
             Total
             <div className="flex justify-end  w-full ">
-              {states.classic.total}
+              {states.oneVoneLoses + states.oneVoneWins}
             </div>
           </div>
         </TabsContent>
@@ -141,7 +72,7 @@ export default function States({ id }: { id: string }) {
             <SwordsIcon className="text-green-500 mr-2" size={24} />
             Wins
             <div className="flex justify-end  w-full ">
-              {states.tournament.wins}
+              {states.tournamentWins}
             </div>
           </div>
           <Separator className="my-6" />
@@ -149,7 +80,7 @@ export default function States({ id }: { id: string }) {
             <FrownIcon className="text-red-600 mr-2" size={24} />
             Defeats
             <div className="flex justify-end  w-full ">
-              {states.tournament.defeats}
+              {states.tournamentLoses}
             </div>
           </div>
           <Separator className="my-6" />
@@ -157,7 +88,7 @@ export default function States({ id }: { id: string }) {
             <PlusSquare className="text-yellow-400 mr-2" size={24} />
             Total
             <div className="flex justify-end  w-full ">
-              {states.tournament.total}
+              {states.tournamentLoses + states.tournamentWins}
             </div>
           </div>
         </TabsContent>
@@ -174,7 +105,7 @@ export default function States({ id }: { id: string }) {
             <SwordsIcon className="text-green-500 mr-2" size={24} />
             Wins
             <div className="flex justify-end  w-full ">
-              {states.twoVtwo.wins}
+              {states.twoVtwoWins}
             </div>
           </div>
           <Separator className="my-6" />
@@ -182,7 +113,7 @@ export default function States({ id }: { id: string }) {
             <FrownIcon className="text-red-600 mr-2" size={24} />
             Defeats
             <div className="flex justify-end  w-full ">
-              {states.twoVtwo.defeats}
+              {states.twoVtwoLoses}
             </div>
           </div>
           <Separator className="my-6" />
@@ -190,7 +121,7 @@ export default function States({ id }: { id: string }) {
             <PlusSquare className="text-yellow-400 mr-2" size={24} />
             Total
             <div className="flex justify-end  w-full ">
-              {states.twoVtwo.total}
+              {states.twoVtwoLoses + states.twoVtwoWins}
             </div>
           </div>
         </TabsContent>
