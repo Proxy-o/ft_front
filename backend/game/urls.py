@@ -23,7 +23,8 @@ urlpatterns = [
     path('accept_invitation_tournament', views.AcceptInvitationTournament.as_view()),
     path('start_tournament', views.StartTournament.as_view()),
     # games for a user with a given id
-    path('user/<int:user_id>', views.GameView.as_view()),
+    path('user/<int:user_id>', views.UserGames.as_view()),
     path('twovtwo/user/<int:user_id>', views.TwoVTwoGameView.as_view()),
     path('tournaments/user/<int:user_id>', views.TournamentsView.as_view()),
+    path('states/<int:user_id>', views.GamesStates.as_view()),
 ]

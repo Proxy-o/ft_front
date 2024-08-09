@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/tooltip";
 import { User } from "@/lib/types";
 import { Activity, Clock, Users } from "lucide-react";
-import React from "react";
+import React, { use, useEffect, useState } from "react";
 import EditProfile from "./editProfile";
 import ProfileAvatar from "./profileAvatar";
 
@@ -59,9 +59,25 @@ export default function UserInfo({
     isSuccess && friends.some((friend: User) => friend.id === id);
 
   const isReqSent = friendReq?.some((req: any) => req.to_user.id === id);
-  const recReqId = friendReq?.find(
-    (req: any) => req.to_user.id == current_user_id
-  )?.id;
+  const [recReqId, setRecReqId] = useState<string | null>(null);
+  const [sendReqId, setSendReqId] = useState<string | null>(null);
+  useEffect(() => {
+    if (friendReq) {
+      console.log(friendReq);
+      const req = friendReq.find((req: any) => req.from_user.id === id);
+      const sendReq = friendReq.find((req: any) => req.to_user.id === id);
+      if (req) {
+        setRecReqId(req.id);
+      } else {
+        setRecReqId(null);
+      }
+      if (sendReq) {
+        setSendReqId(sendReq.id);
+      } else {
+        setSendReqId(null);
+      }
+    }
+  }, [friendReq]);
 
   const handleLogout = () => {
     logout();
@@ -110,7 +126,14 @@ export default function UserInfo({
               <TooltipTrigger asChild>
                 <div className="flex flex-col justify-center items-center ">
                   <Activity className="mb-2" />
-                  <p className={cn("text-sm sm:text-m",user.status === "online" && "text-green-500")}>{user.status}</p>
+                  <p
+                    className={cn(
+                      "text-sm sm:text-m",
+                      user.status === "online" && "text-green-500"
+                    )}
+                  >
+                    {user.status}
+                  </p>
                 </div>
               </TooltipTrigger>
               <TooltipContent>
@@ -159,14 +182,28 @@ export default function UserInfo({
           ) : (
             <>
               {!isFriend && !isBlocked && !recReqId ? (
-                <Button
-                  className="mt-6 w-full"
-                  variant="outline"
-                  onClick={() => addFriend(id)}
-                  disabled={isReqSent || isBlocked}
-                >
-                  Add Friend
-                </Button>
+                <>
+                  <Button
+                    className="mt-6 w-full"
+                    variant="outline"
+                    onClick={() => addFriend(id)}
+                    disabled={isReqSent || isBlocked}
+                  >
+                    Add Friend
+                  </Button>
+                  {sendReqId && (
+                    <Button
+                      className="mt-6 w-full bg-red-400/20"
+                      variant="outline"
+                      onClick={() => {
+                        console.log(recReqId);
+                        reject(sendReqId);
+                      }}
+                    >
+                      Cancel Request
+                    </Button>
+                  )}
+                </>
               ) : (
                 recReqId && (
                   <>
@@ -210,7 +247,7 @@ export default function UserInfo({
                         userid: id,
                         gameType: "two",
                       });
-                      handelSendInvitation(id);
+                      handelSendInvitation(id, "two");
                       router.push("/game/oneVone");
                     }}
                   >

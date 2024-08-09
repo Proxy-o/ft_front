@@ -1,10 +1,10 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 
-const fetchTournament = async ({ userid }: { userid: string }) => {
+const fetchTournaments= async ({ id, pageParam }: { id: string, pageParam: string }) => {
   try {
-    if (userid === "0") return null;
-    const response = await axiosInstance.get(`/game/tournaments/user/${userid}`);
+    if (id === "0") return null;
+    const response = await axiosInstance.get(`/game/tournaments/user/${id}?page=${pageParam}`);
     return response.data;
   } catch (error: any) {
     if (error.response && error.response.status !== 401) {
@@ -13,10 +13,15 @@ const fetchTournament = async ({ userid }: { userid: string }) => {
   }
 };
 
-export default function useGetTournaments(userid: string) {
-  const info = useQuery({
-    queryKey: ["Tournament", userid],
-    queryFn: () => fetchTournament({ userid }),
+export default function useGetournaments(id: string) {
+  const info = useInfiniteQuery({
+    queryKey: [`tourn_${id}`],
+    queryFn: ({ pageParam }) => fetchTournaments({id, pageParam }),
+    initialPageParam: `1`,
+    getNextPageParam: (lastPage) => {
+      return "2";
+    },
   });
   return info;
 }
+

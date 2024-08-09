@@ -19,8 +19,10 @@ const inviteFriend = async (userId: string) => {
 export default function useAddFriend() {
   const queryClient = useQueryClient();
   const token = getCookie("refresh");
-  const socketUrl = process.env.NEXT_PUBLIC_CHAT_URL + "r/?refresh=" + token;
-  const { sendJsonMessage } = useWebSocket(socketUrl);
+  const socketUrl = process.env.NEXT_PUBLIC_CHAT_URL + "2/?refresh=" + token;
+  const { sendJsonMessage } = useWebSocket(socketUrl, {
+    share: true,
+  });
   const info = useMutation({
     mutationFn: async (userId: string) => {
       const res = await inviteFriend(userId);

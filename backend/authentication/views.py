@@ -1,10 +1,12 @@
 from django.contrib.auth.models import User
-import pyotp
+from rest_framework.pagination import PageNumberPagination
+from urllib.parse import urlencode
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
-
+from django.conf import settings
+from django.shortcuts import redirect
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, serializers
 from .serializers import UserSerializer, AvatarSerializer, VerifyOTPSerializer, EditUserSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
@@ -14,16 +16,11 @@ from .permissions import IsOwnerOrReadOnly
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.parsers import MultiPartParser, FormParser
-from django.contrib.auth.hashers import make_password
-from game.serializers import GameSerializer
-from game.models import Game
 from django.db.models import Q
 from django.contrib.auth.password_validation import validate_password
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from authentication.customJWTAuthentication import CustomJWTAuthentication
 from django.contrib.auth import get_user_model
 User = get_user_model()
-
 
 
 @api_view(['POST'])
@@ -67,8 +64,8 @@ class Login(TokenObtainPairView):
         token = response.data.get('access')
         # remove the token from the response
         response.data.pop('access')
-    
-        refresh = response.data.get('refresh')        
+
+        refresh = response.data.get('refresh')
 
         # Create an HttpOnly cookie with the token
         response.set_cookie(
@@ -90,13 +87,13 @@ class Login(TokenObtainPairView):
             samesite='None'  # Adjust as needed, could also be 'Strict' or 'None'
         )
 
-
         # Add user data to the response
         user_serializer = UserSerializer(user, context={'request': request})
         user_data = user_serializer.data
         response.data['user'] = user_data
 
         return response
+
 
 @api_view(['POST'])
 def verifyOTPView(request):
@@ -149,11 +146,13 @@ class CustomTokenRefreshView(TokenRefreshView):
 
 class CustomLogoutView(APIView):
     authentication_classes = []
+
     def post(self, request, *args, **kwargs):
-        response = Response({'detail': 'Successfully logged out'}, status=status.HTTP_200_OK)
-        try :
+        response = Response(
+            {'detail': 'Successfully logged out'}, status=status.HTTP_200_OK)
+        try:
             refresh_token = request.data.get('refresh')
-            if  refresh_token:
+            if refresh_token:
                 token = RefreshToken(refresh_token)
                 token.blacklist()
         except Exception as e:
@@ -163,13 +162,7 @@ class CustomLogoutView(APIView):
             response.delete_cookie('refresh')
         return response
 
-        
-
-            # If the refresh token is invalid, return a success response
-            
-   
-        
-
+        # If the refresh token is invalid, return a success response
 
 
 # upload avatar
@@ -228,12 +221,11 @@ class UserDetail(APIView):
             return Http404
 
     def get(self, request, pk, format=None):
-        print("okokokok")
         user = self.get_object(pk)
         print(request.COOKIES)
         if user is Http404:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        
+
         serializer = UserSerializer(user, context={'request': request})
         return Response(serializer.data)
 
@@ -253,7 +245,6 @@ class UserDetail(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
 
     def delete(self, request, pk, format=None):
         user = self.get_object(pk)
@@ -261,14 +252,4 @@ class UserDetail(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class UserGames(APIView):
-    """
-    Retrieve all games of a user
-    """
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
-
-    def get(self, request, pk, format=None):
-        user = get_object_or_404(User, pk=pk)
-        # games the user participated in
-        games = Game.objects.filter(Q(user1=user) | Q(user2=user) | Q(user3=user) | Q(user4=user))
+# 0auth 2.0

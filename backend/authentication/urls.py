@@ -14,5 +14,4 @@ urlpatterns += [
     path('user', views.UserList.as_view()),
     path('user/<int:pk>', views.UserDetail.as_view()),
     path('user/<int:pk>/avatar', views.UserAvatar.as_view()),
-    path('user/<int:pk>/games', views.UserGames.as_view()),
 ]
