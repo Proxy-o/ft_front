@@ -35,7 +35,6 @@ class TestVerifyOTP(TestCase):
     def test_verify_otp(self):
         data = {"user_id": "1", "otp": "12345"}
         response = self.client.post("/api/verify_otp", data)
-        # print(response.data)
         assert response.status_code == 200
 
 

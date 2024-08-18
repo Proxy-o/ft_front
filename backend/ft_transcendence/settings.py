@@ -27,8 +27,8 @@ SECRET_KEY = os.environ["SECRET_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['10.12.12.4', 'localhost', '127.0.0.1', '10.13.9.17', '10.13.1.15',
-                 '10.12.7.1', '10.12.9.15', "10.13.10.13","localhost","10.13.2.17"]
+ALLOWED_HOSTS = ['10.12.12.4', 'localhost', '127.0.0.1', '10.13.9.17', '10.12.11.2',
+                 '10.12.7.1', '10.12.9.15', "10.13.10.13", "localhost", "10.13.2.17"]
 
 # Application definition
 
@@ -183,7 +183,7 @@ MIDDLEWARE += ['corsheaders.middleware.CorsMiddleware']
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
     'http://10.12.13.5:3000',
-    'http://10.13.1.15:3000'
+    'http://10.12.11.2:3000'
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -201,6 +201,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # URL used to access the media
 MEDIA_URL = '/'
 
-SERVER_URL = os.getenv('SERVER_URL', 'http://10.13.1.15:8000')
-
-
+SERVER_URL = os.getenv('SERVER_URL', 'http://10.12.11.2:8000')
