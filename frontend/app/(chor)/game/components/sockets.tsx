@@ -83,6 +83,26 @@ const Sockets = (
           }
           newAngleRef.current = parseFloat(message[3]);
         }
+      } else if (message[0] === "/show") {
+        if (!gameStartedRef.current) {
+          handleStartGame(
+            leftUser.current?.username || "",
+            rightUser.current?.username || "",
+            gameIdRef.current
+          );
+          timeRef.current = 0;
+          gameStartedRef.current = true;
+          newBallPositionRef.current = { x: 20000, y: 20000 };
+          newAngleRef.current = 0;
+          isFirstTime.current = true;
+          ballInLeftPaddle.current = false;
+          upPressedRef.current = false;
+          downPressedRef.current = false;
+          leftScoreRef.current = 0;
+          rightScoreRef.current = 0;
+          enemyLeftGameRef.current = false;
+          onGoingGame.refetch();
+        }
       } else if (message[0] === "/score") {
         isFirstTime.current = true;
         onGoingGame.refetch();
@@ -100,9 +120,10 @@ const Sockets = (
           state.current = "none";
         }
         gameStartedRef.current = false;
+        setCanvas(null);
         onGoingGame.refetch();
       } else if (message[0] === "/end") {
-        if (leftScoreRef.current >=3) {
+        if (leftScoreRef.current >= 3) {
           state.current = "win";
         } else if (rightScoreRef.current < 3) {
           state.current = "lose";
@@ -134,9 +155,7 @@ const Sockets = (
 
 
   return (
-    <div>
-      <h1>Welcome to page Sockets</h1>
-    </div>
+    <></>
   );
 }
 

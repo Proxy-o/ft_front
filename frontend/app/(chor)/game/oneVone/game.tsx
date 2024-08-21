@@ -24,8 +24,10 @@ import { DoorOpen, Flag, Gamepad } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import NoGame from "../components/noGame";
 import PreGame from "../components/preGame";
+import Sockets from "../components/sockets";
 
 const Game = ({ type }: { type: string }) => {
+  console.log("Game");
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationFrameId = useRef<number>(0);
   const isAnimating = useRef<boolean>(false);
@@ -53,14 +55,12 @@ const Game = ({ type }: { type: string }) => {
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
 
   const {
-    gameMsg,
     handleMovePaddle,
     handleChangeBallDirection,
     handleEnemyScore,
     handleTime,
     handleStartGame,
   } = useGameSocket();
-  const { newNotif } = useInvitationSocket();
 
   const { handleSurrender } = useInvitationSocket();
   const user_id = getCookie("user_id") || "";
@@ -272,9 +272,6 @@ const Game = ({ type }: { type: string }) => {
       ) {
         gameStarted();
       }
-      //  else {
-      //   gameNotStarted();
-      // }
     };
 
     const animate = () => {
@@ -289,101 +286,9 @@ const Game = ({ type }: { type: string }) => {
       animate();
       return returnFunction;
     }
-  }, [gameStartedRef.current, canvas, canvasRef.current]);
+  }, [gameStartedRef.current, canvasRef.current]);
 
-  useEffect(() => {
-    const gameMsge = gameMsg();
-    if (gameMsge) {
-      const parsedMessage = JSON.parse(gameMsge.data);
-      // console.log(parsedMessage.message);
-      const message = parsedMessage?.message.split(" ");
-      if (message[0] === "/move") {
-        const sender = message[2];
-        if (sender !== username) {
-          PaddleRightYRef.current = parseInt(message[1]);
-        }
-      } else if (message[0] === "/ballDirection") {
-        const sender = message[4];
-        if (sender !== username) {
-          newBallPositionRef.current = {
-            x: parseInt(message[1]),
-            y: parseInt(message[2]),
-          };
-          if (
-            canvasRef.current &&
-            (newBallPositionRef.current.x < canvasRef.current.width / 6 ||
-              newBallPositionRef.current.x > (canvasRef.current.width * 5) / 6)
-          ) {
-            isFirstTime.current = false;
-          }
-          newAngleRef.current = parseFloat(message[3]);
-        }
-      } else if (message[0] === "/show") {
-        if (!gameStartedRef.current) {
-          handleStartGame(
-            leftUser.current?.username || "",
-            rightUser.current?.username || "",
-            gameIdRef.current
-          );
-          timeRef.current = 0;
-          gameStartedRef.current = true;
-          newBallPositionRef.current = { x: 20000, y: 20000 };
-          newAngleRef.current = 0;
-          isFirstTime.current = true;
-          ballInLeftPaddle.current = false;
-          upPressedRef.current = false;
-          downPressedRef.current = false;
-          leftScoreRef.current = 0;
-          rightScoreRef.current = 0;
-          enemyLeftGameRef.current = false;
-          onGoingGame.refetch();
-        }
-      } else if (message[0] === "/score") {
-        isFirstTime.current = true;
-        onGoingGame.refetch();
-      } else if (message[0] === "/time") {
-        if (message[2] !== username) {
-          timeRef.current = parseInt(message[1]);
-          enemyLeftGameRef.current = false; // todo: tournament forfeit status
-        }
-      } else if (message[0] === "/refetchPlayers") {
-        onGoingGame.refetch();
-      } else if (message[0] === "/surrender") {
-        if (message[1] !== username) {
-          state.current = "surrendered";
-        } else {
-          state.current = "none";
-        }
-        gameStartedRef.current = false;
-        setCanvas(null);
-        onGoingGame.refetch();
-      } else if (message[0] === "/end") {
-        if (leftScoreRef.current >= 3) {
-          state.current = "win";
-        } else if (rightScoreRef.current < 3) {
-          state.current = "lose";
-        } else {
-          state.current = "none";
-        }
-        gameStartedRef.current = false;
-        setCanvas(null);
-        onGoingGame.refetch();
-      }
-    }
-    const notif = newNotif();
-    if (notif) {
-      const parsedMessage = JSON.parse(notif.data);
-      const message = parsedMessage?.message.split(" ");
-      console.log(parsedMessage.message);
-
-      if (message[0] === "/start" || message[0] === "/refetchTournament") {
-        onGoingGame.refetch();
-      } else if (message[0] === "/end") {
-        gameStartedRef.current = false;
-        onGoingGame.refetch();
-      }
-    }
-  }, [gameMsg()?.data, newNotif()?.data]);
+  
 
   return (
     <>
@@ -434,6 +339,7 @@ const Game = ({ type }: { type: string }) => {
                       rightUser.current?.username || "",
                       gameIdRef.current
                     );
+                    
                   }}
                   className="h-full w-full bg-primary"
                 >
@@ -481,6 +387,29 @@ const Game = ({ type }: { type: string }) => {
           )}
         </div>
       )}
+      <Sockets
+        canvasRef={canvasRef}
+        PaddleRightYRef={PaddleRightYRef}
+        newBallPositionRef={newBallPositionRef}
+        newAngleRef={newAngleRef}
+        isFirstTime={isFirstTime}
+        ballInLeftPaddle={ballInLeftPaddle}
+        upPressedRef={upPressedRef}
+        downPressedRef={downPressedRef}
+        leftScoreRef={leftScoreRef}
+        rightScoreRef={rightScoreRef}
+        enemyLeftGameRef={enemyLeftGameRef}
+        leftUser={leftUser}
+        rightUser={rightUser}
+        gameIdRef={gameIdRef}
+        gameStartedRef={gameStartedRef}
+        timeRef={timeRef}
+        state={state}
+        onGoingGame={onGoingGame}
+        username={username}
+        setCanvas={setCanvas}
+        bgImage={bgImage}
+      />
     </>
   );
 };
