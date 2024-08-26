@@ -149,12 +149,15 @@ const Game = ({ type }: { type: string }) => {
           upPressedRef.current = false;
           handleMovePaddle("down", paddleLeftYRef.current);
         }
-      } else if (e.type === "keyup") {
+      } 
+      if (e.type === "keyup") {
         if (e.key === "ArrowUp") {
           upPressedRef.current = false;
+          if (!downPressedRef.current)
           handleMovePaddle("stop", paddleLeftYRef.current);
         } else if (e.key === "ArrowDown") {
           downPressedRef.current = false;
+          if (!upPressedRef.current)
           handleMovePaddle("stop", paddleLeftYRef.current);
         }
       }
