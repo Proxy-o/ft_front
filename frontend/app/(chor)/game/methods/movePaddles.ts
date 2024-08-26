@@ -2,9 +2,8 @@ import { canvasParams, canvasParamsFour } from "../types";
 
 function movePaddlesOnline(
   canvasParams: canvasParams,
-  handleMovePaddle: (y: number) => void
 ) {
-  const { canvas, paddleLeftYRef, upPressedRef, downPressedRef, paddleHeight } =
+  const { canvas, paddleLeftYRef, upPressedRef, downPressedRef, paddleHeight, paddleRightDirectionRef, PaddleRightYRef } =
     canvasParams;
   if (canvas === null) return;
   if (upPressedRef.current && paddleLeftYRef.current > 0) {
@@ -13,7 +12,7 @@ function movePaddlesOnline(
     } else {
       paddleLeftYRef.current -= 6;
     }
-    handleMovePaddle(paddleLeftYRef.current);
+    // handleMovePaddle(paddleLeftYRef.current);
     // upPressedRef.current = false;
   } else if (
     downPressedRef.current &&
@@ -24,8 +23,23 @@ function movePaddlesOnline(
     } else {
       paddleLeftYRef.current += 6;
     }
-    handleMovePaddle(paddleLeftYRef.current);
+    // handleMovePaddle(paddleLeftYRef.current);
     // downPressedRef.current = false;
+  }
+  if (paddleRightDirectionRef.current === "up") {
+    if (PaddleRightYRef.current - 6 < 0) {
+      PaddleRightYRef.current = 0;
+    } else {
+      PaddleRightYRef.current -= 6;
+    }
+    // handleMovePaddle(PaddleRightYRef.current);
+  } else if (paddleRightDirectionRef.current === "down") {
+    if (PaddleRightYRef.current + 6 > canvas.height - paddleHeight) {
+      PaddleRightYRef.current = canvas.height - paddleHeight;
+    } else {
+      PaddleRightYRef.current += 6;
+    }
+    // handleMovePaddle(PaddleRightYRef.current);
   }
 }
 

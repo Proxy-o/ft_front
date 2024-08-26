@@ -27,13 +27,13 @@ import PreGame from "../components/preGame";
 import Sockets from "../components/sockets";
 
 const Game = ({ type }: { type: string }) => {
-  console.log("Game");
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationFrameId = useRef<number>(0);
   const isAnimating = useRef<boolean>(false);
   const isFirstTime = useRef<boolean>(true);
   const paddleLeftYRef = useRef<number>(0);
   const PaddleRightYRef = useRef<number>(0);
+  const paddleRightDirectionRef = useRef<string>("stop");
   const newBallPositionRef = useRef({ x: 20000, y: 20000 });
   const newAngleRef = useRef<number>(0);
   const leftScoreRef = useRef<number>(0);
@@ -120,6 +120,7 @@ const Game = ({ type }: { type: string }) => {
       paddleLeftYRef,
       paddleRightX,
       PaddleRightYRef,
+      paddleRightDirectionRef,
       newBallPositionRef,
       paddleLeftX,
       paddleWidth,
@@ -141,14 +142,20 @@ const Game = ({ type }: { type: string }) => {
       if (e.type === "keydown") {
         if (e.key === "ArrowUp") {
           upPressedRef.current = true;
+          downPressedRef.current = false;
+          handleMovePaddle("up", paddleLeftYRef.current);
         } else if (e.key === "ArrowDown") {
           downPressedRef.current = true;
+          upPressedRef.current = false;
+          handleMovePaddle("down", paddleLeftYRef.current);
         }
       } else if (e.type === "keyup") {
         if (e.key === "ArrowUp") {
           upPressedRef.current = false;
+          handleMovePaddle("stop", paddleLeftYRef.current);
         } else if (e.key === "ArrowDown") {
           downPressedRef.current = false;
+          handleMovePaddle("stop", paddleLeftYRef.current);
         }
       }
     };
@@ -176,7 +183,7 @@ const Game = ({ type }: { type: string }) => {
         newAngleRef.current = Math.random() * Math.PI;
         while (
           (newAngleRef.current > Math.PI / 6 &&
-            newAngleRef.current < (Math.PI * 5) / 6) ||
+            newAngleRef.current <   (Math.PI * 5) / 6) ||
           (newAngleRef.current > (Math.PI * 7) / 6 &&
             newAngleRef.current < (Math.PI * 11) / 6)
         ) {
@@ -206,7 +213,7 @@ const Game = ({ type }: { type: string }) => {
       draw(canvasParams, ctx);
 
       // move paddles
-      movePaddlesOnline(canvasParams, handleMovePaddle);
+      movePaddlesOnline(canvasParams);
       // // console.log("move paddle" + movePaddleRef.current);
 
       // // Check for collision with left paddle
@@ -253,6 +260,7 @@ const Game = ({ type }: { type: string }) => {
         moveBall(canvasParams, user, leftUser.current, newAngleRef);
 
       // Check if enemy has left the game
+      console.log("timeRef.current", timeRef.current);
       enemyLeftGame(
         canvasParams,
         timeRef,
@@ -394,6 +402,7 @@ const Game = ({ type }: { type: string }) => {
         newAngleRef={newAngleRef}
         isFirstTime={isFirstTime}
         ballInLeftPaddle={ballInLeftPaddle}
+        paddleRightDirectionRef={paddleRightDirectionRef}
         upPressedRef={upPressedRef}
         downPressedRef={downPressedRef}
         leftScoreRef={leftScoreRef}

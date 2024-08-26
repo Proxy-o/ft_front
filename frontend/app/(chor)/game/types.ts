@@ -5,6 +5,7 @@ export type canvasParams = {
   paddleLeftYRef: React.MutableRefObject<number>;
   paddleRightX: number;
   PaddleRightYRef: React.MutableRefObject<number>;
+  paddleRightDirectionRef: React.MutableRefObject<string>;
   newBallPositionRef: React.MutableRefObject<{ x: number; y: number }>;
   paddleLeftX: number;
   paddleWidth: number;

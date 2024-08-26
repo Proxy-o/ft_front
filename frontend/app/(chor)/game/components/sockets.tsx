@@ -13,6 +13,7 @@ const Sockets = (
         ballInLeftPaddle,
         upPressedRef,
         downPressedRef,
+        paddleRightDirectionRef,
         leftScoreRef,
         rightScoreRef,
         enemyLeftGameRef,
@@ -33,6 +34,7 @@ const Sockets = (
         newAngleRef: React.MutableRefObject<number>,
         isFirstTime: React.MutableRefObject<boolean>,
         ballInLeftPaddle: React.MutableRefObject<boolean>,
+        paddleRightDirectionRef: React.MutableRefObject<string>,
         upPressedRef: React.MutableRefObject<boolean>,
         downPressedRef: React.MutableRefObject<boolean>,
         leftScoreRef: React.MutableRefObject<number>,
@@ -63,9 +65,10 @@ const Sockets = (
       const message = parsedMessage?.message.split(" ");
       
       if (message[0] === "/move") {
-        const sender = message[2];
+        const sender = message[3];
         if (sender !== username) {
-          PaddleRightYRef.current = parseInt(message[1]);
+          paddleRightDirectionRef.current = message[1];
+          PaddleRightYRef.current = parseInt(message[2]);
         }
       } else if (message[0] === "/ballDirection") {
         const sender = message[4];

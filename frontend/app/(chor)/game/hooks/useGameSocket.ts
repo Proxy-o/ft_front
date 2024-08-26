@@ -1,4 +1,5 @@
 import getCookie from "@/lib/functions/getCookie";
+import { dir } from "console";
 import useWebSocket from "react-use-websocket";
 
 export default function useGameSocket() {
@@ -16,8 +17,8 @@ export default function useGameSocket() {
     sendJsonMessage({ message: toSend });
   };
 
-  const handleMovePaddle = (paddleY: number) => {
-    const toSend = "/move " + paddleY;
+  const handleMovePaddle = (direction: string, paddleY: number) => {
+    const toSend = "/move " + direction + " " + paddleY;
     sendJsonMessage({ message: toSend });
   };
 

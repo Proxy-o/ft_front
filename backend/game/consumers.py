@@ -399,8 +399,9 @@ class GameConsumer(WebsocketConsumer):
 
     def handle_move(self, split):
         # print("Handling move")
-        paddle_y = split[1]
-        self.send_move_message(paddle_y)
+        direction = split[1]
+        paddle_y = split[2]
+        self.send_move_message(direction, paddle_y)
 
     def handle_four_move(self, split):
         # print("Handling four move")
@@ -548,14 +549,14 @@ class GameConsumer(WebsocketConsumer):
             }
         )
 
-    def send_move_message(self, paddle_y):
+    def send_move_message(self, direction, paddle_y):
         # print("Sending move message")
         async_to_sync(self.channel_layer.group_send)(
             self.game_group,
             {
                 'type': 'send_message',
                 'user': self.user.username,
-                'message': f'/move {paddle_y} {self.user.username}'
+                'message': f'/move {direction} {paddle_y} {self.user.username}'
             }
         )
 
