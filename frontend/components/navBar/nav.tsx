@@ -141,7 +141,6 @@ export default function Nav() {
     invitations,
     id,
     isSuccessInvit,
-    invitationLastMessage,
     queryClient,
     router,
     path,
