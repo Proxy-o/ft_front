@@ -154,11 +154,11 @@ const Game = ({ type }: { type: string }) => {
         if (e.key === "ArrowUp") {
           upPressedRef.current = false;
           if (!downPressedRef.current)
-          handleMovePaddle("stop", paddleLeftYRef.current);
+            handleMovePaddle("stop", paddleLeftYRef.current);
         } else if (e.key === "ArrowDown") {
           downPressedRef.current = false;
           if (!upPressedRef.current)
-          handleMovePaddle("stop", paddleLeftYRef.current);
+            handleMovePaddle("stop", paddleLeftYRef.current);
         }
       }
     };
