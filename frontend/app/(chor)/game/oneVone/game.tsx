@@ -26,7 +26,7 @@ import NoGame from "../components/noGame";
 import PreGame from "../components/preGame";
 import Sockets from "../components/sockets";
 
-const Game = ({ type }: { type: string }) => {
+const Game = ({ type, onGoingGame }: { type: string; onGoingGame: any }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationFrameId = useRef<number>(0);
   const isAnimating = useRef<boolean>(false);
@@ -60,19 +60,21 @@ const Game = ({ type }: { type: string }) => {
     handleEnemyScore,
     handleTime,
     handleStartGame,
+    handleSurrender,
   } = useGameSocket();
-
-  const { handleSurrender } = useInvitationSocket();
   const user_id = getCookie("user_id") || "";
   const { data: user } = useGetUser(user_id || "0");
   const { mutate: surrenderGame } = useSurrenderGame();
   const { mutate: leaveGame } = useLeaveGame();
   const { mutate: endGame } = useEndGame();
-  const { onGoingGame } = useGetGame(user_id || "0", type);
 
   userRef.current = user;
 
   const username = user?.username || "";
+
+  function changeTime(Time: number) {
+    timeRef.current = Time;
+  }
 
   if (onGoingGame?.data?.game?.user1?.username === username) {
     leftUser.current = onGoingGame?.data?.game?.user1;
@@ -263,15 +265,15 @@ const Game = ({ type }: { type: string }) => {
         moveBall(canvasParams, user, leftUser.current, newAngleRef);
 
       // Check if enemy has left the game
-      console.log("timeRef.current", timeRef.current);
-      enemyLeftGame(
-        canvasParams,
-        timeRef,
-        enemyLeftGameRef,
-        gameStartedRef,
-        handleTime,
-        endGame
-      );
+      // console.log("timeRef.current", timeRef.current);
+      // enemyLeftGame(
+      //   canvasParams,
+      //   timeRef,
+      //   enemyLeftGameRef,
+      //   gameStartedRef,
+      //   handleTime,
+      //   endGame
+      // );
     };
 
     const drawOnlineOne = () => {
@@ -415,7 +417,7 @@ const Game = ({ type }: { type: string }) => {
         rightUser={rightUser}
         gameIdRef={gameIdRef}
         gameStartedRef={gameStartedRef}
-        timeRef={timeRef}
+        changeTime={changeTime}
         state={state}
         onGoingGame={onGoingGame}
         username={username}

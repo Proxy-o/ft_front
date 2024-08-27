@@ -48,10 +48,6 @@ class InvitationConsumer(WebsocketConsumer):
             self.handle_ready_four(split)
         elif command == '/readyToStartFour':
             self.handle_ready_to_start_four(split)
-        elif command == '/surrender': # todo: fix surrender in tournament    done, to be tested
-            self.handle_surrender(split)
-        elif command == '/refetchTournament':
-            self.handle_refetch_tournament(split)
         elif command == '/acceptTournament':
             self.handle_accept_tournament(split)
         elif command == '/decline':
@@ -177,33 +173,10 @@ class InvitationConsumer(WebsocketConsumer):
             {'type': 'send_message', 'user': split[4], 'message': f'/startFour {split[1]} {split[2]} {split[3]} {split[4]}'}
         )
 
-    def handle_surrender(self, split):
-        surrenderer = split[1]
-        winner_username = split[2]
-        async_to_sync(self.channel_layer.group_send)(
-            f'inbox_{surrenderer}',
-            {
-                'type': 'send_message',
-                'user': surrenderer,
-                'message': f'/surrender {surrenderer} {winner_username}'
-            }
-        )
-        async_to_sync(self.channel_layer.group_send)(
-            f'inbox_{winner_username}',
-            {
-                'type': 'send_message',
-                'user': winner_username, 'message':
-                f'/surrender {surrenderer} {winner_username}'
-            }
-        )
+    
     
 
-    def handle_refetch_tournament(self, split):
-        print("Refetching tournament")
-        time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        tournamentId = split[1]
-        tournament = Tournament.objects.get(id=tournamentId)
-        self.refresh_tournament(tournament)
+    
 
     def handle_accept_tournament(self, split):
         print("Accepting tournament")
@@ -211,20 +184,7 @@ class InvitationConsumer(WebsocketConsumer):
         tournament = Tournament.objects.get(id=id)
         self.refresh_tournament(tournament)
 
-    def refresh_tournament(self, tournament):
-        print("Refreshing tournament")
-        time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        participants = [tournament.user1, tournament.user2, tournament.user3, tournament.user4]
-        for participant in participants:
-            if participant:
-                async_to_sync(self.channel_layer.group_send)(
-                    f'inbox_{participant.username}',
-                    {
-                        'type': 'send_message',
-                        'user': self.user.username,
-                        'message': f'/refetchTournament {tournament.id} {time}'
-                    }
-                )
+    
 
     def handle_decline(self, split):
         print("Declining invitation")
@@ -290,10 +250,14 @@ class GameConsumer(WebsocketConsumer):
             self.handle_four_move(split)
         elif command == '/changeBallDirection':
             self.handle_change_ball_direction(split)
+        elif command == '/refetchTournament':
+            self.handle_refetch_tournament(split)
         elif command == '/fourChangeBallDirection':
             self.handle_four_change_ball_direction(split)
         elif command == '/time':
             self.handle_time(split)
+        elif command == '/surrender': # todo: fix surrender in tournament    done, to be tested
+            self.handle_surrender(split)
         elif command == '/fourTime':
             self.handle_four_time(split)
         elif command == '/timeResponse':
@@ -444,6 +408,26 @@ class GameConsumer(WebsocketConsumer):
                 'message': f'/time {time} {self.user.username}'
             }
         )
+
+    def handle_surrender(self, split):
+        surrenderer = split[1]
+        winner_username = split[2]
+        async_to_sync(self.channel_layer.group_send)(
+            f'inbox_{surrenderer}',
+            {
+                'type': 'send_message',
+                'user': surrenderer,
+                'message': f'/surrender {surrenderer} {winner_username}'
+            }
+        )
+        async_to_sync(self.channel_layer.group_send)(
+            f'inbox_{winner_username}',
+            {
+                'type': 'send_message',
+                'user': winner_username, 'message':
+                f'/surrender {surrenderer} {winner_username}'
+            }
+        )
     
     def handle_four_time(self, split):
         # print("Handling four time")
@@ -480,6 +464,28 @@ class GameConsumer(WebsocketConsumer):
                 'message': f'/whoLeftGame {self.user.username}'
             }
         )
+
+    def handle_refetch_tournament(self, split):
+        print("Refetching tournament")
+        time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        tournamentId = split[1]
+        tournament = Tournament.objects.get(id=tournamentId)
+        self.refresh_tournament(tournament)
+
+    def refresh_tournament(self, tournament):
+        print("Refreshing tournament")
+        time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        participants = [tournament.user1, tournament.user2, tournament.user3, tournament.user4]
+        for participant in participants:
+            if participant:
+                async_to_sync(self.channel_layer.group_send)(
+                    f'inbox_{participant.username}',
+                    {
+                        'type': 'send_message',
+                        'user': self.user.username,
+                        'message': f'/refetchTournament {tournament.id} {time}'
+                    }
+                )
 
     def handle_still_playing(self, split):
         who_asked = split[2]

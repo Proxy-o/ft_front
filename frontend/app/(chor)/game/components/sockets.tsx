@@ -21,8 +21,8 @@ const Sockets = (
         rightUser,
         gameIdRef,
         gameStartedRef,
-        timeRef,
         state,
+        changeTime,
         onGoingGame,
         username,
         setCanvas,
@@ -43,8 +43,8 @@ const Sockets = (
         leftUser: React.MutableRefObject<User | undefined>,
         rightUser: React.MutableRefObject<User | undefined>,
         gameIdRef: React.MutableRefObject<string>,
+        changeTime: (time: number) => void,
         gameStartedRef: React.MutableRefObject<boolean>,
-        timeRef: React.MutableRefObject<number>,
         state: React.MutableRefObject<string>,
         onGoingGame: any,
         username: string,
@@ -56,7 +56,6 @@ const Sockets = (
     gameMsg,
     handleStartGame,
   } = useGameSocket();
-  const { newNotif } = useInvitationSocket();
   useEffect(() => {
     const gameMsge = gameMsg();
     if (gameMsge) {
@@ -93,7 +92,7 @@ const Sockets = (
             rightUser.current?.username || "",
             gameIdRef.current
           );
-          timeRef.current = 0;
+          changeTime(0);
           gameStartedRef.current = true;
           newBallPositionRef.current = { x: 20000, y: 20000 };
           newAngleRef.current = 0;
@@ -111,7 +110,7 @@ const Sockets = (
         onGoingGame.refetch();
       } else if (message[0] === "/time") {
         if (message[2] !== username) {
-          timeRef.current = parseInt(message[1]);
+          changeTime(parseInt(message[1]));
           enemyLeftGameRef.current = false; // todo: tournament forfeit status
         }
       } else if (message[0] === "/refetchPlayers") {
@@ -140,21 +139,7 @@ const Sockets = (
     }
   }, [gameMsg()?.data]);
 
-  useEffect(() => {
-    const notif = newNotif();
-    if (notif) {
-      const parsedMessage = JSON.parse(notif.data);
-      const message = parsedMessage?.message.split(" ");
-      console.log(parsedMessage.message);
-
-      if (message[0] === "/start" || message[0] === "/refetchTournament") {
-        onGoingGame.refetch();
-      } else if (message[0] === "/end") {
-        gameStartedRef.current = false;
-        onGoingGame.refetch();
-      }
-    }
-  }, [newNotif()?.data]);
+  
 
 
   return (

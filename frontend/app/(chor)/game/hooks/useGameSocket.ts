@@ -102,6 +102,15 @@ export default function useGameSocket() {
     sendJsonMessage({ message: "/disconnect" });
   };
 
+  const handleSurrender = (
+    surrenderer: string,
+    winner: string,
+    game_id: string
+  ) => {
+    const toSend = "/surrender " + surrenderer + " " + winner + " " + game_id;
+    sendJsonMessage({ message: toSend });
+  };
+
   return {
     gameMsg,
     handleStartGame,
@@ -119,5 +128,6 @@ export default function useGameSocket() {
     handleTimeResponse,
     handleStillPlaying,
     handleSurrenderFour,
+    handleSurrender,
   };
 }

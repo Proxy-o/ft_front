@@ -44,14 +44,7 @@ export default function useInvitationSocket() {
     sendJsonMessage({ message: toSend });
   };
 
-  const handleSurrender = (
-    surrenderer: string,
-    winner: string,
-    game_id: string
-  ) => {
-    const toSend = "/surrender " + surrenderer + " " + winner + " " + game_id;
-    sendJsonMessage({ message: toSend });
-  };
+  
 
   const handleRefetchPlayers = (game_id: string) => {
     const toSend = "/refetchPlayers " + game_id;
@@ -91,7 +84,6 @@ export default function useInvitationSocket() {
     handelSendInvitation,
     newNotif,
     handleAcceptInvitation,
-    handleSurrender,
     handleStartGameFour,
     handleRefetchPlayers,
     handleReadyFour,
