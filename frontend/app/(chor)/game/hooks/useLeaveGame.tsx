@@ -1,35 +1,32 @@
+
 import axiosInstance from "@/lib/functions/axiosInstance";
 import useGameSocket from "@/app/(chor)/game/hooks/useGameSocket";
 import useInvitationSocket from "@/app/(chor)/game/hooks/useInvitationSocket";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-const leaveGame = async () => {
+const surrenderGame = async () => {
   try {
-    const res = await axiosInstance.post("/game/leaveGame");
-    console.log(res);
-    if (res.status === 200) {
-      const returnData = {
-        gameId: res.data.gameId,
-        tournamentId: res.data.tournamentId,
-      };
-      toast.success(res.data.message); // todo : refetch game when an enemy join tournament   done, to be tested
-      return returnData;
-    }
+    const res = await axiosInstance.post("/game/surrender");
+    const returnData = {
+      gameId: res.data.gameId,
+      tournamentId: res.data.tournamentId,
+    };
+    return returnData;
   } catch (error: any) {
     toast.error(error?.response?.data.error);
   }
   return null;
 };
 
-export default function useLeaveGame() {
-  const { handleSurrenderFour } = useGameSocket();
+export default function useSurrenderGame() {
+  // const { handleSurrenderFour } = useGameSocket();
   const { handleRefetchTournament } = useInvitationSocket();
   const queryClient = useQueryClient();
   const mutation = useMutation({
-    mutationFn: () => leaveGame(),
+    mutationFn: () => surrenderGame(),
     onSuccess: (data) => {
-      handleSurrenderFour(data?.gameId);
+      // handleSurrenderFour(data?.gameId);
 
       if (data?.tournamentId) {
         handleRefetchTournament(data?.tournamentId);

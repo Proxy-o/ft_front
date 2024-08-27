@@ -6,7 +6,6 @@ const NoGame = ({ state }: { state: React.MutableRefObject<string> }) => {
   const letterIndex = useRef(0);
   const [text, setText] = useState("");
   useEffect(() => {
-    console.log(state.current);
     if (state.current === "win") {
       atext.current = "You won";
     } else if (state.current === "lose") {

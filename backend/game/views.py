@@ -389,7 +389,7 @@ class Surrender(APIView):
                 tournament.winner = tournament.final.winner
                 tournament.save()
                 # return Response({'message': 'Tournament ended', 'tournamentId': tournament.id}, status=status.HTTP_200_OK)
-        return Response({'message': 'Game ended', 'gameId': game.id, 'tournamentId': tournament.id}, status=status.HTTP_200_OK)
+            return Response({'message': 'Game ended', 'gameId': game.id, 'tournamentId': tournament.id}, status=status.HTTP_200_OK)
 
         return Response({'message': 'Game ended'}, status=status.HTTP_200_OK)
 

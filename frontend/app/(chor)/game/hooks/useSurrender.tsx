@@ -1,3 +1,5 @@
+
+
 import axiosInstance from "@/lib/functions/axiosInstance";
 import useGameSocket from "@/app/(chor)/game/hooks/useGameSocket";
 import useInvitationSocket from "@/app/(chor)/game/hooks/useInvitationSocket";
@@ -7,11 +9,15 @@ import { toast } from "sonner";
 const surrenderGame = async () => {
   try {
     const res = await axiosInstance.post("/game/surrender");
-    const returnData = {
-      gameId: res.data.gameId,
-      tournamentId: res.data.tournamentId,
-    };
-    return returnData;
+    console.log(res);
+    if (res.status === 200) {
+      const returnData = {
+        gameId: res.data.gameId,
+        tournamentId: res.data.tournamentId,
+      };
+      toast.success(res.data.message); // todo : refetch game when an enemy join tournament   done, to be tested
+      return returnData;
+    }
   } catch (error: any) {
     toast.error(error?.response?.data.error);
   }
@@ -19,13 +25,13 @@ const surrenderGame = async () => {
 };
 
 export default function useSurrenderGame() {
-  const { handleSurrenderFour } = useGameSocket();
+  // const { handleSurrenderFour } = useGameSocket();
   const { handleRefetchTournament } = useInvitationSocket();
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: () => surrenderGame(),
     onSuccess: (data) => {
-      handleSurrenderFour(data?.gameId);
+      // handleSurrenderFour(data?.gameId);
 
       if (data?.tournamentId) {
         handleRefetchTournament(data?.tournamentId);
