@@ -109,23 +109,28 @@ class OAuthRedirect(APIView):
 
 @authentication_classes([])
 @permission_classes([])
-class OAuthCallback(TokenObtainPairView):
-    print("callback accessed")
+class OAuthCallback(APIView):
     def get(self, request, *args, **kwargs):
         provider = kwargs.get('provider')
         code = request.query_params.get('code')
         state = request.query_params.get('state')
+
+        if not code:
+            return Response({'detail': 'Code is required'}, status=status.HTTP_400_BAD_REQUEST)
+
         user, user_credentials, error = OAuthService.handle_callback(provider, code, state)
         if error:
             return Response(error, status=status.HTTP_400_BAD_REQUEST)
+        
         serializers = OAuthCredentialSerializer(data=user_credentials)
         if serializers.is_valid():
             serializers.save()
         else:
             return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
-        response = super().post(request, *args, **kwargs)
-        access_token = response.data.get('access')
-        refresh_token = response.data.get('refresh')
+        
+        refresh = RefreshToken.for_user(user)
+        access_token = str(refresh.access_token)
+        refresh_token = str(refresh)
         return set_auth_cookies_and_response(user, refresh_token, access_token, request)
 
 
