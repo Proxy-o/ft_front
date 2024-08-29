@@ -8,6 +8,9 @@ urlpatterns = [
     path('refresh', views.CustomTokenRefreshView.as_view()),
     path('verify_otp', views.verifyOTPView, name='verify_otp'),
     path('toggle_otp', views.toggleOTP, name='toggle_otp'),
+    # oauth
+    path('redirect/<str:provider>', views.OAuthRedirect.as_view(), name='oauth_redirect'),
+    path('callback/<str:provider>', views.OAuthCallback.as_view(), name='oauth_callback'),
 ]
 
 urlpatterns += [
