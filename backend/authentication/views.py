@@ -1,3 +1,4 @@
+import requests
 from django.contrib.auth.models import User
 from rest_framework.pagination import PageNumberPagination
 from urllib.parse import urlencode
@@ -7,7 +8,7 @@ from django.conf import settings
 from django.shortcuts import redirect
 from rest_framework.response import Response
 from rest_framework import status, serializers
-from .serializers import UserSerializer, AvatarSerializer, VerifyOTPSerializer, EditUserSerializer
+from .serializers import UserSerializer, AvatarSerializer, VerifyOTPSerializer, EditUserSerializer, OAuthCredentialSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from django.http import Http404
@@ -20,6 +21,7 @@ from django.db.models import Q
 from django.contrib.auth.password_validation import validate_password
 from authentication.customJWTAuthentication import CustomJWTAuthentication
 from django.contrib.auth import get_user_model
+from .services import OAuthService
 User = get_user_model()
 
 
@@ -27,8 +29,7 @@ User = get_user_model()
 @authentication_classes([])  # No authentication required
 @permission_classes([])  # No permissions required
 def signup(request):
-    serializer = UserSerializer(
-        data=request.data, context={'request': request})
+    serializer = UserSerializer(data=request.data, context={'request': request})
 
     if serializer.is_valid():
         try:
@@ -42,6 +43,33 @@ def signup(request):
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+def set_auth_cookies_and_response(user, refresh_token, access_token, request):
+    response = Response({
+        'refresh': str(refresh_token),
+        'access': str(access_token),
+        'user': UserSerializer(user, context={'request': request}).data
+    })
+
+    response.set_cookie(
+        'access',
+        str(access_token),
+        max_age=36000,
+        expires=36000,
+        httponly=True,
+        secure=True,  # Use secure=True if your site is served over HTTPS
+        samesite='None'  # Adjust as needed, could also be 'Strict' or 'None'
+    )
+    response.set_cookie(
+        'refresh',
+        str(refresh_token),
+        max_age=36000,
+        expires=36000,
+        httponly=False,
+        secure=True,  # Use secure=True if your site is served over HTTPS
+        samesite='None'  # Adjust as needed, could also be 'Strict' or 'None'
+    )
+
+    return response
 
 class Login(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
@@ -61,38 +89,44 @@ class Login(TokenObtainPairView):
         response = super().post(request, *args, **kwargs)
 
         # Get the token from the response
-        token = response.data.get('access')
-        # remove the token from the response
-        response.data.pop('access')
+        access_token = response.data.get('access')
+        refresh_token = response.data.get('refresh')
 
-        refresh = response.data.get('refresh')
+        # Use the helper function
+        return set_auth_cookies_and_response(user, refresh_token, access_token, request)
 
-        # Create an HttpOnly cookie with the token
-        response.set_cookie(
-            'access',
-            token,
-            max_age=36000,
-            expires=36000,
-            httponly=True,
-            secure=True,  # Use secure=True if your site is served over HTTPS
-            samesite='None'  # Adjust as needed, could also be 'Strict' or 'None'
-        )
-        response.set_cookie(
-            'refresh',
-            refresh,
-            max_age=36000,
-            expires=36000,
-            httponly=False,
-            secure=True,  # Use secure=True if your site is served over HTTPS
-            samesite='None'  # Adjust as needed, could also be 'Strict' or 'None'
-        )
+# Oauth 2.0
+@authentication_classes([])
+@permission_classes([])
+class OAuthRedirect(APIView):
+    def get(self, request, *args, **kwargs):
+        print('here')
+        provider = kwargs.get('provider')
+        redirect_url, error = OAuthService.get_redirect_url(provider)
+        if error:
+            return Response(error, status=status.HTTP_400_BAD_REQUEST)
+        return redirect(redirect_url)
 
-        # Add user data to the response
-        user_serializer = UserSerializer(user, context={'request': request})
-        user_data = user_serializer.data
-        response.data['user'] = user_data
-
-        return response
+@authentication_classes([])
+@permission_classes([])
+class OAuthCallback(TokenObtainPairView):
+    print("callback accessed")
+    def get(self, request, *args, **kwargs):
+        provider = kwargs.get('provider')
+        code = request.query_params.get('code')
+        state = request.query_params.get('state')
+        user, user_credentials, error = OAuthService.handle_callback(provider, code, state)
+        if error:
+            return Response(error, status=status.HTTP_400_BAD_REQUEST)
+        serializers = OAuthCredentialSerializer(data=user_credentials)
+        if serializers.is_valid():
+            serializers.save()
+        else:
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+        response = super().post(request, *args, **kwargs)
+        access_token = response.data.get('access')
+        refresh_token = response.data.get('refresh')
+        return set_auth_cookies_and_response(user, refresh_token, access_token, request)
 
 
 @api_view(['POST'])
@@ -116,7 +150,6 @@ def toggleOTP(request):
         user.otp_active = False
         user.save()
         return Response({'detail': 'OTP disabled'}, status=200)
-
 
 class CustomTokenRefreshView(TokenRefreshView):
     def post(self, request, *args, **kwargs):
@@ -143,7 +176,6 @@ class CustomTokenRefreshView(TokenRefreshView):
 
         return response
 
-
 class CustomLogoutView(APIView):
     authentication_classes = []
 
@@ -163,7 +195,6 @@ class CustomLogoutView(APIView):
         return response
 
         # If the refresh token is invalid, return a success response
-
 
 # upload avatar
 class UserAvatar(APIView):
@@ -190,7 +221,6 @@ class UserAvatar(APIView):
             return Response(data=serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
 class UserList(APIView):
     """
     List all users, or create a new user.
@@ -203,7 +233,6 @@ class UserList(APIView):
         serializer = UserSerializer(
             users, context={'request': request}, many=True)
         return Response(serializer.data)
-
 
 class UserDetail(APIView):
     """
@@ -251,5 +280,3 @@ class UserDetail(APIView):
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-
-# 0auth 2.0
