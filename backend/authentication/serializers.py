@@ -9,6 +9,7 @@ from django.contrib.auth.hashers import check_password
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.hashers import make_password
 from django.conf import settings
+from authentication.models import OAuthCredential
 
 User = get_user_model()
 
@@ -22,7 +23,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ('id', 'username', 'first_name', 'last_name', 'email',
                   'password', 'avatar', 'status', 'friends', "date_joined", "qr_code", "otp_active")
-        extra_kwargs = {'password': {'write_only': True}}
+        extra_kwargs = {'password': {'write_only': True, 'required': False}}
 
     def get_avatar(self, obj):
         if obj.avatar:
@@ -139,3 +140,30 @@ class VerifyOTPSerializer(serializers.Serializer):
             "refresh": str(refresh),
             "access": str(refresh.access_token),
         }
+
+
+class OAuthCredentialSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = OAuthCredential
+        fields = '__all__'
+
+    def create(self, validated_data):
+        user = validated_data.get('user')
+        provider = validated_data.get('provider')
+        refresh_token = validated_data.get('refresh_token')
+        access_token = validated_data.get('access_token')
+        expires_at = validated_data.get('expires_at')
+
+        # Check if the OAuth credential already exists for the same user and provider
+        credential, created = OAuthCredential.objects.update_or_create(
+            user=user,
+            provider=provider,
+            defaults={
+                'refresh_token': refresh_token,
+                'access_token': access_token,
+                'expires_at': expires_at
+            }
+        )
+
+        return credential

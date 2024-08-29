@@ -1,3 +1,4 @@
+psycopg2-binary==2.9.9
 asgiref==3.6.0
 async-timeout==4.0.3
 attrs==23.1.0
@@ -45,5 +46,4 @@ watchdog==3.0.0
 websocket-client==1.7.0
 whitenoise==6.4.0
 zope.interface==6.1
-psycopg2==2.9.3
 requests==2.32.3
