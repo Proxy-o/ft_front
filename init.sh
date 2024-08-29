@@ -2,7 +2,7 @@
 
 set -e
 
-DOTENV=$(find . -name .env -o -name settings.py)
+DOTENV=$(find . -name .env)
 if [ "$(uname)" == "Linux" ]
 then
     IPADDR=$(hostname -I | cut -d ' ' -f 1 | tr -d ' ')
@@ -14,5 +14,5 @@ fi
 
 for file in $DOTENV
 do
-    $SEDI "s/ipaddr/$IPADDR/g" $file
+    $SEDI "s/__ipaddr__/$IPADDR/g" $file
 done
