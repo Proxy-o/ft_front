@@ -1,23 +1,14 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { setLoginCookie } from "./useLogin";
 
-export const setLoginCookie = (data: any) => {
-  var date = new Date();
-  date.setTime(date.getTime() + 30 * 24 * 60 * 60 * 1000); // 30 days
-  var expires = "; expires=" + date.toUTCString();
-  var sameSite = "; SameSite=None; Secure";
-  document.cookie = "logged_in=yes" + expires + "; path=/" + sameSite;
-  document.cookie = "user_id=" + data.user.id + expires + "; path=/" + sameSite;
-
-};
-
-export default function useLogin() {
+export default function useOAuthLogin() {
   const router = useRouter();
   const mutation = useMutation({
-    mutationFn: async (data: { username: string; password: string }) => {
+    mutationFn: async (provider: string) => {
       try {
-        const response = await axiosInstance.post("/login", data);
+        const response = await axiosInstance.post(`/redirect/${provider}`);
         return response.data;
       } catch (error: any) {
         if (error.response) {

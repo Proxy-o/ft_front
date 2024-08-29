@@ -14,7 +14,7 @@ RUN npm install
 COPY ./frontend .
 
 # Copy environment variables
-COPY ../.env ./.env
+COPY .env .env
 
 # Expose the port the app runs on
 EXPOSE 3000
