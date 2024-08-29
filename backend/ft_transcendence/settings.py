@@ -22,12 +22,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-secure-v9^pz=2p0@)dx)x!u*yl11l73-oyhvf5_do8*&s7h_gl-ic17" # os.environ["SECRET_KEY"]
+SECRET_KEY = os.environ["SECRET_KEY"]
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+SERVER_HOST = os.environ['SERVER_HOST']
+ALLOWED_HOSTS = [SERVER_HOST, 'localhost', '127.0.0.1']
 
 # Application definition
 
@@ -93,22 +94,15 @@ ASGI_APPLICATION = 'ft_transcendence.asgi.application'  # new
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ["POSTGRES_NAME"],
+        "USER": os.environ["POSTGRES_USER"],
+        "PASSWORD": os.environ["POSTGRES_PASSWORD"],
+        "HOST": os.environ["POSTGRES_HOST"],
+        "PORT": os.environ["POSTGRES_PORT"],
+
     }
 }
-
-# DATABASES = {
-#     'default': {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "NAME": os.environ["POSTGRES_NAME"],
-#         "USER": os.environ["POSTGRES_USER"],
-#         "PASSWORD": os.environ["POSTGRES_PASSWORD"],
-#         "HOST": os.environ["POSTGRES_HOST"],
-#         "PORT": os.environ["POSTGRES_PORT"],
-
-#     }
-# }
 
 
 # Password validation
@@ -174,20 +168,6 @@ REST_FRAMEWORK = {
     ],
 }
 
-OAUTH_PROVIDERS={
-    '42': {
-        'base_url': 'https://api.intra.42.fr',
-        'authorize_url': '/oauth/authorize',
-        'token_url': '/oauth/token',
-        'user_info_url': '/v2/me',
-        'client_id': 'u-s4t2ud-3f415d8701b8c558101437fd9fc65398bbba09a8d7d535a9513cf18740c4a166',
-        'client_secret': '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',
-        'redirect_uri': 'http://127.0.0.1:8000/api/callback/42',
-        'scope': 'public',
-        'state': 'secure',
-    },
-}
-
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=7),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
@@ -201,9 +181,9 @@ SIMPLE_JWT = {
 INSTALLED_APPS += ['corsheaders']
 MIDDLEWARE += ['corsheaders.middleware.CorsMiddleware']
 CORS_ORIGIN_WHITELIST = [
+    f'http://{SERVER_HOST}:3000',
     'http://127.0.0.1:3000',
     'http://localhost:3000',
-    # 'http://ipaddr:3000',
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -221,6 +201,21 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # URL used to access the media
 MEDIA_URL = '/'
 
-SERVER_URL = os.getenv('SERVER_URL', 'http://localhost:8000')
+SERVER_URL = os.getenv['SERVER_URL']
 
+# oauth providers
+
+OAUTH_PROVIDERS = {
+    '42': {
+        'base_url': 'https://api.intra.42.fr',
+        'authorize_url': '/oauth/authorize',
+        'token_url': '/oauth/token',
+        'user_info_url': '/v2/me',
+        'client_id': os.environ['OAUTH_42_CLIENT_ID'],
+        'client_secret': os.environ['OAUTH_42_CLIENT_SECRET'],
+        'redirect_uri': f'{SERVER_URL}/api/callback/42',
+        'scope': 'public',
+        'state': 'secure',
+    },
+}
 
