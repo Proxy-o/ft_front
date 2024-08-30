@@ -2,7 +2,7 @@
 all:
 	bash init.sh
 	mkdir -p ./postgres
-	docker-compose -f ./docker-compose.yml up -d
+	docker-compose -f ./docker-compose.yml up #-d
 	@echo ""
 	@echo "\033[0;32m######################### \033[0m"
 	@echo "\033[0;32mSERVER IS READY TO USE \033[0m"
@@ -21,7 +21,7 @@ down:
 
 re:	down
 	
-	docker-compose -f ./docker-compose.yml up -d --build
+	docker-compose -f ./docker-compose.yml up --build # -d
 
 clean: down
 	

@@ -21,9 +21,5 @@ COPY . .
 # Expose the port server is running on
 EXPOSE 8000
 
-
-
-
-
 # Start the application from run_app.sh
 CMD ["sh", "run_app.sh"]
