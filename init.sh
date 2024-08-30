@@ -14,5 +14,5 @@ fi
 
 for file in $DOTENV
 do
-    $SEDI "s/__ipaddr__/$IPADDR/g" $file
+    $SEDI "/^SERVER_HOST/c\SERVER_HOST=$IPADDR" $file
 done

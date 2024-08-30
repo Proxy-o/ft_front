@@ -20,13 +20,13 @@ export default function Home() {
                 </p>
                 <div className="flex space-x-4 mt-24">
                   <Link
-                    href="#"
+                    href="/login"
                     className="inline-flex items-center justify-center rounded-md bg-primary px-6 py-3 text-primary-foreground font-medium transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                   >
                     Login
                   </Link>
                   <Link
-                    href="#"
+                    href="/register"
                     className="p-4 inline-flex items-center justify-center rounded-md border border-primary text-primary font-medium transition-colors hover:bg-primary hover:text-primary-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                   >
                     Sign up

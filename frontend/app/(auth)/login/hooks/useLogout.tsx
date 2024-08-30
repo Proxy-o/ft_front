@@ -29,7 +29,7 @@ export default function useLogout() {
       queryClient.removeQueries({
         queryKey: ["user"],
       });
-      router.push("/login");
+      router.push("/");
     },
     onError: (error) => toast.error(error.message),
   });
