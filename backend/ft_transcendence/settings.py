@@ -201,7 +201,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # URL used to access the media
 MEDIA_URL = '/'
 
-SERVER_URL = os.getenv['SERVER_URL']
+SERVER_URL = os.environ['SERVER_URL']
 
 # oauth providers
 
