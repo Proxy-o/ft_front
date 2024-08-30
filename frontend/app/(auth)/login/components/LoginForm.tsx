@@ -100,7 +100,7 @@ export default function LoginForm() {
             <Separator className="my-4 ml-2" />
           </div>
           <div className="flex w-full">
-            <Button className="w-full" onClick={() => onOauthSubmit("42")}>
+            <Button type="button" className="w-full" onClick={() => onOauthSubmit("42")}>
                 Login with 42
             </Button>
           </div>
