@@ -9,7 +9,7 @@ then
     SEDI="sed -i"
 else
     IPADDR=$(ipconfig getifaddr en0)
-    SEDI="sed -i ''"
+    SEDI='sed -i ""'
 fi
 
 for file in $DOTENV

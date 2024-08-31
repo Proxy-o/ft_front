@@ -10,28 +10,26 @@ import dynamic from "next/dynamic";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
 import { Toaster } from "@/components/ui/sonner";
 import { usePathname } from "next/navigation";
+import getCookie from "@/lib/functions/getCookie";
 
 const ThemeProvider = dynamic(() => import("@/lib/providers/ThemeProvider"), {
   ssr: false,
 });
 const Nav = lazy(() => import("@/components/navBar/nav"));
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({children}: {children: React.ReactNode}) {
   const mb = useMediaQuery("(min-width: 768px)");
   const [showNav, setShowNav] = useState<boolean>(false);
   const path = usePathname();
+  const logged_in = getCookie("logged_in");
 
   useEffect(() => {
-    if (mb && path != "/login" && path != "/register") {
+    if (mb && path != "/login" && path != "/register" && logged_in == "yes") {
       setShowNav(true);
     } else {
       setShowNav(false);
     }
-  }, [path, mb]);
+  }, [path, mb, logged_in]);
 
   return (
     <html lang="en">
