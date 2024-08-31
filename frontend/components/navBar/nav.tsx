@@ -79,7 +79,7 @@ export default function Nav() {
   const logged_in = getCookie("logged_in");
 
   useEffect(() => {
-    if (logged_in != "yes" && path != "/login" && path != "/register") {
+    if (logged_in != "yes" && path != "/login" && path != "/register" && path != "/game/local") {
       return logout();
     }
   }, [logged_in, router, logout, path]);
@@ -259,17 +259,17 @@ export default function Nav() {
           )}
         >
           <UserRoundCog className="mr-2 h-6 w-6 " />
-          Sittings
+          Settings
         </Link>
         <Button
           variant={"ghost"}
           className={cn(
             buttonVariants({ variant: "ghost", size: "sm" }),
-            "justify-start mb-2"
+            "justify-start mb-2",
           )}
           onClick={() => handleLogout()}
         >
-          <LogOut className="mr-2 h-6 w-6 " />
+          <LogOut className={logged_in !== "yes" ? "hidden" : "mr-2 h-6 w-6"} />
           logout
         </Button>
         <button
