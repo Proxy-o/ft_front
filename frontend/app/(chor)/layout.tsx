@@ -1,7 +1,7 @@
 "use client";
 import getCookie from "@/lib/functions/getCookie";
 import SearchFriend from "./profile/components/searchFriend";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import MobilNav from "@/components/navBar/mobilNav";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
@@ -14,7 +14,9 @@ export default function RootLayout({
   const router = useRouter();
   const is_logged_in = getCookie("logged_in");
   const mb = useMediaQuery("(min-width: 768px)");
-  if (!is_logged_in) {
+  const is_local = usePathname() === "/game/local";
+
+  if (!is_logged_in && !is_local) {
     return router.push("/login");
   }
 

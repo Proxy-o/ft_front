@@ -73,7 +73,7 @@ export default function Home() {
 
 <div className="w-full   mt-36 flex items-center justify-center">
 <Link
-                    href="#"
+                    href="/game/local"
                     className="inline-flex items-center justify-center rounded-md bg-primary/30 px-6 py-3 text-primary-foreground font-medium transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
                   >
                     Play Local
