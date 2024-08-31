@@ -105,7 +105,8 @@ class OAuthRedirect(APIView):
         redirect_url, error = OAuthService.get_redirect_url(provider)
         if error:
             return Response(error, status=status.HTTP_400_BAD_REQUEST)
-        return redirect(redirect_url)
+        return Response({'redirect_url': redirect_url})
+
 
 @authentication_classes([])
 @permission_classes([])
@@ -114,7 +115,9 @@ class OAuthCallback(APIView):
         provider = kwargs.get('provider')
         code = request.query_params.get('code')
         state = request.query_params.get('state')
-
+        print('========================provider ', provider)
+        print('========================code ', code)
+        print('========================state ', state)
         if not code:
             return Response({'detail': 'Code is required'}, status=status.HTTP_400_BAD_REQUEST)
 

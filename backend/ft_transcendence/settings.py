@@ -202,7 +202,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/'
 
 SERVER_URL = os.environ['SERVER_URL']
-
+print('======================================', SERVER_URL)
 # oauth providers
 
 OAUTH_PROVIDERS = {
@@ -213,7 +213,7 @@ OAUTH_PROVIDERS = {
         'user_info_url': '/v2/me',
         'client_id': os.environ['OAUTH_42_CLIENT_ID'],
         'client_secret': os.environ['OAUTH_42_CLIENT_SECRET'],
-        'redirect_uri': f'{SERVER_URL}/api/callback/42',
+        'redirect_uri': f'{SERVER_URL}/callback/42',
         'scope': 'public',
         'state': 'secure',
     },
