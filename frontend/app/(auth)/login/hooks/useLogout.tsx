@@ -13,15 +13,15 @@ export default function useLogout() {
       const data = {
         refresh: getCookie("refresh"),
       };
+      const response = await axiosInstance.post("/logout", data);
+      return response.data;
+    },
+    onSuccess: () => {
+      toast.info("Logged out!see you soon");
       deleteCookie("logged_in");
       deleteCookie("refresh");
       deleteCookie("access");
       deleteCookie("user_id");
-      const response = await axiosInstance.post("/logout", data);
-
-      return response.data;
-    },
-    onSuccess: () => {
       queryClient.removeQueries({
         queryKey: ["user"],
       });
