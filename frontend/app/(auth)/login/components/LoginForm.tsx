@@ -19,7 +19,7 @@ import useOAuthLogin from "../hooks/useOAuthLogin";
 
 export default function LoginForm() {
   const { mutate: login, isError, isPending } = useLogin();
-  const { mutate: OauthLogin } = useOAuthLogin();
+  const { mutate: OauthLogin, isPending: isLoading } = useOAuthLogin();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -101,7 +101,11 @@ export default function LoginForm() {
           </div>
           <div className="flex w-full">
             <Button type="button" className="w-full" onClick={() => onOauthSubmit("42")}>
-                Login with 42
+            {isLoading ? (
+                <Loader className="h-5 w-5 animate-spin animation" />
+              ) : (
+                "Login with 42"
+              )}
             </Button>
           </div>
 

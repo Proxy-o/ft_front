@@ -40,3 +40,28 @@ export type Invitation = {
   type: string;
   is_accepted: boolean;
 };
+
+export type OAuthCallbackParams = {
+  provider: string;
+  code: string;
+  state: string;
+};
+
+export type OAuthCallbackResponse = {
+  access_token: string;
+  refresh_token: string;
+  user: {
+    id: string;
+  };
+};
+
+export type LoginParams = {
+  username: string;
+  password: string;
+};
+
+export type LoginResponse = {
+  user: {
+    id: string;
+  };
+};
