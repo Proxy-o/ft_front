@@ -33,7 +33,7 @@ const useOAuthCallback = () => {
         }
         setCookie('logged_in', 'yes');
         setCookie('user_id', data.user.id);
-        router.push("/");
+        router.push("/game");
     },
   });
 };

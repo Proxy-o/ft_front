@@ -1,7 +1,7 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { setCookie } from '@//lib/functions/getCookie';
+import { setCookie } from '@/lib/functions/getCookie';
 import { LoginParams, LoginResponse } from '@/lib/types';
 
 const useLogin = () => {
@@ -31,7 +31,7 @@ const useLogin = () => {
       }
       setCookie('logged_in', 'yes');
       setCookie('user_id', data.user.id);
-      router.push("/");
+      router.push("/game");
     },
   });
 
