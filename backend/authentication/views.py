@@ -100,7 +100,6 @@ class Login(TokenObtainPairView):
 @permission_classes([])
 class OAuthRedirect(APIView):
     def get(self, request, *args, **kwargs):
-        print('here')
         provider = kwargs.get('provider')
         redirect_url, error = OAuthService.get_redirect_url(provider)
         if error:
@@ -115,9 +114,7 @@ class OAuthCallback(APIView):
         provider = kwargs.get('provider')
         code = request.query_params.get('code')
         state = request.query_params.get('state')
-        print('========================provider ', provider)
-        print('========================code ', code)
-        print('========================state ', state)
+
         if not code:
             return Response({'detail': 'Code is required'}, status=status.HTTP_400_BAD_REQUEST)
 
