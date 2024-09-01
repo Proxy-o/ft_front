@@ -1,6 +1,7 @@
 from django.conf import settings
 from rest_framework import serializers
 from .models import Game, Tournament, Invitation
+import urllib.parse
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -14,10 +15,14 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'avatar']
 
     def get_avatar(self, obj):
-        if obj.avatar:
-            # Replace 'SERVER_URL' with the actual setting name
-            server_url = settings.SERVER_URL
-            return f"{server_url}{obj.avatar.url}"
+        if obj.avatar :
+            avatar_url : str = urllib.parse.unquote(obj.avatar.url)
+            if avatar_url.startswith('/https'):
+                avatar_url = avatar_url.replace('/https:/', 'https://', 1)
+                return avatar_url
+            else :
+                server_url = settings.SERVER_URL
+                return f"{server_url}{obj.avatar.url}"
         return None
 
 
