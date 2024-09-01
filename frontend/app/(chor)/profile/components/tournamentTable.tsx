@@ -24,7 +24,6 @@ export default function TournamentTable({ userid }: { userid: string }) {
   return (
     isSuccess && (
       <div className="w-full">
-        <div className="p-4 relative font-semibold">Tournaments</div>
         <Accordion type="single" collapsible>
           {games &&
             games.map((tournament: any, index: number) => (
