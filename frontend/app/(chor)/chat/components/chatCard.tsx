@@ -108,7 +108,7 @@ export default function ChatCard({
       ref={chatRef}
     >
       <Link
-        className="  flex justify-end md:justify-start ml-2 p-2 shadow-2xl "
+        className="  flex justify-end md:justify-start ml-2 p-2 shadow-2xl bg-secondary/15 "
         href={`/profile/${receiver.id}`}
       >
         <Avatar className=" mr-2 relative">
