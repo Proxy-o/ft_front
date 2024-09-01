@@ -67,13 +67,13 @@ class OAuthService:
 
         user_infos = response.json()
         user = User.objects.filter(Q(username=user_infos['login']) | Q(email=user_infos['email'])).first()
-
         if user is None:
             request_data = {
                 'username': user_infos['login'],
                 'email': user_infos['email'],
                 'password': User.objects.make_random_password(),
                 'has_oauth_credentials': True,
+                'avatar': user_infos["image"]["link"]
             }
             user, error = OAuthService.create_user(request_data)
             if error:
@@ -88,7 +88,9 @@ class OAuthService:
                 username=validated_data['username'],
                 email=validated_data['email'],
                 password=validated_data['password'],
-                has_oauth_credentials=validated_data['has_oauth_credentials']
+                has_oauth_credentials=validated_data['has_oauth_credentials'],
+                avatar=validated_data['avatar']
+                
             )
             user.set_password(validated_data['password'])
             user.save()
