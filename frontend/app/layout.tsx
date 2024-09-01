@@ -48,7 +48,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
                 <main className="border-l-[0.04rem] w-full sm:mx-0 h-screen overflow-auto  md:p-0">
                   {children}
                 </main>
-                <Toaster duration={1000} />
+                <Toaster duration={3000} />
               </div>
             </Suspense>
           </ThemeProvider>
