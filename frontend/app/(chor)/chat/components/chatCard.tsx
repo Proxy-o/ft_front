@@ -150,7 +150,7 @@ export default function ChatCard({
                     key={index}
                     message={result}
                     me={result.user == user_id}
-                    sender={sender}
+                    receiver={receiver}
                   />
                 );
               });

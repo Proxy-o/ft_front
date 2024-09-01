@@ -87,10 +87,12 @@ export default function MobilNav() {
   const invitationSocketUrl =
     process.env.NEXT_PUBLIC_INVITATION_URL + "/?refresh=" + token;
 
-  const { lastJsonMessage }: { lastJsonMessage: LastMessage } =
-    useWebSocket(socketUrl,    {
+  const { lastJsonMessage }: { lastJsonMessage: LastMessage } = useWebSocket(
+    socketUrl,
+    {
       share: true,
-    });
+    }
+  );
   const {
     lastJsonMessage: invitationLastMessage,
   }: { lastJsonMessage: LastMessage } = useWebSocket(invitationSocketUrl);
@@ -154,13 +156,13 @@ export default function MobilNav() {
     if (lastJsonMessage?.type === "request") {
       let id = lastJsonMessage.id;
       if (path != "/friend_requests")
-      toast(`New friend request from ${lastJsonMessage.user}`, {
-        icon: <UserPlus2 className="mr-2" />,
-        action: {
-          label: `View`,
-          onClick: () => router.push(`/profile/${id}`),
-        },
-      });
+        toast(`New friend request from ${lastJsonMessage.user}`, {
+          icon: <UserPlus2 className="mr-2" />,
+          action: {
+            label: `View`,
+            onClick: () => router.push(`/profile/${id}`),
+          },
+        });
       queryClient.invalidateQueries({
         queryKey: ["requests"],
       });

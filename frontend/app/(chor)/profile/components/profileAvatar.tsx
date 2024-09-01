@@ -37,7 +37,6 @@ export default function ProfileAvatar({
   const handleButtonClick = () => {
     inputFileRef.current?.click();
   };
-console.log(user.avatar);
   return (
     user && (
       <form onSubmit={handleSubmit} className="relative">
