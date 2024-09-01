@@ -256,7 +256,6 @@ class UserDetail(APIView):
 
     def get(self, request, pk, format=None):
         user = self.get_object(pk)
-        print(request.COOKIES)
         if user is Http404:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
