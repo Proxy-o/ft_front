@@ -5,6 +5,7 @@ const fetchUser = async ({ id }: { id: string }) => {
   try {
     if (id === "0") return null;
     const response = await axiosInstance.get(`/user/${id}`);
+    console.log(response.data);
     return response.data;
   } catch (error: any) {
     throw new Error(error.response.data.message);

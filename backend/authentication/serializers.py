@@ -10,6 +10,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.hashers import make_password
 from django.conf import settings
 from authentication.models import OAuthCredential
+import urllib.parse
 
 User = get_user_model()
 
@@ -26,10 +27,16 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {'password': {'write_only': True}}
 
     def get_avatar(self, obj):
-        if obj.avatar:
-            # Replace 'SERVER_URL' with the actual setting name
-            server_url = settings.SERVER_URL
-            return f"{server_url}{obj.avatar.url}"
+        
+        
+        if obj.avatar :
+            avatar_url : str = urllib.parse.unquote(obj.avatar.url)
+            if avatar_url.startswith('/https'):
+                avatar_url = avatar_url.replace('/https:/', 'https://', 1)
+                return avatar_url
+            else :
+                server_url = settings.SERVER_URL
+                return f"{server_url}{obj.avatar.url}"
         return None
     
     def get_qr_code(self, obj):
