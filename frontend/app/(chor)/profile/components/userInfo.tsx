@@ -173,7 +173,7 @@ export default function UserInfo({
         <div className="flex justify-center items-center space-x-3 ">
           {canEdit ? (
             <Button
-              className="mt-6 w-full"
+              className="mt-6 w-full bg-red-500/30"
               variant="outline"
               onClick={() => handleLogout()}
             >
@@ -184,7 +184,7 @@ export default function UserInfo({
               {!isFriend && !isBlocked && !recReqId ? (
                 <>
                   <Button
-                    className="mt-6 w-full"
+                    className="mt-6 w-full bg-green-400/20"
                     variant="outline"
                     onClick={() => addFriend(id)}
                     disabled={isReqSent || isBlocked}
