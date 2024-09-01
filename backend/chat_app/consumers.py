@@ -16,7 +16,6 @@ class ChatConsumer(WebsocketConsumer):
         self.user_inbox = None
 
     def connect(self):
-        print("***************connected")
         self.user = self.scope['user']
         self.user_inbox = f'inbox_{self.user.id}'
         # connection has to be accepted
@@ -33,7 +32,6 @@ class ChatConsumer(WebsocketConsumer):
             User.objects.filter(id=self.user.id).update(status='online')
 
     def disconnect(self, close_code):
-        print("***************disconnected")
         if self.user.is_authenticated:
             # -------------------- new --------------------
             # delete the user inbox for private messages
@@ -43,10 +41,6 @@ class ChatConsumer(WebsocketConsumer):
             )
             # set the status of the user to offline in the database
             User.objects.filter(id=self.user.id).update(status='offline')
-
-
-    
-
 
     def receive(self, text_data=None, bytes_data=None):
         text_data_json = json.loads(text_data)
@@ -61,7 +55,6 @@ class ChatConsumer(WebsocketConsumer):
             try:
                 target_user = User.objects.get(id=target_id)
             except User.DoesNotExist:
-                print("User does not exist")
                 return
 
             async_to_sync(self.channel_layer.group_send)(
@@ -81,7 +74,6 @@ class ChatConsumer(WebsocketConsumer):
             try:
                 target_user = User.objects.get(id=target_id)
             except User.DoesNotExist:
-                # print("User does not exist")
                 return
 
             if self.user in target_user.blocked.all():
@@ -107,7 +99,6 @@ class ChatConsumer(WebsocketConsumer):
                 }))
                 return
 
-            
             if len(target_msg) > 1000 or len(target_msg) < 1:
                 self.send(json.dumps({
                     'type': 'blocked',

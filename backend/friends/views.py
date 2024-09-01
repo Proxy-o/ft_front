@@ -42,7 +42,6 @@ def search_users(request, search_query):
     users = users.exclude(pk=request.user.pk)
     serializer = UserSerializer(
         users, context={'request': request}, many=True)
-    print(serializer.data)
     return Response(serializer.data)
 
 
