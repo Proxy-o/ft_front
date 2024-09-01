@@ -26,7 +26,6 @@ export default function GamesState({
 
   return (
     <div className="w-full">
-      <div className="p-4 relative font-semibold">Completed games</div>
       <Card className="w-full">
         <Table>
           <TableHeader className="bg-secondary ">
