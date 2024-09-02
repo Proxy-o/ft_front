@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import MobilNav from "@/components/navBar/mobilNav";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
+import { useEffect } from "react";
 
 export default function RootLayout({
   children,
@@ -16,12 +17,15 @@ export default function RootLayout({
   const mb = useMediaQuery("(min-width: 768px)");
   const is_local = usePathname() === "/game/local";
 
-  if (!is_logged_in && !is_local) {
-    return router.push("/login");
+useEffect(() => {
+  if (!is_local && !is_logged_in)  {
+    router.push("/login");
   }
+}
+, [ router, is_local, is_logged_in ]);
 
   return (
-    <div className="h-full relative">
+    (is_logged_in || is_local) && <div className="h-full relative">
       <div
         className={cn(
           "flex w-full  overflow-auto",
@@ -29,11 +33,11 @@ export default function RootLayout({
         )}
       >
         <div className="w-full h-full ">
-          <SearchFriend />
+          {!is_local && <SearchFriend />}
           {children}
         </div>
       </div>
-      {!mb && <MobilNav />}
+      {(!mb && !is_local) && <MobilNav />}
     </div>
   );
 }
