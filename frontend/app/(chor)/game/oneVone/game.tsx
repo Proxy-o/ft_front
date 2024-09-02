@@ -34,7 +34,7 @@ const Game = ({ type, onGoingGame }: { type: string; onGoingGame: any }) => {
   const paddleLeftYRef = useRef<number>(0);
   const PaddleRightYRef = useRef<number>(0);
   const paddleRightDirectionRef = useRef<string>("stop");
-  const newBallPositionRef = useRef({ x: 20000, y: 20000 });
+  const newBallPositionRef = useRef({ x: (canvasRef.current?.width || 0) / 2, y: (canvasRef.current?.height || 0) / 2 });
   const newAngleRef = useRef<number>(0);
   const leftScoreRef = useRef<number>(0);
   const rightScoreRef = useRef<number>(0);
@@ -55,6 +55,7 @@ const Game = ({ type, onGoingGame }: { type: string; onGoingGame: any }) => {
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
 
   const {
+    gameMsg,
     handleMovePaddle,
     handleChangeBallDirection,
     handleEnemyScore,
@@ -180,6 +181,7 @@ const Game = ({ type, onGoingGame }: { type: string; onGoingGame: any }) => {
     }
 
     const gameStarted = () => {
+      setTimeout(() => {
       if (
         username === controllerUser.current?.username &&
         newAngleRef.current === 0
@@ -197,13 +199,15 @@ const Game = ({ type, onGoingGame }: { type: string; onGoingGame: any }) => {
         let enemyX = canvas.width - newBallPositionRef.current.x;
         let enemyY = newBallPositionRef.current.y;
         let enemyAngle = Math.PI - newAngleRef.current;
-        handleChangeBallDirection(
-          enemyX,
-          enemyY,
-          enemyAngle,
-          rightUser.current?.username || ""
-        );
-      }
+
+          handleChangeBallDirection(
+            enemyX,
+            enemyY,
+            enemyAngle,
+            rightUser.current?.username || ""
+          );
+        }
+      }, 1000);
 
       if (bgImage.current === null) {
         bgImage.current = new Image();
@@ -301,6 +305,91 @@ const Game = ({ type, onGoingGame }: { type: string; onGoingGame: any }) => {
     }
   }, [gameStartedRef.current, canvasRef.current]);
 
+
+  useEffect(() => {
+    const gameMsge = gameMsg();
+    if (gameMsge) {
+      const parsedMessage = JSON.parse(gameMsge.data);
+      console.log(parsedMessage.message);
+      const message = parsedMessage?.message.split(" ");
+      
+      if (message[0] === "/move") {
+        const sender = message[3];
+        if (sender !== username) {
+          paddleRightDirectionRef.current = message[1];
+          PaddleRightYRef.current = parseInt(message[2]);
+        }
+      } else if (message[0] === "/ballDirection") {
+        const sender = message[4];
+        if (sender !== username) {
+          newBallPositionRef.current = {
+            x: parseInt(message[1]),
+            y: parseInt(message[2]),
+          };
+          if (
+            canvasRef.current &&
+            (newBallPositionRef.current.x < canvasRef.current.width / 6 ||
+              newBallPositionRef.current.x > (canvasRef.current.width * 5) / 6)
+          ) {
+            isFirstTime.current = false;
+          }
+          newAngleRef.current = parseFloat(message[3]);
+        }
+      } else if (message[0] === "/show") {
+        if (!gameStartedRef.current) {
+          handleStartGame(
+            leftUser.current?.username || "",
+            rightUser.current?.username || "",
+            gameIdRef.current
+          );
+          changeTime(0);
+          gameStartedRef.current = true;
+          newBallPositionRef.current = { x: 400, y: 200 };
+          newAngleRef.current = 0;
+          paddleRightDirectionRef.current = "stop";
+          isFirstTime.current = true;
+          ballInLeftPaddle.current = false;
+          upPressedRef.current = false;
+          downPressedRef.current = false;
+          leftScoreRef.current = 0;
+          rightScoreRef.current = 0;
+          enemyLeftGameRef.current = false;
+          onGoingGame.refetch();
+        }
+      } else if (message[0] === "/score") {
+        console.log("refetching");
+        isFirstTime.current = true;
+        onGoingGame.refetch();
+      } else if (message[0] === "/time") {
+        if (message[2] !== username) {
+          changeTime(parseInt(message[1]));
+          enemyLeftGameRef.current = false; // todo: tournament forfeit status
+        }
+      } else if (message[0] === "/refetchPlayers") {
+        onGoingGame.refetch();
+      } else if (message[0] === "/surrender") {
+        if (message[1] !== username) {
+          state.current = "surrendered";
+        } else {
+          state.current = "none";
+        }
+        gameStartedRef.current = false;
+        setCanvas(null);
+        onGoingGame.refetch();
+      } else if (message[0] === "/end") {
+        if (leftScoreRef.current >= 3) {
+          state.current = "win";
+        } else if (rightScoreRef.current < 3) {
+          state.current = "lose";
+        } else {
+          state.current = "none";
+        }
+        gameStartedRef.current = false;
+        setCanvas(null);
+        onGoingGame.refetch();
+      }
+    }
+  }, [gameMsg()?.data]);
   
 
   return (
@@ -380,7 +469,7 @@ const Game = ({ type, onGoingGame }: { type: string; onGoingGame: any }) => {
               )}
             </>
           ) : (
-            <div className="ml-[80px] h-5/6 w-1/6">
+            <div className="ml-auto mr-[80px] h-5/6 w-1/6">
               <Button
                 onClick={() => {
                   setCanvas(null);
@@ -400,30 +489,6 @@ const Game = ({ type, onGoingGame }: { type: string; onGoingGame: any }) => {
           )}
         </div>
       )}
-      <Sockets
-        canvasRef={canvasRef}
-        PaddleRightYRef={PaddleRightYRef}
-        newBallPositionRef={newBallPositionRef}
-        newAngleRef={newAngleRef}
-        isFirstTime={isFirstTime}
-        ballInLeftPaddle={ballInLeftPaddle}
-        paddleRightDirectionRef={paddleRightDirectionRef}
-        upPressedRef={upPressedRef}
-        downPressedRef={downPressedRef}
-        leftScoreRef={leftScoreRef}
-        rightScoreRef={rightScoreRef}
-        enemyLeftGameRef={enemyLeftGameRef}
-        leftUser={leftUser}
-        rightUser={rightUser}
-        gameIdRef={gameIdRef}
-        gameStartedRef={gameStartedRef}
-        changeTime={changeTime}
-        state={state}
-        onGoingGame={onGoingGame}
-        username={username}
-        setCanvas={setCanvas}
-        bgImage={bgImage}
-      />
     </>
   );
 };
