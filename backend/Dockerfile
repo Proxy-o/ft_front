@@ -1,5 +1,12 @@
 # Use an official Python runtime as a parent image
-FROM python:3
+FROM python:3-alpine3.20
+
+RUN apk add --no-cache \
+    zlib-dev \
+    jpeg-dev \
+    gcc \
+    musl-dev \
+    libffi-dev
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
