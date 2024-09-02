@@ -40,6 +40,7 @@ export default function Home() {
                   className="rounded-lg shadow-lg w-full h-full"
                   width="500"
                   height="500"
+                  priority
                 />
               </div>
             </div>
