@@ -27,8 +27,8 @@ SECRET_KEY = os.environ["SECRET_KEY"]
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['10.12.12.4', 'localhost', '127.0.0.1', '10.13.9.17', '10.13.10.3',
-                 '10.12.7.1', '10.12.9.15', "10.13.10.13","localhost","10.13.2.17"]
+SERVER_HOST = os.environ['SERVER_HOST']
+ALLOWED_HOSTS = [SERVER_HOST, 'localhost', '127.0.0.1']
 
 # Application definition
 
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'rest_framework',
     'daphne',  # new
     'django.contrib.staticfiles',
     # newly added
@@ -165,7 +166,6 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'authentication.customJWTAuthentication.CustomJWTAuthentication',
     ],
-
 }
 
 SIMPLE_JWT = {
@@ -181,9 +181,9 @@ SIMPLE_JWT = {
 INSTALLED_APPS += ['corsheaders']
 MIDDLEWARE += ['corsheaders.middleware.CorsMiddleware']
 CORS_ORIGIN_WHITELIST = [
+    f'http://{SERVER_HOST}:3000',
+    'http://127.0.0.1:3000',
     'http://localhost:3000',
-    'http://10.12.13.5:3000',
-    'http://10.13.10.3:3000'
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -201,6 +201,21 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # URL used to access the media
 MEDIA_URL = '/'
 
-SERVER_URL = os.getenv('SERVER_URL', 'http://10.13.10.3:8000')
+SERVER_URL = os.environ['SERVER_URL']
+print('======================================', SERVER_URL)
+# oauth providers
 
+OAUTH_PROVIDERS = {
+    '42': {
+        'base_url': 'https://api.intra.42.fr',
+        'authorize_url': '/oauth/authorize',
+        'token_url': '/oauth/token',
+        'user_info_url': '/v2/me',
+        'client_id': os.environ['OAUTH_42_CLIENT_ID'],
+        'client_secret': os.environ['OAUTH_42_CLIENT_SECRET'],
+        'redirect_uri': f'{SERVER_URL}/callback/42',
+        'scope': 'public',
+        'state': 'secure',
+    },
+}
 

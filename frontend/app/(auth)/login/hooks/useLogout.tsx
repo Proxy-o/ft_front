@@ -1,5 +1,5 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
-import getCookie from "@/lib/functions/getCookie";
+import getCookie, { deleteCookie } from "@/lib/functions/getCookie";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -13,23 +13,19 @@ export default function useLogout() {
       const data = {
         refresh: getCookie("refresh"),
       };
-      // document.cookie =
-      // "access=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=lax;";
-      // document.cookie =
-      // "refresh=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=lax;";
-      document.cookie =
-      "logged_in=no;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=lax;";
-      document.cookie =
-      "user_id=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=lax;";
       const response = await axiosInstance.post("/logout", data);
-
       return response.data;
     },
     onSuccess: () => {
+      toast.info("Logged out!see you soon");
+      deleteCookie("logged_in");
+      deleteCookie("refresh");
+      deleteCookie("access");
+      deleteCookie("user_id");
       queryClient.removeQueries({
         queryKey: ["user"],
       });
-      router.push("/login");
+      router.push("/");
     },
     onError: (error) => toast.error(error.message),
   });

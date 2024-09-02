@@ -7,11 +7,11 @@ import { Message } from "../types";
 export default function ChatBubble({
   message,
   me,
-  sender,
+  receiver,
 }: {
   message: Message;
   me: boolean;
-  sender: User;
+  receiver: User;
 }) {
   const [showDate, setShowDate] = useState(false);
   return me ? (
@@ -33,7 +33,7 @@ export default function ChatBubble({
     <div className="flex w-full h-fit items-center relative hover:cursor-pointer">
       <Avatar className=" mr-2 size-4">
         <AvatarImage
-          src={sender.avatar}
+          src={receiver.avatar}
           alt="profile image"
           className="rounded-full size-4"
         />

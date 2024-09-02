@@ -1,5 +1,12 @@
 # Use an official Python runtime as a parent image
-FROM python:3
+FROM python:3-alpine3.20
+
+RUN apk add --no-cache \
+    zlib-dev \
+    jpeg-dev \
+    gcc \
+    musl-dev \
+    libffi-dev
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -20,10 +27,6 @@ COPY . .
 
 # Expose the port server is running on
 EXPOSE 8000
-
-
-
-
 
 # Start the application from run_app.sh
 CMD ["sh", "run_app.sh"]

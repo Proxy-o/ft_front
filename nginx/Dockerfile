@@ -1,8 +1,8 @@
 # Use an official Nginx runtime as a parent image
-FROM nginx:latest
+FROM nginx:stable-alpine3.20
 
 # Install openssl package to generate self-signed certificate
-RUN apt-get update && apt-get install -y openssl
+RUN apk add --no-cache openssl
 
 # Create directory for SSL certs
 RUN mkdir -p /etc/nginx/certs

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { deleteCookie } from "@/lib/functions/getCookie";
 
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BACKEND_URL + "/api",
@@ -11,12 +12,10 @@ axiosInstance.interceptors.response.use(
   },
   (error) => {
     if (error.response && error.response.status === 401) {
-      document.cookie =
-        "logged_in=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=lax;";
-      document.cookie =
-        "user_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=lax;";
-      document.cookie =
-        "refresh=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=lax;";
+      deleteCookie("logged_in");
+      deleteCookie("refresh");
+      deleteCookie("access");
+      deleteCookie("user_id");
     }
 
     return Promise.reject(error);

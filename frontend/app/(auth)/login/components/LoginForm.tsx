@@ -15,9 +15,11 @@ import { Separator } from "@/components/ui/separator";
 import { Eye, EyeOff, Loader, User } from "lucide-react";
 import { useState } from "react";
 import useLogin from "../hooks/useLogin";
+import useOAuthLogin from "../hooks/useOAuthLogin";
 
 export default function LoginForm() {
   const { mutate: login, isError, isPending } = useLogin();
+  const { mutate: OauthLogin, isPending: isLoading } = useOAuthLogin();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -25,6 +27,10 @@ export default function LoginForm() {
   const onSubmit = () => {
     login({ username, password });
   };
+
+  const onOauthSubmit = (provider: string) => {
+    OauthLogin(provider)
+  }
 
   return (
     <form
@@ -85,6 +91,20 @@ export default function LoginForm() {
                 <Loader className="h-5 w-5 animate-spin animation" />
               ) : (
                 "Login"
+              )}
+            </Button>
+          </div>
+          <div className="flex w-32 justify-center my-4 text-xs items-center">
+            <Separator className="my-4 mr-2 " />
+            OR
+            <Separator className="my-4 ml-2" />
+          </div>
+          <div className="flex w-full">
+            <Button type="button" className="w-full" onClick={() => onOauthSubmit("42")}>
+            {isLoading ? (
+                <Loader className="h-5 w-5 animate-spin animation" />
+              ) : (
+                "Login with 42"
               )}
             </Button>
           </div>

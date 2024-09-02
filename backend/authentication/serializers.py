@@ -9,6 +9,8 @@ from django.contrib.auth.hashers import check_password
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.hashers import make_password
 from django.conf import settings
+from authentication.models import OAuthCredential
+import urllib.parse
 
 User = get_user_model()
 
@@ -21,14 +23,18 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'username', 'first_name', 'last_name', 'email',
-                  'password', 'avatar', 'status', 'friends', "date_joined", "qr_code", "otp_active")
+                  'password', 'avatar', 'status', 'friends', "date_joined", "qr_code", "otp_active", "has_oauth_credentials")
         extra_kwargs = {'password': {'write_only': True}}
 
     def get_avatar(self, obj):
-        if obj.avatar:
-            # Replace 'SERVER_URL' with the actual setting name
-            server_url = settings.SERVER_URL
-            return f"{server_url}{obj.avatar.url}"
+        if obj.avatar :
+            avatar_url : str = urllib.parse.unquote(obj.avatar.url)
+            if avatar_url.startswith('/https'):
+                avatar_url = avatar_url.replace('/https:/', 'https://', 1)
+                return avatar_url
+            else :
+                server_url = settings.SERVER_URL
+                return f"{server_url}{obj.avatar.url}"
         return None
     
     def get_qr_code(self, obj):
@@ -70,10 +76,14 @@ class EditUserSerializer(serializers.ModelSerializer):
         extra_kwargs = {'password': {'write_only': True}}
 
     def get_avatar(self, obj):
-        if obj.avatar:
-            # Replace 'SERVER_URL' with the actual setting name
-            server_url = settings.SERVER_URL
-            return f"{server_url}{obj.avatar.url}"
+        if obj.avatar :
+            avatar_url : str = urllib.parse.unquote(obj.avatar.url)
+            if avatar_url.startswith('/https'):
+                avatar_url = avatar_url.replace('/https:/', 'https://', 1)
+                return avatar_url
+            else :
+                server_url = settings.SERVER_URL
+                return f"{server_url}{obj.avatar.url}"
         return None
 
     def update(self, instance, validated_data):
@@ -139,3 +149,32 @@ class VerifyOTPSerializer(serializers.Serializer):
             "refresh": str(refresh),
             "access": str(refresh.access_token),
         }
+
+
+class OAuthCredentialSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = OAuthCredential
+        fields = '__all__'
+
+    def create(self, validated_data):
+        user = validated_data.get('user')
+        user_oauth_uid = validated_data.get('user_oauth_uid')
+        provider = validated_data.get('provider')
+        refresh_token = validated_data.get('refresh_token')
+        access_token = validated_data.get('access_token')
+        expires_at = validated_data.get('expires_at')
+
+        # Check if the OAuth credential already exists for the same user and provider
+        credential, created = OAuthCredential.objects.update_or_create(
+            user=user,
+            user_oauth_uid=user_oauth_uid,
+            provider=provider,
+            defaults={
+                'refresh_token': refresh_token,
+                'access_token': access_token,
+                'expires_at': expires_at
+            }
+        )
+
+        return credential

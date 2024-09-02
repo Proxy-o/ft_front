@@ -26,7 +26,6 @@ export default function GamesState({
 
   return (
     <div className="w-full">
-      <div className="p-4 relative font-semibold">Completed games</div>
       <Card className="w-full">
         <Table>
           <TableHeader className="bg-secondary ">
@@ -68,13 +67,7 @@ export default function GamesState({
                             </AvatarFallback>
                           </Avatar>
                           <h1
-                            className={cn(
-                              game.user1.id == user_id &&
-                                (game.winner?.id == user_id
-                                  ? "text-yellow-300 "
-                                  : "text-red-300 "),
-                              "w-fit"
-                            )}
+                            className="w-fit"
                           >
                             {game.user1.username}
                           </h1>
@@ -95,12 +88,7 @@ export default function GamesState({
                               </AvatarFallback>
                             </Avatar>
                             <h1
-                              className={cn(
-                                game.user3?.id == user_id &&
-                                  (game.winner?.id == user_id
-                                    ? "text-yellow-300 "
-                                    : "text-red-300 ")
-                              )}
+                              
                             >
                               {game.user3?.username}
                             </h1>
@@ -124,12 +112,6 @@ export default function GamesState({
                             </AvatarFallback>
                           </Avatar>
                           <h1
-                            className={cn(
-                              game.user2.id == user_id &&
-                                (game.winner?.id == user_id
-                                  ? "text-yellow-300 "
-                                  : "text-red-300 ")
-                            )}
                           >
                             {game.user2.username}
                           </h1>
@@ -150,12 +132,7 @@ export default function GamesState({
                               </AvatarFallback>
                             </Avatar>
                             <h1
-                              className={cn(
-                                game.user4?.id == user_id &&
-                                  (game.winner?.id == user_id
-                                    ? "text-yellow-300 "
-                                    : "text-red-300 ")
-                              )}
+                            
                             >
                               {game.user4?.username}
                             </h1>

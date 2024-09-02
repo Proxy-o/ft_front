@@ -79,7 +79,12 @@ export default function Nav() {
   const logged_in = getCookie("logged_in");
 
   useEffect(() => {
-    if (logged_in != "yes" && path != "/login" && path != "/register") {
+    if (
+      logged_in != "yes" &&
+      path != "/login" &&
+      path != "/register" &&
+      path != "/game/local"
+    ) {
       return logout();
     }
   }, [logged_in, router, logout, path]);
@@ -250,27 +255,30 @@ export default function Nav() {
       </nav>
 
       <div className="flex flex-col px-2">
-        <Link
-          href="/profile/settings"
-          className={cn(
-            buttonVariants({ variant: "ghost", size: "sm" }),
-            "justify-start mb-2"
-          )}
-        >
-          <UserRoundCog className="mr-2 h-6 w-6 " />
-          Sittings
-        </Link>
-        <Button
-          variant={"ghost"}
-          className={cn(
-            buttonVariants({ variant: "ghost", size: "sm" }),
-            "justify-start mb-2"
-          )}
-          onClick={() => handleLogout()}
-        >
-          <LogOut className="mr-2 h-6 w-6 " />
-          logout
-        </Button>
+        <div>
+          <Link
+            href="/profile/settings"
+            className={cn(
+              buttonVariants({ variant: "ghost", size: "sm" }),
+              "justify-start mb-2"
+            )}
+          >
+            <UserRoundCog className="mr-2 h-6 w-6 " />
+            Settings
+          </Link>
+          <Button
+            variant={"ghost"}
+            className={cn(
+              buttonVariants({ variant: "ghost", size: "sm" }),
+              "justify-start mb-2"
+            )}
+            onClick={() => handleLogout()}
+          >
+            <LogOut className="mr-2 h-6 w-6"
+            />
+            logout
+          </Button>
+        </div>
         <button
           onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
           className={cn(

@@ -1,43 +1,41 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { setCookie } from '@/lib/functions/getCookie';
+import { LoginParams, LoginResponse } from '@/lib/types';
 
-export const setLoginCookie = (data: any) => {
-  var date = new Date();
-  date.setTime(date.getTime() + 30 * 24 * 60 * 60 * 1000); // 30 days
-  var expires = "; expires=" + date.toUTCString();
-  // add same site and secure
-  // document.cookie = "access=" + data.access + expires + "; path=/" + "; h"
-  // document.cookie = "refresh=" + data.refresh + expires + "; path=/";
-  document.cookie = "logged_in=yes" + expires + "; path=/" + ";  ";
-  document.cookie = "user_id=" + data.user.id + expires + "; path=/" + ";  ";
-
-};
-
-export default function useLogin() {
+const useLogin = () => {
   const router = useRouter();
+
   const mutation = useMutation({
-    mutationFn: async (data: { username: string; password: string }) => {
+    mutationFn: async (data: LoginParams) => {
       try {
-        const response = await axiosInstance.post("/login", data);
+        const response = await axiosInstance.post<LoginResponse>("/login", data);
         return response.data;
       } catch (error: any) {
         if (error.response) {
-          const data = error.response.data;
-          if (data.detail === "2FA required") {
-            var date = new Date();
-            date.setTime(date.getTime() + 30 * 24 * 60 * 60 * 1000); // 30 days
-            var expires = "; expires=" + date.toUTCString();
-            document.cookie = "user_id=" + data.user_id + expires + "; path=/";
+          const responseData = error.response.data;
+          if (responseData.detail === "2FA required") {
+            setCookie('user_id', responseData.user_id);
             router.push("/verifyOTP");
+            return;
           }
         }
+        throw new Error(error.response?.data?.detail || "An error occurred during login");
       }
     },
     onSuccess: (data) => {
-      setLoginCookie(data);
-      router.push("/");
+      if (!data) {
+        router.push("/login");
+        return;
+      }
+      setCookie('logged_in', 'yes');
+      setCookie('user_id', data.user.id);
+      router.push("/game");
     },
   });
+
   return mutation;
-}
+};
+
+export default useLogin;
