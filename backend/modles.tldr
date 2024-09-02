@@ -1,58 +1,35 @@
 {
 	"tldrawFileFormatVersion": 1,
 	"schema": {
-		"schemaVersion": 1,
-		"storeVersion": 4,
-		"recordVersions": {
-			"asset": {
-				"version": 1,
-				"subTypeKey": "type",
-				"subTypeVersions": {
-					"image": 3,
-					"video": 3,
-					"bookmark": 1
-				}
-			},
-			"camera": {
-				"version": 1
-			},
-			"document": {
-				"version": 2
-			},
-			"instance": {
-				"version": 24
-			},
-			"instance_page_state": {
-				"version": 5
-			},
-			"page": {
-				"version": 1
-			},
-			"shape": {
-				"version": 3,
-				"subTypeKey": "type",
-				"subTypeVersions": {
-					"group": 0,
-					"text": 1,
-					"bookmark": 2,
-					"draw": 1,
-					"geo": 8,
-					"note": 5,
-					"line": 1,
-					"frame": 0,
-					"arrow": 3,
-					"highlight": 0,
-					"embed": 4,
-					"image": 3,
-					"video": 2
-				}
-			},
-			"instance_presence": {
-				"version": 5
-			},
-			"pointer": {
-				"version": 1
-			}
+		"schemaVersion": 2,
+		"sequences": {
+			"com.tldraw.store": 4,
+			"com.tldraw.asset": 1,
+			"com.tldraw.camera": 1,
+			"com.tldraw.document": 2,
+			"com.tldraw.instance": 25,
+			"com.tldraw.instance_page_state": 5,
+			"com.tldraw.page": 1,
+			"com.tldraw.instance_presence": 5,
+			"com.tldraw.pointer": 1,
+			"com.tldraw.shape": 4,
+			"com.tldraw.asset.bookmark": 2,
+			"com.tldraw.asset.image": 5,
+			"com.tldraw.asset.video": 5,
+			"com.tldraw.shape.group": 0,
+			"com.tldraw.shape.text": 2,
+			"com.tldraw.shape.bookmark": 2,
+			"com.tldraw.shape.draw": 2,
+			"com.tldraw.shape.geo": 9,
+			"com.tldraw.shape.note": 7,
+			"com.tldraw.shape.line": 5,
+			"com.tldraw.shape.frame": 0,
+			"com.tldraw.shape.arrow": 5,
+			"com.tldraw.shape.highlight": 1,
+			"com.tldraw.shape.embed": 4,
+			"com.tldraw.shape.image": 4,
+			"com.tldraw.shape.video": 2,
+			"com.tldraw.binding.arrow": 0
 		}
 	},
 	"records": [
@@ -66,9 +43,9 @@
 		{
 			"id": "pointer:pointer",
 			"typeName": "pointer",
-			"x": 982.0997416074658,
-			"y": 626.8141268824937,
-			"lastActivityTimestamp": 1708167036291,
+			"x": 257.72514481537837,
+			"y": 593.9525676279345,
+			"lastActivityTimestamp": 1725270355253,
 			"meta": {}
 		},
 		{
@@ -79,9 +56,9 @@
 			"typeName": "page"
 		},
 		{
-			"x": -68.78646820186788,
-			"y": -122.54273176112696,
-			"z": 1.148883207719615,
+			"x": 35.72407393462163,
+			"y": -76.17913012793446,
+			"z": 1,
 			"meta": {},
 			"id": "camera:page:page",
 			"typeName": "camera"
@@ -89,7 +66,11 @@
 		{
 			"editingShapeId": null,
 			"croppingShapeId": null,
-			"selectedShapeIds": [],
+			"selectedShapeIds": [
+				"shape:g0Z98aXA3-00p2a4R1pcH",
+				"shape:iDdO9NB-u3xA4uSiToTDv",
+				"shape:rRpe6qVX-iDrs6RhRPnvH"
+			],
 			"hoveredShapeId": null,
 			"erasingShapeIds": [],
 			"hintingShapeIds": [],
@@ -108,7 +89,7 @@
 			"brush": null,
 			"scribbles": [],
 			"cursor": {
-				"type": "default",
+				"type": "move",
 				"rotation": 0
 			},
 			"isFocusMode": false,
@@ -118,8 +99,8 @@
 			"screenBounds": {
 				"x": 0,
 				"y": 0,
-				"w": 1845.833251953125,
-				"h": 1085.833251953125
+				"w": 956,
+				"h": 966
 			},
 			"zoomBrush": null,
 			"isGridMode": false,
@@ -127,7 +108,6 @@
 			"chatMessage": "",
 			"isChatting": false,
 			"highlightedUserIds": [],
-			"canMoveCamera": true,
 			"isFocused": true,
 			"devicePixelRatio": 2.4000000953674316,
 			"isCoarsePointer": false,
@@ -139,7 +119,7 @@
 			"currentPageId": "page:page",
 			"insets": [
 				false,
-				true,
+				false,
 				true,
 				false
 			],
@@ -148,302 +128,233 @@
 			"typeName": "instance"
 		},
 		{
-			"x": 495.560582380336,
-			"y": 338.6620171958374,
+			"x": 102.65483231537837,
+			"y": 232.45256762793446,
 			"rotation": 0,
 			"isLocked": false,
 			"opacity": 1,
 			"meta": {},
+			"id": "shape:rAP4ISgED3j5vhQutKawY",
 			"type": "text",
 			"props": {
-				"color": "black",
+				"color": "red",
 				"size": "m",
-				"w": 612.4778442382812,
-				"text": ". Major module: Use a Framework as backend.\n◦ Minor module: Use a database for the backend.",
+				"w": 577.2265625,
+				"text": "◦ Major module: Use a Framework as backend.",
 				"font": "draw",
-				"align": "start",
+				"textAlign": "middle",
 				"autoSize": true,
 				"scale": 1
 			},
 			"parentId": "page:page",
 			"index": "a1",
-			"id": "shape:I0C0SPFu-LAVh94az0XHS",
 			"typeName": "shape"
 		},
 		{
-			"x": 497.2025146484375,
-			"y": 414.14776611328125,
+			"x": 94.61186356537837,
+			"y": 675.4291301279345,
 			"rotation": 0,
 			"isLocked": false,
 			"opacity": 1,
 			"meta": {},
-			"type": "text",
-			"props": {
-				"color": "black",
-				"size": "m",
-				"w": 920,
-				"text": ".Major module: Standard user management, authentication, users across tournaments.",
-				"font": "draw",
-				"align": "start",
-				"autoSize": false,
-				"scale": 1
-			},
-			"parentId": "page:page",
-			"index": "a2",
-			"id": "shape:3j0M3j8m28e4arspm7wwJ",
-			"typeName": "shape"
-		},
-		{
-			"x": 501.2337646484375,
-			"y": 497.06182861328125,
-			"rotation": 0,
-			"isLocked": false,
-			"opacity": 1,
-			"meta": {},
-			"type": "text",
-			"props": {
-				"color": "black",
-				"size": "m",
-				"w": 380.953125,
-				"text": "Major module: Remote players",
-				"font": "draw",
-				"align": "middle",
-				"autoSize": true,
-				"scale": 1
-			},
-			"parentId": "page:page",
-			"index": "a3",
-			"id": "shape:NgmhMA8rR5IgUD9IvDCuN",
-			"typeName": "shape"
-		},
-		{
-			"x": 499.8392333984375,
-			"y": 552.0813598632812,
-			"rotation": 0,
-			"isLocked": false,
-			"opacity": 1,
-			"meta": {},
-			"type": "text",
-			"props": {
-				"color": "black",
-				"size": "m",
-				"w": 389.2578125,
-				"text": "Major module: Multiple players",
-				"font": "draw",
-				"align": "middle",
-				"autoSize": true,
-				"scale": 1
-			},
-			"parentId": "page:page",
-			"index": "a4",
-			"id": "shape:aW9h7Od57xtU6cd-pPNJW",
-			"typeName": "shape"
-		},
-		{
-			"x": 502.7493896484375,
-			"y": 617.7727661132812,
-			"rotation": 0,
-			"isLocked": false,
-			"opacity": 1,
-			"meta": {},
-			"type": "text",
-			"props": {
-				"color": "black",
-				"size": "m",
-				"w": 306.125,
-				"text": "Major module: Live Chat.",
-				"font": "draw",
-				"align": "middle",
-				"autoSize": true,
-				"scale": 1
-			},
-			"parentId": "page:page",
-			"index": "a5",
-			"id": "shape:Td9qC4FleOZIXZ1eVrxXn",
-			"typeName": "shape"
-		},
-		{
-			"x": 467.55994407175626,
-			"y": 674.8661185003368,
-			"rotation": 0,
-			"isLocked": false,
-			"opacity": 1,
-			"meta": {},
-			"type": "text",
-			"props": {
-				"color": "black",
-				"size": "m",
-				"w": 882.265625,
-				"text": "• Major module: Implement Two-Factor Authentication (2FA) and JWT.",
-				"font": "draw",
-				"align": "middle",
-				"autoSize": true,
-				"scale": 1
-			},
-			"parentId": "page:page",
-			"index": "a6",
-			"id": "shape:dR0nxook_25CfbowmzTWN",
-			"typeName": "shape"
-		},
-		{
-			"x": 473.7023894006536,
-			"y": 747.2978055600315,
-			"rotation": 0,
-			"isLocked": false,
-			"opacity": 1,
-			"meta": {},
-			"id": "shape:QVskAlFo6yCQR4ljcYEaa",
-			"type": "text",
-			"props": {
-				"color": "black",
-				"size": "m",
-				"w": 671.7642822265625,
-				"text": "Major module: Implementing a remote authentication",
-				"font": "draw",
-				"align": "middle",
-				"autoSize": true,
-				"scale": 1
-			},
-			"parentId": "page:page",
-			"index": "aI",
-			"typeName": "shape"
-		},
-		{
-			"x": 1076.1763972156618,
-			"y": 341.40949185767766,
-			"rotation": 0,
-			"isLocked": false,
-			"opacity": 1,
-			"meta": {},
-			"id": "shape:sGQUgQjzM4KWYnD1FZC8b",
+			"id": "shape:g0Z98aXA3-00p2a4R1pcH",
 			"type": "text",
 			"props": {
 				"color": "light-green",
 				"size": "m",
-				"w": 97.00260162353516,
-				"text": "Otmane",
+				"w": 611.4765625,
+				"text": "◦ Minor module: Use a database for the backend.",
 				"font": "draw",
-				"align": "middle",
+				"textAlign": "middle",
 				"autoSize": true,
 				"scale": 1
 			},
 			"parentId": "page:page",
-			"index": "aJ",
+			"index": "a202n",
 			"typeName": "shape"
 		},
 		{
-			"x": 1110.767744329765,
-			"y": 373.58237973404124,
+			"x": 102.30717606537837,
+			"y": 282.3822551279345,
 			"rotation": 0,
 			"isLocked": false,
 			"opacity": 1,
 			"meta": {},
-			"id": "shape:BjZ3o7NNB4eDu5scYFh0w",
-			"type": "text",
-			"props": {
-				"color": "yellow",
-				"size": "m",
-				"w": 36.01953125,
-				"text": "All",
-				"font": "draw",
-				"align": "middle",
-				"autoSize": true,
-				"scale": 1
-			},
-			"parentId": "page:page",
-			"index": "aK",
-			"typeName": "shape"
-		},
-		{
-			"x": 1410.4294080590005,
-			"y": 416.7090574818046,
-			"rotation": 0,
-			"isLocked": false,
-			"opacity": 1,
-			"meta": {},
-			"id": "shape:BaJ1lzlwcqdCpWmzxFWtl",
-			"type": "text",
-			"props": {
-				"color": "yellow",
-				"size": "m",
-				"w": 113.56510162353516,
-				"text": "Othmane",
-				"font": "draw",
-				"align": "middle",
-				"autoSize": true,
-				"scale": 1
-			},
-			"parentId": "page:page",
-			"index": "aL",
-			"typeName": "shape"
-		},
-		{
-			"x": 889.8240459407325,
-			"y": 500.6815698544849,
-			"rotation": 0,
-			"isLocked": false,
-			"opacity": 1,
-			"meta": {},
-			"id": "shape:-AgSAs8CYxtCzUhc0utf7",
+			"id": "shape:UKkf6VlbAJI9H8EWEA7E2",
 			"type": "text",
 			"props": {
 				"color": "red",
 				"size": "m",
-				"w": 85.48567199707031,
-				"text": "Hamza",
+				"w": 860.3984375,
+				"text": "◦ Major module: Standard user management, authentication, users",
 				"font": "draw",
-				"align": "middle",
-				"autoSize": true,
+				"textAlign": "start",
+				"autoSize": false,
 				"scale": 1
 			},
 			"parentId": "page:page",
-			"index": "aM",
+			"index": "a32o5",
 			"typeName": "shape"
 		},
 		{
-			"x": 894.1959673986214,
-			"y": 553.314151267931,
+			"x": 99.16264481537837,
+			"y": 338.08147387793446,
 			"rotation": 0,
 			"isLocked": false,
 			"opacity": 1,
 			"meta": {},
-			"id": "shape:OmIDiyCIdfKbF4Xr9JxBF",
+			"id": "shape:D_uysWhfWrPtdkA3ItmFN",
 			"type": "text",
 			"props": {
 				"color": "red",
 				"size": "m",
-				"w": 85.48567199707031,
-				"text": "Hamza",
+				"w": 698.765625,
+				"text": "◦ Major module: Implementing a remote authentication.",
 				"font": "draw",
-				"align": "middle",
+				"textAlign": "middle",
 				"autoSize": true,
 				"scale": 1
 			},
 			"parentId": "page:page",
-			"index": "aN",
+			"index": "a499L",
 			"typeName": "shape"
 		},
 		{
-			"x": 813.4757643103658,
-			"y": 621.567158501244,
+			"x": 100.13530106537837,
+			"y": 391.67131762793446,
 			"rotation": 0,
 			"isLocked": false,
 			"opacity": 1,
 			"meta": {},
-			"id": "shape:_nIaAs2yZ6JSET4WFiKBD",
+			"id": "shape:ecCFn2GmGg6olNNyWiY6o",
 			"type": "text",
 			"props": {
 				"color": "red",
 				"size": "m",
-				"w": 113.56510162353516,
-				"text": "Othmane",
+				"w": 402.1875,
+				"text": "◦ Major module: Remote players",
 				"font": "draw",
-				"align": "middle",
+				"textAlign": "start",
 				"autoSize": true,
 				"scale": 1
 			},
 			"parentId": "page:page",
-			"index": "aO",
+			"index": "a50z7",
+			"typeName": "shape"
+		},
+		{
+			"x": 100.51420731537837,
+			"y": 466.5736613779345,
+			"rotation": 0,
+			"isLocked": false,
+			"opacity": 1,
+			"meta": {},
+			"id": "shape:CGzZV2XJB5_t_OgsORCbQ",
+			"type": "text",
+			"props": {
+				"color": "red",
+				"size": "m",
+				"w": 323.8828125,
+				"text": "◦ Major module: Live chat.",
+				"font": "draw",
+				"textAlign": "middle",
+				"autoSize": true,
+				"scale": 1
+			},
+			"parentId": "page:page",
+			"index": "a64Gq",
+			"typeName": "shape"
+		},
+		{
+			"x": 102.22514481537837,
+			"y": 507.0267863779345,
+			"rotation": 0,
+			"isLocked": false,
+			"opacity": 1,
+			"meta": {},
+			"id": "shape:I6Z6ukk7FM1mkMV4QXM6h",
+			"type": "text",
+			"props": {
+				"color": "red",
+				"size": "m",
+				"w": 860.3984375,
+				"text": "◦ Major module: Implement Two-Factor Authentication (2FA) and JWT.",
+				"font": "draw",
+				"textAlign": "start",
+				"autoSize": false,
+				"scale": 1
+			},
+			"parentId": "page:page",
+			"index": "a76NQ",
+			"typeName": "shape"
+		},
+		{
+			"x": 99.74076981537837,
+			"y": 580.1244426279345,
+			"rotation": 0,
+			"isLocked": false,
+			"opacity": 1,
+			"meta": {},
+			"id": "shape:iDdO9NB-u3xA4uSiToTDv",
+			"type": "text",
+			"props": {
+				"color": "light-green",
+				"size": "m",
+				"w": 486.234375,
+				"text": "◦ Minor module: Support on all devices.",
+				"font": "draw",
+				"textAlign": "start",
+				"autoSize": true,
+				"scale": 1
+			},
+			"parentId": "page:page",
+			"index": "a88ZT",
+			"typeName": "shape"
+		},
+		{
+			"x": 94.13139481537837,
+			"y": 624.5775676279345,
+			"rotation": 0,
+			"isLocked": false,
+			"opacity": 1,
+			"meta": {},
+			"id": "shape:rRpe6qVX-iDrs6RhRPnvH",
+			"type": "text",
+			"props": {
+				"color": "light-green",
+				"size": "m",
+				"w": 621.6015625,
+				"text": "◦ Minor module: Expanding Browser Compatibility.",
+				"font": "draw",
+				"textAlign": "middle",
+				"autoSize": true,
+				"scale": 1
+			},
+			"parentId": "page:page",
+			"index": "a9Bjg",
+			"typeName": "shape"
+		},
+		{
+			"x": 100.22123856537837,
+			"y": 430.51897387793446,
+			"rotation": 0,
+			"isLocked": false,
+			"opacity": 1,
+			"meta": {},
+			"id": "shape:Vj16P0f5-rpuwyPqAEake",
+			"type": "text",
+			"props": {
+				"color": "red",
+				"size": "m",
+				"w": 780.3125,
+				"text": "◦ Major module: Multiplayers (more than 2 in the same game).",
+				"font": "draw",
+				"textAlign": "middle",
+				"autoSize": true,
+				"scale": 1
+			},
+			"parentId": "page:page",
+			"index": "aA3WW",
 			"typeName": "shape"
 		}
 	]
