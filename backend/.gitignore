@@ -3,3 +3,7 @@
 __pycache__/
 .env
 .venv/
+./media/qr_codes/
+# all images except default_image
+./media/images/* 
+!./media/images/default_image.jpg

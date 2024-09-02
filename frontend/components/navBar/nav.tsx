@@ -149,6 +149,7 @@ export default function Nav() {
     queryClient,
     router,
     path,
+    invitationLastMessage,
   ]);
 
   useEffect(() => {

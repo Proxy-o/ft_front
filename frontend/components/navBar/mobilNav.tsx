@@ -117,18 +117,13 @@ export default function MobilNav() {
       const message = parsedMessage.split(" ");
       if (message[0] === "/notif") {
         if (!path.startsWith("/game")) {
-          toast(
-            <Button
-              variant="ghost"
-              className="w-full text-center flex  items-center gap-4 m-0"
-              onClick={() => {
-                router.push(`/game`);
-              }}
-            >
-              <GamepadIcon className="h-6 w-6 text-primary" />
-              {"You have a new Game Invite from " + sender}
-            </Button>
-          );
+          toast(`${sender} Has invite you to play`, {
+            icon: <GamepadIcon className="mr-2" />,
+            action: {
+              label: `Play`,
+              onClick: () => router.push(`/game`),
+            },
+          });
         }
       }
       queryClient.invalidateQueries({
