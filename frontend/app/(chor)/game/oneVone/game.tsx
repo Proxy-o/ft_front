@@ -25,8 +25,9 @@ import { Card } from "@/components/ui/card";
 import NoGame from "../components/noGame";
 import PreGame from "../components/preGame";
 import Sockets from "../components/sockets";
+import { Toaster } from "@/components/ui/sonner";
 
-const Game = ({ type, onGoingGame }: { type: string; onGoingGame: any }) => {
+const Game = ({ type }: { type: string; }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationFrameId = useRef<number>(0);
   const isAnimating = useRef<boolean>(false);
@@ -63,11 +64,16 @@ const Game = ({ type, onGoingGame }: { type: string; onGoingGame: any }) => {
     handleStartGame,
     handleSurrender,
   } = useGameSocket();
+
+  const { newNotif } = useInvitationSocket();
+
   const user_id = getCookie("user_id") || "";
   const { data: user } = useGetUser(user_id || "0");
   const { mutate: surrenderGame } = useSurrenderGame();
   const { mutate: leaveGame } = useLeaveGame();
   const { mutate: endGame } = useEndGame();
+
+  const { onGoingGame } = useGetGame(user_id || "0", "two");
 
   userRef.current = user;
 
@@ -394,6 +400,20 @@ const Game = ({ type, onGoingGame }: { type: string; onGoingGame: any }) => {
     }
   }, [gameMsg()?.data]);
   
+  useEffect(() => {
+    const notif = newNotif();
+    if (notif) {
+      const parsedMessage = JSON.parse(notif.data);
+      const message = parsedMessage?.message.split(" ");
+      if (message[0] === "/start" || message[0] === "/refetchTournament") {
+        onGoingGame.refetch();
+      } else if (message[0] === "/end") {
+        // gameStartedRef.current = false;
+        onGoingGame.refetch();
+      }
+    }
+  }, [newNotif()?.data]);
+
 
   return (
     <>

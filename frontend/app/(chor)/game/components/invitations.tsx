@@ -15,7 +15,7 @@ import { useRouter } from "next/navigation";
 import useInvitationSocket from "@/app/(chor)/game/hooks/useInvitationSocket";
 import { toast } from "sonner";
 
-const Invitations = ({ mode, onGoingGame }: { mode: string; onGoingGame: any }) => {
+const Invitations = ({ mode }: { mode: string;  }) => {
   const { newNotif } = useInvitationSocket();
   const user_id = getCookie("user_id") || "";
   const router = useRouter();
@@ -49,15 +49,10 @@ const Invitations = ({ mode, onGoingGame }: { mode: string; onGoingGame: any }) 
     if (notif) {
       const parsedMessage = JSON.parse(notif.data);
       const message = parsedMessage?.message.split(" ");
-      if (message[0] === "/start" || message[0] === "/refetchTournament") {
-        onGoingGame.refetch();
-      } else if (message[0] === "/notif") {
+      if (message[0] === "/notif") {
         invitationsData.refetch();
       } else if (message[0] === "/decline") {
         toast.error(message[1] + " has declined your invitation");
-      } else if (message[0] === "/end") {
-        // gameStartedRef.current = false;
-        onGoingGame.refetch();
       }
     }
   }, [newNotif()?.data]);
