@@ -115,11 +115,12 @@ class AcceptInvitationView(APIView):
             return Response({'error': 'You are not the receiver of this invitation'}, status=status.HTTP_403_FORBIDDEN)
         if invitation.sender not in user.friends.all():
             return Response({'error': 'This user is not your friend'}, status=status.HTTP_403_FORBIDDEN)
-        sender_game = Game.objects.filter(Q(user1=invitation.sender) | Q(user2=invitation.sender) | Q(user3=invitation.sender) | Q(
-            user4=invitation.sender)).filter(winner=None).filter(type=invitation.type).last()
-        if sender_game:
-            invitation.delete()
-            return Response({'error': 'Player already in a game'}, status=status.HTTP_403_FORBIDDEN)
+        if invitation.type == "two":
+            sender_game = Game.objects.filter(Q(user1=invitation.sender) | Q(user2=invitation.sender) | Q(user3=invitation.sender) | Q(
+                user4=invitation.sender)).filter(winner=None).last()
+            if sender_game:
+                invitation.delete()
+                return Response({'error': 'Player already in a game'}, status=status.HTTP_403_FORBIDDEN)
         receiver_game = Game.objects.filter(Q(user1=user) | Q(user2=user) | Q(user3=user) | Q(
             user4=user)).filter(winner=None).filter(type=invitation.type).last()
         if receiver_game:
