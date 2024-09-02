@@ -12,8 +12,8 @@ def get_default_avatar():
     return 'images/default_avatar.jpg'
 
 class User(AbstractUser):
-    username = models.CharField(max_length=10, unique=True)
-    email = models.EmailField(unique=True)
+    username = models.CharField(max_length=15, unique=True)
+    email = models.EmailField(unique=True, blank=True, null=True)
     avatar = models.ImageField(upload_to=upload_to, default=get_default_avatar)
     status = models.CharField(max_length=100, blank=True)
     friends = models.ManyToManyField("self", blank=True)
@@ -33,3 +33,4 @@ class OAuthCredential(models.Model):
     refresh_token = models.CharField(max_length=255)
     access_token = models.CharField(max_length=255)
     expires_at = models.DateTimeField()
+    user_oauth_uid = models.CharField(max_length=255, default='')
