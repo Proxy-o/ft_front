@@ -265,19 +265,20 @@ const Game = ({ type, onGoingGame }: { type: string; onGoingGame: any }) => {
       );
 
       // Move the ball
-      if (newAngleRef.current !== 0)
+      if (newAngleRef.current !== 0 && leftScoreRef.current < 3 && rightScoreRef.current < 3) {
         moveBall(canvasParams, user, leftUser.current, newAngleRef);
+      }
 
       // Check if enemy has left the game
       // console.log("timeRef.current", timeRef.current);
-      // enemyLeftGame(
-      //   canvasParams,
-      //   timeRef,
-      //   enemyLeftGameRef,
-      //   gameStartedRef,
-      //   handleTime,
-      //   endGame
-      // );
+      enemyLeftGame(
+        canvasParams,
+        timeRef,
+        enemyLeftGameRef,
+        gameStartedRef,
+        handleTime,
+        endGame
+      );
     };
 
     const drawOnlineOne = () => {
@@ -377,9 +378,11 @@ const Game = ({ type, onGoingGame }: { type: string; onGoingGame: any }) => {
         setCanvas(null);
         onGoingGame.refetch();
       } else if (message[0] === "/end") {
-        if (leftScoreRef.current >= 3) {
+        if (leftScoreRef.current < 3 && rightScoreRef.current < 3) {
+          state.current = "leave";
+        } else if (leftScoreRef.current >= 3) {
           state.current = "win";
-        } else if (rightScoreRef.current < 3) {
+        } else if (rightScoreRef.current >= 3) {
           state.current = "lose";
         } else {
           state.current = "none";

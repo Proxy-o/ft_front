@@ -17,7 +17,6 @@ const endGame = async (data: {
       loser,
       loserScore,
     });
-    toast.success(res.data.message);
     if (res.data.tournamentId) {
       return res.data.tournamentId;
     }

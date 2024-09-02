@@ -24,6 +24,8 @@ const NoGame = ({ state }: { state: React.MutableRefObject<string> }) => {
       atext.current = "Start a local game";
     } else if (state.current === "tournament") {
       atext.current = "Join a tournament";
+    } else if (state.current === "leave") {
+      atext.current = "Your enemy has left the game";
     }
     setTimeout(() => {
       if (letterIndex.current < atext.current.length) {
