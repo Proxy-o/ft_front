@@ -15,7 +15,6 @@ from django.http import Http404
 from rest_framework import permissions
 from .permissions import IsOwnerOrReadOnly
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.parsers import MultiPartParser, FormParser
 from django.db.models import Q
 from django.contrib.auth.password_validation import validate_password
@@ -205,7 +204,6 @@ class CustomLogoutView(APIView):
 class UserAvatar(APIView):
 
     permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
-    authentication_classes = [JWTAuthentication]
 
     parser_classes = [MultiPartParser, FormParser]
 
@@ -231,7 +229,6 @@ class UserList(APIView):
     List all users, or create a new user.
     """
     permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
 
     def get(self, request, format=None):
         users = User.objects.all()
