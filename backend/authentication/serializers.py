@@ -159,6 +159,7 @@ class OAuthCredentialSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = validated_data.get('user')
+        user_oauth_uid = validated_data.get('user_oauth_uid')
         provider = validated_data.get('provider')
         refresh_token = validated_data.get('refresh_token')
         access_token = validated_data.get('access_token')
@@ -167,6 +168,7 @@ class OAuthCredentialSerializer(serializers.ModelSerializer):
         # Check if the OAuth credential already exists for the same user and provider
         credential, created = OAuthCredential.objects.update_or_create(
             user=user,
+            user_oauth_uid=user_oauth_uid,
             provider=provider,
             defaults={
                 'refresh_token': refresh_token,
