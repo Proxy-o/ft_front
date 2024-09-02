@@ -26,6 +26,7 @@ import NoGame from "../components/noGame";
 import PreGame from "../components/preGame";
 import Sockets from "../components/sockets";
 import { Toaster } from "@/components/ui/sonner";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Game = ({ type }: { type: string; }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -66,6 +67,9 @@ const Game = ({ type }: { type: string; }) => {
   } = useGameSocket();
 
   const { newNotif } = useInvitationSocket();
+
+  const query = useQueryClient();
+
 
   const user_id = getCookie("user_id") || "";
   const { data: user } = useGetUser(user_id || "0");
@@ -373,6 +377,7 @@ const Game = ({ type }: { type: string; }) => {
           enemyLeftGameRef.current = false; // todo: tournament forfeit status
         }
       } else if (message[0] === "/refetchPlayers") {
+        query.invalidateQueries({ queryKey: ["friends",user_id] });
         onGoingGame.refetch();
       } else if (message[0] === "/surrender") {
         if (message[1] !== username) {
@@ -406,6 +411,7 @@ const Game = ({ type }: { type: string; }) => {
       const parsedMessage = JSON.parse(notif.data);
       const message = parsedMessage?.message.split(" ");
       if (message[0] === "/start" || message[0] === "/refetchTournament") {
+        console.log("refetchindddddg");
         onGoingGame.refetch();
       } else if (message[0] === "/end") {
         // gameStartedRef.current = false;

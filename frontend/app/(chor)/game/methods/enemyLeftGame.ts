@@ -6,7 +6,7 @@ function enemyLeftGame(
   time: React.MutableRefObject<number>,
   enemyLeftGameRef: React.MutableRefObject<boolean>,
   gameStartedRef: React.MutableRefObject<boolean>,
-  handleTime: (time: number) => void,
+  handleTime: (time: number, enemy: string) => void,
   endGame: (data: {
     winner: string;
     winnerScore: number;
@@ -27,9 +27,9 @@ function enemyLeftGame(
     enemyLeftGameRef.current = true;
     time.current = seconds;
     // console.log("current time: " + time.current + "seconds: " + seconds);
-    handleTime(time.current);
+    handleTime(time.current, rightUserRef.current?.id || "");
   } else {
-    if (seconds - time.current > 2) {
+    if (seconds - time.current > 3) {
       toast.error("Enemy left the game");
     // alert("2");
       endGame({

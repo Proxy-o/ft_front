@@ -49,15 +49,15 @@ class InvitationView(APIView):
             is_accepted=None)) | (Q(sender=receiver) & Q(receiver=sender) & Q(is_accepted=None))).last()
         if previousInvitations and (previousInvitations.is_accepted != True and previousInvitations.is_accepted != False):
             return Response({'error': 'invitation alredy sent'}, status=status.HTTP_403_FORBIDDEN)
-        sender_game = Game.objects.filter(Q(user1=sender) | Q(user2=sender) | Q(user3=sender) | Q(
-            user4=sender)).filter(winner=None).filter(type=type).last()
-        # receiver_game = Game.objects.filter(Q(user1=receiver) | Q(user2=receiver) | Q(user3=receiver) | Q(
-        #     user4=receiver)).filter(winner=None).filter(type=type).last()
-        # if sender_game or receiver_game:
-        #     return Response({'error': 'Player already in a game'}, status=status.HTTP_403_FORBIDDEN)
+        # sender_game = Game.objects.filter(Q(user1=sender) | Q(user2=sender) | Q(user3=sender) | Q(
+        #     user4=sender)).filter(winner=None).filter(type=type).last()
+        receiver_game = Game.objects.filter(Q(user1=receiver) | Q(user2=receiver) | Q(user3=receiver) | Q(
+            user4=receiver)).filter(winner=None).filter(type=type).last()
+        if receiver_game:
+            return Response({'error': 'Player already in a game'}, status=status.HTTP_403_FORBIDDEN)
         invitation = Invitation(sender=sender, receiver=receiver, type=type)
         invitation.save()
-
+        
         serializer = InvitationSerializer(invitation)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -115,6 +115,16 @@ class AcceptInvitationView(APIView):
             return Response({'error': 'You are not the receiver of this invitation'}, status=status.HTTP_403_FORBIDDEN)
         if invitation.sender not in user.friends.all():
             return Response({'error': 'This user is not your friend'}, status=status.HTTP_403_FORBIDDEN)
+        sender_game = Game.objects.filter(Q(user1=invitation.sender) | Q(user2=invitation.sender) | Q(user3=invitation.sender) | Q(
+            user4=invitation.sender)).filter(winner=None).filter(type=invitation.type).last()
+        if sender_game:
+            invitation.delete()
+            return Response({'error': 'Player already in a game'}, status=status.HTTP_403_FORBIDDEN)
+        receiver_game = Game.objects.filter(Q(user1=user) | Q(user2=user) | Q(user3=user) | Q(
+            user4=user)).filter(winner=None).filter(type=invitation.type).last()
+        if receiver_game:
+            invitation.delete()
+            return Response({'error': 'You are already in a game'}, status=status.HTTP_403_FORBIDDEN)
         game = Game.objects.filter(Q(user1=user) | Q(user2=user) | Q(
             user3=user) | Q(user4=user)).filter(winner=None).filter(type=invitation.type).last()
         if game:
@@ -122,6 +132,7 @@ class AcceptInvitationView(APIView):
                 type = "1 VS 1"
             elif game.type == "four":
                 type = "2 VS 2"
+            invitation.delete()
             return Response({'error': f'You are already in a {type} game'}, status=status.HTTP_403_FORBIDDEN)
         invitation.is_accepted = True
         invitation.save()
@@ -129,6 +140,12 @@ class AcceptInvitationView(APIView):
             game = createGame(invitation.sender, invitation.receiver, "two")
         elif invitation.type == "four":
             game = joinGame(invitation.sender, invitation.receiver, "four")
+
+        # set status to playing 
+        invitation.sender.status = "playing"
+        invitation.receiver.status = "playing"
+        invitation.sender.save()
+        invitation.receiver.save()
 
         return Response(
             {
@@ -184,7 +201,11 @@ class OnGoingGame(APIView):
         game = Game.objects.filter((Q(user1=user) | Q(user2=user)) & Q(
             winner=None) & Q(type="two")).last()
         if not game:
+            user.status = "online"
+            user.save()
             return Response({'message': 'No ongoing game found', 'game': 'null'}, status=status.HTTP_204_NO_CONTENT)
+        user.status = "playing"
+        game.save()
         serializer = GameSerializer(game)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

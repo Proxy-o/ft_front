@@ -5,14 +5,11 @@ import { toast } from "sonner";
 
 async function accept(invitationId: string) {
   let res;
-  try {
+  
     res = await axiosInstance.post("game/accept_invitation", {
       invitationId,
     });
-  } catch (error: any) {
-    toast.error(error?.response?.data.error);
-    return "";
-  }
+  
   const gameId = res.data.gameId;
   return gameId;
 }
@@ -23,11 +20,17 @@ export default function useAcceptInvitation() {
   const mutation = useMutation({
     mutationFn: accept,
     onSuccess: (gameId) => {
+      console.log("gameId", gameId);
       handleRefetchPlayers(gameId);
-      // query.invalidateQueries({ queryKey: ["game"] });
-      // query.invalidateQueries({ queryKey: ["gameFour"] });
+      query.invalidateQueries({ queryKey: ["game"] });
+      query.invalidateQueries({ queryKey: ["gameFour"] });
       query.invalidateQueries({ queryKey: ["invitations"] });
     },
+    onError: (error) => {
+
+      query.invalidateQueries({ queryKey: ["invitations"] });
+      console.log(toast.error(error?.response?.data.error));
+    }
   });
   return mutation;
 }

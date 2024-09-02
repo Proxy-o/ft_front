@@ -16,7 +16,6 @@ const InviteFriends = ({ gameType }: { gameType: string }) => {
 
   const data: [{ id: string; username: string; avatar: string; status:string }] = friends.data || [];
 
-  const onlineUsers = data.filter((user) => user.status === "online");
 
   const { mutate: invite } = useSendInvitation();
 
@@ -29,9 +28,9 @@ const InviteFriends = ({ gameType }: { gameType: string }) => {
             Invite
         </div>
         <div className="flex flex-col w-full items-center justify-center pt-2 border-t gap-2">
-          {onlineUsers.length ? (
-            onlineUsers.map(
-              (friend: { id: string; username: string; avatar: string }) => {
+          {data.length ? (
+            data.map(
+              (friend: { id: string; username: string; avatar: string,status: string }) => {
                 
                 return (
                   <div
@@ -58,6 +57,7 @@ const InviteFriends = ({ gameType }: { gameType: string }) => {
                       <div className="w-full h-full flex justify-center items-center">{friend.username}</div>
                     </div>
                     <Button
+                    disabled={friend.status !== "online"}
                       size={"xs"}
                       onClick={() => {
                         invite({

@@ -74,7 +74,7 @@ class InvitationConsumer(WebsocketConsumer):
         receiver = User.objects.get(id=split[2])
         async_to_sync(self.channel_layer.group_send)(
             f'inbox_{receiver.username}',
-            {'type': 'send_message', 'user': self.user.username, 'message': ' '.join(split) + ' '}
+            {'type': 'send_message', 'user': self.user.username, 'message': ' '.join(split) + ' ' + time}
         )
 
     def handle_accept(self, split):

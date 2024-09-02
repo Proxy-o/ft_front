@@ -17,7 +17,7 @@ export default function Page() {
   }, [user, isSuccess, router]);
   return (
     <div className={`flex flex-col w-full h-full justify-start items-center`}>
-      <Tournament />
+      {/* <Tournament /> */}
     </div>
   );
 }
