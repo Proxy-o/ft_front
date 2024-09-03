@@ -1,7 +1,7 @@
-import Four from "./twoVtwo";
 import { Card } from "@/components/ui/card";
 import Invitations from "../components/invitations";
 import InviteFriends from "../components/inviteFriend";
+import Game from "./game";
 
 export default function Page() {
   return (
@@ -12,7 +12,7 @@ export default function Page() {
         </h1>
         <Card className="w-full h-fit flex flex-col justify-center items-start mx-auto gap-2">
           <div className="w-full h-[400px] lg:h-[500px]">
-            <Four />
+            <Game />
           </div>
         </Card>
         <div className="w-full h-full flex flex-col md:flex-row justify-start items-start gap-4">

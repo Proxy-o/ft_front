@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useRef, useState } from "react";
 import { changeBallDirectionFour } from "../methods/changeBallDirection";
 import { canvasParamsFour } from "../types";
@@ -23,18 +25,10 @@ import { DoorOpen, Flag, Gamepad } from "lucide-react";
 import Hover from "../components/hover";
 import { toast } from "sonner";
 import PreGame from "../components/preGame";
+import useGetFourGame from "../hooks/useGetFourGame";
+import NoGame from "../components/noGame";
 
-const Game = ({
-  gameStartedRef,
-  setGameChange,
-  onGoingGame,
-  state,
-}: {
-  gameStartedRef: React.MutableRefObject<boolean>;
-  setGameChange: React.Dispatch<React.SetStateAction<boolean>>;
-  onGoingGame: any;
-  state: React.MutableRefObject<string>;
-}) => {
+const Game = () => {
   const playerReadyRef = useRef(0);
   const isFirstTime = useRef(true);
   const paddleRightTopYRef = useRef(0);
@@ -56,6 +50,13 @@ const Game = ({
   const enemyLeftGameRef = useRef(false);
   const numberOfTimeResponseRef = useRef(0);
   const stillPlayingUsersRef = useRef<string[]>([]);
+  const user_id = getCookie("user_id") || "";
+  const gameStartedRef = useRef(false);
+  const state = useRef<string>("none");
+
+  const [gameChange, setGameChange] = useState(false);
+
+  const { onGoingGame } = useGetFourGame(user_id || "0");
   const dummyPlayer: User = {
     username: "player",
     avatar: "none",
@@ -72,7 +73,6 @@ const Game = ({
   const rightUserTop = useRef<User>(dummyPlayer);
   const rightUserBottom = useRef<User>(dummyPlayer);
 
-  const user_id = getCookie("user_id") || "";
   const { data: user } = useGetUser(user_id || "0");
   const username: string = user?.username || "";
 
@@ -102,6 +102,8 @@ const Game = ({
     handleRefetchPlayers,
     handleStartGameFour,
   } = useInvitationSocket();
+
+
 
   const { mutate: endGame } = useEndGame();
 
@@ -316,6 +318,24 @@ const Game = ({
   }, [canvas, gameStartedRef.current]);
 
   useEffect(() => {
+    if (
+      onGoingGame.data?.game.user1 ||
+      onGoingGame.data?.game.user2 ||
+      onGoingGame.data?.game.user3 ||
+      onGoingGame.data?.game.user4
+    ) {
+      setGameChange(true);
+    } else {
+      setGameChange(false);
+    }
+  }, [
+    onGoingGame.data?.game.user1,
+    onGoingGame.data?.game.user2,
+    onGoingGame.data?.game.user3,
+    onGoingGame.data?.game.user4,
+  ]);
+
+  useEffect(() => {
     if (newNotif()) {
       const notif = newNotif();
       const parsedMessage = JSON.parse(notif?.data);
@@ -496,6 +516,10 @@ const Game = ({
     }
   }, [gameMsg()?.data]);
   return (
+    <div className="p-4 flex flex-col mx-auto justify-center w-full h-full">
+      {onGoingGame.isSuccess && (
+        <>
+          {gameChange && (
     <>
       {!gameStartedRef.current &&
         (leftUserTop.current ||
@@ -571,6 +595,12 @@ const Game = ({
         </Button>
       )}
     </>
+    )}
+    {!gameChange && <NoGame state={state} />}
+    {/* </Game> */}
+  </>
+)}0
+</div>
   );
 };
 
