@@ -8,7 +8,9 @@ import requests
 from urllib.parse import urlencode
 from datetime import datetime, timedelta
 from .models import OAuthCredential
-
+import pyotp
+import qrcode
+from django.core.files.base import ContentFile
 User = get_user_model()
 
 class OAuthService:
@@ -97,15 +99,24 @@ class OAuthService:
     @staticmethod
     def create_user(validated_data):
         try:
+            otp_base32 = pyotp.random_base32()
+            otp_auth_url = pyotp.totp.TOTP(otp_base32).provisioning_uri(
+                name=validated_data.get('email'), issuer_name='FT Transcendence')
+            stream = BytesIO()
+            image = qrcode.make(f"{otp_auth_url}")
+            image.save(stream)
             user = User.objects.create(
                 username=validated_data['username'],
                 # email=validated_data['email'],
                 password=validated_data['password'],
                 has_oauth_credentials=validated_data['has_oauth_credentials'],
-                avatar=validated_data['avatar']
+                avatar=validated_data['avatar'],
+                otp_base32= otp_base32,
                 
             )
             user.set_password(validated_data['password'])
+            user.qr_code = ContentFile(
+            stream.getvalue(), name=f"qr{get_random_string(10)}.png")
             user.save()
             return user, None
         except Exception as e:
