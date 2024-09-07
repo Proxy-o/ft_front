@@ -145,7 +145,7 @@ class VerifyOTPSerializer(serializers.Serializer):
         user = validated_data.get("user")
         refresh = RefreshToken.for_user(user)
         return {
-            "user": UserSerializer(user).data,
+            "user": user,
             "refresh": str(refresh),
             "access": str(refresh.access_token),
         }
