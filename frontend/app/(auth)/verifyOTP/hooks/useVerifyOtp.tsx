@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { VerifyOTPState } from "../types";
 import { useRouter } from "next/navigation";
-import { setLoginCookie } from "@/app/(auth)/login/hooks/useLogin";
+import { setCookie } from "@/lib/functions/getCookie";
 
 const verifyOtp = async (data: VerifyOTPState) => {
   try {
@@ -24,7 +24,8 @@ export default function useVerifyOtp() {
       return res;
     },
     onSuccess: (data) => {
-      setLoginCookie(data);
+      toast.success("OTP verified successfully.");
+      setCookie("logged_in", "yes", 1);
       route.push("/");
     },
     onError: (err) => {
