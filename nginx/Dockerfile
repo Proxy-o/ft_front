@@ -1,26 +1,16 @@
-# Use an official Nginx runtime as a parent image
-FROM nginx:stable-alpine3.20
+#syntax=docker/dockerfile:1
+FROM debian:oldstable-slim
 
-# Install openssl package to generate self-signed certificate
-RUN apk add --no-cache openssl
+# Install nginx and modSecurity
+RUN apt-get update && apt-get install -y \
+    nginx \
+    libnginx-mod-http-modsecurity \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Create directory for SSL certs
-RUN mkdir -p /etc/nginx/certs
+COPY tools/nginx.conf .
+COPY tools/setup.sh .
 
-# Generate self-signed SSL certificate
-RUN openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-    -keyout /etc/nginx/certs/self.key \
-    -out /etc/nginx/certs/self.crt \
-    -subj "/C=US/ST=State/L=City/O=Organization/CN=localhost"
+# init setup of nginx and modSecurity and ssl
+RUN bash setup.sh
 
-# Remove default configuration file
-RUN rm /etc/nginx/conf.d/default.conf
-
-# Copy custom Nginx configuration file
-COPY conf/nginx.conf /etc/nginx/nginx.conf
-
-# Expose ports
-EXPOSE 443
-
-# Command to start Nginx
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["nginx"]
