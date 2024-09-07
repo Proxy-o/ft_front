@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 
 import {
   InputOTP,
@@ -11,14 +10,15 @@ import useVerifyOtp from "./hooks/useVerifyOtp";
 import { Button } from "@/components/ui/button";
 import getCookie from "@/lib/functions/getCookie";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Page() {
-  const [value, setValue] = React.useState("");
+  const [value, setValue] = useState("");
   const { mutate } = useVerifyOtp();
   const user_id = getCookie("user_id");
   const router = useRouter();
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (value.length === 6) {
       mutate({
         otp: value,

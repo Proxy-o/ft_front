@@ -45,8 +45,7 @@ def signup(request):
 def set_auth_cookies_and_response(user, refresh_token, access_token, request):
     response = Response({
         'refresh': str(refresh_token),
-        'access': str(access_token),
-        'user': UserSerializer(user, context={'request': request}).data
+        'user': UserSerializer(user, context={'request': request}).data,
     })
 
     response.set_cookie(
@@ -134,12 +133,16 @@ class OAuthCallback(APIView):
 
 
 @api_view(['POST'])
+@authentication_classes([])
+@permission_classes([])
 def verifyOTPView(request):
     serializer = VerifyOTPSerializer(
         context={'request': request}, data=request.data)
     serializer.is_valid(raise_exception=True)
     login_info = serializer.save()
-    return Response(login_info, status=200)
+    response = set_auth_cookies_and_response(
+        login_info['user'], login_info['refresh'], login_info['access'], request)
+    return response
 
 
 @api_view(['POST'])
