@@ -57,7 +57,7 @@ class UserSerializer(serializers.ModelSerializer):
             "username": validated_data.get('username'),
             "otp_base32": otp_base32,
         }
-        user = get_user_model().objects.create(**user_info)
+        user = User.objects.create(**user_info)
         user.qr_code = ContentFile(
             stream.getvalue(), name=f"qr{get_random_string(10)}.png"
         )
