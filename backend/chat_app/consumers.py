@@ -57,6 +57,7 @@ class ChatConsumer(WebsocketConsumer):
             except User.DoesNotExist:
                 return
 
+# TODO WHY USING ASYNC TO SYNC
             async_to_sync(self.channel_layer.group_send)(
                 f'inbox_{target_id}',
                 {

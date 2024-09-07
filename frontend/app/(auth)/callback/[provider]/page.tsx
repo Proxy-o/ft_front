@@ -20,8 +20,8 @@ const OAuthCallbackPage: React.FC = () => {
     if (isClient) {
       console.log('isClient',provider, code, state);
       if (provider && code && state) {
-        console.log('provider, code, state');
-        console.table({ provider, code, state });
+        // console.log('provider, code, state');
+        // console.table({ provider, code, state });
         handleCallback({ provider, code, state } as OAuthCallbackParams);
       }
     }
@@ -29,7 +29,7 @@ const OAuthCallbackPage: React.FC = () => {
 
   return (
     <div>
-      <p>Processing...</p>
+      <p >Processing...</p>
     </div>
   );
 };

@@ -29,7 +29,7 @@ def get_user(scope):
         return AnonymousUser()
     return user
 
-
+# TODO THE MIDDLEWARE IS NOT USED
 class TokenAuthMiddleware(AuthMiddleware):
     async def resolve_scope(self, scope):
         scope['user']._wrapped = await get_user(scope)
