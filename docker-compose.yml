@@ -9,8 +9,6 @@ services:
       - "443:443"
     networks:
       - mynetwork
-    volumes:
-      - ./nginx/conf:/etc/nginx/conf # Example volume mount for nginx configuration
     depends_on:
       - backend
 
@@ -56,6 +54,8 @@ services:
       - /app/node_modules        # Ensure node_modules is not overwritten by host
     networks:
       - mynetwork
+    depends_on:
+      - backend
 
 networks:
   mynetwork:

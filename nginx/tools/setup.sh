@@ -5,13 +5,12 @@ set -e
 # init setup
 SETUP_DEPS=(
     "openssl"
-    "git"
+    "wget"
 )
 
 apt-get update && apt-get install -y \
     ${SETUP_DEPS[@]} \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
-
 
 # ssl setup
 mkdir -p /etc/nginx/certs
@@ -29,17 +28,18 @@ mkdir -p /etc/nginx/modsec
 wget https://raw.githubusercontent.com/SpiderLabs/ModSecurity/v3/master/modsecurity.conf-recommended -O /etc/nginx/modsec/modsecurity.conf
 wget https://raw.githubusercontent.com/SpiderLabs/ModSecurity/v3/master/unicode.mapping -O /etc/nginx/modsec/unicode.mapping
 
-# install modSecurity
-git clone --depth 1 --recursive -b v3/master https://github.com/owasp-modsecurity/ModSecurity ModSecurity
-./ModSecurity/build.sh
-./ModSecurity/configure
-make -C ModSecurity
-make install -C ModSecurity
-rm -rf ModSecurity
+# install OWASP ModSecurity Core Rule Set
 
-# install nginx connector
-git clone --depth 1 https://github.com/owasp-modsecurity/ModSecurity-nginx.git ModSecurity-nginx
-./ModSecurity/configure --add-module=MosSecurity-nginx --with-compat
+wget https://github.com/coreruleset/coreruleset/archive/refs/tags/v4.6.0.tar.gz
+tar -xvf v4.6.0.tar.gz
+mkdir -p /etc/nginx/modsec/owasp-crs
+mv coreruleset-4.6.0/crs-setup.conf.example /etc/nginx/modsec/owasp-crs/crs-setup.conf
+mv coreruleset-4.6.0/rules /etc/nginx/modsec/owasp-crs/rules
+rm -rf coreruleset-4.6.0 v4.6.0.tar.gz
+
+# include OWASP ModSecurity Core Rule Set
+echo "Include /etc/nginx/modsec/owasp-crs/crs-setup.conf" >> /etc/nginx/modsec/modsecurity.conf
+echo "Include /etc/nginx/modsec/owasp-crs/rules/*.conf" >> /etc/nginx/modsec/modsecurity.conf
 
 # clean up
 apt-get purge -y \
