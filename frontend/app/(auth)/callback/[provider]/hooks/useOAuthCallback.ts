@@ -20,13 +20,12 @@ const useOAuthCallback = () => {
             if (responseData.detail === "2FA required") {
               setCookie('user_id', responseData.user_id);
               router.push("/verifyOTP");
-              return;
             }
         }
         throw new Error(error.response?.data?.detail || "An error occurred during login");
       }
     },
-    onSuccess: (data) => {
+    onSuccess: (data:any) => {
         if (!data || !data.user) {
           router.push("/login");
           return;

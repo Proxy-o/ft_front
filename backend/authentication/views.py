@@ -120,6 +120,8 @@ class OAuthCallback(APIView):
         if error:
             return Response(error, status=status.HTTP_400_BAD_REQUEST)
         
+        if user.otp_active:
+            return Response({'detail': '2FA required', 'user_id': user.id}, status=status.HTTP_400_BAD_REQUEST)
         serializers = OAuthCredentialSerializer(data=user_credentials)
         if serializers.is_valid():
             serializers.save()

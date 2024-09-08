@@ -10,6 +10,9 @@ from datetime import datetime, timedelta
 from .models import OAuthCredential
 import pyotp
 import qrcode
+from io import BytesIO
+from django.utils.crypto import get_random_string
+
 from django.core.files.base import ContentFile
 User = get_user_model()
 
