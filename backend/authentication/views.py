@@ -257,7 +257,7 @@ class UserDetail(APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         serializer = UserSerializer(user, context={'request': request})
-        print(serializer.data)
+        # print(serializer.data)
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):
