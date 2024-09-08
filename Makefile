@@ -1,6 +1,6 @@
 
 all:
-	bash init.sh
+	bash tools/init.sh
 	mkdir -p ./postgres
 	docker-compose -f ./docker-compose.yml up #-d
 	@echo ""
