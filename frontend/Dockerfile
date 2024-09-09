@@ -15,11 +15,11 @@ RUN npm install
 # Copy local code to the container image.
 COPY ./frontend .
 
-# Copy environment variables
+# # Copy environment variables
 # COPY .env .env
 
-# Expose the port the app runs on
-EXPOSE 3000
+# # Expose the port the app runs on
+# EXPOSE 3000
 
 # Run the web service on container startup.
 CMD ["npm", "run", "dev"]

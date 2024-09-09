@@ -23,8 +23,13 @@ re:	down
 	
 	docker-compose -f ./docker-compose.yml up --build # -d
 
+logs:
+	docker-compose -f ./docker-compose.yml logs $(s)
+
+test_waf:
+	./nginx/tools/test_waf.sh
+
 clean: down
-	
 	docker system prune -a
 
 fclean:
@@ -35,4 +40,4 @@ fclean:
 	docker volume rm $$(docker volume ls -q) 2>/dev/null || true
 	docker network rm $$(docker network ls -q) 2>/dev/null || true
 
-.PHONY	: all build down re clean fclean
+.PHONY	: all build down re clean fclean logs test_waf
