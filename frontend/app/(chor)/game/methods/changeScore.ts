@@ -59,7 +59,7 @@ function changeScoreFour(
     userLeftBottom: leftUserBottom,
     userRightTop: rightUserTop,
     userRightBottom: rightUserBottom,
-    gameIdRef,
+    gameId,
   } = canvasParams;
   if (canvas === null) return;
   if (
@@ -74,10 +74,8 @@ function changeScoreFour(
         (newBallPositionRef.current.y >= canvas.height / 2 &&
           username === rightUserBottom?.current.username)))
   ) {
-    handleEnemyScoreFour(gameIdRef.current);
     isFirstTime.current = true;
-    newBallPositionRef.current.x = canvas.width / 2;
-    newBallPositionRef.current.x = canvas.width / 2;
+    newBallPositionRef.current = { x: canvas.width / 2, y: canvas.height / 2 };
     newAngleRef.current = Math.random() * 2 * Math.PI;
     while (
       (newAngleRef.current > Math.PI / 6 &&
@@ -93,6 +91,7 @@ function changeScoreFour(
       newAngleRef.current,
       username
     );
+    handleEnemyScoreFour(gameId);
   }
 }
 

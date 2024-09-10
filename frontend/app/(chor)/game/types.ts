@@ -1,4 +1,5 @@
 import { User } from "@/lib/types";
+import React from "react";
 
 export type canvasParams = {
   canvas: HTMLCanvasElement | null;
@@ -28,6 +29,10 @@ export type canvasParamsFour = {
   paddleLeftBottomYRef: React.MutableRefObject<number>;
   paddleRightTopYRef: React.MutableRefObject<number>;
   paddleRightBottomYRef: React.MutableRefObject<number>;
+  paddleLeftTopDirectionRef: React.MutableRefObject<string>;
+  paddleLeftBottomDirectionRef: React.MutableRefObject<string>;
+  paddleRightTopDirectionRef: React.MutableRefObject<string>;
+  paddleRightBottomDirectionRef: React.MutableRefObject<string>;
   userLeftTop: React.MutableRefObject<User>;
   userLeftBottom: React.MutableRefObject<User>;
   userRightTop: React.MutableRefObject<User>;
@@ -41,5 +46,5 @@ export type canvasParamsFour = {
   isFirstTime: React.MutableRefObject<boolean>;
   rightScoreRef: React.MutableRefObject<number>;
   leftScoreRef: React.MutableRefObject<number>;
-  gameIdRef: React.MutableRefObject<string>;
+  gameId: string;
 };

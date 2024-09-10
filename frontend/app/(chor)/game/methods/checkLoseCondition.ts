@@ -36,7 +36,7 @@ function checkLoseConditionFour(
   canvas: HTMLCanvasElement | null,
   leftScoreRef: React.MutableRefObject<number>,
   rightScoreRef: React.MutableRefObject<number>,
-  gameStartedRef: React.MutableRefObject<boolean>,
+  setGameStarted: React.Dispatch<React.SetStateAction<boolean>>,
   endGameFour: (data: {
     winner: string;
     winnerScore: number;
@@ -45,7 +45,7 @@ function checkLoseConditionFour(
   }) => void,
   username: string,
   handleRefetchPlayers: (gameId: string) => void,
-  setGameChange: React.Dispatch<React.SetStateAction<boolean>>
+  
 ) {
   if (canvas === null) return;
   const {
@@ -54,11 +54,10 @@ function checkLoseConditionFour(
     userRightTop: rightUserTop,
     userRightBottom: rightUserBottom,
   } = canvasParams;
-  if (rightScoreRef.current === 3 || leftScoreRef.current === 3) {
-    handleRefetchPlayers(canvasParams.gameIdRef.current);
-    gameStartedRef.current = false;
+  if (rightScoreRef.current >= 3 || leftScoreRef.current >= 3) {
+    handleRefetchPlayers(canvasParams.gameId);
+    setGameStarted(false);
     if (rightScoreRef.current >= 3) {
-      setGameChange(false);
       if (username === leftUserTop.current?.username) {
         endGameFour({
           winner: rightUserTop.current?.id || "",
@@ -74,9 +73,8 @@ function checkLoseConditionFour(
         toast.success("You have won the game");
       }
     }
-    if (leftScoreRef.current < 3) {
+    if (leftScoreRef.current >= 3) {
       if (username === rightUserTop.current?.username) {
-        setGameChange(false);
         endGameFour({
           winner: leftUserTop.current?.id || "",
           winnerScore: leftScoreRef.current,

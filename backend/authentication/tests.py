@@ -25,6 +25,32 @@ class TestCreateUser(TestCase):
     #     response = api_client.post(self.register_url, data)
     #     assert response.status_code == 400
 
+class CreateFourUsers(TestCase):
+    def setUp(self):
+        self.client = Client()
+
+    def test_create_four_users(self):
+        self.user1 = User.objects.create_user(
+            username="t",
+            password="ttt",
+            email="e1@e1.e1"
+        )
+        self.user2 = User.objects.create_user(
+            username="y",
+            password="yyy",
+            email="e2@e2.e2"
+        )
+        self.user3 = User.objects.create_user(
+            username="u",
+            password="uuu",
+            email="e3.e3@e3"
+        )
+        self.user4 = User.objects.create_user(
+            username="i",
+            password="iii",
+            email="e4.e4@e4"
+        )
+
 
 class TestVerifyOTP(TestCase):
     def setUp(self):

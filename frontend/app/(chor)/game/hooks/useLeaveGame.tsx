@@ -1,7 +1,6 @@
-
 import axiosInstance from "@/lib/functions/axiosInstance";
-import useGameSocket from "@/app/(chor)/game/hooks/useGameSocket";
-import useInvitationSocket from "@/app/(chor)/game/hooks/useInvitationSocket";
+import useGameSocket from "@/app/(chor)/game/hooks/sockets/useGameSocket";
+import useInvitationSocket from "@/app/(chor)/game/hooks/sockets/useInvitationSocket";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 

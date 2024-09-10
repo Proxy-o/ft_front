@@ -9,7 +9,7 @@ from django.contrib.auth import get_user_model
 from .serializers import GameSerializer, TournamentSerializer, InvitationSerializer
 from rest_framework import permissions
 from authentication.customJWTAuthentication import CustomJWTAuthentication
-from .consumers import WebsocketConsumer
+from .gameConsumer import WebsocketConsumer
 from asgiref.sync import async_to_sync
 from django.shortcuts import get_object_or_404
 from channels.layers import get_channel_layer
@@ -310,14 +310,48 @@ class EndGame(APIView):
         game.user2_score = winner_score if user2.id == winner_id else loser_score
         game.save()
         channel_layer = get_channel_layer()
+        # async_to_sync(channel_layer.group_send)(
+        #     f'game_{game.id}',
+        #     {
+        #         'type': 'send_message',
+        #         'message': '/end',
+        #         'gameId': game.id
+        #     }
+        # )
         async_to_sync(channel_layer.group_send)(
-            f'game_{game.id}',
+            f'inbox_{game.user1.id}',
             {
                 'type': 'send_message',
                 'message': '/end',
                 'gameId': game.id
             }
         )
+        async_to_sync(channel_layer.group_send)(
+            f'inbox_{game.user2.id}',
+            {
+                'type': 'send_message',
+                'message': '/end',
+                'gameId': game.id
+            }
+        )
+        if game.user3:
+            async_to_sync(channel_layer.group_send)(
+                f'inbox_{game.user3.id}',
+                {
+                    'type': 'send_message',
+                    'message': '/end',
+                    'gameId': game.id
+                }
+            )
+        if game.user4:
+            async_to_sync(channel_layer.group_send)(
+                f'inbox_{game.user4.id}',
+                {
+                    'type': 'send_message',
+                    'message': '/end',
+                    'gameId': game.id
+                }
+            )
         if game.type == "tournament":
             print("tournament")
             tournament = Tournament.objects.get(

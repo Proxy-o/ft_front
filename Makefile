@@ -11,6 +11,9 @@ all:
 	@echo "\033[0;31mServer adress: https://127.0.0.1 \033[0m"
 	@echo ""
 
+start:
+	docker-compose -f ./docker-compose.yml up
+
 build:
 	
 	docker-compose -f ./docker-compose.yml build

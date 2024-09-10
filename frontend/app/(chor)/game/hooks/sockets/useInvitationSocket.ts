@@ -23,47 +23,8 @@ export default function useInvitationSocket() {
     sendJsonMessage({ message: toSend });
   };
 
-  const handleStartGameFour = (
-    user: string,
-    leftTop: string,
-    leftBottom: string,
-    rightTop: string,
-    rightBottom: string
-  ) => {
-    const toSend =
-      "/fourDebut " +
-      user +
-      " " +
-      leftTop +
-      " " +
-      leftBottom +
-      " " +
-      rightTop +
-      " " +
-      rightBottom;
-    sendJsonMessage({ message: toSend });
-  };
-
-  
-
   const handleRefetchPlayers = (game_id: string) => {
     const toSend = "/refetchPlayers " + game_id;
-    sendJsonMessage({ message: toSend });
-  };
-
-  const handleReadyFour = (sender: string, receiver: string) => {
-    const toSend = "/readyFour " + sender + " " + receiver;
-    sendJsonMessage({ message: toSend });
-  };
-
-  const handleReadyToStartFour = (
-    user1: string,
-    user2: string,
-    user3: string,
-    user4: string
-  ) => {
-    const toSend =
-      "/readyToStartFour " + user1 + " " + user2 + " " + user3 + " " + user4;
     sendJsonMessage({ message: toSend });
   };
 
@@ -84,10 +45,7 @@ export default function useInvitationSocket() {
     handelSendInvitation,
     newNotif,
     handleAcceptInvitation,
-    handleStartGameFour,
     handleRefetchPlayers,
-    handleReadyFour,
-    handleReadyToStartFour,
     handleRefetchTournament,
     handleAcceptTournamentInvitation,
     handleInvitationDecline,

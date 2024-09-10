@@ -13,8 +13,8 @@ import { User } from "@/lib/types";
 import getCookie from "@/lib/functions/getCookie";
 import useGetGame from "../hooks/useGetGames";
 import useEndGame from "../hooks/useEndGame";
-import useGameSocket from "@/app/(chor)/game/hooks/useGameSocket";
-import useInvitationSocket from "@/app/(chor)/game/hooks/useInvitationSocket";
+import useGameSocket from "@/app/(chor)/game/hooks/sockets/useGameSocket";
+import useInvitationSocket from "@/app/(chor)/game/hooks/sockets/useInvitationSocket";
 import { enemyLeftGame } from "../methods/enemyLeftGame";
 import useGetUser from "../../profile/hooks/useGetUser";
 import useSurrenderGame from "../hooks/useSurrender";
@@ -28,7 +28,7 @@ import Sockets from "../components/sockets";
 import { Toaster } from "@/components/ui/sonner";
 import { useQueryClient } from "@tanstack/react-query";
 
-const Game = ({ type }: { type: string; }) => {
+const Game = ({ type }: { type: string }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationFrameId = useRef<number>(0);
   const isAnimating = useRef<boolean>(false);
@@ -36,7 +36,10 @@ const Game = ({ type }: { type: string; }) => {
   const paddleLeftYRef = useRef<number>(0);
   const PaddleRightYRef = useRef<number>(0);
   const paddleRightDirectionRef = useRef<string>("stop");
-  const newBallPositionRef = useRef({ x: (canvasRef.current?.width || 0) / 2, y: (canvasRef.current?.height || 0) / 2 });
+  const newBallPositionRef = useRef({
+    x: (canvasRef.current?.width || 0) / 2,
+    y: (canvasRef.current?.height || 0) / 2,
+  });
   const newAngleRef = useRef<number>(0);
   const leftScoreRef = useRef<number>(0);
   const rightScoreRef = useRef<number>(0);
@@ -69,7 +72,6 @@ const Game = ({ type }: { type: string; }) => {
   const { newNotif } = useInvitationSocket();
 
   const query = useQueryClient();
-
 
   const user_id = getCookie("user_id") || "";
   const { data: user } = useGetUser(user_id || "0");
@@ -153,16 +155,16 @@ const Game = ({ type }: { type: string; }) => {
       // preventDefault to prevent the page from scrolling
       if (e.key === "ArrowUp" || e.key === "ArrowDown") e.preventDefault();
       if (e.type === "keydown") {
-        if (e.key === "ArrowUp") {
+        if (e.key === "ArrowUp" && !upPressedRef.current) {
           upPressedRef.current = true;
           downPressedRef.current = false;
           handleMovePaddle("up", paddleLeftYRef.current);
-        } else if (e.key === "ArrowDown") {
+        } else if (e.key === "ArrowDown" && !downPressedRef.current) {
           downPressedRef.current = true;
           upPressedRef.current = false;
           handleMovePaddle("down", paddleLeftYRef.current);
         }
-      } 
+      }
       if (e.type === "keyup") {
         if (e.key === "ArrowUp") {
           upPressedRef.current = false;
@@ -192,23 +194,23 @@ const Game = ({ type }: { type: string; }) => {
 
     const gameStarted = () => {
       setTimeout(() => {
-      if (
-        username === controllerUser.current?.username &&
-        newAngleRef.current === 0
-      ) {
-        newBallPositionRef.current = { x, y }; // Initialize the ref
-        newAngleRef.current = Math.random() * Math.PI;
-        while (
-          (newAngleRef.current > Math.PI / 6 &&
-            newAngleRef.current <   (Math.PI * 5) / 6) ||
-          (newAngleRef.current > (Math.PI * 7) / 6 &&
-            newAngleRef.current < (Math.PI * 11) / 6)
+        if (
+          username === controllerUser.current?.username &&
+          newAngleRef.current === 0
         ) {
-          newAngleRef.current = Math.random() * 2 * Math.PI;
-        }
-        let enemyX = canvas.width - newBallPositionRef.current.x;
-        let enemyY = newBallPositionRef.current.y;
-        let enemyAngle = Math.PI - newAngleRef.current;
+          newBallPositionRef.current = { x, y }; // Initialize the ref
+          newAngleRef.current = Math.random() * Math.PI;
+          while (
+            (newAngleRef.current > Math.PI / 6 &&
+              newAngleRef.current < (Math.PI * 5) / 6) ||
+            (newAngleRef.current > (Math.PI * 7) / 6 &&
+              newAngleRef.current < (Math.PI * 11) / 6)
+          ) {
+            newAngleRef.current = Math.random() * 2 * Math.PI;
+          }
+          let enemyX = canvas.width - newBallPositionRef.current.x;
+          let enemyY = newBallPositionRef.current.y;
+          let enemyAngle = Math.PI - newAngleRef.current;
 
           handleChangeBallDirection(
             enemyX,
@@ -275,7 +277,11 @@ const Game = ({ type }: { type: string; }) => {
       );
 
       // Move the ball
-      if (newAngleRef.current !== 0 && leftScoreRef.current < 3 && rightScoreRef.current < 3) {
+      if (
+        newAngleRef.current !== 0 &&
+        leftScoreRef.current < 3 &&
+        rightScoreRef.current < 3
+      ) {
         moveBall(canvasParams, user, leftUser.current, newAngleRef);
       }
 
@@ -316,14 +322,13 @@ const Game = ({ type }: { type: string; }) => {
     }
   }, [gameStartedRef.current, canvasRef.current]);
 
-
   useEffect(() => {
     const gameMsge = gameMsg();
     if (gameMsge) {
       const parsedMessage = JSON.parse(gameMsge.data);
       console.log(parsedMessage.message);
       const message = parsedMessage?.message.split(" ");
-      
+
       if (message[0] === "/move") {
         const sender = message[3];
         if (sender !== username) {
@@ -377,7 +382,7 @@ const Game = ({ type }: { type: string; }) => {
           enemyLeftGameRef.current = false; // todo: tournament forfeit status
         }
       } else if (message[0] === "/refetchPlayers") {
-        query.invalidateQueries({ queryKey: ["friends",user_id] });
+        query.invalidateQueries({ queryKey: ["friends", user_id] });
         onGoingGame.refetch();
       } else if (message[0] === "/surrender") {
         if (message[1] !== username) {
@@ -404,7 +409,7 @@ const Game = ({ type }: { type: string; }) => {
       }
     }
   }, [gameMsg()?.data]);
-  
+
   useEffect(() => {
     const notif = newNotif();
     if (notif) {
@@ -419,7 +424,6 @@ const Game = ({ type }: { type: string; }) => {
       }
     }
   }, [newNotif()?.data]);
-
 
   return (
     <>
@@ -470,7 +474,6 @@ const Game = ({ type }: { type: string; }) => {
                       rightUser.current?.username || "",
                       gameIdRef.current
                     );
-                    
                   }}
                   className="h-full w-full bg-primary"
                 >

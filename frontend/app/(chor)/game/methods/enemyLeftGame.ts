@@ -49,7 +49,8 @@ function enemyLeftGameFour(
   canvasParams: canvasParamsFour,
   time: React.MutableRefObject<number>,
   enemyLeftGameRef: React.MutableRefObject<boolean>,
-  gameStartedRef: React.MutableRefObject<boolean>,
+  gameStarted: boolean,
+  setGameStarted: React.Dispatch<React.SetStateAction<boolean>>,
   handleTimeFour: (time: number, username: string) => void,
   handleWhoLeftGame: () => void,
   username: string
@@ -73,8 +74,8 @@ function enemyLeftGameFour(
     // console.log("current time: " + time.current + "seconds: " + seconds);
     handleTimeFour(time.current, username);
   } else {
-    if (seconds - time.current > 4 && gameStartedRef.current) {
-      gameStartedRef.current = false;
+    if (seconds - time.current > 4 && gameStarted) {
+      setGameStarted(false);
       handleWhoLeftGame();
     }
   }

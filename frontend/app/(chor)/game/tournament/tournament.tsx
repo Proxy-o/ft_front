@@ -12,7 +12,7 @@ import Two from "../oneVone/oneVone";
 import Invitations from "../components/invitations";
 import useLeavetournament from "../hooks/useLeaveTournament";
 import useDeleteTournament from "../hooks/useDeleteTournament";
-import useInvitationSocket from "@/app/(chor)/game/hooks/useInvitationSocket";
+import useInvitationSocket from "@/app/(chor)/game/hooks/sockets/useInvitationSocket";
 import { useEffect, useRef } from "react";
 import NoGame from "../components/noGame";
 import { Card } from "@/components/ui/card";
@@ -50,9 +50,9 @@ const Tournament = () => {
   return (
     <div className="flex flex-col p-4 lg:flex-row w-full h-full lg:justify-center items-center lg:items-start gap-2">
       <Card className="w-11/12 max-w-[900px] h-fit flex flex-col justify-center items-start gap-4 p-4">
-      <div className="w-full h-fit">
-            <Two type="tournament" />
-          </div>
+        <div className="w-full h-fit">
+          <Two type="tournament" />
+        </div>
       </Card>
       <div className="flex flex-col gap-4 w-full min-w-80 lg:max-w-[350px] lg:mr-auto">
         {isSuccess && data.tournament && (

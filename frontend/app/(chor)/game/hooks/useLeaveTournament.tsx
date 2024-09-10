@@ -1,5 +1,5 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
-import useInvitationSocket from "@/app/(chor)/game/hooks/useInvitationSocket";
+import useInvitationSocket from "@/app/(chor)/game/hooks/sockets/useInvitationSocket";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -8,8 +8,7 @@ const leavetournament = async (tournamentId: string) => {
     const res = await axiosInstance.post("/game/leaveTournament", {
       tournamentId: tournamentId,
     });
-    if (res !== res)
-      throw new Error("Failed to leave tournament");
+    if (res !== res) throw new Error("Failed to leave tournament");
   } catch (error: any) {
     toast.error(error?.response?.data.error);
   }

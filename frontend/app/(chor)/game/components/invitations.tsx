@@ -12,10 +12,10 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import useAcceptInvitationTournament from "../hooks/useAccepteInvitationTournament";
 import { Card } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
-import useInvitationSocket from "@/app/(chor)/game/hooks/useInvitationSocket";
+import useInvitationSocket from "@/app/(chor)/game/hooks/sockets/useInvitationSocket";
 import { toast } from "sonner";
 
-const Invitations = ({ mode }: { mode: string;  }) => {
+const Invitations = ({ mode }: { mode: string }) => {
   const { newNotif } = useInvitationSocket();
   const user_id = getCookie("user_id") || "";
   const router = useRouter();
