@@ -1,7 +1,7 @@
 # Use the official Node.js image.
 FROM node:18-alpine3.20
 
-RUN apk add --no-cache vault
+# RUN apk add --no-cache vault
 
 # Create and change to the app directory.
 WORKDIR /app
