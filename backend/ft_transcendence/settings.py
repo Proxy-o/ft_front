@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 import os  # new
 from datetime import timedelta  # new
-from fetchSec import fetchSec  # new
+from .fetchSec import fetchSec
 
 # fetch secrets from vault
 get_secret = fetchSec('root')
@@ -54,7 +54,6 @@ INSTALLED_APPS = [
     # 2FA
     'pyotp',
     'qrcode',
-
 ]
 
 MIDDLEWARE = [
