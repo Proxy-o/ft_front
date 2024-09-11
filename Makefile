@@ -1,7 +1,7 @@
 
 all:
 	bash tools/init.sh
-	mkdir -p ./postgres
+	mkdir -p ./postgres_data
 	docker-compose -f ./docker-compose.yml up #-d
 	@echo ""
 	@echo "\033[0;32m######################### \033[0m"
@@ -33,7 +33,7 @@ clean: down
 	docker system prune -a
 
 fclean:
-	rm -rf ./postgres  
+	rm -rf ./postgres_data  
 	docker stop $$(docker ps -qa) 2>/dev/null || true
 	docker rm $$(docker ps -qa) 2>/dev/null || true
 	docker rmi -f $$(docker images -qa) 2>/dev/null || true
