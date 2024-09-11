@@ -6,7 +6,7 @@ import { toast } from "sonner";
 
 const surrenderGame = async () => {
   try {
-    const res = await axiosInstance.post("/game/surrender");
+    const res = await axiosInstance.post("/game/leaveGame");
     const returnData = {
       gameId: res.data.gameId,
       tournamentId: res.data.tournamentId,

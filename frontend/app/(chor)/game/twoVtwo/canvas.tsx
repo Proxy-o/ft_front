@@ -255,7 +255,7 @@ const Canvas = ({
         setGameStarted,
         endGameFour,
         username,
-        handleRefetchPlayers,
+        handleRefetchPlayers
       );
 
       // Check for collision with the horizontal walls
@@ -400,90 +400,90 @@ const Canvas = ({
         } else if (message[0] === "/whoLeftGame") {
           const whoAsked = message[1];
           handleStillPlaying(username, whoAsked);
-        } else if (message[0] === "/fourSurrender") {
-          const surrenderer = message[1];
-          if (surrenderer !== username) {
-            if (
-              username === leftUserTop.current.username ||
-              username === leftUserBottom.current.username
-            ) {
-              if (
-                surrenderer === rightUserTop.current.username ||
-                surrenderer === rightUserBottom.current.username
-              ) {
-                state.current = "surrendered";
-              } else {
-                state.current = "surrender";
-              }
-            } else {
-              if (
-                surrenderer === leftUserTop.current.username ||
-                surrenderer === leftUserBottom.current.username
-              ) {
-                state.current = "surrendered";
-              } else {
-                state.current = "surrender";
-              }
-            }
-          }
-          setGameStarted(false);
-          onGoingGame.refetch();
-        } else if (message[0] === "/stillPlaying") {
-          const user = message[1];
-          const whoAsked = message[2];
-          if (whoAsked === username) {
-            stillPlayingUsersRef.current.push(user);
-            // handleWhoLeftGame();
-            if (stillPlayingUsersRef.current.length === 4) {
-              // find the user who did not respond
-              if (
-                leftUserTop.current.username &&
-                leftUserBottom.current.username &&
-                rightUserTop.current.username &&
-                rightUserBottom.current.username
-              ) {
-                const userWhoDidNotRespond = [
-                  leftUserTop.current.username,
-                  leftUserBottom.current.username,
-                  rightUserTop.current.username,
-                  rightUserBottom.current.username,
-                ];
-                stillPlayingUsersRef.current.forEach((user) => {
-                  const index = userWhoDidNotRespond.indexOf(user);
-                  if (index > -1) {
-                    userWhoDidNotRespond.splice(index, 1);
-                  }
-                });
-                handleUserLeftGame(userWhoDidNotRespond[0] || "");
-                const winner =
-                  leftUserTop.current.username === userWhoDidNotRespond[0] ||
-                  leftUserBottom.current.username === userWhoDidNotRespond[0]
-                    ? rightUserTop.current.id
-                    : leftUserTop.current.id;
-                const loser =
-                  leftUserTop.current.username === userWhoDidNotRespond[0] ||
-                  leftUserBottom.current.username === userWhoDidNotRespond[0]
-                    ? leftUserTop.current.id
-                    : rightUserTop.current.id;
-                // alert("3");
-                endGameFour({
-                  winner,
-                  winnerScore: 3,
-                  loser,
-                  loserScore: 0,
-                });
-              }
-            }
-          }
-        } else if (message[0] === "/userLeftGame") {
-          onGoingGame.refetch();
-        } else if (message[0] === "/end") {
-          leftScoreRef.current = 0;
-          rightScoreRef.current = 0;
-          setGameStarted(false);
-          newAngleRef.current = 0;
-          onGoingGame.refetch();
         }
+      } else if (message[0] === "/fourSurrender") {
+        const surrenderer = message[1];
+        if (surrenderer !== username) {
+          if (
+            username === leftUserTop.current.username ||
+            username === leftUserBottom.current.username
+          ) {
+            if (
+              surrenderer === rightUserTop.current.username ||
+              surrenderer === rightUserBottom.current.username
+            ) {
+              state.current = "surrendered";
+            } else {
+              state.current = "surrender";
+            }
+          } else {
+            if (
+              surrenderer === leftUserTop.current.username ||
+              surrenderer === leftUserBottom.current.username
+            ) {
+              state.current = "surrendered";
+            } else {
+              state.current = "surrender";
+            }
+          }
+        }
+        setGameStarted(false);
+        onGoingGame.refetch();
+      } else if (message[0] === "/stillPlaying") {
+        const user = message[1];
+        const whoAsked = message[2];
+        if (whoAsked === username) {
+          stillPlayingUsersRef.current.push(user);
+          // handleWhoLeftGame();
+          if (stillPlayingUsersRef.current.length === 4) {
+            // find the user who did not respond
+            if (
+              leftUserTop.current.username &&
+              leftUserBottom.current.username &&
+              rightUserTop.current.username &&
+              rightUserBottom.current.username
+            ) {
+              const userWhoDidNotRespond = [
+                leftUserTop.current.username,
+                leftUserBottom.current.username,
+                rightUserTop.current.username,
+                rightUserBottom.current.username,
+              ];
+              stillPlayingUsersRef.current.forEach((user) => {
+                const index = userWhoDidNotRespond.indexOf(user);
+                if (index > -1) {
+                  userWhoDidNotRespond.splice(index, 1);
+                }
+              });
+              handleUserLeftGame(userWhoDidNotRespond[0] || "");
+              const winner =
+                leftUserTop.current.username === userWhoDidNotRespond[0] ||
+                leftUserBottom.current.username === userWhoDidNotRespond[0]
+                  ? rightUserTop.current.id
+                  : leftUserTop.current.id;
+              const loser =
+                leftUserTop.current.username === userWhoDidNotRespond[0] ||
+                leftUserBottom.current.username === userWhoDidNotRespond[0]
+                  ? leftUserTop.current.id
+                  : rightUserTop.current.id;
+              // alert("3");
+              endGameFour({
+                winner,
+                winnerScore: 3,
+                loser,
+                loserScore: 0,
+              });
+            }
+          }
+        }
+      } else if (message[0] === "/userLeftGame") {
+        onGoingGame.refetch();
+      } else if (message[0] === "/end") {
+        leftScoreRef.current = 0;
+        rightScoreRef.current = 0;
+        setGameStarted(false);
+        newAngleRef.current = 0;
+        onGoingGame.refetch();
       }
     }
   }, [gameMsg()]);

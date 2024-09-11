@@ -23,13 +23,13 @@ const surrenderGame = async () => {
 };
 
 export default function useSurrenderGame() {
-  // const { handleSurrenderFour } = useGameSocket();
+  const { handleSurrenderFour } = useGameSocket();
   const { handleRefetchTournament } = useInvitationSocket();
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: () => surrenderGame(),
     onSuccess: (data) => {
-      // handleSurrenderFour(data?.gameId);
+      handleSurrenderFour(data?.gameId);
 
       if (data?.tournamentId) {
         handleRefetchTournament(data?.tournamentId);
