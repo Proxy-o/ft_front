@@ -16,11 +16,10 @@ services:
 
   db:
     container_name: postgres_container
-    image: postgres:13-alpine3.20
-    env_file:
-      - .env
+    image: postgres:14-alpine3.20
     volumes:
       - ./postgres:/data/postgres
+      - ./tools/postgres/init_postgres.sh:/docker-entrypoint-initdb.d/init_postgres.sh
     networks:
       - mynetwork
     restart: unless-stopped
@@ -29,7 +28,11 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-
+    depends_on:
+      vault:
+        condition: service_healthy
+    entrypoint: ["/docker-entrypoint-initdb.d/init_postgres.sh"]
+  
   backend:
     container_name: backend_container
     build:
@@ -39,9 +42,7 @@ services:
       - mynetwork
     volumes:
       - ./backend:/app
-    env_file:
-      - .env
-    stop_grace_period: 10s
+    stop_grace_period: 30s
     depends_on:
       db:
         condition: service_healthy
@@ -76,6 +77,48 @@ services:
       VAULT_DEV_ROOT_TOKEN_ID: root
       VAULT_DEV_LISTEN_ADDRESS: "0.0.0.0:8200"
     entrypoint: ["/bin/sh", "-c", "/vault/file/entrypoint.sh"]
+
+  vault:
+    container_name: vault_container
+    image: hashicorp/vault:1.7
+    ports:
+      - "8200:8200"
+      - "8201:8201"
+    networks:
+      - mynetwork
+    volumes:
+      - ./vault_data:/vault/file
+    cap_add:
+      - IPC_LOCK
+    env_file:
+      - .env
+    entrypoint: ["/bin/sh", "-c", "/vault/file/entrypoint.sh"]
+    healthcheck:
+      test: ["CMD", "vault", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  vault:
+    container_name: vault_container
+    image: hashicorp/vault:1.7
+    ports:
+      - "8200:8200"
+      - "8201:8201"
+    networks:
+      - mynetwork
+    volumes:
+      - ./vault_data:/vault/file
+    cap_add:
+      - IPC_LOCK
+    env_file:
+      - .env
+    entrypoint: ["/bin/sh", "-c", "/vault/file/entrypoint.sh"]
+    healthcheck:
+      test: ["CMD", "vault", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 networks:
   mynetwork:
