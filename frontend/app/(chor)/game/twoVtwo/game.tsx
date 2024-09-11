@@ -6,14 +6,12 @@ import { User } from "@/lib/types";
 import getCookie from "@/lib/functions/getCookie";
 import useGetUser from "../../profile/hooks/useGetUser";
 import NoGameFour from "../components/noGameFour";
-import { Button } from "@/components/ui/button";
-import useLeaveGame from "../hooks/useLeaveGame";
 import useSurrenderGame from "../hooks/useSurrender";
-import { DoorOpen, Flag, Gamepad } from "lucide-react";
 import PreGame from "../components/preGame";
 import useGetFourGame from "../hooks/useGetFourGame";
 import Canvas from "./canvas";
 import useInvitationSocket from "../hooks/sockets/useInvitationSocket";
+import FourActions from "../components/fourActions";
 
 const Game = () => {
   const playerReadyRef = useRef(0);
@@ -39,11 +37,6 @@ const Game = () => {
   const { data: user } = useGetUser(user_id || "0");
   const username: string = user?.username || "";
 
-  const { mutate: surrenderGame } = useSurrenderGame();
-
-  const { mutate: leaveGame } = useLeaveGame();
-
-  const { handleStartGameFour } = useGameSocket();
   const { newNotif, handleRefetchPlayers } = useInvitationSocket();
 
   leftUserTop.current = onGoingGame.data?.game?.user1 || dummyPlayer;
@@ -109,45 +102,18 @@ const Game = () => {
             state={state}
             playerReadyRef={playerReadyRef}
           />
-          {!gameStarted ? (
-            <div className="w-full flex flex-row justify-center items-center gap-4">
-              <Button
-                onClick={() => {
-                  playerReadyRef.current = 0;
-
-                  handleStartGameFour(
-                    username,
-                    leftUserTop.current?.username || "",
-                    leftUserBottom.current?.username || "",
-                    rightUserBottom.current?.username || "",
-                    rightUserTop.current?.username || ""
-                  );
-                }}
-                className="h-full w-full"
-              >
-                <Gamepad size={25} />
-              </Button>
-              <Button
-                onClick={() => {
-                  leaveGame();
-                  handleRefetchPlayers(onGoingGame.data?.game.id || "");
-                }}
-                className="h-full w-full"
-              >
-                <DoorOpen size={25} />
-              </Button>
-            </div>
-          ) : (
-            <Button
-              onClick={() => {
-                surrenderGame();
-                handleRefetchPlayers(onGoingGame.data?.game.id || "");
-              }}
-              className="h-full w-full"
-            >
-              <Flag size={25} />
-              Surrender
-            </Button>
+          {onGoingGame.data?.game && (
+            <FourActions
+              playerReadyRef={playerReadyRef}
+              gameStarted={gameStarted}
+              username={username}
+              leftUserTop={leftUserTop}
+              leftUserBottom={leftUserBottom}
+              rightUserBottom={rightUserBottom}
+              rightUserTop={rightUserTop}
+              onGoingGame={onGoingGame}
+              handleRefetchPlayers={handleRefetchPlayers}
+            />
           )}
         </>
       )}
