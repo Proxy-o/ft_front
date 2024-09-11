@@ -10,26 +10,8 @@ services:
     networks:
       - mynetwork
     depends_on:
-      - vault
       - backend
-      - frontend
 
-  db:
-    container_name: postgres_container
-    image: postgres:14-alpine3.20
-    volumes:
-      - ./postgres:/data/postgres
-      - ./tools/postgres/init_postgres.sh:/docker-entrypoint-initdb.d/init_postgres.sh
-    networks:
-      - mynetwork
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    entrypoint: ["/docker-entrypoint-initdb.d/init_postgres.sh"]
-  
   backend:
     container_name: backend_container
     build:
@@ -44,6 +26,25 @@ services:
       db:
         condition: service_healthy
 
+  db:
+    container_name: postgres_container
+    build:
+      context: ./postgres
+      dockerfile: Dockerfile
+    volumes:
+      - ./postgres_data:/data/postgres
+    networks:
+      - mynetwork
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      vault:
+        condition: service_healthy
+
   frontend:
     container_name: frontend_container
     build:
@@ -54,8 +55,6 @@ services:
       - /app/node_modules        # Ensure node_modules is not overwritten by host
     networks:
       - mynetwork
-    depends_on:
-      - backend
 
   vault:
     container_name: vault_container
@@ -72,6 +71,11 @@ services:
     env_file:
       - .env
     entrypoint: ["/bin/sh", "-c", "/vault/file/entrypoint.sh"]
+    healthcheck:
+      test: ["CMD", "vault", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 networks:
   mynetwork:
