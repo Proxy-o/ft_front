@@ -14,6 +14,7 @@ async function accept(invitationId: string) {
   } catch (error: any) {
     toast.error(error?.response?.data.error);
   }
+  return ""
 }
 
 export default function useAcceptInvitationTournament() {
@@ -21,7 +22,7 @@ export default function useAcceptInvitationTournament() {
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: accept,
-    onSuccess: (tournamentId) => {
+    onSuccess: (tournamentId: string) => {
       handleAcceptTournamentInvitation(tournamentId);
       queryClient.invalidateQueries({ queryKey: ["tournament"] });
       queryClient.invalidateQueries({ queryKey: ["invitations"] });

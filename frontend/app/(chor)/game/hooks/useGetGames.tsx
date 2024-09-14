@@ -21,10 +21,10 @@ const getOnGoingGame = async (type: string, tournamentId?: string) => {
   }
 };
 
-export default function useGetGame(userId: string, type: string) {
+export default function useGetGame(userId: string, type: string, tournamentId?: string) {
   const data = useQuery({
     queryKey: ["game", userId],
-    queryFn: () => getOnGoingGame(type),
+    queryFn: () => getOnGoingGame(type, tournamentId),
   });
   return { onGoingGame: data };
 }

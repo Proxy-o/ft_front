@@ -215,7 +215,7 @@ class OnGoingTournamentGame(APIView):
     permission_classes = [permissions.IsAuthenticated]
     authentication_classes = [CustomJWTAuthentication]
 
-    def get(self, request, tournamentId):
+    def get(self, request, tournament_id):
         # print("get ongoing tournament game")
         user = request.user
         tournament = Tournament.objects.filter(
@@ -224,7 +224,7 @@ class OnGoingTournamentGame(APIView):
             (Q(user3=user) & Q(user3_left=False)) |
             (Q(user4=user) & Q(user4_left=False))
         ).filter(winner=None).last()
-        if not tournament or tournamentId != tournament.id:
+        if not tournament or tournament_id != tournament.id:
             return Response({'error': 'No ongoing tournament found', 'game': 'null'}, status=status.HTTP_204_NO_CONTENT)
         game = None
         if tournament.semi1 and not tournament.semi1.winner and (tournament.semi1.user1 == user or tournament.semi1.user2 == user):
@@ -485,18 +485,32 @@ class LeaveGame(APIView):
         return Response({'message': 'Game left'}, status=status.HTTP_200_OK)
 
 
+class OnGoingTournamentView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [CustomJWTAuthentication]
+
+    def get(self, request):
+        user = request.user
+        tournaments = Tournament.objects.filter(
+            (Q(user1=user) & Q(user1_left=False)) |
+            (Q(user2=user) & Q(user2_left=False)) |
+            (Q(user3=user) & Q(user3_left=False)) |
+            (Q(user4=user) & Q(user4_left=False))
+        ).filter(winner=None).last()
+        if not tournaments:
+            return Response({'error': 'No ongoing tournament found'}, status=status.HTTP_204_NO_CONTENT)
+        serializer = TournamentSerializer(tournaments)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 class TournamentView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     authentication_classes = [CustomJWTAuthentication]
 
     def get(self, request, tournament_id):
-        print("get tournament")
         user = request.user
         tournaments = Tournament.objects.filter(id=tournament_id).last()
-        print("hello")
         if not tournaments:
             return Response({'error': 'No ongoing tournament found'}, status=status.HTTP_204_NO_CONTENT)
-        print(tournaments)
         serializer = TournamentSerializer(tournaments)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

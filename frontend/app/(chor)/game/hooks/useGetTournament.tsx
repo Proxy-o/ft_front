@@ -2,10 +2,11 @@ import axiosInstance from "@/lib/functions/axiosInstance";
 import { useQuery } from "@tanstack/react-query";
 import TournamentBoard from "../components/tournamentBoard";
 
-const getTournament = async (tournamentId: string) => {
+const getTournament = async (tournamentId?: string) => {
   try {
+    const url = (tournamentId) ? `/game/tournament/${tournamentId}` : `/game/OngoingTournament`;
     const response = await axiosInstance.get(
-      `/game/tournament/${tournamentId}`
+      url
     );
     if (response.data.status === 204) {
       return { tournament: null };
@@ -16,13 +17,11 @@ const getTournament = async (tournamentId: string) => {
   }
 };
 
-export default function useGetTournament(tournamentId: string) {
-  console.log("getting tournament");
+export default function useGetTournament(tournamentId?: string) {
   const data = useQuery({
     queryFn: () => getTournament(tournamentId),
     queryKey: ["tournament", tournamentId],
   });
-  console.log("dataa", data);
   return {
     tournament: data,
   };

@@ -23,12 +23,11 @@ const Tournament = ({ tournamentId }: { tournamentId: string }) => {
   const { mutate: createTournament } = useCreateTournament(user_id);
   const { mutate: leavetournament } = useLeavetournament();
   const { newNotif, handleRefetchTournament } = useInvitationSocket();
-  const { onGoingGame } = useGetGame(user_id || "0", "tournament");
+  const { onGoingGame } = useGetGame(user_id || "0", "tournament", tournamentId);
   const { mutate: deleteTournament } = useDeleteTournament();
   const stateRef = useRef<string>("tournament");
   const { tournament } = useGetTournament(tournamentId);
   const { isSuccess, data } = tournament;
-  console.log("toutnzmr", tournament?.data);
   useEffect(() => {
     const notif = newNotif();
     if (notif) {
@@ -67,7 +66,7 @@ const Tournament = ({ tournamentId }: { tournamentId: string }) => {
             >
               Leave Tournament
             </Button>
-            {data.tournament?.creator === user_id && (
+            {data.tournament && (
               <Button
                 onMouseDown={() => {
                   deleteTournament(tournamentId);

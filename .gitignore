@@ -1,3 +1,4 @@
 /postgres
 # any .env
 # .env
+.venv
