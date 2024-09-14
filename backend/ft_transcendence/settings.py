@@ -16,7 +16,10 @@ from datetime import timedelta  # new
 from .fetchSec import fetchSec
 
 # fetch secrets from vault
-get_secret = fetchSec('root')
+get_secret, err = fetchSec('root')
+if err:
+    raise err
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
