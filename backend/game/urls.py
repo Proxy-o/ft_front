@@ -14,8 +14,8 @@ urlpatterns = [
     path('surrender', views.Surrender.as_view()),
     path('leaveGame', views.LeaveGame.as_view()),
     
-    path('tournament', views.TournamentView.as_view()),
-    path('onGoingTournamentGame', views.OnGoingTournamentGame.as_view()),
+    path('tournament/<int:tournament_id>', views.TournamentView.as_view()),
+    path('onGoingTournamentGame/<int:tournament_id>', views.OnGoingTournamentGame.as_view()),
     path('deleteTournament', views.DeleteTournament.as_view()),
     path('createTournament', views.TournamentView.as_view()),
     path('leaveTournament', views.LeaveTournament.as_view()),

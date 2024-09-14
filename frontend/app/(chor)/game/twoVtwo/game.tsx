@@ -53,7 +53,7 @@ const Game = () => {
       const message = parsedMessage.message.split(" ");
       if (message[0] === "/start") {
         // invitaionsData.refetch();
-        handleRefetchPlayers(onGoingGame.data?.game.user1.id || "");
+        handleRefetchPlayers(onGoingGame.data?.game.id || "");
         onGoingGame.refetch();
         // setStartCountdown(true);
       } else if (message[0] === "/refetchPlayers") {

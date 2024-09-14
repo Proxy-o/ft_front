@@ -215,7 +215,7 @@ class OnGoingTournamentGame(APIView):
     permission_classes = [permissions.IsAuthenticated]
     authentication_classes = [CustomJWTAuthentication]
 
-    def get(self, request):
+    def get(self, request, tournamentId):
         # print("get ongoing tournament game")
         user = request.user
         tournament = Tournament.objects.filter(
@@ -224,7 +224,7 @@ class OnGoingTournamentGame(APIView):
             (Q(user3=user) & Q(user3_left=False)) |
             (Q(user4=user) & Q(user4_left=False))
         ).filter(winner=None).last()
-        if not tournament:
+        if not tournament or tournamentId != tournament.id:
             return Response({'error': 'No ongoing tournament found', 'game': 'null'}, status=status.HTTP_204_NO_CONTENT)
         game = None
         if tournament.semi1 and not tournament.semi1.winner and (tournament.semi1.user1 == user or tournament.semi1.user2 == user):
@@ -309,7 +309,6 @@ class EndGame(APIView):
         game.user1_score = winner_score if user1.id == winner_id else loser_score
         game.user2_score = winner_score if user2.id == winner_id else loser_score
         game.save()
-        channel_layer = get_channel_layer()
         # async_to_sync(channel_layer.group_send)(
         #     f'game_{game.id}',
         #     {
@@ -318,40 +317,7 @@ class EndGame(APIView):
         #         'gameId': game.id
         #     }
         # )
-        async_to_sync(channel_layer.group_send)(
-            f'inbox_{game.user1.id}',
-            {
-                'type': 'send_message',
-                'message': '/end',
-                'gameId': game.id
-            }
-        )
-        async_to_sync(channel_layer.group_send)(
-            f'inbox_{game.user2.id}',
-            {
-                'type': 'send_message',
-                'message': '/end',
-                'gameId': game.id
-            }
-        )
-        if game.user3:
-            async_to_sync(channel_layer.group_send)(
-                f'inbox_{game.user3.id}',
-                {
-                    'type': 'send_message',
-                    'message': '/end',
-                    'gameId': game.id
-                }
-            )
-        if game.user4:
-            async_to_sync(channel_layer.group_send)(
-                f'inbox_{game.user4.id}',
-                {
-                    'type': 'send_message',
-                    'message': '/end',
-                    'gameId': game.id
-                }
-            )
+        
         if game.type == "tournament":
             print("tournament")
             tournament = Tournament.objects.get(
@@ -523,17 +489,14 @@ class TournamentView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     authentication_classes = [CustomJWTAuthentication]
 
-    def get(self, request):
-        # print("get tournament")
+    def get(self, request, tournament_id):
+        print("get tournament")
         user = request.user
-        tournaments = Tournament.objects.filter(
-            (Q(user1=user) & Q(user1_left=False)) |
-            (Q(user2=user) & Q(user2_left=False)) |
-            (Q(user3=user) & Q(user3_left=False)) |
-            (Q(user4=user) & Q(user4_left=False))
-        ).filter(winner=None).last()
+        tournaments = Tournament.objects.filter(id=tournament_id).last()
+        print("hello")
         if not tournaments:
             return Response({'error': 'No ongoing tournament found'}, status=status.HTTP_204_NO_CONTENT)
+        print(tournaments)
         serializer = TournamentSerializer(tournaments)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

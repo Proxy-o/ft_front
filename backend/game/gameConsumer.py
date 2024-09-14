@@ -59,8 +59,6 @@ class GameConsumer(WebsocketConsumer):
         elif command == '/readyToStartFour':
             print("Ready to start four")
             self.handle_ready_to_start_four(split)
-        elif command == '/refetchTournament':
-            self.handle_refetch_tournament(split)
         elif command == '/fourChangeBallDirection':
             self.handle_four_change_ball_direction(split)
         elif command == '/time':
@@ -77,6 +75,8 @@ class GameConsumer(WebsocketConsumer):
             self.handle_still_playing(split)
         elif command == '/userLeftGame':
             self.handle_user_left_game(split)
+        elif command == '/endGame':
+            self.handle_end_game(split)
 
     def disconnect(self, close_code):
         if self.user.is_authenticated:
@@ -460,20 +460,6 @@ class GameConsumer(WebsocketConsumer):
         tournament = Tournament.objects.get(id=tournamentId)
         self.refresh_tournament(tournament)
 
-    def refresh_tournament(self, tournament):
-        print("Refreshing tournament")
-        time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        participants = [tournament.user1, tournament.user2, tournament.user3, tournament.user4]
-        for participant in participants:
-            if participant:
-                async_to_sync(self.channel_layer.group_send)(
-                    f'game_{participant.username}',
-                    {
-                        'type': 'send_message',
-                        'user': self.user.username,
-                        'message': f'/refetchTournament {tournament.id} {time}'
-                    }
-                )
 
     def handle_still_playing(self, split):
         who_asked = split[2]
@@ -755,7 +741,46 @@ class GameConsumer(WebsocketConsumer):
                     'message': f'/ballDirection {ball_x} {ball_y} {ball_angle} {self.user.username}'
                 }
             )
-
+    
+    def handle_end_game(self, split):
+        user = self.user.username
+        game = Game.objects.filter(Q(user1=self.user) | Q(user2=self.user) | Q(user3=self.user) | Q(user4=self.user)).last()
+        if not game:
+            return
+        async_to_sync(self.channel_layer.group_send)(
+            f'game_{game.user1.username}',
+            {
+                'type': 'send_message',
+                'user': user,
+                'message': f'/endGame {user}'
+            }
+        )
+        async_to_sync(self.channel_layer.group_send)(
+            f'game_{game.user2.username}',
+            {
+                'type': 'send_message',
+                'user': user,
+                'message': f'/endGame {user}'
+            }
+        )
+        if game.user3:
+            async_to_sync(self.channel_layer.group_send)(
+                f'game_{game.user3.username}',
+                {
+                    'type': 'send_message',
+                    'user': user,
+                    'message': f'/endGame {user}'
+                }
+            )
+        if game.user4:
+            async_to_sync(self.channel_layer.group_send)(
+                f'game_{game.user4.username}',
+                {
+                    'type': 'send_message',
+                    'user': user,
+                    'message': f'/endGame {user}'
+                }
+            )
 
 
     def send_message(self, event):

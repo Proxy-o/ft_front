@@ -21,6 +21,11 @@ export default function useGameSocket() {
     sendJsonMessage({ message: toSend });
   };
 
+  const handleEndGame = () => {
+    const toSend = "/endGame ";
+    sendJsonMessage({ message: toSend });
+  };
+
   const handleMovePaddleFour = (
     paddleY: number,
     direction: string,
@@ -159,6 +164,7 @@ export default function useGameSocket() {
     handleChangeBallDirection,
     handleEnemyScore,
     handleMovePaddleFour,
+    handleEndGame,
     handleChangeBallDirectionFour,
     handleEnemyScoreFour,
     handleReadyFour,

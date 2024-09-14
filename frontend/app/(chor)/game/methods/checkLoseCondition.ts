@@ -44,8 +44,7 @@ function checkLoseConditionFour(
     loserScore: number;
   }) => void,
   username: string,
-  handleRefetchPlayers: (gameId: string) => void,
-  
+  handleRefetchPlayers: (gameId: string) => void
 ) {
   if (canvas === null) return;
   const {

@@ -28,7 +28,15 @@ import Sockets from "../components/sockets";
 import { Toaster } from "@/components/ui/sonner";
 import { useQueryClient } from "@tanstack/react-query";
 
-const Game = ({ type }: { type: string }) => {
+const Game = ({
+  type,
+  onGoingGame,
+  tournamentId,
+}: {
+  type: string;
+  onGoingGame: any;
+  tournamentId?: string;
+}) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationFrameId = useRef<number>(0);
   const isAnimating = useRef<boolean>(false);
@@ -69,7 +77,8 @@ const Game = ({ type }: { type: string }) => {
     handleSurrender,
   } = useGameSocket();
 
-  const { newNotif } = useInvitationSocket();
+  const { newNotif, handleAcceptTournamentInvitation, handleRefetchPlayers } =
+    useInvitationSocket();
 
   const query = useQueryClient();
 
@@ -78,8 +87,6 @@ const Game = ({ type }: { type: string }) => {
   const { mutate: surrenderGame } = useSurrenderGame();
   const { mutate: leaveGame } = useLeaveGame();
   const { mutate: endGame } = useEndGame();
-
-  const { onGoingGame } = useGetGame(user_id || "0", "two");
 
   userRef.current = user;
 
@@ -383,6 +390,8 @@ const Game = ({ type }: { type: string }) => {
         }
       } else if (message[0] === "/refetchPlayers") {
         query.invalidateQueries({ queryKey: ["friends", user_id] });
+        query.invalidateQueries({ queryKey: ["game"] });
+        query.invalidateQueries({ queryKey: ["tournament"] });
         onGoingGame.refetch();
       } else if (message[0] === "/surrender") {
         if (message[1] !== username) {
@@ -393,7 +402,7 @@ const Game = ({ type }: { type: string }) => {
         gameStartedRef.current = false;
         setCanvas(null);
         onGoingGame.refetch();
-      } else if (message[0] === "/end") {
+      } else if (message[0] === "/endGame") {
         if (leftScoreRef.current < 3 && rightScoreRef.current < 3) {
           state.current = "leave";
         } else if (leftScoreRef.current >= 3) {
@@ -405,6 +414,9 @@ const Game = ({ type }: { type: string }) => {
         }
         gameStartedRef.current = false;
         setCanvas(null);
+        if (type === "tournament") {
+          handleRefetchPlayers(onGoingGame.data.game.id);
+        }
         onGoingGame.refetch();
       }
     }
@@ -416,10 +428,6 @@ const Game = ({ type }: { type: string }) => {
       const parsedMessage = JSON.parse(notif.data);
       const message = parsedMessage?.message.split(" ");
       if (message[0] === "/start" || message[0] === "/refetchTournament") {
-        console.log("refetchindddddg");
-        onGoingGame.refetch();
-      } else if (message[0] === "/end") {
-        // gameStartedRef.current = false;
         onGoingGame.refetch();
       }
     }
