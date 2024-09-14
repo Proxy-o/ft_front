@@ -5,9 +5,6 @@ set -e
 # Start the Vault server in the background
 vault server -dev -dev-root-token-id="$VAULT_DEV_ROOT_TOKEN_ID" &
 
-# Set the VAULT_ADDR environment variable
-export VAULT_ADDR='http://127.0.0.1:8200'
-
 # Wait for Vault to be ready
 echo "Waiting for Vault to be ready..."
 while ! wget -q --spider $VAULT_ADDR/v1/sys/health; do
@@ -44,8 +41,9 @@ OAUTH_42_STATE=$(vault write -f -field=random_bytes sys/tools/random/32 | base64
 
 # Encrypt sensitive data
 echo "Encrypting sensitive data..."
-OAUTH_42_CLIENT_ID=$(vault write -field=ciphertext transit/encrypt/my-key plaintext=$(echo -n "$OAUTH_42_CLIENT_ID" | base64))
-OAUTH_42_CLIENT_SECRET=$(vault write -field=ciphertext transit/encrypt/my-key plaintext=$(echo -n "$OAUTH_42_CLIENT_SECRET" | base64))
+OAUTH_42_CLIENT_ID=$(vault write -field=ciphertext transit/encrypt/my-key plaintext="$(echo -n $OAUTH_42_CLIENT_ID | base64)")
+OAUTH_42_CLIENT_SECRET=$(vault write -field=ciphertext transit/encrypt/my-key plaintext="$(echo -n $OAUTH_42_CLIENT_SECRET | base64)")
+
 
 # Write secrets to Vault
 echo "Writing secrets to Vault..."
