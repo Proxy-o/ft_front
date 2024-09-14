@@ -11,6 +11,9 @@ from .models import OAuthCredential
 import pyotp
 import qrcode
 from django.core.files.base import ContentFile
+from io import BytesIO
+from django.utils.crypto import get_random_string
+
 User = get_user_model()
 
 class OAuthService:
@@ -39,6 +42,9 @@ class OAuthService:
     def handle_callback(provider, code, state):
         if provider not in settings.OAUTH_PROVIDERS:
             return None, None, {'detail': 'Invalid provider'}
+
+        if state != settings.OAUTH_PROVIDERS[provider]['state']:
+            return None, None, {'detail': 'Invalid state'}
 
         base_url = settings.OAUTH_PROVIDERS[provider]['base_url']
         token_url = base_url + settings.OAUTH_PROVIDERS[provider]['token_url']
