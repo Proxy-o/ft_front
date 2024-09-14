@@ -55,6 +55,9 @@ services:
       - /app/node_modules        # Ensure node_modules is not overwritten by host
     networks:
       - mynetwork
+    depends_on:
+      vault:
+        condition: service_healthy
 
   vault:
     container_name: vault_container
