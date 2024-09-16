@@ -13,7 +13,7 @@ export default function useCreateTournament(userId: string) {
   const mutation = useMutation({
     mutationFn: CreateTournament,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["tournament", userId] });
+      queryClient.invalidateQueries({ queryKey: ["tournament"] });
     },
   });
   // todo handle create tournament logic

@@ -37,6 +37,7 @@ def signup(request):
             return Response({'password': e}, status=status.HTTP_400_BAD_REQUEST)
         user = serializer.save()
         user.set_password(request.data['password'])
+        user.avatar = f'images/{user.id % 4}.jpg'
         user.save()
         return Response({'user': serializer.data}, status=200)
 
