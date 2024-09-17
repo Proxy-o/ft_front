@@ -17,27 +17,28 @@ export default function RootLayout({
   const mb = useMediaQuery("(min-width: 768px)");
   const is_local = usePathname() === "/game/local";
 
-useEffect(() => {
-  if (!is_local && !is_logged_in)  {
-    router.push("/login");
-  }
-}
-, [ router, is_local, is_logged_in ]);
+  useEffect(() => {
+    if (!is_local && !is_logged_in) {
+      router.push("/login");
+    }
+  }, [router, is_local, is_logged_in]);
 
   return (
-    (is_logged_in || is_local) && <div className="h-full relative">
-      <div
-        className={cn(
-          "flex w-full  overflow-auto",
-          !mb && "h-[calc(100vh-3.7rem)]"
-        )}
-      >
-        <div className="w-full h-full ">
-          {!is_local && <SearchFriend />}
-          {children}
+    (is_logged_in || is_local) && (
+      <div className="h-full relative">
+        <div
+          className={cn(
+            "flex w-full  overflow-auto",
+            !mb && "h-[calc(100vh-3.7rem)]"
+          )}
+        >
+          <div className="w-full h-full ">
+            {!is_local && <SearchFriend />}
+            {children}
+          </div>
         </div>
+        {!mb && !is_local && <MobilNav />}
       </div>
-      {(!mb && !is_local) && <MobilNav />}
-    </div>
+    )
   );
 }

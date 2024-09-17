@@ -8,19 +8,19 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { CheckCircle, XCircle } from "lucide-react";
 import useAcceptFriend from "../hooks/useAcceptFriend";
 import useReject from "../hooks/useDeclineReq";
-import getCookie from "@/lib/functions/getCookie";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import useGetUser from "../../profile/hooks/useGetUser";
 
 export default function FriendRequests() {
   const { data, isSuccess } = useGetFrdReq();
   const { mutate: acceptFriend } = useAcceptFriend();
   const { mutate: reject } = useReject();
-  const user_id = getCookie("user_id") as string;
+  const {data: user} = useGetUser("0");
 
   const filteredData =
     isSuccess &&
-    data.filter(({ to_user }: { to_user: User }) => to_user.id == user_id);
+    data.filter(({ to_user }: { to_user: User }) => to_user.id == user?.id);
   const reqCount = filteredData.length;
   return (
     isSuccess && (
@@ -70,7 +70,7 @@ export default function FriendRequests() {
                       className="text-green-500 hover:text-green-400 hover:scale-[1.1] transition-all mr-2 cursor-pointer"
                       onClick={() =>
                         acceptFriend({
-                          user_id,
+                          user_id: user?.id,
                           friend: from_user,
                           to_accept_id: id,
                         })

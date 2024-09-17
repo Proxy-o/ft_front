@@ -7,6 +7,7 @@ const editUser = async (user: User) => {
 
     delete user.avatar;
     const response = await axiosInstance.put(`/user/${user.id}`, user);
+    console.log(response.data);
     return response.data;
   
 };
@@ -22,7 +23,7 @@ export default function useEditUser() {
     },
     onSuccess: (_, user) => {
       // invalidate the user query to refetch the data
-      queryClient.invalidateQueries(["user", user.id]);
+      // queryClient.invalidateQueries(["user", user.id]);
       if (!_)
         return toast.error("An error occurred while updating your profile");
       toast.success("Profile updated successfully");

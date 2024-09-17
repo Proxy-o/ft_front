@@ -28,7 +28,8 @@ User = get_user_model()
 @authentication_classes([])  # No authentication required
 @permission_classes([])  # No permissions required
 def signup(request):
-    serializer = UserSerializer(data=request.data, context={'request': request})
+    serializer = UserSerializer(
+        data=request.data, context={'request': request})
 
     if serializer.is_valid():
         try:
@@ -41,6 +42,7 @@ def signup(request):
         return Response({'user': serializer.data}, status=200)
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 def set_auth_cookies_and_response(user, refresh_token, access_token, request):
     response = Response({
@@ -69,6 +71,7 @@ def set_auth_cookies_and_response(user, refresh_token, access_token, request):
 
     return response
 
+
 class Login(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
         username = request.data.get('username')
@@ -94,6 +97,8 @@ class Login(TokenObtainPairView):
         return set_auth_cookies_and_response(user, refresh_token, access_token, request)
 
 # Oauth 2.0
+
+
 @authentication_classes([])
 @permission_classes([])
 class OAuthRedirect(APIView):
@@ -116,16 +121,17 @@ class OAuthCallback(APIView):
         if not code:
             return Response({'detail': 'Code is required'}, status=status.HTTP_400_BAD_REQUEST)
 
-        user, user_credentials, error = OAuthService.handle_callback(provider, code, state)
+        user, user_credentials, error = OAuthService.handle_callback(
+            provider, code, state)
         if error:
             return Response(error, status=status.HTTP_400_BAD_REQUEST)
-        
+
         serializers = OAuthCredentialSerializer(data=user_credentials)
         if serializers.is_valid():
             serializers.save()
         else:
             return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
-        
+
         refresh = RefreshToken.for_user(user)
         access_token = str(refresh.access_token)
         refresh_token = str(refresh)
@@ -158,6 +164,7 @@ def toggleOTP(request):
         user.save()
         return Response({'detail': 'OTP disabled'}, status=200)
 
+
 class CustomTokenRefreshView(TokenRefreshView):
     def post(self, request, *args, **kwargs):
         # Extract the refresh token from the request data
@@ -183,6 +190,7 @@ class CustomTokenRefreshView(TokenRefreshView):
 
         return response
 
+
 class CustomLogoutView(APIView):
     authentication_classes = []
 
@@ -204,6 +212,8 @@ class CustomLogoutView(APIView):
         # If the refresh token is invalid, return a success response
 
 # upload avatar
+
+
 class UserAvatar(APIView):
 
     permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
@@ -227,6 +237,7 @@ class UserAvatar(APIView):
             return Response(data=serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class UserList(APIView):
     """
     List all users, or create a new user.
@@ -239,12 +250,12 @@ class UserList(APIView):
             users, context={'request': request}, many=True)
         return Response(serializer.data)
 
+
 class UserDetail(APIView):
     """
     Retrieve, update or delete a user instance
     """
     # permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
-    authentication_classes = [CustomJWTAuthentication]
 
     def get_object(self, pk):
         try:
@@ -255,7 +266,11 @@ class UserDetail(APIView):
             return Http404
 
     def get(self, request, pk, format=None):
-        user = self.get_object(pk)
+        if pk == 0:
+            user = request.user
+        else:
+            user = self.get_object(pk)
+
         if user is Http404:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -284,4 +299,3 @@ class UserDetail(APIView):
         user = self.get_object(pk)
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
