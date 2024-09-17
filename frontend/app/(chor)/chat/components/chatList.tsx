@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { User } from "@/lib/types";
 import ChatFriendCard from "./chatFriendCard";
 import ChatCard from "./chatCard";
-import getCookie from "@/lib/functions/getCookie";
 import useGetFriends from "../hooks/useGetFriends";
 
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
@@ -18,9 +17,8 @@ import useGetUser from "@/app/(chor)/profile/hooks/useGetUser";
 import { Card } from "@/components/ui/card";
 
 export default function ChatList() {
-  const user_id = getCookie("user_id");
-  const { data: friends, isSuccess } = useGetFriends(user_id || "0");
-  const { data: sender, isSuccess: isSender } = useGetUser(user_id || "0");
+  const { data: sender, isSuccess: isSender } = useGetUser("0");
+  const { data: friends, isSuccess } = useGetFriends(sender?.id );
   const [receiver, setReceiver] = React.useState<User>();
   const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
   const handleChatOpen = (friend: User) => {

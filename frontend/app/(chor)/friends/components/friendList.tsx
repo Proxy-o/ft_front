@@ -14,7 +14,7 @@ import useGetFriends from "@/app/(chor)/chat/hooks/useGetFriends";
 import { User } from "@/lib/types";
 
 export default function FriendList({ user_id }: { user_id: string }) {
-  const { data: friends, isSuccess } = useGetFriends(user_id || "0");
+  const { data: friends, isSuccess } = useGetFriends(user_id );
   return (
     <Card className="p-4   flex  lg:w-72 flex-col">
       <p className="text-center w-full">Friends</p>

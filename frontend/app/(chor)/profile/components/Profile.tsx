@@ -13,15 +13,12 @@ import TabStates from "./tabStates";
 import { Card } from "@/components/ui/card";
 
 export default function Profile({ id }: { id: string }) {
-  const id_cookie = getCookie("user_id") as string;
   const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
 
-  // get the data for the same user or the user that is being visited
   const { data, isSuccess } = useGetUser(id);
-  // get the data for the user that is logged in
-  const { data: sender, isSuccess: isSender } = useGetUser(id_cookie);
+  const { data: sender, isSuccess: isSender } = useGetUser("0");
   const { data: blocked } = useGetBlocked();
-  const { data: friends } = useGetFriends(id_cookie);
+  const { data: friends } = useGetFriends(sender?.id);
   const isBlocked = blocked?.some((user: any) => user.id == id);
   const isFriend = friends?.some((user: any) => user.id == id);
   const blocked_by_current_user = blocked?.some((user: any) => {
@@ -29,7 +26,7 @@ export default function Profile({ id }: { id: string }) {
   });
 
   const logged_in = getCookie("logged_in");
-  const canEdit = logged_in === "yes" && id === id_cookie ? true : false;
+  const canEdit = logged_in === "yes" && id == sender?.id ? true : false;
   const chatRef = useRef<HTMLDivElement>(null); // Specify the type as React.RefObject<HTMLDivElement>
 
   useEffect(() => {
@@ -58,7 +55,7 @@ export default function Profile({ id }: { id: string }) {
               <UserInfo
                 user={data}
                 canEdit={canEdit}
-                current_user_id={id_cookie || "0"}
+                current_user_id={sender?.id}
                 isBlocked={isBlocked}
                 blocked_by_current_user={blocked_by_current_user}
                 setChatOpen={setIsChatOpen}
@@ -77,7 +74,7 @@ export default function Profile({ id }: { id: string }) {
             </div>
             <div className="flex flex-col gap-4 mb-6">
               <States id={id} />
-              {((!isBlocked && isFriend) || id_cookie == id) && (
+              {((!isBlocked && isFriend) || sender?.id == id) && (
                 <FriendList user_id={id} />
               )}
             </div>

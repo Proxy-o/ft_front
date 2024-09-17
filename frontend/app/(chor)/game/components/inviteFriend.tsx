@@ -1,18 +1,19 @@
 "use client";
 
 import { Sword, UserRoundSearch } from "lucide-react";
-import getCookie from "@/lib/functions/getCookie";
 import useGetFriends from "@/app/(chor)/chat/hooks/useGetFriends";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import useSendInvitation from "../hooks/useSendInvitation";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import useGetUser from "../../profile/hooks/useGetUser";
 
 const InviteFriends = ({ gameType }: { gameType: string }) => {
-  const user_id = getCookie("user_id");
 
-  const friends = useGetFriends(user_id || "0");
+  const { data: user } = useGetUser( "0");
+  
+  const friends = useGetFriends(user?.id);
 
   const data: [{ id: string; username: string; avatar: string; status:string }] = friends.data || [];
 

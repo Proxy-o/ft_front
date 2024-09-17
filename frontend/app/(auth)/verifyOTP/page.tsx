@@ -8,24 +8,24 @@ import {
 } from "@/components/ui/input-otp";
 import useVerifyOtp from "./hooks/useVerifyOtp";
 import { Button } from "@/components/ui/button";
-import getCookie from "@/lib/functions/getCookie";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import useGetUser from "@/app/(chor)/profile/hooks/useGetUser";
 
 export default function Page() {
   const [value, setValue] = useState("");
   const { mutate } = useVerifyOtp();
-  const user_id = getCookie("user_id");
+  const {data: user} = useGetUser("0");
   const router = useRouter();
 
   useEffect(() => {
-    if (value.length === 6) {
+    if (value.length === 6 && user) {
       mutate({
         otp: value,
-        user_id: user_id || "0",
+        user_id: user?.id,
       });
     }
-  }, [value, user_id, mutate]);
+  }, [value, user, mutate]);
 
   return (
     <div className="space-y-2 w-full  h-full flex flex-col justify-center items-center">

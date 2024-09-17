@@ -34,6 +34,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import useGetInvitations from "@/app/(chor)/game/hooks/useGetInvitations";
+import useGetUser from "@/app/(chor)/profile/hooks/useGetUser";
 
 export default function MobilNav() {
   const [popOverOpen, setPopOverOpen] = useState(false);
@@ -82,7 +83,6 @@ export default function MobilNav() {
   };
 
   const token = getCookie("refresh");
-  const id = getCookie("user_id");
   const socketUrl = process.env.NEXT_PUBLIC_CHAT_URL + "2/?refresh=" + token;
   const invitationSocketUrl =
     process.env.NEXT_PUBLIC_INVITATION_URL + "/?refresh=" + token;
@@ -98,14 +98,15 @@ export default function MobilNav() {
   }: { lastJsonMessage: LastMessage } = useWebSocket(invitationSocketUrl);
   const [showNotif, setShowNotif] = useState(false);
   const [reqNotif, setReqNotif] = useState(false);
+  const {data: user} = useGetUser("0")
   const { data: friends, isSuccess: isSuccessFriends } = useGetFriends(
-    id ? id : "0"
+    user?.id
   );
   const { data: requests, isSuccess: isSuccessReq } = useGetFrdReq();
   const queryClient = useQueryClient();
   const [gameNotif, setGameNotif] = useState(false);
   const { data: invitations, isSuccess: isSuccessInvit } = useGetInvitations(
-    id || "0"
+    user?.id
   );
 
   useEffect(() => {
@@ -132,18 +133,18 @@ export default function MobilNav() {
         }
       }
       queryClient.invalidateQueries({
-        queryKey: ["invitations", id],
+        queryKey: ["invitations", user?.id],
       });
       invitationLastMessage.message = "";
     }
     if (isSuccessInvit && invitations) {
       invitations.forEach((invitation: any) => {
-        if (invitation.receiver.id.toString() === id) setGameNotif(true);
+        if (invitation.receiver.id.toString() === user?.id) setGameNotif(true);
       });
     }
   }, [
     invitations,
-    id,
+    user?.id,
     isSuccessInvit,
     invitationLastMessage,
     queryClient,
@@ -170,15 +171,15 @@ export default function MobilNav() {
     }
     if (isSuccessReq && requests) {
       requests.forEach((request: any) => {
-        if (request.to_user.id.toString() === id) setReqNotif(true);
+        if (request.to_user.id.toString() === user?.id) setReqNotif(true);
       });
     }
-  }, [isSuccessReq, requests, id, lastJsonMessage, queryClient, router, path]);
+  }, [isSuccessReq, requests, user?.id, lastJsonMessage, queryClient, router, path]);
 
   useEffect(() => {
     if (lastJsonMessage?.type === "private_message") {
       queryClient.invalidateQueries({
-        queryKey: ["friends", id],
+        queryKey: ["friends", user?.id],
       });
       if (!path.startsWith("chat"))
         toast(`New message from ${lastJsonMessage.user}`, {
@@ -206,7 +207,7 @@ export default function MobilNav() {
     friends,
     lastJsonMessage,
     queryClient,
-    id,
+    user?.id,
     showNotif,
     router,
   ]);

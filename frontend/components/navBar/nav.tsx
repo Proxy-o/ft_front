@@ -28,6 +28,7 @@ import { LastMessage } from "@/app/(chor)/chat/types";
 import useGetFrdReq from "@/app/(chor)/friends/hooks/useGetFrReq";
 import { toast } from "sonner";
 import useGetInvitations from "@/app/(chor)/game/hooks/useGetInvitations";
+import useGetUser from "@/app/(chor)/profile/hooks/useGetUser";
 
 export default function Nav() {
   const { mutate: logout } = useLogout();
@@ -75,8 +76,8 @@ export default function Nav() {
   };
 
   const token = getCookie("refresh");
-  const id = getCookie("user_id");
   const logged_in = getCookie("logged_in");
+  const {data:user} = useGetUser( "0");
 
   useEffect(() => {
     if (
@@ -105,13 +106,13 @@ export default function Nav() {
   const [showNotif, setShowNotif] = useState(false);
   const [reqNotif, setReqNotif] = useState(false);
   const { data: friends, isSuccess: isSuccessFriends } = useGetFriends(
-    id ? id : "0"
+    user?.id
   );
   const { data: requests, isSuccess: isSuccessReq } = useGetFrdReq();
   const queryClient = useQueryClient();
   const [gameNotif, setGameNotif] = useState(false);
   const { data: invitations, isSuccess: isSuccessInvit } = useGetInvitations(
-    id || "0"
+    user?.id
   );
 
   useEffect(() => {
@@ -133,18 +134,18 @@ export default function Nav() {
         }
       }
       queryClient.invalidateQueries({
-        queryKey: ["invitations", id],
+        queryKey: ["invitations",  user?.id],
       });
       invitationLastMessage.message = "";
     }
     if (isSuccessInvit && invitations) {
       invitations.forEach((invitation: any) => {
-        if (invitation.receiver.id.toString() === id) setGameNotif(true);
+        if (invitation.receiver.id.toString() === user?.id) setGameNotif(true);
       });
     }
   }, [
     invitations,
-    id,
+    user?.id,
     isSuccessInvit,
     invitationLastMessage,
     queryClient,
@@ -171,15 +172,15 @@ export default function Nav() {
     }
     if (isSuccessReq && requests) {
       requests.forEach((request: any) => {
-        if (request.to_user.id.toString() === id) setReqNotif(true);
+        if (request.to_user.id.toString() === user?.id) setReqNotif(true);
       });
     }
-  }, [isSuccessReq, requests, id, lastJsonMessage, queryClient, router, path]);
+  }, [isSuccessReq, requests, user?.id, lastJsonMessage, queryClient, router, path]);
 
   useEffect(() => {
     if (lastJsonMessage?.type === "private_message") {
       queryClient.invalidateQueries({
-        queryKey: ["friends", id],
+        queryKey: ["friends", user?.id],
       });
       if (!path.startsWith("/chat"))
         toast(`New message from ${lastJsonMessage.user}`, {
@@ -207,7 +208,7 @@ export default function Nav() {
     friends,
     lastJsonMessage,
     queryClient,
-    id,
+    user?.id,
     showNotif,
     router,
   ]);

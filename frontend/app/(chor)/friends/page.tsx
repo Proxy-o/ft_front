@@ -12,13 +12,12 @@ import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
 
 export default function Page() {
-  const user_id = getCookie("user_id");
   const router = useRouter();
+  const { data: user, isSuccess } = useGetUser( "0");
   const { data: friends, isSuccess: friendsIsSuccess } = useGetFriends(
-    user_id || "0"
+    user?.id
   );
 
-  const { data: user, isSuccess } = useGetUser(user_id || "0");
   useEffect(() => {
     if (!user && isSuccess) {
       router.push("/login");

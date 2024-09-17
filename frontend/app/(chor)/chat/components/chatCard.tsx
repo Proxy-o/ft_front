@@ -23,7 +23,6 @@ export default function ChatCard({
   receiver: User;
   sender: User;
 }) {
-  const user_id = getCookie("user_id");
   const senderId = sender.id;
   const receiverId = receiver.id;
   const token = getCookie("refresh");
@@ -76,10 +75,10 @@ export default function ChatCard({
   useEffect(() => {
     readMessages(receiverId).then(() => {
       queryClient.invalidateQueries({
-        queryKey: ["friends", user_id],
+        queryKey: ["friends", senderId],
       });
     });
-  }, [lastMessage, receiverId, queryClient, user_id]);
+  }, [lastMessage, receiverId, queryClient, senderId]);
 
   const handleFetchNextPage = useCallback(() => {
     if (data?.pages[data.pages.length - 1].next === null) {
@@ -149,7 +148,7 @@ export default function ChatCard({
                   <ChatBubble
                     key={index}
                     message={result}
-                    me={result.user == user_id}
+                    me={result.user == senderId}
                     receiver={receiver}
                   />
                 );
