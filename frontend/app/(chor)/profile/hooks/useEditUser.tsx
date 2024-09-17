@@ -23,12 +23,14 @@ export default function useEditUser() {
     },
     onSuccess: (_, user) => {
       // invalidate the user query to refetch the data
-      // queryClient.invalidateQueries(["user", user.id]);
+      queryClient.invalidateQueries({
+        queryKey: ["user", user.id],
+      })
       if (!_)
         return toast.error("An error occurred while updating your profile");
       toast.success("Profile updated successfully");
     },
-    onError: (err) => {
+    onError: (err : any) => {
       if (err.response.data.username) {
         toast.error(err.response.data.username[0]);
       }
