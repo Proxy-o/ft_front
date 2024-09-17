@@ -3,32 +3,14 @@ services:
   nginx:
     container_name: nginx_container
     build:
-      context: ./nginx
+      context: nginx
       dockerfile: Dockerfile
     ports:
       - "443:443"
     networks:
       - mynetwork
-    volumes:
-      - ./nginx/conf:/etc/nginx/conf # Example volume mount for nginx configuration
     depends_on:
       - backend
-
-  db:
-    container_name: postgres_container
-    image: postgres:14-alpine3.20
-    env_file:
-      - .env
-    volumes:
-      - ./postgres:/data/postgres
-    networks:
-      - mynetwork
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
 
   backend:
     container_name: backend_container
@@ -39,11 +21,28 @@ services:
       - mynetwork
     volumes:
       - ./backend:/app
-    env_file:
-      - .env
-    stop_grace_period: 1s
+    stop_grace_period: 30s
     depends_on:
       db:
+        condition: service_healthy
+
+  db:
+    container_name: postgres_container
+    build:
+      context: ./postgres
+      dockerfile: Dockerfile
+    volumes:
+      - ./postgres_data:/data/postgres
+    networks:
+      - mynetwork
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    depends_on:
+      vault:
         condition: service_healthy
 
   frontend:
@@ -56,6 +55,30 @@ services:
       - /app/node_modules        # Ensure node_modules is not overwritten by host
     networks:
       - mynetwork
+    depends_on:
+      vault:
+        condition: service_healthy
+
+  vault:
+    container_name: vault_container
+    image: hashicorp/vault:1.7
+    ports:
+      - "8200:8200"
+      - "8201:8201"
+    networks:
+      - mynetwork
+    volumes:
+      - ./vault_data:/vault/file
+    cap_add:
+      - IPC_LOCK
+    env_file:
+      - .env
+    entrypoint: ["/bin/sh", "-c", "/vault/file/entrypoint.sh"]
+    healthcheck:
+      test: ["CMD", "vault", "status"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 networks:
   mynetwork:

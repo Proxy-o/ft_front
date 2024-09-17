@@ -13,21 +13,27 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 import os  # new
 from datetime import timedelta  # new
+from .fetchSec import fetchSec
+
+# fetch secrets from vault
+get_secret, err = fetchSec('root')
+if err:
+    raise err
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ["SECRET_KEY"]
+SECRET_KEY = get_secret('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-SERVER_HOST = os.environ['SERVER_HOST']
+SERVER_HOST = get_secret('SERVER_HOST')
 ALLOWED_HOSTS = [SERVER_HOST, 'localhost', '127.0.0.1']
 
 # Application definition
@@ -51,7 +57,6 @@ INSTALLED_APPS = [
     # 2FA
     'pyotp',
     'qrcode',
-
 ]
 
 MIDDLEWARE = [
@@ -95,11 +100,11 @@ ASGI_APPLICATION = 'ft_transcendence.asgi.application'  # new
 DATABASES = {
     'default': {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ["POSTGRES_NAME"],
-        "USER": os.environ["POSTGRES_USER"],
-        "PASSWORD": os.environ["POSTGRES_PASSWORD"],
-        "HOST": os.environ["POSTGRES_HOST"],
-        "PORT": os.environ["POSTGRES_PORT"],
+        "NAME": get_secret('POSTGRES_NAME'),
+        "USER": get_secret('POSTGRES_USER'),
+        "PASSWORD": get_secret('POSTGRES_PASSWORD'),
+        "HOST": get_secret('POSTGRES_HOST'),
+        "PORT": get_secret('POSTGRES_PORT'),
 
     }
 }
@@ -201,7 +206,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # URL used to access the media
 MEDIA_URL = '/'
 
-SERVER_URL = os.environ['SERVER_URL']
+SERVER_URL = f'https://{SERVER_HOST}'
 print('======================================', SERVER_URL)
 # oauth providers
 
@@ -211,11 +216,11 @@ OAUTH_PROVIDERS = {
         'authorize_url': '/oauth/authorize',
         'token_url': '/oauth/token',
         'user_info_url': '/v2/me',
-        'client_id': os.environ['OAUTH_42_CLIENT_ID'],
-        'client_secret': os.environ['OAUTH_42_CLIENT_SECRET'],
+        'client_id': get_secret('OAUTH_42_CLIENT_ID'),
+        'client_secret': get_secret('OAUTH_42_CLIENT_SECRET'),
         'redirect_uri': f'{SERVER_URL}/callback/42',
         'scope': 'public',
-        'state': 'secure',
+        'state': get_secret('OAUTH_42_STATE'),
     },
 }
 
