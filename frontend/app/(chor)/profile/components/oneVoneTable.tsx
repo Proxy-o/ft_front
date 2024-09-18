@@ -4,6 +4,7 @@ import useGetGames from "../hooks/useGetGames";
 import GamesState from "./gamesState";
 import { Button } from "@/components/ui/button";
 import { ArrowBigDownDash } from "lucide-react";
+import { Card } from "@/components/ui/card";
 
 export default function OneVoneTable({ id }: { id: string }) {
   const { data, isSuccess, fetchNextPage } = useGetGames(id);
@@ -16,24 +17,24 @@ export default function OneVoneTable({ id }: { id: string }) {
   }, [data]);
   return (
     isSuccess && (
-      <>
+      <Card className="pb-2">
         <GamesState games={games} user_id={id} />
-        <div className="w-full flex justify-center items-center ">
+        <div className="w-full flex justify-center items-center border-t pb-2">
           {games?.length ? (
             <Button
               size={"sm"}
               variant="ghost"
               disabled={!haseMore}
-              className="mt-4"
+              className="mt-4 border"
               onClick={() => fetchNextPage()}
             >
-              {haseMore ? <ArrowBigDownDash /> : "No more games"}
+              {haseMore ? "Show more" : "No more games"}
             </Button>
           ) : (
             <></>
           )}
         </div>
-      </>
+      </Card>
     )
   );
 }
