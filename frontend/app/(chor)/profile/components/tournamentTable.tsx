@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/accordion";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { ArrowBigDownDash } from "lucide-react";
+import { Card } from "@/components/ui/card";
 
 export default function TournamentTable({ userid }: { userid: string }) {
   const { data, isSuccess, fetchNextPage } = useGetTournaments(userid);
@@ -23,9 +23,9 @@ export default function TournamentTable({ userid }: { userid: string }) {
 
   return (
     isSuccess && (
-      <div className="w-full">
+      <Card className="w-full">
         <Accordion type="single" collapsible>
-          {games &&
+          {games?.length ? (
             games.map((tournament: any, index: number) => (
               <AccordionItem value={tournament.id} key={index}>
                 <AccordionTrigger className="p-2">
@@ -74,24 +74,27 @@ export default function TournamentTable({ userid }: { userid: string }) {
                   <TournamentBoard tournament={tournament} />
                 </AccordionContent>
               </AccordionItem>
-            ))}
+            ))
+          ) : (
+            <div className="w-full text-center m-4">No tournaments</div>
+          )}
         </Accordion>
-        <div className="w-full flex justify-center items-center ">
+        <div className="w-full flex justify-center items-center p-2 border-t">
           {games?.length ? (
             <Button
               size={"sm"}
               variant="ghost"
               disabled={!haseMore}
-              className="mt-4"
+              className="mt-4 border"
               onClick={() => fetchNextPage()}
             >
-              {haseMore ? <ArrowBigDownDash /> : "No more games"}
+              {haseMore ? "Show more" : "No more games"}
             </Button>
           ) : (
             <></>
           )}
         </div>
-      </div>
+      </Card>
     )
   );
 }

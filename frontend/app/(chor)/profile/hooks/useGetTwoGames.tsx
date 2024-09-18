@@ -1,5 +1,5 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
 const fetchGames = async ({
   id,
@@ -27,7 +27,10 @@ export default function useGetTwoGames(id: string) {
     queryFn: ({ pageParam }) => fetchGames({ id, pageParam }),
     initialPageParam: `1`,
     getNextPageParam: (lastPage) => {
-      return "2";
+      if (lastPage.next) {
+        return lastPage.next.split("=").pop();
+      }
+      return false;
     },
   });
   return info;
