@@ -52,7 +52,7 @@ class InvitationView(APIView):
         # sender_game = Game.objects.filter(Q(user1=sender) | Q(user2=sender) | Q(user3=sender) | Q(
         #     user4=sender)).filter(winner=None).filter(type=type).last()
         receiver_game = Game.objects.filter(Q(user1=receiver) | Q(user2=receiver) | Q(user3=receiver) | Q(
-            user4=receiver)).filter(winner=None).filter(type=type).last()
+            user4=receiver)).filter(winner=None).last()
         if receiver_game:
             return Response({'error': 'Player already in a game'}, status=status.HTTP_403_FORBIDDEN)
         invitation = Invitation(sender=sender, receiver=receiver, type=type)
@@ -703,24 +703,17 @@ class StartTournament(APIView):
     def post(self, request):
         # print("start tournament")
         user = request.user
-        tournament = Tournament.objects.filter(
-            creator=user).filter(winner=None).last()
+        tournament_id = request.data.get('tournamentId')
+        tournament = Tournament.objects.get(id=tournament_id)
         if not tournament:
             return Response({'error': 'No ongoing tournament found'}, status=status.HTTP_204_NO_CONTENT)
-        if tournament.creator != user:
+        if user.id != tournament.creator.id:
             return Response({'error': 'You are not the creator of this tournament'}, status=status.HTTP_403_FORBIDDEN)
         if not tournament.user1 or not tournament.user2 or not tournament.user3 or not tournament.user4:
-            return Response({'error': 'Not enough participants'}, status=status.HTTP_200_OK)
-        semi1 = Game(user1=tournament.user1,
-                     user2=tournament.user2, type="tournament")
-        semi1.save()
-        semi2 = Game(user1=tournament.user3,
-                     user2=tournament.user4, type="tournament")
-        semi2.save()
-        tournament.semi1 = semi1
-        tournament.semi2 = semi2
+            return Response({'error': 'Not enough players'}, status=status.HTTP_400_BAD_REQUEST)
+        tournament.started = True
         tournament.save()
-        return Response({'message': 'Tournament started'}, status=status.HTTP_200_OK)
+        return Response({'message': 'Tournament started', 'tournamentId': tournament.id}, status=status.HTTP_200_OK)
 
 
 class UserGamesPagination(PageNumberPagination):

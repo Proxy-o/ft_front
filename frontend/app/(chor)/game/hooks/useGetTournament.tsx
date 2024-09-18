@@ -20,9 +20,7 @@ const getTournament = async (tournamentId?: string) => {
 export default function useGetTournament(tournamentId?: string) {
   const data = useQuery({
     queryFn: () => getTournament(tournamentId),
-    queryKey: ["tournament", tournamentId],
+    queryKey: ["tournament"],
   });
-  return {
-    tournament: data,
-  };
+  return data;
 }

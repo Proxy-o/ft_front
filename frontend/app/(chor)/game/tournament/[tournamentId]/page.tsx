@@ -13,6 +13,9 @@ import useGetTournament from "../../hooks/useGetTournament";
 import { Button } from "@/components/ui/button";
 import TournamentBoard from "../../components/tournamentBoard";
 import Invitations from "../../components/invitations";
+import { routeModule } from "next/dist/build/templates/app-page";
+import { useRouter } from "next/navigation";
+
 
 export default function Page({ params }: { params: { tournamentId: string } }) {
   const tournamentId = params.tournamentId;
@@ -26,10 +29,19 @@ export default function Page({ params }: { params: { tournamentId: string } }) {
     "tournament",
     tournamentId
   );
+  const router = useRouter();
   const { mutate: deleteTournament } = useDeletetournament();
   const stateRef = useRef<string>("tournament");
-  const { tournament } = useGetTournament(tournamentId);
-  const { isSuccess, data, refetch: refetchTournament } = tournament;
+  const { data, isSuccess, isLoading, refetch: refetchTournament } = useGetTournament(tournamentId);
+  
+
+  useEffect(() => {
+    console.log("tournament sss", data?.tournament);
+    if (!data?.tournament?.started && isSuccess) {
+      router.push(`/game/tournament`);
+    }
+  }, [isSuccess, isLoading]);
+
   useEffect(() => {
     const notif = newNotif();
     if (notif) {
@@ -41,7 +53,7 @@ export default function Page({ params }: { params: { tournamentId: string } }) {
         message[0] === "/refetchPlayers"
       ) {
         refetchTournament();
-        // onGoingGame.refetch();
+        onGoingGame.refetch();
       }
     }
   }, [newNotif()?.data]);

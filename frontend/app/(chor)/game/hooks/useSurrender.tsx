@@ -30,7 +30,7 @@ export default function useSurrenderGame() {
     mutationFn: () => surrenderGame(),
     onSuccess: (data) => {
       handleSurrenderFour(data?.gameId);
-
+      console.log(data);
       if (data?.tournamentId) {
         handleRefetchTournament(data?.tournamentId);
       }
