@@ -139,7 +139,7 @@ export default function MobilNav() {
     }
     if (isSuccessInvit && invitations) {
       invitations.forEach((invitation: any) => {
-        if (invitation.receiver.id.toString() === user?.id) setGameNotif(true);
+        if (invitation.receiver.id.toString() == user?.id) setGameNotif(true);
       });
     }
   }, [
@@ -171,7 +171,7 @@ export default function MobilNav() {
     }
     if (isSuccessReq && requests) {
       requests.forEach((request: any) => {
-        if (request.to_user.id.toString() === user?.id) setReqNotif(true);
+        if (request.to_user.id.toString() == user?.id) setReqNotif(true);
       });
     }
   }, [isSuccessReq, requests, user?.id, lastJsonMessage, queryClient, router, path]);
@@ -233,19 +233,19 @@ export default function MobilNav() {
                 <div className="relative">
                   <link.icon className=" size-5 " />
                   <span className="h-3 w-3 bg-white rounded-full absolute top-0 right-0 "></span>
-                  <span className="h-1 w-1 bg-primary rounded-full absolute top-1 right-1 animate-ping"></span>
+                  <span className="h-1 w-1 bg-red-600  rounded-full absolute top-1 right-1 animate-ping"></span>
                 </div>
               ) : link.title === "Requests" && reqNotif ? (
                 <div className="relative">
                   <link.icon className=" size-5 " />
                   <span className="h-3 w-3 bg-white rounded-full absolute top-0 right-0 "></span>
-                  <span className="h-1 w-1 bg-primary rounded-full absolute top-1 right-1 animate-ping"></span>
+                  <span className="h-1 w-1 bg-red-600  rounded-full absolute top-1 right-1 animate-ping"></span>
                 </div>
               ) : link.title === "Play" && gameNotif ? (
                 <div className="relative">
                   <link.icon className=" h-6 w-6 " />
                   <span className="h-3 w-3 bg-white rounded-full absolute top-0 right-0 "></span>
-                  <span className="h-1 w-1 bg-primary rounded-full absolute top-1 right-1 animate-ping"></span>
+                  <span className="h-1 w-1 bg-red-600  rounded-full absolute top-1 right-1 animate-ping"></span>
                 </div>
               ) : (
                 <link.icon
