@@ -68,6 +68,24 @@ class ChatConsumer(WebsocketConsumer):
                 }
             )
 
+        if message.startswith('/friendUpdate '):
+            split = message.split(' ', 2)
+            target_id = split[1]
+            try:
+                target_user = User.objects.get(id=target_id)
+            except User.DoesNotExist:
+                return
+
+
+            async_to_sync(self.channel_layer.group_send)(
+                f'inbox_{target_id}',
+                {
+                    'type': 'friendUpdate',
+                    'target': self.user.id,
+                }
+            )
+            return
+
         if message.startswith('/pm '):
             split = message.split(' ', 2)
             target_id = split[1]
@@ -142,4 +160,7 @@ class ChatConsumer(WebsocketConsumer):
         self.send(text_data=json.dumps(event))
 
     def request(self, event):
+        self.send(text_data=json.dumps(event))
+        
+    def friendUpdate(self, event):
         self.send(text_data=json.dumps(event))

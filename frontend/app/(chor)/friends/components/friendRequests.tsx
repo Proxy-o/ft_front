@@ -16,7 +16,7 @@ export default function FriendRequests() {
   const { data, isSuccess } = useGetFrdReq();
   const { mutate: acceptFriend } = useAcceptFriend();
   const { mutate: reject } = useReject();
-  const {data: user} = useGetUser("0");
+  const { data: user } = useGetUser("0");
 
   const filteredData =
     isSuccess &&
@@ -32,14 +32,14 @@ export default function FriendRequests() {
           </p>
         </div>
         <Link
-        href="/friends"
-        className={cn(
-          buttonVariants({ variant: "outline", size: "lg" }),
-          " ml-auto my-2"
-        )}
-      >
-        Friends
-      </Link>
+          href="/friends"
+          className={cn(
+            buttonVariants({ variant: "outline", size: "lg" }),
+            " ml-auto my-2"
+          )}
+        >
+          Friends
+        </Link>
         {reqCount !== 0 ? (
           <>
             {filteredData.map(
@@ -78,7 +78,9 @@ export default function FriendRequests() {
                     />
                     <XCircle
                       className="text-red-500 hover:text-red-400 hover:scale-[1.1] transition-all  mr-2 cursor-pointer"
-                      onClick={() => reject(id)}
+                      onClick={() =>
+                        reject({ to_reject_id: id, friend: from_user })
+                      }
                     />
                   </div>
                 </div>
@@ -87,7 +89,7 @@ export default function FriendRequests() {
           </>
         ) : (
           <div className="w-full text-center h-16 flex justify-center items-center bg-primary/5">
-             You don&apos;t have any requests
+            You don&apos;t have any requests
           </div>
         )}
       </Card>

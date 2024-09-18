@@ -77,7 +77,7 @@ export default function Nav() {
 
   const token = getCookie("refresh");
   const logged_in = getCookie("logged_in");
-  const {data:user} = useGetUser( "0");
+  const { data: user } = useGetUser("0");
 
   useEffect(() => {
     if (
@@ -134,7 +134,7 @@ export default function Nav() {
         }
       }
       queryClient.invalidateQueries({
-        queryKey: ["invitations",  user?.id],
+        queryKey: ["invitations", user?.id],
       });
       invitationLastMessage.message = "";
     }
@@ -154,11 +154,30 @@ export default function Nav() {
   ]);
 
   useEffect(() => {
+    if (lastJsonMessage?.type === "friendUpdate") {
+      queryClient.invalidateQueries({
+        queryKey: ["friends", user?.id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["requests"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["invitations", user?.id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["blocked"],
+      });
+      
+   
+      lastJsonMessage.type = "null";
+    }
+  }, [lastJsonMessage, queryClient, router, user?.id]);
+
+  useEffect(() => {
     setReqNotif(false);
     if (lastJsonMessage?.type === "request") {
-      
       let id = lastJsonMessage.id;
-      if (path != "/friend_requests")
+      if (path != "/friend_requests") {
         toast(`New friend request from ${lastJsonMessage.user}`, {
           icon: <UserPlus2 className="mr-2" />,
           action: {
@@ -166,6 +185,12 @@ export default function Nav() {
             onClick: () => router.push(`/profile/${id}`),
           },
         });
+      }
+      queryClient.invalidateQueries({
+        queryKey: ["friends", user?.id],
+      });
+      // queryClient.invalidateQueries({
+      //   queryKey: [""]
       queryClient.invalidateQueries({
         queryKey: ["requests"],
       });
@@ -176,7 +201,15 @@ export default function Nav() {
         if (request.to_user.id.toString() == user?.id) setReqNotif(true);
       });
     }
-  }, [isSuccessReq, requests, user?.id, lastJsonMessage, queryClient, router, path]);
+  }, [
+    isSuccessReq,
+    requests,
+    user?.id,
+    lastJsonMessage,
+    queryClient,
+    router,
+    path,
+  ]);
 
   useEffect(() => {
     if (lastJsonMessage?.type === "private_message") {
@@ -277,8 +310,7 @@ export default function Nav() {
             )}
             onClick={() => handleLogout()}
           >
-            <LogOut className="mr-2 h-6 w-6"
-            />
+            <LogOut className="mr-2 h-6 w-6" />
             logout
           </Button>
         </div>
