@@ -9,6 +9,8 @@ services:
       - "443:443"
     networks:
       - mynetwork
+    volumes:
+      - ./log_nginx:/var/log/nginx
     depends_on:
       - backend
 
