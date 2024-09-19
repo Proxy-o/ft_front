@@ -172,6 +172,27 @@ export default function MobilNav() {
   }, [isSuccessReq, requests, user?.id, lastJsonMessage, queryClient, router, path]);
 
   useEffect(() => {
+    if (lastJsonMessage?.type === "friendUpdate") {
+      queryClient.invalidateQueries({
+        queryKey: ["friends", user?.id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["requests"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["invitations", user?.id],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["blocked"],
+      });
+      
+      
+   
+      lastJsonMessage.type = "null";
+    }
+  }, [lastJsonMessage, queryClient, router, user?.id]);
+
+  useEffect(() => {
     if (lastJsonMessage?.type === "private_message") {
       queryClient.invalidateQueries({
         queryKey: ["friends", user?.id],
