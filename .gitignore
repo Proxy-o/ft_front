@@ -1,6 +1,7 @@
 .env
-frontend/node_modules/
-frontend/.next/
+frontend/node_modules
+frontend/.next
 frontend/.env
-log_nginx/
-postgres/
+log_nginx
+postgres
+backend/media
