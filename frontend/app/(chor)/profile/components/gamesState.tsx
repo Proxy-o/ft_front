@@ -26,7 +26,6 @@ export default function GamesState({
 
   return (
     <div className="w-full">
-      <Card className="w-full">
         <Table>
           <TableHeader className="bg-secondary ">
             <TableRow>
@@ -166,7 +165,6 @@ export default function GamesState({
             )}
           </TableBody>
         </Table>
-      </Card>
     </div>
   );
 }
