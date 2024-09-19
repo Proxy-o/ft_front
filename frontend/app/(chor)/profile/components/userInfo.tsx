@@ -196,8 +196,7 @@ export default function UserInfo({
                       className="mt-6 w-full bg-red-400/20"
                       variant="outline"
                       onClick={() => {
-                        console.log(recReqId);
-                        reject(sendReqId);
+                        reject({ to_reject_id: sendReqId, friend: user });
                       }}
                     >
                       Cancel Request
@@ -223,7 +222,7 @@ export default function UserInfo({
                     <Button
                       className="mt-6 w-full bg-red-400/20"
                       variant="outline"
-                      onClick={() => reject(recReqId)}
+                      onClick={() => reject({ to_reject_id: recReqId, friend: user })}
                     >
                       Decline
                     </Button>
