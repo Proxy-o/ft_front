@@ -1,7 +1,8 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
-import useInvitationSocket from "@/app/(chor)/game/hooks/useInvitationSocket";
+import useInvitationSocket from "@/app/(chor)/game/hooks/sockets/useInvitationSocket";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import useGameSocket from "./sockets/useGameSocket";
 
 const endGame = async (data: {
   winner: string;
@@ -17,7 +18,6 @@ const endGame = async (data: {
       loser,
       loserScore,
     });
-    toast.success(res.data.message);
     if (res.data.tournamentId) {
       return res.data.tournamentId;
     }
@@ -29,6 +29,7 @@ const endGame = async (data: {
 
 export default function useEndGame() {
   const { handleRefetchTournament } = useInvitationSocket();
+  const { handleEndGame } = useGameSocket();
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: (data: {
@@ -41,7 +42,10 @@ export default function useEndGame() {
       queryClient.invalidateQueries({ queryKey: ["game"] });
       queryClient.invalidateQueries({ queryKey: ["tournament"] });
       queryClient.invalidateQueries({ queryKey: ["tournamentGame"] });
+      handleEndGame();
+
       if (tournamentId) {
+        console.log("tournamentId", tournamentId);
         handleRefetchTournament(tournamentId);
       }
     },

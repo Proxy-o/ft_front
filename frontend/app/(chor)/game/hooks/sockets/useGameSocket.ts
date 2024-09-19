@@ -16,13 +16,22 @@ export default function useGameSocket() {
     sendJsonMessage({ message: toSend });
   };
 
-  const handleMovePaddle = (paddleY: number) => {
-    const toSend = "/move " + paddleY;
+  const handleMovePaddle = (direction: string, paddleY: number) => {
+    const toSend = "/move " + direction + " " + paddleY;
     sendJsonMessage({ message: toSend });
   };
 
-  const handleMovePaddleFour = (paddleY: number, user: string) => {
-    const toSend = "/fourMove " + paddleY + " " + user;
+  const handleEndGame = () => {
+    const toSend = "/endGame ";
+    sendJsonMessage({ message: toSend });
+  };
+
+  const handleMovePaddleFour = (
+    paddleY: number,
+    direction: string,
+    user: string
+  ) => {
+    const toSend = "/fourMove " + paddleY + " " + direction + " " + user;
     sendJsonMessage({ message: toSend });
   };
 
@@ -34,6 +43,18 @@ export default function useGameSocket() {
   ) => {
     const toSend =
       "/changeBallDirection " + ballX + " " + ballY + " " + angle + " " + user;
+    sendJsonMessage({ message: toSend });
+  };
+
+  const handleReadyToStartFour = (
+    user1: string,
+    user2: string,
+    user3: string,
+    user4: string
+  ) => {
+    console.log("sending ready to start");
+    const toSend =
+      "/readyToStartFour " + user1 + " " + user2 + " " + user3 + " " + user4;
     sendJsonMessage({ message: toSend });
   };
 
@@ -101,6 +122,41 @@ export default function useGameSocket() {
     sendJsonMessage({ message: "/disconnect" });
   };
 
+  const handleSurrender = (
+    surrenderer: string,
+    winner: string,
+    game_id: string
+  ) => {
+    const toSend = "/surrender " + surrenderer + " " + winner + " " + game_id;
+    sendJsonMessage({ message: toSend });
+  };
+
+  const handleReadyFour = (sender: string, receiver: string) => {
+    const toSend = "/readyFour " + sender + " " + receiver;
+    sendJsonMessage({ message: toSend });
+  };
+
+  const handleStartGameFour = (
+    user: string,
+    leftTop: string,
+    leftBottom: string,
+    rightTop: string,
+    rightBottom: string
+  ) => {
+    const toSend =
+      "/fourDebut " +
+      user +
+      " " +
+      leftTop +
+      " " +
+      leftBottom +
+      " " +
+      rightTop +
+      " " +
+      rightBottom;
+    sendJsonMessage({ message: toSend });
+  };
+
   return {
     gameMsg,
     handleStartGame,
@@ -108,15 +164,20 @@ export default function useGameSocket() {
     handleChangeBallDirection,
     handleEnemyScore,
     handleMovePaddleFour,
+    handleEndGame,
     handleChangeBallDirectionFour,
     handleEnemyScoreFour,
+    handleReadyFour,
     handleTime,
     handleDisconnect,
     handleTimeFour,
+    handleReadyToStartFour,
     handleWhoLeftGame,
     handleUserLeftGame,
     handleTimeResponse,
     handleStillPlaying,
     handleSurrenderFour,
+    handleSurrender,
+    handleStartGameFour,
   };
 }

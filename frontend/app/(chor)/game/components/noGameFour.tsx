@@ -1,17 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { useEffect, useRef, useState } from "react";
 
-const NoGameFour = ({
-  state,
-}: {
-  state: React.MutableRefObject<string>;
-}) => {
+const NoGameFour = ({ state }: { state: React.MutableRefObject<string> }) => {
   const atext = useRef<string>("Invite a friend to play");
 
   const letterIndex = useRef(0);
   const [text, setText] = useState("");
   useEffect(() => {
-    console.log(state.current);
     if (state.current === "win") {
       atext.current = "You won";
     } else if (state.current === "lose") {
@@ -26,6 +21,8 @@ const NoGameFour = ({
       atext.current = "The right player wins the game";
     } else if (state.current === "local") {
       atext.current = "Start a local game";
+    } else {
+      atext.current = "Invite a friend to play";
     }
     setTimeout(() => {
       if (letterIndex.current < atext.current.length) {
@@ -44,23 +41,7 @@ const NoGameFour = ({
         backgroundPosition: "center",
       }}
     >
-      {state.current !== "none" &&
-        state.current !== "left" &&
-        state.current !== "right" &&
-        state.current !== "local" && (
-          <>
-            <Button
-              className="m-auto"
-              onClick={() => {
-                state.current = "none";
-                setText("");
-                letterIndex.current = 0;
-              }}
-            >
-              Play again
-            </Button>
-          </>
-        )}
+      <div className="text-white text-2xl m-auto">{text}</div>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
 import getCookie from "@/lib/functions/getCookie";
-import useInvitationSocket from "@/app/(chor)/game/hooks/useInvitationSocket";
+import useInvitationSocket from "@/app/(chor)/game/hooks/sockets/useInvitationSocket";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -14,6 +14,7 @@ const invite = async ({
   gameType: string;
 }) => {
   let res;
+  console.log("user_id zbbi");
   try {
     res = await axiosInstance.post("game/send_invitation", {
       sender: user_id,

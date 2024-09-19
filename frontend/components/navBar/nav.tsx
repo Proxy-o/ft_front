@@ -147,10 +147,10 @@ export default function Nav() {
     invitations,
     user?.id,
     isSuccessInvit,
-    invitationLastMessage,
     queryClient,
     router,
     path,
+    invitationLastMessage,
   ]);
 
   useEffect(() => {

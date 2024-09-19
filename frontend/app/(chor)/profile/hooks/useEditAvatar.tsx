@@ -25,13 +25,7 @@ export default function useEditAvatar() {
       return res;
     },
     onSuccess: (data, variables) => {
-      queryClient.setQueryData(
-        ["user", variables.id.toString()],
-        (old: any) => {
-          return { ...old, avatar: data.avatar };
-        }
-      );
-
+      queryClient.invalidateQueries(["user", variables.id]);
       toast.success("Avatar updated successfully");
     },
     onError: (error: Error) => {

@@ -6,7 +6,6 @@ const NoGame = ({ state }: { state: React.MutableRefObject<string> }) => {
   const letterIndex = useRef(0);
   const [text, setText] = useState("");
   useEffect(() => {
-    console.log(state.current);
     if (state.current === "win") {
       atext.current = "You won";
     } else if (state.current === "lose") {
@@ -25,6 +24,8 @@ const NoGame = ({ state }: { state: React.MutableRefObject<string> }) => {
       atext.current = "Start a local game";
     } else if (state.current === "tournament") {
       atext.current = "Join a tournament";
+    } else if (state.current === "leave") {
+      atext.current = "Your enemy has left the game";
     }
     setTimeout(() => {
       if (letterIndex.current < atext.current.length) {

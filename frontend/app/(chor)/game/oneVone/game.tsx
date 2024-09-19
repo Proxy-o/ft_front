@@ -13,8 +13,8 @@ import { User } from "@/lib/types";
 import getCookie from "@/lib/functions/getCookie";
 import useGetGame from "../hooks/useGetGames";
 import useEndGame from "../hooks/useEndGame";
-import useGameSocket from "@/app/(chor)/game/hooks/useGameSocket";
-import useInvitationSocket from "@/app/(chor)/game/hooks/useInvitationSocket";
+import useGameSocket from "@/app/(chor)/game/hooks/sockets/useGameSocket";
+import useInvitationSocket from "@/app/(chor)/game/hooks/sockets/useInvitationSocket";
 import { enemyLeftGame } from "../methods/enemyLeftGame";
 import useGetUser from "../../profile/hooks/useGetUser";
 import useSurrenderGame from "../hooks/useSurrender";
@@ -24,15 +24,30 @@ import { DoorOpen, Flag, Gamepad } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import NoGame from "../components/noGame";
 import PreGame from "../components/preGame";
+import Sockets from "../components/sockets";
+import { Toaster } from "@/components/ui/sonner";
+import { useQueryClient } from "@tanstack/react-query";
 
-const Game = ({ type }: { type: string }) => {
+const Game = ({
+  type,
+  onGoingGame,
+  tournamentId,
+}: {
+  type: string;
+  onGoingGame: any;
+  tournamentId?: string;
+}) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationFrameId = useRef<number>(0);
   const isAnimating = useRef<boolean>(false);
   const isFirstTime = useRef<boolean>(true);
   const paddleLeftYRef = useRef<number>(0);
   const PaddleRightYRef = useRef<number>(0);
-  const newBallPositionRef = useRef({ x: 20000, y: 20000 });
+  const paddleRightDirectionRef = useRef<string>("stop");
+  const newBallPositionRef = useRef({
+    x: (canvasRef.current?.width || 0) / 2,
+    y: (canvasRef.current?.height || 0) / 2,
+  });
   const newAngleRef = useRef<number>(0);
   const leftScoreRef = useRef<number>(0);
   const rightScoreRef = useRef<number>(0);
@@ -59,20 +74,27 @@ const Game = ({ type }: { type: string }) => {
     handleEnemyScore,
     handleTime,
     handleStartGame,
+    handleSurrender,
   } = useGameSocket();
-  const { newNotif } = useInvitationSocket();
 
-  const { handleSurrender } = useInvitationSocket();
+  const { newNotif, handleAcceptTournamentInvitation, handleRefetchPlayers } =
+    useInvitationSocket();
+
+  const query = useQueryClient();
+
   const user_id = getCookie("user_id") || "";
   const { data: user } = useGetUser(user_id || "0");
   const { mutate: surrenderGame } = useSurrenderGame();
   const { mutate: leaveGame } = useLeaveGame();
   const { mutate: endGame } = useEndGame();
-  const { onGoingGame } = useGetGame(user_id || "0", type);
 
   userRef.current = user;
 
   const username = user?.username || "";
+
+  function changeTime(Time: number) {
+    timeRef.current = Time;
+  }
 
   if (onGoingGame?.data?.game?.user1?.username === username) {
     leftUser.current = onGoingGame?.data?.game?.user1;
@@ -120,6 +142,7 @@ const Game = ({ type }: { type: string }) => {
       paddleLeftYRef,
       paddleRightX,
       PaddleRightYRef,
+      paddleRightDirectionRef,
       newBallPositionRef,
       paddleLeftX,
       paddleWidth,
@@ -139,16 +162,25 @@ const Game = ({ type }: { type: string }) => {
       // preventDefault to prevent the page from scrolling
       if (e.key === "ArrowUp" || e.key === "ArrowDown") e.preventDefault();
       if (e.type === "keydown") {
-        if (e.key === "ArrowUp") {
+        if (e.key === "ArrowUp" && !upPressedRef.current) {
           upPressedRef.current = true;
-        } else if (e.key === "ArrowDown") {
+          downPressedRef.current = false;
+          handleMovePaddle("up", paddleLeftYRef.current);
+        } else if (e.key === "ArrowDown" && !downPressedRef.current) {
           downPressedRef.current = true;
+          upPressedRef.current = false;
+          handleMovePaddle("down", paddleLeftYRef.current);
         }
-      } else if (e.type === "keyup") {
+      }
+      if (e.type === "keyup") {
         if (e.key === "ArrowUp") {
           upPressedRef.current = false;
+          if (!downPressedRef.current)
+            handleMovePaddle("stop", paddleLeftYRef.current);
         } else if (e.key === "ArrowDown") {
           downPressedRef.current = false;
+          if (!upPressedRef.current)
+            handleMovePaddle("stop", paddleLeftYRef.current);
         }
       }
     };
@@ -168,30 +200,33 @@ const Game = ({ type }: { type: string }) => {
     }
 
     const gameStarted = () => {
-      if (
-        username === controllerUser.current?.username &&
-        newAngleRef.current === 0
-      ) {
-        newBallPositionRef.current = { x, y }; // Initialize the ref
-        newAngleRef.current = Math.random() * Math.PI;
-        while (
-          (newAngleRef.current > Math.PI / 6 &&
-            newAngleRef.current < (Math.PI * 5) / 6) ||
-          (newAngleRef.current > (Math.PI * 7) / 6 &&
-            newAngleRef.current < (Math.PI * 11) / 6)
+      setTimeout(() => {
+        if (
+          username === controllerUser.current?.username &&
+          newAngleRef.current === 0
         ) {
-          newAngleRef.current = Math.random() * 2 * Math.PI;
+          newBallPositionRef.current = { x, y }; // Initialize the ref
+          newAngleRef.current = Math.random() * Math.PI;
+          while (
+            (newAngleRef.current > Math.PI / 6 &&
+              newAngleRef.current < (Math.PI * 5) / 6) ||
+            (newAngleRef.current > (Math.PI * 7) / 6 &&
+              newAngleRef.current < (Math.PI * 11) / 6)
+          ) {
+            newAngleRef.current = Math.random() * 2 * Math.PI;
+          }
+          let enemyX = canvas.width - newBallPositionRef.current.x;
+          let enemyY = newBallPositionRef.current.y;
+          let enemyAngle = Math.PI - newAngleRef.current;
+
+          handleChangeBallDirection(
+            enemyX,
+            enemyY,
+            enemyAngle,
+            rightUser.current?.username || ""
+          );
         }
-        let enemyX = canvas.width - newBallPositionRef.current.x;
-        let enemyY = newBallPositionRef.current.y;
-        let enemyAngle = Math.PI - newAngleRef.current;
-        handleChangeBallDirection(
-          enemyX,
-          enemyY,
-          enemyAngle,
-          rightUser.current?.username || ""
-        );
-      }
+      }, 1000);
 
       if (bgImage.current === null) {
         bgImage.current = new Image();
@@ -206,7 +241,7 @@ const Game = ({ type }: { type: string }) => {
       draw(canvasParams, ctx);
 
       // move paddles
-      movePaddlesOnline(canvasParams, handleMovePaddle);
+      movePaddlesOnline(canvasParams);
       // // console.log("move paddle" + movePaddleRef.current);
 
       // // Check for collision with left paddle
@@ -249,10 +284,16 @@ const Game = ({ type }: { type: string }) => {
       );
 
       // Move the ball
-      if (newAngleRef.current !== 0)
+      if (
+        newAngleRef.current !== 0 &&
+        leftScoreRef.current < 3 &&
+        rightScoreRef.current < 3
+      ) {
         moveBall(canvasParams, user, leftUser.current, newAngleRef);
+      }
 
       // Check if enemy has left the game
+      // console.log("timeRef.current", timeRef.current);
       enemyLeftGame(
         canvasParams,
         timeRef,
@@ -272,9 +313,6 @@ const Game = ({ type }: { type: string }) => {
       ) {
         gameStarted();
       }
-      //  else {
-      //   gameNotStarted();
-      // }
     };
 
     const animate = () => {
@@ -289,18 +327,20 @@ const Game = ({ type }: { type: string }) => {
       animate();
       return returnFunction;
     }
-  }, [gameStartedRef.current, canvas, canvasRef.current]);
+  }, [gameStartedRef.current, canvasRef.current]);
 
   useEffect(() => {
     const gameMsge = gameMsg();
     if (gameMsge) {
       const parsedMessage = JSON.parse(gameMsge.data);
-      // console.log(parsedMessage.message);
+      console.log(parsedMessage.message);
       const message = parsedMessage?.message.split(" ");
+
       if (message[0] === "/move") {
-        const sender = message[2];
+        const sender = message[3];
         if (sender !== username) {
-          PaddleRightYRef.current = parseInt(message[1]);
+          paddleRightDirectionRef.current = message[1];
+          PaddleRightYRef.current = parseInt(message[2]);
         }
       } else if (message[0] === "/ballDirection") {
         const sender = message[4];
@@ -325,10 +365,11 @@ const Game = ({ type }: { type: string }) => {
             rightUser.current?.username || "",
             gameIdRef.current
           );
-          timeRef.current = 0;
+          changeTime(0);
           gameStartedRef.current = true;
-          newBallPositionRef.current = { x: 20000, y: 20000 };
+          newBallPositionRef.current = { x: 400, y: 200 };
           newAngleRef.current = 0;
+          paddleRightDirectionRef.current = "stop";
           isFirstTime.current = true;
           ballInLeftPaddle.current = false;
           upPressedRef.current = false;
@@ -339,14 +380,18 @@ const Game = ({ type }: { type: string }) => {
           onGoingGame.refetch();
         }
       } else if (message[0] === "/score") {
+        console.log("refetching");
         isFirstTime.current = true;
         onGoingGame.refetch();
       } else if (message[0] === "/time") {
         if (message[2] !== username) {
-          timeRef.current = parseInt(message[1]);
+          changeTime(parseInt(message[1]));
           enemyLeftGameRef.current = false; // todo: tournament forfeit status
         }
       } else if (message[0] === "/refetchPlayers") {
+        query.invalidateQueries({ queryKey: ["friends", user_id] });
+        query.invalidateQueries({ queryKey: ["game"] });
+        query.invalidateQueries({ queryKey: ["tournament"] });
         onGoingGame.refetch();
       } else if (message[0] === "/surrender") {
         if (message[1] !== username) {
@@ -357,33 +402,36 @@ const Game = ({ type }: { type: string }) => {
         gameStartedRef.current = false;
         setCanvas(null);
         onGoingGame.refetch();
-      } else if (message[0] === "/end") {
-        if (leftScoreRef.current >= 3) {
+      } else if (message[0] === "/endGame") {
+        if (leftScoreRef.current < 3 && rightScoreRef.current < 3) {
+          state.current = "leave";
+        } else if (leftScoreRef.current >= 3) {
           state.current = "win";
-        } else if (rightScoreRef.current < 3) {
+        } else if (rightScoreRef.current >= 3) {
           state.current = "lose";
         } else {
           state.current = "none";
         }
         gameStartedRef.current = false;
         setCanvas(null);
+        if (type === "tournament") {
+          handleRefetchPlayers(onGoingGame.data.game.id);
+        }
         onGoingGame.refetch();
       }
     }
+  }, [gameMsg()?.data]);
+
+  useEffect(() => {
     const notif = newNotif();
     if (notif) {
       const parsedMessage = JSON.parse(notif.data);
       const message = parsedMessage?.message.split(" ");
-      console.log(parsedMessage.message);
-
       if (message[0] === "/start" || message[0] === "/refetchTournament") {
-        onGoingGame.refetch();
-      } else if (message[0] === "/end") {
-        gameStartedRef.current = false;
         onGoingGame.refetch();
       }
     }
-  }, [gameMsg()?.data, newNotif()?.data]);
+  }, [newNotif()?.data]);
 
   return (
     <>
@@ -461,7 +509,7 @@ const Game = ({ type }: { type: string }) => {
               )}
             </>
           ) : (
-            <div className="ml-[80px] h-5/6 w-1/6">
+            <div className="ml-auto mr-[80px] h-5/6 w-1/6">
               <Button
                 onClick={() => {
                   setCanvas(null);

@@ -15,9 +15,9 @@ const InviteFriends = ({ gameType }: { gameType: string }) => {
   
   const friends = useGetFriends(user?.id);
 
-  const data: [{ id: string; username: string; avatar: string; status:string }] = friends.data || [];
-
-  const onlineUsers = data.filter((user) => user.status === "online");
+  const data: [
+    { id: string; username: string; avatar: string; status: string }
+  ] = friends.data || [];
 
   const { mutate: invite } = useSendInvitation();
 
@@ -26,24 +26,26 @@ const InviteFriends = ({ gameType }: { gameType: string }) => {
   return (
     <Card className="w-full h-full bg-background p-2 mb-28">
       <div className="w-full h-full flex flex-col justify-start items-start">
-        <div className="w-full text-center text-lg font-bold pb-2">
-            Invite
-        </div>
+        <div className="w-full text-center text-lg font-bold pb-2">Invite</div>
         <div className="flex flex-col w-full items-center justify-center pt-2 border-t gap-2">
-          {onlineUsers.length ? (
-            onlineUsers.map(
-              (friend: { id: string; username: string; avatar: string }) => {
-                
+          {data.length ? (
+            data.map(
+              (friend: {
+                id: string;
+                username: string;
+                avatar: string;
+                status: string;
+              }) => {
                 return (
                   <div
                     key={friend.id}
                     className="flex flex-row justify-between w-10/12 items-start"
                   >
-                    <div className="flex flex-row items-center justify-center cursor-pointer h-full gap-4"
+                    <div
+                      className="flex flex-row items-center justify-center cursor-pointer h-full gap-4"
                       onClick={() => {
                         router.push(`/profile/${friend.id}`);
-                      }
-                      }
+                      }}
                     >
                       <Avatar className="relative">
                         <AvatarImage
@@ -56,9 +58,12 @@ const InviteFriends = ({ gameType }: { gameType: string }) => {
                         </AvatarFallback>
                         <div className="absolute bottom-1 right-1 w-2 h-2 rounded-full bg-green-400 border border-white"></div>
                       </Avatar>
-                      <div className="w-full h-full flex justify-center items-center">{friend.username}</div>
+                      <div className="w-full h-full flex justify-center items-center">
+                        {friend.username}
+                      </div>
                     </div>
                     <Button
+                      // disabled={friend.status !== "online"} // todo: enable this when game is ready and fix it
                       size={"xs"}
                       onClick={() => {
                         invite({
@@ -75,9 +80,9 @@ const InviteFriends = ({ gameType }: { gameType: string }) => {
             )
           ) : (
             <div className="flex flex-row justify-center items-center gap-2 text-primary border-t p-2 w-full">
-            <UserRoundSearch />
-            You have no friends
-          </div>
+              <UserRoundSearch />
+              You have no friends
+            </div>
           )}
         </div>
       </div>

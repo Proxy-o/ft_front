@@ -3,7 +3,8 @@ from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 from .models import Message
 from django.contrib.auth import get_user_model
-
+from django.db.models import Q
+from game.models import Game
 
 User = get_user_model()
 
@@ -29,7 +30,11 @@ class ChatConsumer(WebsocketConsumer):
                 self.channel_name,
             )
             # set the status of the user to online in the database
-            User.objects.filter(id=self.user.id).update(status='online')
+            game = Game.objects.filter((Q(user1=self.user) | Q(user2=self.user) | Q(user3=self.user) | Q(user4=self.user)) & Q(winner=None))
+            if not game:
+                User.objects.filter(id=self.user.id).update(status='online')
+            else:
+                User.objects.filter(id=self.user.id).update(status='playing')
 
     def disconnect(self, close_code):
         if self.user.is_authenticated:
@@ -39,7 +44,6 @@ class ChatConsumer(WebsocketConsumer):
                 self.user_inbox,
                 self.channel_name,
             )
-            # set the status of the user to offline in the database
             User.objects.filter(id=self.user.id).update(status='offline')
 
     def receive(self, text_data=None, bytes_data=None):

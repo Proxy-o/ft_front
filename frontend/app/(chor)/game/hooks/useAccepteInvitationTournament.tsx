@@ -1,5 +1,5 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
-import useInvitationSocket from "@/app/(chor)/game/hooks/useInvitationSocket";
+import useInvitationSocket from "@/app/(chor)/game/hooks/sockets/useInvitationSocket";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -14,6 +14,7 @@ async function accept(invitationId: string) {
   } catch (error: any) {
     toast.error(error?.response?.data.error);
   }
+  return "";
 }
 
 export default function useAcceptInvitationTournament() {
@@ -21,10 +22,11 @@ export default function useAcceptInvitationTournament() {
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: accept,
-    onSuccess: (tournamentId) => {
+    onSuccess: (tournamentId: string) => {
+      console.log("tournamentId", tournamentId);
+      handleAcceptTournamentInvitation(tournamentId);
       queryClient.invalidateQueries({ queryKey: ["tournament"] });
       queryClient.invalidateQueries({ queryKey: ["invitations"] });
-      handleAcceptTournamentInvitation(tournamentId);
     },
   });
   return mutation;

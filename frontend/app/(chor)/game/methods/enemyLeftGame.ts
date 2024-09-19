@@ -6,7 +6,7 @@ function enemyLeftGame(
   time: React.MutableRefObject<number>,
   enemyLeftGameRef: React.MutableRefObject<boolean>,
   gameStartedRef: React.MutableRefObject<boolean>,
-  handleTime: (time: number) => void,
+  handleTime: (time: number, enemy: string) => void,
   endGame: (data: {
     winner: string;
     winnerScore: number;
@@ -27,9 +27,9 @@ function enemyLeftGame(
     enemyLeftGameRef.current = true;
     time.current = seconds;
     // console.log("current time: " + time.current + "seconds: " + seconds);
-    handleTime(time.current);
+    handleTime(time.current, rightUserRef.current?.id || "");
   } else {
-    if (seconds - time.current > 2) {
+    if (seconds - time.current > 3) {
       toast.error("Enemy left the game");
     // alert("2");
       endGame({
@@ -49,7 +49,8 @@ function enemyLeftGameFour(
   canvasParams: canvasParamsFour,
   time: React.MutableRefObject<number>,
   enemyLeftGameRef: React.MutableRefObject<boolean>,
-  gameStartedRef: React.MutableRefObject<boolean>,
+  gameStarted: boolean,
+  setGameStarted: React.Dispatch<React.SetStateAction<boolean>>,
   handleTimeFour: (time: number, username: string) => void,
   handleWhoLeftGame: () => void,
   username: string
@@ -73,8 +74,8 @@ function enemyLeftGameFour(
     // console.log("current time: " + time.current + "seconds: " + seconds);
     handleTimeFour(time.current, username);
   } else {
-    if (seconds - time.current > 4 && gameStartedRef.current) {
-      gameStartedRef.current = false;
+    if (seconds - time.current > 4 && gameStarted) {
+      setGameStarted(false);
       handleWhoLeftGame();
     }
   }
