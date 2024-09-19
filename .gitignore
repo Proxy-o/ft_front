@@ -5,3 +5,4 @@ frontend/.env
 log_nginx
 postgres
 backend/media
+.venv

@@ -1,9 +1,9 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
 import { useQuery } from "@tanstack/react-query";
 
-const getTournament = async (tournamentId: string) => {
+const getOnGoingTournament = async () => {
   try {
-    const response = await axiosInstance.get(`/game/tournament/${tournamentId}`);
+    const response = await axiosInstance.get(`/game/OngoingTournament`);
     if (response.data.status === 204) {
       return { tournament: null };
     } else if (response.data.status === 404) {
@@ -15,10 +15,10 @@ const getTournament = async (tournamentId: string) => {
   }
 };
 
-export default function useGetTournament(tournamentId: string) {
+export default function useGetOnGoingTournament() {
   const data = useQuery({
-    queryFn: () => getTournament(tournamentId),
-    queryKey: ["tournament", tournamentId],
+    queryFn: () => getOnGoingTournament(),
+    queryKey: ["tournament"],
   });
   return data;
 }

@@ -47,6 +47,8 @@ class InvitationConsumer(WebsocketConsumer):
             self.handle_accept_tournament(split)
         elif command == '/startTournament':
             self.handle_start_tournament(split)
+        elif command == '/refetchTournament':
+            self.handle_refetch_tournament(split)
         elif command == '/decline':
             self.handle_decline(split)
 
@@ -131,6 +133,7 @@ class InvitationConsumer(WebsocketConsumer):
     def handle_accept_tournament(self, split):
         print("Accepting tournament")
         id = split[1]
+        print('toooornament ', id)
         tournament = Tournament.objects.get(id=id)
         # check this is working todo 
         print(id)
@@ -143,22 +146,22 @@ class InvitationConsumer(WebsocketConsumer):
         if tournament.user1 and tournament.user1_left == False:
             async_to_sync(self.channel_layer.group_send)(
                 f'inbox_{tournament.user1.username}',
-                {'type': 'send_message', 'user': self.user.username, 'message': f'/refetchTournament {tournament.id}'}
+                {'type': 'send_message', 'user': self.user.username, 'message': f'/acceptTournament {tournament.id}'}
             )
         if tournament.user2 and tournament.user2_left == False:
             async_to_sync(self.channel_layer.group_send)(
                 f'inbox_{tournament.user2.username}',
-                {'type': 'send_message', 'user': self.user.username, 'message': f'/refetchTournament {tournament.id}'}
+                {'type': 'send_message', 'user': self.user.username, 'message': f'/acceptTournament {tournament.id}'}
             )
         if tournament.user3 and tournament.user3_left == False:
             async_to_sync(self.channel_layer.group_send)(
                 f'inbox_{tournament.user3.username}',
-                {'type': 'send_message', 'user': self.user.username, 'message': f'/refetchTournament {tournament.id}'}
+                {'type': 'send_message', 'user': self.user.username, 'message': f'/acceptTournament {tournament.id}'}
             )
         if tournament.user4 and tournament.user4_left == False:
             async_to_sync(self.channel_layer.group_send)(
                 f'inbox_{tournament.user4.username}',
-                {'type': 'send_message', 'user': self.user.username, 'message': f'/refetchTournament {tournament.id}'}
+                {'type': 'send_message', 'user': self.user.username, 'message': f'/acceptTournament {tournament.id}'}
             )
             
     def handle_start_tournament(self, split):
@@ -188,6 +191,31 @@ class InvitationConsumer(WebsocketConsumer):
                 {'type': 'send_message', 'user': self.user.username, 'message': f'/startTournament {tournament.id}'}
             )
         
+    def handle_refetch_tournament(self, split):
+        id = split[1]
+        tournament = Tournament.objects.get(id=id)
+        if not tournament:
+            print("Tournament not found")
+        if tournament.user1 and tournament.user1_left == False:
+            async_to_sync(self.channel_layer.group_send)(
+                f'inbox_{tournament.user1.username}',
+                {'type': 'send_message', 'user': self.user.username, 'message': f'/refetchTournament {tournament.id}'}
+            )
+        if tournament.user2 and tournament.user2_left == False:
+            async_to_sync(self.channel_layer.group_send)(
+                f'inbox_{tournament.user2.username}',
+                {'type': 'send_message', 'user': self.user.username, 'message': f'/refetchTournament {tournament.id}'}
+            )
+        if tournament.user3 and tournament.user3_left == False:
+            async_to_sync(self.channel_layer.group_send)(
+                f'inbox_{tournament.user3.username}',
+                {'type': 'send_message', 'user': self.user.username, 'message': f'/refetchTournament {tournament.id}'}
+            )
+        if tournament.user4 and tournament.user4_left == False:
+            async_to_sync(self.channel_layer.group_send)(
+                f'inbox_{tournament.user4.username}',
+                {'type': 'send_message', 'user': self.user.username, 'message': f'/refetchTournament {tournament.id}'}
+            )
 
     
 

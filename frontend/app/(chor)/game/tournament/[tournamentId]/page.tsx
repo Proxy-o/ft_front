@@ -20,10 +20,8 @@ import { useRouter } from "next/navigation";
 export default function Page({ params }: { params: { tournamentId: string } }) {
   const tournamentId = params.tournamentId;
   const user_id = getCookie("user_id") || "";
-  const { data: user } = useGetUser(user_id || "0");
-  const { mutate: createTournament } = useCreateTournament(user_id);
   const { mutate: leavetournament } = useLeavetournament();
-  const { newNotif, handleRefetchTournament } = useInvitationSocket();
+  const { newNotif } = useInvitationSocket();
   const { onGoingGame } = useGetGame(
     user_id || "0",
     "tournament",
@@ -31,12 +29,10 @@ export default function Page({ params }: { params: { tournamentId: string } }) {
   );
   const router = useRouter();
   const { mutate: deleteTournament } = useDeletetournament();
-  const stateRef = useRef<string>("tournament");
   const { data, isSuccess, isLoading, refetch: refetchTournament } = useGetTournament(tournamentId);
   
 
   useEffect(() => {
-    console.log("tournament sss", data?.tournament);
     if (!data?.tournament?.started && isSuccess) {
       router.push(`/game/tournament`);
     }
