@@ -2,17 +2,16 @@
 
 set -e
 
-DOTENV=$(find . -name .env)
+
 if [ "$(uname)" == "Linux" ]
 then
     IPADDR=$(hostname -I | cut -d ' ' -f 1 | tr -d ' ')
-    SEDI="sed -i"
+    sed -i "s/^SERVER_HOST=.*/SERVER_HOST=$IPADDR/" .env
 else
     IPADDR=$(ipconfig getifaddr en0)
-    SEDI='sed -i ""'
+   sed -i '' "s/^SERVER_HOST=.*/SERVER_HOST=$IPADDR/" .env
 fi
 
-for file in $DOTENV
-do
-    $SEDI "s/^SERVER_HOST=.*/SERVER_HOST=$IPADDR/" $file
-done
+mkdir -p ./postgres_data
+mkdir -p ./log_nginx
+

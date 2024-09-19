@@ -1,7 +1,6 @@
 
 all:
 	bash tools/init.sh
-	mkdir -p ./postgres_data
 	docker-compose -f ./docker-compose.yml up #-d
 	@echo ""
 	@echo "\033[0;32m######################### \033[0m"
