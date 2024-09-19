@@ -13,6 +13,7 @@ const surrenderGame = async () => {
         gameId: res.data.gameId,
         tournamentId: res.data.tournamentId,
       };
+      console.log("tournament surrender",res.data);
       toast.success(res.data.message); // todo : refetch game when an enemy join tournament   done, to be tested
       return returnData;
     }

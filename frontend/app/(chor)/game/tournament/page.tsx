@@ -10,36 +10,51 @@ import InviteFriends from "../components/inviteFriend";
 import TournamentBoard from "../components/tournamentBoard";
 import { Button } from "@/components/ui/button";
 import useInvitationSocket from "../hooks/sockets/useInvitationSocket";
-import { use, useEffect } from "react";
+import { useEffect } from "react";
 import useStartTournament from "../hooks/useStartTournament";
 import { useQueryClient } from "@tanstack/react-query";
+import useGetOnGoingTournament from "../hooks/useGetOnGoingTournament";
 
 export default function Page() {
   const user_id = getCookie("user_id") || "";
   const queryClient = useQueryClient();
-  const { data, isLoading, isSuccess, refetch } = useGetTournament();
+  const { data, isLoading, isSuccess, refetch } = useGetOnGoingTournament();
   const { newNotif } = useInvitationSocket();
   const { mutate: createTournament } = useCreateTournament(user_id);
   const { mutate: startTournament } = useStartTournament(data?.tournament?.id);
   const router = useRouter();
 
+  console.log(data);
+
   useEffect(() => {
-    console.log("tournament sss", data?.tournament);
-    if (data?.tournament?.started && isSuccess) {
-      router.push(`/game/tournament/${data?.tournament?.id}`);
+    if (
+      !(
+        (data?.tournament?.user1?.id === user_id &&
+          data?.tournament?.user1_left) ||
+        (data?.tournament?.user2?.id === user_id &&
+          data?.tournament?.user2_left) ||
+        (data?.tournament?.user3?.id === user_id &&
+          data?.tournament?.user3_left) ||
+        (data?.tournament?.user4?.id === user_id &&
+          data?.tournament?.user4_left
+        ) &&
+          data?.tournament?.started &&
+          isSuccess &&
+          !data?.tournament?.winner)
+    ) {
+      // router.push(`/game/tournament/${data?.tournament?.id}`);
     }
   }, [isSuccess, isLoading]);
-  // listen refetchTournament
   useEffect(() => {
     const notif = newNotif();
     if (notif) {
       const parsedMessage = JSON.parse(notif.data);
       const message = parsedMessage?.message.split(" ");
       console.log(parsedMessage.message);
-      if (message[0] === "/refetchTournament") {
-        console.log("refetching tournament azbi");
+      if (message[0] === "/acceptTournament") {
         refetch();
       } else if (message[0] === "/startTournament") {
+        refetch();
         router.push(`/game/tournament/${data?.tournament?.id}`);
       }
     }
