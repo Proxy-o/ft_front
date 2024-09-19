@@ -31,8 +31,14 @@ logs:
 test_waf:
 	./nginx/tools/test_waf.sh
 
-clean: down
-	docker system prune -a
+clean:
+	docker-compose down --rmi all --volumes
+
+oclean:
+	docker-compose stop $(s)
+	docker-compose rm -f $(s)
+	docker-compose images -q $(s) | xargs -r docker rmi
+	docker volume ls -qf dangling=true | xargs -r docker volume rm
 
 fclean:
 	rm -rf ./postgres_data  
@@ -42,4 +48,4 @@ fclean:
 	docker volume rm $$(docker volume ls -q) 2>/dev/null || true
 	docker network rm $$(docker network ls -q) 2>/dev/null || true
 
-.PHONY	: all build down re clean fclean logs test_waf
+.PHONY	: all build down re clean fclean logs test_waf oclean
