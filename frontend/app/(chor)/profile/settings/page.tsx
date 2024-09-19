@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import EditProfileForm from "../components/editProfileForm";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
+import { Switch } from "@/components/ui/switch";
 
 export default function Page() {
   const { data: user, isSuccess } = useGetUser("0");
@@ -27,15 +28,10 @@ export default function Page() {
             </Avatar>
       )}
       <div className="space-x-3">
-        <Button disabled={user?.otp_active} onClick={() => toggleOTP("enable")}>
-          Enable OTP
-        </Button>
-        <Button
-          disabled={!user?.otp_active}
-          onClick={() => toggleOTP("disable")}
-        >
-          Disable OTP
-        </Button>
+        <Switch
+          defaultChecked={user?.otp_active}
+          onCheckedChange={(checked: boolean) => toggleOTP(checked ? "enable" : "disable")}
+        />
       </div>
       </Card>
 
