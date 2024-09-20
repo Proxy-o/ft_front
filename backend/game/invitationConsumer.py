@@ -71,6 +71,8 @@ class InvitationConsumer(WebsocketConsumer):
         time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
         receiver = User.objects.get(id=split[2])
+        if not receiver:
+            return
         async_to_sync(self.channel_layer.group_send)(
             f'inbox_{receiver.username}',
             {'type': 'send_message', 'user': self.user.username, 'message': ' '.join(split) + ' ' + time}
@@ -78,10 +80,8 @@ class InvitationConsumer(WebsocketConsumer):
 
     def handle_accept(self, split):
         game_id = split[1]
-        try:
-            game = Game.objects.get(id=game_id)
-        except Game.DoesNotExist:
-            self.send_error('Game not found')
+        game = Game.objects.get(id=game_id)
+        if not game:
             return
         if game.user1:
             async_to_sync(self.channel_layer.group_send)(
@@ -109,7 +109,6 @@ class InvitationConsumer(WebsocketConsumer):
         print(split)
         game = Game.objects.filter(id=split[1]).last()
         if not game:
-            self.send_error('Game not found')
             return
         time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         participants = []
@@ -119,6 +118,8 @@ class InvitationConsumer(WebsocketConsumer):
             participants = [game.user1, game.user2, game.user3, game.user4]
         elif game.type == 'tournament':
             tournament = Tournament.objects.filter(Q(semi1=game) | Q(semi2=game) | Q(final=game)).filter(Q(user1=self.user) | Q(user2=self.user) | Q(user3=self.user) | Q(user4=self.user)).last()
+            if not tournament:
+                return
             participants = [tournament.user1, tournament.user2, tournament.user3, tournament.user4]
         for participant in participants:
             if participant:
@@ -138,6 +139,8 @@ class InvitationConsumer(WebsocketConsumer):
         id = split[1]
         print('toooornament ', id)
         tournament = Tournament.objects.get(id=id)
+        if not tournament:
+            return
         # check this is working todo 
         print(id)
         if not tournament:
@@ -198,7 +201,7 @@ class InvitationConsumer(WebsocketConsumer):
         id = split[1]
         tournament = Tournament.objects.get(id=id)
         if not tournament:
-            print("Tournament not found")
+            return
         if tournament.user1 and tournament.user1_left == False:
             async_to_sync(self.channel_layer.group_send)(
                 f'inbox_{tournament.user1.username}',
@@ -225,6 +228,7 @@ class InvitationConsumer(WebsocketConsumer):
     def handle_decline(self, split):
         print("Declining invitation")
         invitation = Invitation.objects.get(id=split[1])
+        return
         invitation.delete()
         async_to_sync(self.channel_layer.group_send)(
             f'inbox_{invitation.sender.username}',

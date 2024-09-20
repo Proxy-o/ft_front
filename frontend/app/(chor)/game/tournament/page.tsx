@@ -14,6 +14,7 @@ import { useEffect } from "react";
 import useStartTournament from "../hooks/useStartTournament";
 import { useQueryClient } from "@tanstack/react-query";
 import useGetOnGoingTournament from "../hooks/useGetOnGoingTournament";
+import useAborttournament from "../hooks/useAbortTournament";
 
 export default function Page() {
   const user_id = getCookie("user_id") || "";
@@ -23,18 +24,19 @@ export default function Page() {
   const { newNotif } = useInvitationSocket();
   const { mutate: createTournament } = useCreateTournament(user_id);
   const { mutate: startTournament } = useStartTournament(tournament?.id);
+  const { mutate: abortTournament } = useAborttournament();
   const router = useRouter();
 
-
   if (tournament?.started) {
-    if ((tournament?.user1.id === user_id && !tournament?.user1_left) ||
-        (tournament?.user2.id === user_id && !tournament?.user2_left) ||
-        (tournament?.user3.id === user_id && !tournament?.user3_left) ||
-        (tournament?.user4.id === user_id && !tournament?.user4_left)) {
+    if (
+      (tournament?.user1.id === user_id && !tournament?.user1_left) ||
+      (tournament?.user2.id === user_id && !tournament?.user2_left) ||
+      (tournament?.user3.id === user_id && !tournament?.user3_left) ||
+      (tournament?.user4.id === user_id && !tournament?.user4_left)
+    ) {
       router.push(`/game/tournament/${tournament.id}`);
     }
   }
-  
 
   useEffect(() => {
     const notif = newNotif();
@@ -47,34 +49,55 @@ export default function Page() {
       } else if (message[0] === "/startTournament") {
         refetch();
         router.push(`/game/tournament/${tournament?.id}`);
+      } else if (
+        message[0] === "/refetchTournament" ||
+        message[0] === "/refetchPlayers"
+      ) {
+        refetch();
       }
     }
   }, [newNotif()?.data]);
+
 
   return (
     <div className="flex flex-col w-full h-fit justify-center items-center">
       {tournament ? (
         <>
           <TournamentBoard tournament={tournament} />
+          {tournament.started ? (
+            <Button
+              className="w-1/2"
+              onClick={() => {
+                if (isSuccess) {
+                  router.push(`/game/tournament/${tournament.id}`);
+                }
+              }}
+            >
+              Go to Tournament
+            </Button>
+          ) : (
+            user_id == tournament?.creator.id && (
+              <Button
+                className="w-1/2"
+                onClick={() => {
+                  if (isSuccess) {
+                    startTournament(tournament?.id);
+                  }
+                }}
+              >
+                Start Tournament
+              </Button>
+            )
+          )}
           <Button
             className="w-1/2"
             onClick={() => {
               if (isSuccess) {
-                router.push(`/game/tournament/${tournament.id}`);
+                abortTournament(tournament?.id);
               }
             }}
           >
-            Go to Tournament
-          </Button>
-          <Button
-            className="w-1/2"
-            onClick={() => {
-              if (isSuccess) {
-                startTournament(tournament?.id);
-              }
-            }}
-          >
-            Start Tournament
+            Abort Tournament
           </Button>
         </>
       ) : (

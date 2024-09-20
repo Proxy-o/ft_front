@@ -54,7 +54,7 @@ function checkLoseConditionFour(
     userRightBottom: rightUserBottom,
   } = canvasParams;
   if (rightScoreRef.current >= 3 || leftScoreRef.current >= 3) {
-    handleRefetchPlayers(canvasParams.gameId);
+    // handleRefetchPlayers(canvasParams.gameId);
     setGameStarted(false);
     if (rightScoreRef.current >= 3) {
       if (username === leftUserTop.current?.username) {

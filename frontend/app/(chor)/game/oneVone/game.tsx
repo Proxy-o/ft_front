@@ -414,9 +414,9 @@ const Game = ({
         }
         gameStartedRef.current = false;
         setCanvas(null);
-        if (type === "tournament") {
-          handleRefetchPlayers(onGoingGame.data.game.id);
-        }
+        // if (type === "tournament") {
+        //   handleRefetchPlayers(onGoingGame.data.game.id);
+        // }
         onGoingGame.refetch();
       }
     }
