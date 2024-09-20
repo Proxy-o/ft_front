@@ -397,10 +397,10 @@ const Canvas = ({
       } else if (message[0] === "/fourTime") {
         if (gameStarted) {
           handleTimeResponse(parseInt(message[1]), message[2]);
-        } else if (message[0] === "/whoLeftGame") {
-          const whoAsked = message[1];
-          handleStillPlaying(username, whoAsked);
         }
+      } else if (message[0] === "/whoLeftGame") {
+        const whoAsked = message[1];
+        handleStillPlaying(username, whoAsked);
       } else if (message[0] === "/fourSurrender") {
         const surrenderer = message[1];
         if (surrenderer !== username) {
@@ -435,7 +435,7 @@ const Canvas = ({
         if (whoAsked === username) {
           stillPlayingUsersRef.current.push(user);
           // handleWhoLeftGame();
-          if (stillPlayingUsersRef.current.length === 4) {
+          if (stillPlayingUsersRef.current.length === 3) {
             // find the user who did not respond
             if (
               leftUserTop.current.username &&
@@ -473,12 +473,13 @@ const Canvas = ({
                 loser,
                 loserScore: 0,
               });
+              // handleRefetchPlayers(gameId);
             }
           }
         }
-      } else if (message[0] === "/userLeftGame") {
+      } else if (message[0] === "/userLeftGame" || message[0] === "/refetchPlayers") {
         onGoingGame.refetch();
-      } else if (message[0] === "/end") {
+      } else if (message[0] === "/endGame") {
         leftScoreRef.current = 0;
         rightScoreRef.current = 0;
         setGameStarted(false);
