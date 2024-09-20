@@ -12,6 +12,7 @@ import { User } from "@/lib/types";
 import { canvasParamsFour } from "../types";
 import { moveBallFour } from "../methods/moveBall";
 import useEndGameFour from "../hooks/useEndGameFour";
+import { toast } from "sonner";
 
 const Canvas = ({
   leftUserTop,
@@ -331,6 +332,12 @@ const Canvas = ({
         isFirstTime.current = true;
         playerReadyRef.current = 0;
         stillPlayingUsersRef.current = [];
+        setTimeout(() => {
+          if (!gameStarted) {
+            toast.error("A player is not ready");
+          }
+        }
+        , 1000);
         handleReadyFour(sender, receiver);
       } else if (message[0] === "/readyFour") {
         playerReadyRef.current += 1;
