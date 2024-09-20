@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import useAcceptInvitationTournament from "../hooks/useAccepteInvitationTournament";
 import { Card } from "@/components/ui/card";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import useInvitationSocket from "@/app/(chor)/game/hooks/sockets/useInvitationSocket";
 import { toast } from "sonner";
 
@@ -24,6 +24,7 @@ const Invitations = ({ mode }: { mode: string }) => {
   const { mutate: acceptInvitationMutation } = useAcceptInvitation();
   const { mutate: acceptInvitationTournamentMutation } =
     useAcceptInvitationTournament();
+  const path = usePathname();
   const invitations: Invitation[] = invitationsData.data
     ? invitationsData.data
     : [];
@@ -125,24 +126,38 @@ const Invitations = ({ mode }: { mode: string }) => {
                           </div>
                         </div>
                       </div>
+
                       <div className="flex flex-row justify-end items-center gap-2">
-                        <Button
-                          // className="rounded-md bg-primary hover:bg-secondary hover:text-primary hover:border-primary border-2  border-primary mr-2"
-                          size={"xs"}
-                          onClick={() => {
-                            acceptInvitation(invitation.id);
-                            router.push("/game/oneVone");
-                          }}
-                        >
-                          <Check size={20} />
-                        </Button>
-                        <Button
-                          variant={"secondary"}
-                          size={"xs"}
-                          onClick={() => declineMutation(invitation.id)}
-                        >
-                          <X size={20} />
-                        </Button>
+                        {path == "/game/oneVone" ? (
+                          <>
+                            <Button
+                              // className="rounded-md bg-primary hover:bg-secondary hover:text-primary hover:border-primary border-2  border-primary mr-2"
+                              size={"xs"}
+                              onClick={() => {
+                                acceptInvitation(invitation.id);
+                              }}
+                            >
+                              <Check size={20} />
+                            </Button>
+                            <Button
+                              variant={"secondary"}
+                              size={"xs"}
+                              onClick={() => declineMutation(invitation.id)}
+                            >
+                              <X size={20} />
+                            </Button>
+                          </>
+                        ) : (
+                          <Button
+                            // className="rounded-md bg-primary hover:bg-secondary hover:text-primary hover:border-primary border-2  border-primary mr-2"
+                            size={"sm"}
+                            onClick={() => {
+                              router.push("/game/oneVone");
+                            }}
+                          >
+                            Go to one vs one
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -178,23 +193,37 @@ const Invitations = ({ mode }: { mode: string }) => {
                         </div>
                       </div>
                       <div className="flex flex-row justify-end items-center gap-2">
-                        <Button
-                          // className="rounded-md bg-primary hover:bg-secondary hover:text-primary hover:border-primary border-2  border-primary mr-2"
-                          size={"sm"}
-                          onClick={() => {
-                            acceptInvitation(invitation.id);
-                            router.push("/game/twoVtwo");
-                          }}
-                        >
-                          <Check size={20} />
-                        </Button>
-                        <Button
-                          variant={"secondary"}
-                          size={"sm"}
-                          onClick={() => declineMutation(invitation.id)}
-                        >
-                          <X size={20} />
-                        </Button>
+                        {path == "/game/twoVtwo" ? (
+                          <>
+                            <Button
+                              // className="rounded-md bg-primary hover:bg-secondary hover:text-primary hover:border-primary border-2  border-primary mr-2"
+                              size={"sm"}
+                              onClick={() => {
+                                acceptInvitation(invitation.id);
+                              }}
+                            >
+                              <Check size={20} />
+                            </Button>
+                            <Button
+                              variant={"secondary"}
+                              size={"sm"}
+                              onClick={() => declineMutation(invitation.id)}
+                            >
+                              <X size={20} />
+                            </Button>
+                          </>
+                        ) : (
+                          <Button
+                            // className="rounded-md bg-primary hover:bg-secondary hover:text-primary hover:border-primary border-2  border-primary mr-2"
+
+                            size={"sm"}
+                            onClick={() => {
+                              router.push("/game/twoVtwo");
+                            }}
+                          >
+                            Go to two vs two
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -230,23 +259,38 @@ const Invitations = ({ mode }: { mode: string }) => {
                         </div>
                       </div>
                       <div className="flex flex-row justify-end items-center gap-2">
-                        <Button
-                          // className="rounded-md bg-primary hover:bg-secondary hover:text-primary hover:border-primary border-2  border-primary mr-2"
-                          size={"sm"}
-                          onClick={() => {
-                            acceptInvitationTournament(invitation.id);
-                            router.push("/game/tournament");
-                          }}
-                        >
-                          <Check size={20} />
-                        </Button>
-                        <Button
-                          variant={"secondary"}
-                          size={"sm"}
-                          onClick={() => declineMutation(invitation.id)}
-                        >
-                          <X size={20} />
-                        </Button>
+                        {path == "/game/tournament" ? (
+                          <>
+                            <Button
+                              // className="rounded-md bg-primary hover:bg-secondary hover:text-primary hover:border-primary border-2  border-primary mr-2"
+                              size={"sm"}
+                              onClick={() => {
+                                acceptInvitationTournament(invitation.id);
+                                router.push("/game/tournament");
+                              }}
+                            >
+                              <Check size={20} />
+                            </Button>
+                            <Button
+                              variant={"secondary"}
+                              size={"sm"}
+                              onClick={() => declineMutation(invitation.id)}
+                            >
+                              <X size={20} />
+                            </Button>
+                          </>
+                        ) : (
+                          <Button
+                            // className="rounded-md bg-primary hover:bg-secondary hover:text-primary hover:border-primary border-2  border-primary mr-2"
+
+                            size={"sm"}
+                            onClick={() => {
+                              router.push("/game/tournament");
+                            }}
+                          >
+                            Go to tournament
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </div>

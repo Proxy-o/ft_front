@@ -20,6 +20,7 @@ export default function useAcceptInvitation() {
   const mutation = useMutation({
     mutationFn: accept,
     onSuccess: (gameId) => {
+      toast.success("Invitation accepted");
       handleRefetchPlayers(gameId);
       query.invalidateQueries({ queryKey: ["game"] });
       query.invalidateQueries({ queryKey: ["gameFour"] });

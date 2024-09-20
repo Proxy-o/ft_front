@@ -21,7 +21,7 @@ function checkLoseConditionOnline(
   if (rightScoreRef.current >= 3) {
     gameStartedRef.current = false;
     setCanvas(null);
-    // alert("1");
+    // alert("1 score is " + rightScoreRef.current);
     endGame({
       winner: rightUser?.id || "",
       winnerScore: rightScoreRef.current,
