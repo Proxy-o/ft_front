@@ -15,24 +15,24 @@ export default function Page() {
   return (
     <Card className="gap-4 w-full h-full flex flex-col justify-center items-center p-4 ">
       <Card className="flex flex-col gap-2 justify-center items-center h-full  p-4 max-w-lg w-full ">
-
-      {isSuccess && user && user.otp_active && (
-
-              <Avatar className=" mr-2 size-48">
-              <AvatarImage
-                src={user?.qr_code}
-                alt="QR Code"
-                className="rounded-sm size-48"
-              />
-              <AvatarFallback className="rounded-sm size-4 text-xs">QR</AvatarFallback>
-            </Avatar>
-      )}
-      <div className="space-x-3">
-        <Switch
-          defaultChecked={user?.otp_active}
-          onCheckedChange={(checked: boolean) => toggleOTP(checked ? "enable" : "disable")}
-        />
-      </div>
+          {isSuccess && user && user.otp_active && (
+            <Avatar className="flex flex-col mr-2 size-fit">
+            <p>Scan the QRCode</p>
+            <AvatarImage
+              src={user?.qr_code}
+              alt="QR Code"
+              className="rounded-sm size-48"
+            />
+            <AvatarFallback className="rounded-sm size-4 text-xs">QR</AvatarFallback>
+          </Avatar>
+        )}
+          <div className="flex space-x-3">
+            <p>Enable One Time Passsword</p>
+            <Switch
+              defaultChecked={user?.otp_active}
+              onCheckedChange={(checked: boolean) => toggleOTP(checked ? "enable" : "disable")}
+            />
+          </div>
       </Card>
 
       {isSuccess && <EditProfileForm user={user} />}
