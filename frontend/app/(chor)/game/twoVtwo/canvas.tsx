@@ -332,12 +332,6 @@ const Canvas = ({
         isFirstTime.current = true;
         playerReadyRef.current = 0;
         stillPlayingUsersRef.current = [];
-        setTimeout(() => {
-          if (!gameStarted) {
-            toast.error("A player is not ready");
-          }
-        }
-        , 1000);
         handleReadyFour(sender, receiver);
       } else if (message[0] === "/readyFour") {
         playerReadyRef.current += 1;
@@ -484,7 +478,10 @@ const Canvas = ({
             }
           }
         }
-      } else if (message[0] === "/userLeftGame" || message[0] === "/refetchPlayers") {
+      } else if (
+        message[0] === "/userLeftGame" ||
+        message[0] === "/refetchPlayers"
+      ) {
         onGoingGame.refetch();
       } else if (message[0] === "/endGame") {
         leftScoreRef.current = 0;

@@ -92,7 +92,20 @@ class GameConsumer(WebsocketConsumer):
         user2 = split[2]
         gameId = split[3]
         # print("gaaaaame group", self.game_group, self.user.username)
-        user = ''
+        game = Game.objects.get(id=gameId)
+        if not game:
+            return
+        if game.type == "two" and (game.user1.status == 'offline' or game.user2.status == 'offline'): #todo:this is unfinished
+            async_to_sync(self.channel_layer.group_send)(
+                f'game_{game.user1.username}',
+                {'type': 'send_message', 'user': user1, 'message': f'/endGame {user1}'}
+            )
+            async_to_sync(self.channel_layer.group_send)(
+                f'game_{game.user2.username}',
+                {'type': 'send_message', 'user': user2, 'message': f'/endGame {user2}'}
+            )
+            game.delete()
+            
         if self.user.username == user1:
             user = user2
         else:
