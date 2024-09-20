@@ -48,7 +48,7 @@ class InvitationView(APIView):
         previousInvitations = Invitation.objects.filter((Q(sender=sender) & Q(receiver=receiver) & Q(
             is_accepted=None)) | (Q(sender=receiver) & Q(receiver=sender) & Q(is_accepted=None))).last()
         if previousInvitations and (previousInvitations.is_accepted != True and previousInvitations.is_accepted != False):
-            return Response({'error': 'invitation alredy sent'}, status=status.HTTP_403_FORBIDDEN)
+            previousInvitations.delete()
         # sender_game = Game.objects.filter(Q(user1=sender) | Q(user2=sender) | Q(user3=sender) | Q(
         #     user4=sender)).filter(winner=None).filter(type=type).last()
         receiver_game = Game.objects.filter(Q(user1=receiver) | Q(user2=receiver) | Q(user3=receiver) | Q(
@@ -663,7 +663,7 @@ class StartTournament(APIView):
     permission_classes = [permissions.IsAuthenticated]
     authentication_classes = [CustomJWTAuthentication]
 
-    def post(self, request):
+    def post(self, request): 
         # print("start tournament")
         user = request.user
         tournament_id = request.data.get('tournamentId')
@@ -674,6 +674,12 @@ class StartTournament(APIView):
             return Response({'error': 'You are not the creator of this tournament'}, status=status.HTTP_403_FORBIDDEN)
         if not tournament.user1 or not tournament.user2 or not tournament.user3 or not tournament.user4:
             return Response({'error': 'Not enough players'}, status=status.HTTP_400_BAD_REQUEST)
+        user1_on_goin_game = Game.objects.filter(Q(user1=tournament.user1) | Q(user2=tournament.user1) | Q(user3=tournament.user1) | Q(user4=tournament.user1)).filter(winner=None).last()
+        user2_on_goin_game = Game.objects.filter(Q(user1=tournament.user2) | Q(user2=tournament.user2) | Q(user3=tournament.user2) | Q(user4=tournament.user2)).filter(winner=None).last()
+        user3_on_goin_game = Game.objects.filter(Q(user1=tournament.user3) | Q(user2=tournament.user3) | Q(user3=tournament.user3) | Q(user4=tournament.user3)).filter(winner=None).last()
+        user4_on_goin_game = Game.objects.filter(Q(user1=tournament.user4) | Q(user2=tournament.user4) | Q(user3=tournament.user4) | Q(user4=tournament.user4)).filter(winner=None).last()
+        if user1_on_goin_game or user2_on_goin_game or user3_on_goin_game or user4_on_goin_game:
+            return Response({'error': 'Players already in a game'}, status=status.HTTP_400_BAD_REQUEST) #todo:test this
         tournament.started = True
         tournament.save()
         return Response({'message': 'Tournament started', 'tournamentId': tournament.id}, status=status.HTTP_200_OK)
