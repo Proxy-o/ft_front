@@ -67,7 +67,9 @@ const Game = () => {
       {onGoingGame.isSuccess && (
         <>
           {!gameStarted &&
-            (onGoingGame.data?.game ? (
+            (onGoingGame.data?.game &&
+            onGoingGame.data?.game?.user1_score < 3 &&
+            onGoingGame.data?.game?.user2_score < 3 ? (
               <div
                 className={"w-full h-full flex justify-center items-center"}
                 style={{
@@ -102,19 +104,21 @@ const Game = () => {
             state={state}
             playerReadyRef={playerReadyRef}
           />
-          {onGoingGame.data?.game && (
-            <FourActions
-              playerReadyRef={playerReadyRef}
-              gameStarted={gameStarted}
-              username={username}
-              leftUserTop={leftUserTop}
-              leftUserBottom={leftUserBottom}
-              rightUserBottom={rightUserBottom}
-              rightUserTop={rightUserTop}
-              onGoingGame={onGoingGame}
-              handleRefetchPlayers={handleRefetchPlayers}
-            />
-          )}
+          {onGoingGame.data?.game &&
+            onGoingGame.data?.game?.user1_score < 3 &&
+            onGoingGame.data?.game?.user2_score < 3 && (
+              <FourActions
+                playerReadyRef={playerReadyRef}
+                gameStarted={gameStarted}
+                username={username}
+                leftUserTop={leftUserTop}
+                leftUserBottom={leftUserBottom}
+                rightUserBottom={rightUserBottom}
+                rightUserTop={rightUserTop}
+                onGoingGame={onGoingGame}
+                handleRefetchPlayers={handleRefetchPlayers}
+              />
+            )}
         </>
       )}
       {/* {!gameChange && <NoGame state={state} />} */}

@@ -209,16 +209,16 @@ const Game = ({
           newAngleRef.current = Math.random() * Math.PI;
           while (
             (newAngleRef.current > Math.PI / 6 &&
-            newAngleRef.current < (Math.PI * 5) / 6) ||
+              newAngleRef.current < (Math.PI * 5) / 6) ||
             (newAngleRef.current > (Math.PI * 7) / 6 &&
-            newAngleRef.current < (Math.PI * 11) / 6)
+              newAngleRef.current < (Math.PI * 11) / 6)
           ) {
             newAngleRef.current = Math.random() * 2 * Math.PI;
           }
           let enemyX = canvas.width - newBallPositionRef.current.x;
           let enemyY = newBallPositionRef.current.y;
           let enemyAngle = Math.PI - newAngleRef.current;
-          
+
           handleChangeBallDirection(
             enemyX,
             enemyY,
@@ -227,19 +227,19 @@ const Game = ({
           );
         }
       }, 1000);
-      
+
       if (bgImage.current === null) {
         bgImage.current = new Image();
         bgImage.current.src = "/game.jpeg";
       }
-      
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.globalAlpha = 0.5;
       ctx.drawImage(bgImage.current, 0, 0, canvas.width, canvas.height);
       ctx.globalAlpha = 1;
       // draw paddles and ball
       draw(canvasParams, ctx);
-      
+
       // move paddles
       movePaddlesOnline(canvasParams);
       // // console.log("move paddle" + movePaddleRef.current);
@@ -247,7 +247,7 @@ const Game = ({
         setGameStarted(false);
         onGoingGame.refetch();
       }
-      
+
       // // Check for collision with left paddle
       changeBallDirectionOnline(
         canvasParams,
@@ -256,7 +256,7 @@ const Game = ({
         handleChangeBallDirection,
         rightUser.current
       );
-      
+
       // Check for score
       checkLoseConditionOnline(
         canvas,
@@ -424,7 +424,11 @@ const Game = ({
     if (notif) {
       const parsedMessage = JSON.parse(notif.data);
       const message = parsedMessage?.message.split(" ");
-      if (message[0] === "/start" || message[0] === "/refetchTournament" || message[0] === "/refetchPlayers") {
+      if (
+        message[0] === "/start" ||
+        message[0] === "/refetchTournament" ||
+        message[0] === "/refetchPlayers"
+      ) {
         onGoingGame.refetch();
       }
     }
