@@ -50,19 +50,19 @@ export default function Home() {
           <div className="container mx-auto pt-12">
             <h2 className="text-2xl font-bold mb-4">Modes</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-              <div className="bg-muted rounded-lg p-4">
+              <div className="bg-muted rounded-lg p-4 hover:scale-105 transition duration-1000 ease-out"> 
                 <h3 className="text-lg font-bold mb-2">1 VS 1</h3>
                 <p className="text-muted-foreground">
                   Play against your friend in a classic match.
                 </p>
               </div>
-              <div className="bg-muted rounded-lg p-4">
+              <div className="bg-muted rounded-lg p-4 hover:scale-105 transition duration-1000 ease-out">
                 <h3 className="text-lg font-bold mb-2">2 vs 2</h3>
                 <p className="text-muted-foreground">
                   Team up with a friend and compete against another team.
                 </p>
               </div>
-              <div className="bg-muted rounded-lg p-4">
+              <div className="bg-muted rounded-lg p-4 hover:scale-105 transition duration-1000 ease-out">
                 <h3 className="text-lg font-bold mb-2">Tournament</h3>
                 <p className="text-muted-foreground">
                   Join a tournament and compete against other players.
