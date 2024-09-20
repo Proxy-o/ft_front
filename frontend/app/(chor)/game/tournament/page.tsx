@@ -19,32 +19,23 @@ export default function Page() {
   const user_id = getCookie("user_id") || "";
   const queryClient = useQueryClient();
   const { data, isLoading, isSuccess, refetch } = useGetOnGoingTournament();
+  const tournament = data?.tournament;
   const { newNotif } = useInvitationSocket();
   const { mutate: createTournament } = useCreateTournament(user_id);
-  const { mutate: startTournament } = useStartTournament(data?.tournament?.id);
+  const { mutate: startTournament } = useStartTournament(tournament?.id);
   const router = useRouter();
 
-  console.log(data);
 
-  useEffect(() => {
-    if (
-      !(
-        (data?.tournament?.user1?.id === user_id &&
-          data?.tournament?.user1_left) ||
-        (data?.tournament?.user2?.id === user_id &&
-          data?.tournament?.user2_left) ||
-        (data?.tournament?.user3?.id === user_id &&
-          data?.tournament?.user3_left) ||
-        (data?.tournament?.user4?.id === user_id &&
-          data?.tournament?.user4_left
-        ) &&
-          data?.tournament?.started &&
-          isSuccess &&
-          !data?.tournament?.winner)
-    ) {
-      // router.push(`/game/tournament/${data?.tournament?.id}`);
+  if (tournament?.started) {
+    if ((tournament?.user1.id === user_id && !tournament?.user1_left) ||
+        (tournament?.user2.id === user_id && !tournament?.user2_left) ||
+        (tournament?.user3.id === user_id && !tournament?.user3_left) ||
+        (tournament?.user4.id === user_id && !tournament?.user4_left)) {
+      router.push(`/game/tournament/${tournament.id}`);
     }
-  }, [isSuccess, isLoading]);
+  }
+  
+
   useEffect(() => {
     const notif = newNotif();
     if (notif) {
@@ -55,25 +46,35 @@ export default function Page() {
         refetch();
       } else if (message[0] === "/startTournament") {
         refetch();
-        router.push(`/game/tournament/${data?.tournament?.id}`);
+        router.push(`/game/tournament/${tournament?.id}`);
       }
     }
   }, [newNotif()?.data]);
 
   return (
     <div className="flex flex-col w-full h-fit justify-center items-center">
-      {data?.tournament ? (
+      {tournament ? (
         <>
-          <TournamentBoard tournament={data?.tournament} />
+          <TournamentBoard tournament={tournament} />
           <Button
             className="w-1/2"
             onClick={() => {
               if (isSuccess) {
-                startTournament(data?.tournament?.id);
+                router.push(`/game/tournament/${tournament.id}`);
               }
             }}
           >
-            go to tournament
+            Go to Tournament
+          </Button>
+          <Button
+            className="w-1/2"
+            onClick={() => {
+              if (isSuccess) {
+                startTournament(tournament?.id);
+              }
+            }}
+          >
+            Start Tournament
           </Button>
         </>
       ) : (
@@ -89,11 +90,11 @@ export default function Page() {
       {isSuccess && <Invitations mode="tournament" />}
 
       {isSuccess &&
-        data?.tournament &&
-        (!data?.tournament?.user1 ||
-          !data?.tournament?.user2 ||
-          !data?.tournament?.user3 ||
-          !data?.tournament?.user4) && <InviteFriends gameType="tournament" />}
+        tournament &&
+        (!tournament?.user1 ||
+          !tournament?.user2 ||
+          !tournament?.user3 ||
+          !tournament?.user4) && <InviteFriends gameType="tournament" />}
       <TournamentTable userid={user_id} />
     </div>
   );

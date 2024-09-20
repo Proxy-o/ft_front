@@ -326,10 +326,31 @@ class EndGame(APIView):
                 if not tournament.final.user1:
                     tournament.final.user1 = game.winner
                     tournament.final.save()
+                
+                # if final enemy left before finishing the semi1
+                if tournament.user3 == tournament.semi2.winner and tournament.user3_left:
+                    tournament.final.winner = tournament.final.user1
+                    tournament.winner = tournament.final.winner
+                if tournament.user4 == tournament.semi2.winner and tournament.user4_left:
+                    tournament.final.winner = tournament.final.user1
+                    tournament.winner = tournament.final.winner    
+                tournament.final.user1_score = 10
+                tournament.final.save()
+                tournament.save()
             elif game == tournament.semi2:
                 if not tournament.final.user2:
                     tournament.final.user2 = game.winner
                     tournament.final.save()
+                # if final enemy left before finishing the semi2
+                if tournament.user1 == tournament.semi1.winner and tournament.user1_left:
+                    tournament.final.winner = tournament.final.user2
+                    tournament.winner = tournament.final.winner
+                if tournament.user2 == tournament.semi1.winner and tournament.user2_left:
+                    tournament.final.winner = tournament.final.user2
+                    tournament.winner = tournament.final.winner
+                tournament.final.user2_score = 10
+                tournament.final.save()
+                tournament.save()
             elif game == tournament.final:
                 tournament.winner = tournament.final.winner
                 tournament.save()
@@ -404,12 +425,22 @@ class Surrender(APIView):
             if game == tournament.semi1:
                 tournament.final.user1 = game.winner
                 tournament.final.save()
+                if (tournament.semi2.winner == tournament.user3 and tournament.user3_left) or (tournament.semi2.winner == tournament.user4 and tournament.user4_left):
+                    tournament.final.winner = tournament.final.user1
+                    tournament.winner = tournament.final.winner
             elif game == tournament.semi2:
                 tournament.final.user2 = game.winner
                 tournament.final.save()
+                if (tournament.semi1.winner == tournament.user1 and tournament.user1_left) or (tournament.semi1.winner == tournament.user2 and tournament.user2_left):
+                    tournament.final.winner = tournament.final.user2
+                    tournament.winner = tournament.final.winner
             elif game == tournament.final:
                 tournament.winner = tournament.final.winner
-                tournament.save()
+            tournament.semi1.save()
+            tournament.semi2.save()
+            tournament.final.save()
+            tournament.save()
+            
                 # return Response({'message': 'Tournament ended', 'tournamentId': tournament.id}, status=status.HTTP_200_OK)
             return Response({'message': 'Game ended', 'gameId': game.id, 'tournamentId': tournament.id}, status=status.HTTP_200_OK)
 
@@ -445,43 +476,6 @@ class LeaveGame(APIView):
                 print("game deleted")
             else:
                 game.save()
-        elif game.type == 'tournament':
-            tournament = Tournament.objects.get(
-                Q(semi1=game) | Q(semi2=game) | Q(final=game))
-            if game == tournament.semi1 or game == tournament.semi2:
-                if user == tournament.user1:
-                    tournament.user1 = None
-                elif user == tournament.user2:
-                    tournament.user2 = None
-                elif user == tournament.user3:
-                    tournament.user3 = None
-                elif user == tournament.user4:
-                    tournament.user4 = None
-            if game == tournament.semi1:
-                if game.user1 == user:
-                    game.user1 = None
-                elif game.user2 == user:
-                    game.user2 = None
-            elif game == tournament.semi2:
-                if game.user1 == user:
-                    game.user1 = None
-                elif game.user2 == user:
-                    game.user2 = None
-            elif game == tournament.final:
-                if game.user1 == user:
-                    game.winner = game.user2
-                    game.user1_score = 10
-                    game.user2_score = 0
-                    tournament.winner = game.user2
-                elif game.user2 == user:
-                    game.winner = game.user1
-                    game.user1_score = 10
-                    game.user2_score = 0
-                    tournament.winner = game.user1
-            tournament.save()
-            game.save()
-
-            return Response({'message': 'Tournament ended', 'tournamentId': tournament.id, 'gameId': game.id}, status=status.HTTP_200_OK)
         return Response({'message': 'Game left'}, status=status.HTTP_200_OK)
 
 
@@ -573,98 +567,42 @@ class LeaveTournament(APIView):
             tournament.user3_left = True
         elif user == tournament.user4:
             tournament.user4_left = True
-        if tournament.semi1 and not tournament.semi1.winner and (tournament.semi1.user1 == user or tournament.semi1.user2 == user):
+        if (tournament.semi1.user1 == user or tournament.semi1.user2 == user) and not tournament.semi1.winner:
             if tournament.semi1.user1 == user:
+                tournament.user2_score = 10
                 tournament.semi1.winner = tournament.semi1.user2
-                tournament.semi1.user1_score = 0
-                tournament.semi1.user2_score = 10
-                tournament.final.user1 = tournament.semi1.winner
+                tournament.final.user1 = tournament.semi1.user2
             elif tournament.semi1.user2 == user:
+                tournament.user1_score = 10
                 tournament.semi1.winner = tournament.semi1.user1
-                tournament.semi1.user1_score = 10
-                tournament.semi1.user2_score = 0
-                tournament.final.user2 = tournament.semi1.winner
-        elif tournament.semi2 and not tournament.semi2.winner and (tournament.semi2.user1 == user or tournament.semi2.user2 == user):
+                tournament.final.user1 = tournament.semi1.user1
+            if tournament.final.user2 and ((tournament.final.user2 == tournament.user3 and tournament.user3_left) or (tournament.final.user2 == tournament.user4 and tournament.user4_left)):
+                tournament.final.winner = tournament.final.user1
+                tournament.winner = tournament.final.winner
+        elif (tournament.semi2.user1 == user or tournament.semi2.user2 == user) and not tournament.semi2.winner:
             if tournament.semi2.user1 == user:
+                tournament.user4_score = 10
                 tournament.semi2.winner = tournament.semi2.user2
-                tournament.semi2.user1_score = 0
-                tournament.semi2.user2_score = 10
-                tournament.final.user1 = tournament.semi2.winner
+                tournament.final.user2 = tournament.semi2.user2
             elif tournament.semi2.user2 == user:
+                tournament.user3_score = 10
                 tournament.semi2.winner = tournament.semi2.user1
-                tournament.semi2.user1_score = 10
-                tournament.semi2.user2_score = 0
-                tournament.final.user2 = tournament.semi2.winner
-        elif tournament.final and not tournament.final.winner and (tournament.final.user1 == user or tournament.final.user2 == user):
+                tournament.final.user2 = tournament.semi2.user1
+            if tournament.final.user1 and ((tournament.final.user1 == tournament.user1 and tournament.user1_left) or (tournament.final.user1 == tournament.user2 and tournament.user2_left)):
+                tournament.final.winner = tournament.final.user2
+                tournament.winner = tournament.final.winner
+        elif (tournament.final.user1 == user or tournament.final.user2 == user) and not tournament.final.winner:
             if tournament.final.user1 == user:
                 tournament.final.winner = tournament.final.user2
-                tournament.final.user1_score = 0
-                tournament.final.user2_score = 10
+                tournament.winner = tournament.final.winner
             elif tournament.final.user2 == user:
                 tournament.final.winner = tournament.final.user1
-                tournament.final.user1_score = 10
-                tournament.final.user2_score = 0
-            if tournament.final.winner:
                 tournament.winner = tournament.final.winner
         tournament.semi1.save()
         tournament.semi2.save()
         tournament.final.save()
         tournament.save()
         return Response({'message': 'Tournament left'}, status=status.HTTP_200_OK)
-
-
-class UpdateFinal(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [CustomJWTAuthentication]
-
-    def post(self, request):
-        # print("update final")
-        tournamentId = request.data.get('tournamentId')
-        tournament = Tournament.objects.get(id=tournamentId)
-        if not tournament:
-            return Response({'error': 'No ongoing tournament found'}, status=status.HTTP_204_NO_CONTENT)
-        if tournament.semi1.winner and not tournament.final.user1:
-            tournament.final.user1 = tournament.semi1.winner
-            if (tournament.final.user2 == tournament.user1 and tournament.user1_left) or (tournament.final.user2 == tournament.user2 and tournament.user2_left)or (tournament.final.user2 == tournament.user3 and tournament.user3_left)or (tournament.final.user2 == tournament.user4 and tournament.user4_left):
-                tournament.final.winner = tournament.final.user1
-                tournament.winner = tournament.final.winner
-                tournament.final.save()
-                tournament.save()
-                return Response({'message': 'Tournament ended', 'tournamentId': tournament.id}, status=status.HTTP_200_OK)
-        if tournament.semi2.winner and not tournament.final.user2:
-            tournament.final.user2 = tournament.semi2.winner
-            if (tournament.final.user1 == tournament.user1 and tournament.user1_left) or (tournament.final.user1 == tournament.user2 and tournament.user2_left)or (tournament.final.user1 == tournament.user3 and tournament.user3_left)or (tournament.final.user1 == tournament.user4 and tournament.user4_left):
-                tournament.final.winner = tournament.final.user2
-                tournament.winner = tournament.final.winner
-                tournament.final.save()
-                tournament.save()
-                return Response({'message': 'Tournament ended', 'tournamentId': tournament.id}, status=status.HTTP_200_OK)
-        tournament.final.save()
-        tournament.save()
-        return Response({'message': 'Final updated', 'tournamentId': tournament.id}, status=status.HTTP_200_OK)
-# class InviteToTournament(APIView):
-#     permission_classes = [permissions.IsAuthenticated]
-#     authentication_classes = [CustomJWTAuthentication]
-
-#     def post(self, request):
-#         # print("invite to tournament")
-#         user = request.user
-#         try:
-#             tournament = Tournament.objects.filter(
-#                 participants=user).filter(winner=None).last()
-#         except Tournament.DoesNotExist:
-#             return Response({'error': 'No ongoing tournament found'}, status=status.HTTP_204_NO_CONTENT)
-#         receiver_id = request.data.get('receiver')
-#         try:
-#             receiver = User.objects.get(id=receiver_id)
-#         except User.DoesNotExist:
-#             return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
-#         if receiver in tournament.participants.all():
-#             return Response({'error': 'User already in the tournament'}, status=status.HTTP_200_OK)
-#         Invitation = Invitation(
-#             sender=user, receiver=receiver, type="tournament").save()
-#         serializer = InvitationSerializer(Invitation)
-#         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class AcceptInvitationTournament(APIView):
@@ -686,6 +624,10 @@ class AcceptInvitationTournament(APIView):
             return Response({'error': 'This user is not your friend'}, status=status.HTTP_403_FORBIDDEN)
         invitation.is_accepted = True
         invitation.save()
+        user_tournament = Tournament.objects.filter(
+            Q(user1=user) | Q(user2=user) | Q(user3=user) | Q(user4=user)).filter(winner=None).last()
+        if user_tournament:
+            return Response({'error': 'You are already in a tournament'}, status=status.HTTP_200_OK)
         tournament = Tournament.objects.filter(
             Q(user1=sender) | Q(user2=sender) | Q(user3=sender) | Q(user4=sender)).filter(winner=None).last()
         # if tournament does not exist

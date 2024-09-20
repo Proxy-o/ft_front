@@ -15,6 +15,7 @@ import TournamentBoard from "../../components/tournamentBoard";
 import Invitations from "../../components/invitations";
 import { routeModule } from "next/dist/build/templates/app-page";
 import { useRouter } from "next/navigation";
+import useGameSocket from "../../hooks/sockets/useGameSocket";
 
 
 export default function Page({ params }: { params: { tournamentId: string } }) {
@@ -22,6 +23,7 @@ export default function Page({ params }: { params: { tournamentId: string } }) {
   const user_id = getCookie("user_id") || "";
   const { mutate: leavetournament } = useLeavetournament();
   const { newNotif } = useInvitationSocket();
+  const { handleSurrender } = useGameSocket();
   const { onGoingGame } = useGetGame(
     user_id || "0",
     "tournament",
@@ -71,6 +73,11 @@ export default function Page({ params }: { params: { tournamentId: string } }) {
               <Button
                 onClick={() => {
                   leavetournament(tournamentId);
+                  handleSurrender(
+                    (onGoingGame.data?.game?.user1?.id || "0") === user_id ? onGoingGame.data?.game?.user1?.username : onGoingGame.data?.game?.user2?.username,
+                    (onGoingGame.data?.game?.user1?.id || "0") === user_id ? onGoingGame.data?.game?.user2?.username : onGoingGame.data?.game?.user1?.username,
+                    onGoingGame.data?.game?.id || "0"
+                  );
                 }}
               >
                 Leave Tournament

@@ -20,7 +20,6 @@ urlpatterns = [
     path('deleteTournament', views.DeleteTournament.as_view()),
     path('createTournament', views.TournamentView.as_view()),
     path('leaveTournament', views.LeaveTournament.as_view()),
-    path('updateFinal', views.UpdateFinal.as_view()),
     path('accept_invitation_tournament', views.AcceptInvitationTournament.as_view()),
     path('start_tournament', views.StartTournament.as_view()),
     # games for a user with a given id
