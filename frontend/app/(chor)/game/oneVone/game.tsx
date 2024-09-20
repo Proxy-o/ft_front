@@ -209,16 +209,16 @@ const Game = ({
           newAngleRef.current = Math.random() * Math.PI;
           while (
             (newAngleRef.current > Math.PI / 6 &&
-              newAngleRef.current < (Math.PI * 5) / 6) ||
+            newAngleRef.current < (Math.PI * 5) / 6) ||
             (newAngleRef.current > (Math.PI * 7) / 6 &&
-              newAngleRef.current < (Math.PI * 11) / 6)
+            newAngleRef.current < (Math.PI * 11) / 6)
           ) {
             newAngleRef.current = Math.random() * 2 * Math.PI;
           }
           let enemyX = canvas.width - newBallPositionRef.current.x;
           let enemyY = newBallPositionRef.current.y;
           let enemyAngle = Math.PI - newAngleRef.current;
-
+          
           handleChangeBallDirection(
             enemyX,
             enemyY,
@@ -227,23 +227,27 @@ const Game = ({
           );
         }
       }, 1000);
-
+      
       if (bgImage.current === null) {
         bgImage.current = new Image();
         bgImage.current.src = "/game.jpeg";
       }
-
+      
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.globalAlpha = 0.5;
       ctx.drawImage(bgImage.current, 0, 0, canvas.width, canvas.height);
       ctx.globalAlpha = 1;
       // draw paddles and ball
       draw(canvasParams, ctx);
-
+      
       // move paddles
       movePaddlesOnline(canvasParams);
       // // console.log("move paddle" + movePaddleRef.current);
-
+      if (onGoingGame?.data?.game?.winner?.username) {
+        setGameStarted(false);
+        onGoingGame.refetch();
+      }
+      
       // // Check for collision with left paddle
       changeBallDirectionOnline(
         canvasParams,
@@ -252,7 +256,7 @@ const Game = ({
         handleChangeBallDirection,
         rightUser.current
       );
-
+      
       // Check for score
       checkLoseConditionOnline(
         canvas,
@@ -359,6 +363,7 @@ const Game = ({
           newAngleRef.current = parseFloat(message[3]);
         }
       } else if (message[0] === "/show") {
+        console.log("showing");
         if (!gameStartedRef.current) {
           handleStartGame(
             leftUser.current?.username || "",
@@ -388,11 +393,6 @@ const Game = ({
           changeTime(parseInt(message[1]));
           enemyLeftGameRef.current = false; // todo: tournament forfeit status
         }
-      } else if (message[0] === "/refetchPlayers") {
-        query.invalidateQueries({ queryKey: ["friends", user_id] });
-        query.invalidateQueries({ queryKey: ["game"] });
-        query.invalidateQueries({ queryKey: ["tournament"] });
-        onGoingGame.refetch();
       } else if (message[0] === "/surrender") {
         if (message[1] !== username) {
           state.current = "surrendered";
@@ -427,7 +427,7 @@ const Game = ({
     if (notif) {
       const parsedMessage = JSON.parse(notif.data);
       const message = parsedMessage?.message.split(" ");
-      if (message[0] === "/start" || message[0] === "/refetchTournament") {
+      if (message[0] === "/start" || message[0] === "/refetchTournament" || message[0] === "/refetchPlayers") {
         onGoingGame.refetch();
       }
     }

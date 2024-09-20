@@ -112,7 +112,10 @@ class InvitationConsumer(WebsocketConsumer):
             self.send_error('Game not found')
             return
         time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        if game.type == 'four':
+        participants = []
+        if game.type == 'two':
+            participants = [game.user1, game.user2]
+        elif game.type == 'four':
             participants = [game.user1, game.user2, game.user3, game.user4]
         elif game.type == 'tournament':
             tournament = Tournament.objects.filter(Q(semi1=game) | Q(semi2=game) | Q(final=game)).filter(Q(user1=self.user) | Q(user2=self.user) | Q(user3=self.user) | Q(user4=self.user)).last()
