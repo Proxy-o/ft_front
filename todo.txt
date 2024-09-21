@@ -1,0 +1,3 @@
+- fix status button
+- add playing status 
+- add loading status
