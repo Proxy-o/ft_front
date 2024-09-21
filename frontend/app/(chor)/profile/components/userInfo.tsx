@@ -129,7 +129,11 @@ export default function UserInfo({
                   <p
                     className={cn(
                       "text-sm sm:text-m",
-                      user.status === "online" && "text-green-500"
+                      user.status === "online"
+                        ? "text-green-500"
+                        : user.status === "playing"
+                        ? "text-yellow-500"
+                        : "text-red-500"
                     )}
                   >
                     {user.status}
@@ -222,7 +226,9 @@ export default function UserInfo({
                     <Button
                       className="mt-6 w-full bg-red-400/20"
                       variant="outline"
-                      onClick={() => reject({ to_reject_id: recReqId, friend: user })}
+                      onClick={() =>
+                        reject({ to_reject_id: recReqId, friend: user })
+                      }
                     >
                       Decline
                     </Button>

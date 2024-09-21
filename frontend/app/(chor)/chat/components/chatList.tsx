@@ -18,7 +18,7 @@ import { Card } from "@/components/ui/card";
 
 export default function ChatList() {
   const { data: sender, isSuccess: isSender } = useGetUser("0");
-  const { data: friends, isSuccess } = useGetFriends(sender?.id );
+  const { data: friends, isSuccess } = useGetFriends(sender?.id);
   const [receiver, setReceiver] = React.useState<User>();
   const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
   const handleChatOpen = (friend: User) => {
@@ -79,28 +79,26 @@ export default function ChatList() {
           <Drawer>
             <DrawerContent className=" max-h-96 h-full ">
               <div className="h-full overflow-auto">
-
-              {isSuccess &&
-                friends.map((friend: User) => {
-                  return (
-                    <div
-                      key={friend.id}
-                      onClick={() => handleChatOpen(friend)}
-                      className="cursor-pointer"
-                    >
-                      <DrawerClose className=" w-full">
-                        <ChatFriendCard
-                          friend={friend}
-                          setReceiverId={setReceiverId}
-                        />
-                      </DrawerClose>
-                    </div>
-                  );
-                })}
+                {isSuccess &&
+                  friends.map((friend: User) => {
+                    return (
+                      <div
+                        key={friend.id}
+                        onClick={() => handleChatOpen(friend)}
+                        className="cursor-pointer"
+                      >
+                        <DrawerClose className=" w-full">
+                          <ChatFriendCard
+                            friend={friend}
+                            setReceiverId={setReceiverId}
+                          />
+                        </DrawerClose>
+                      </div>
+                    );
+                  })}
               </div>
-                
             </DrawerContent>
-            <div className="flex   justify-center   absolute  left-2 z-50">
+            <div className="flex   justify-center   absolute  right-2 top-4 z-50">
               <DrawerTrigger className="    w-14 h-9 items-center rounded-full  transition-transform flex justify-center  ">
                 <Users className="w-full h-30 hover:scale-90 transition-all" />
               </DrawerTrigger>

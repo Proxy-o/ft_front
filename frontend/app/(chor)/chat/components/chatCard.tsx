@@ -15,6 +15,7 @@ import { AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import readMessages from "../hooks/useReadMessages";
 import { Message } from "../types";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 export default function ChatCard({
   receiver,
@@ -107,13 +108,20 @@ export default function ChatCard({
       ref={chatRef}
     >
       <Link
-        className="  flex justify-end md:justify-start ml-2 p-2 shadow-2xl bg-secondary/15 "
+        className="  flex justify-start ml-2 p-2 shadow-2xl rounded-md bg-secondary/50 mr-2 mt-1 "
         href={`/profile/${receiver.id}`}
       >
         <Avatar className=" mr-2 relative">
-          {receiver.status === "online" && (
-            <div className="bg-green-500 size-2 rounded-full absolute bottom-[8px] right-1 z-50"></div>
-          )}
+          <div
+            className={cn(
+              " size-2 rounded-full absolute bottom-[0px] right-0 z-50 border border-white",
+              receiver.status === "online"
+                ? "bg-green-500"
+                : receiver.status === "playing"
+                ? "bg-yellow-500"
+                : "bg-red-500"
+            )}
+          />
           <AvatarImage
             src={receiver.avatar}
             alt={receiver.username}
@@ -123,7 +131,7 @@ export default function ChatCard({
             {receiver.username?.slice(0, 2)}
           </AvatarFallback>
         </Avatar>
-        <div className="text-center flex flex-col justify-center items-center mr-2 w-fit overflow-clip ">
+        <div className="flex flex-col   mr-2 w-fit overflow-clip ">
           {receiver.username}
           <p className="text-xs text-gray-600">{receiver.status}</p>
         </div>

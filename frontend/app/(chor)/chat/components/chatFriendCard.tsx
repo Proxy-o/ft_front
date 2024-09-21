@@ -1,5 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User } from "@/lib/types";
+import { cn } from "@/lib/utils";
 import { MessageCircle, User2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -22,9 +23,16 @@ export default function ChatFriendCard({
     <div className="flex p-2  rounded-sm  bg-secondary/60 hover:bg-secondary my-1 w-full ">
       <div className="flex flex-1 ">
         <Avatar className="rounded-full mr-2 relative">
-          {friend.status === "online" && (
-            <div className="bg-green-500 size-2 rounded-full absolute bottom-[5px] right-1 z-50"></div>
-          )}
+          <div
+            className={cn(
+              " size-2 rounded-full absolute bottom-[0px] right-0 z-50 border border-white",
+              friend.status === "online"
+                ? "bg-green-500"
+                : friend.status === "playing"
+                ? "bg-yellow-500"
+                : "bg-red-500"
+            )}
+          />
           <AvatarImage
             src={friend.avatar}
             alt="profile image"
