@@ -10,13 +10,14 @@ export default function useChatSocket() {
   const token = getCookie("refresh");
 
   useEffect(() => {
-    if (!isLoading && user?.id) {
+
+    if (!isLoading && user?.s_token) {
       setSocketUrl(
         process.env.NEXT_PUBLIC_CHAT_URL +
           "2/?refresh=" +
           token +
-          "&user_id=" +
-          user?.id
+          "&s_token=" +
+          user?.s_token
       );
     }
   }, [isLoading, user, token]);

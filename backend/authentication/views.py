@@ -1,4 +1,3 @@
-import requests
 from django.contrib.auth.models import User
 from rest_framework.pagination import PageNumberPagination
 from urllib.parse import urlencode
@@ -38,6 +37,8 @@ def signup(request):
             return Response({'password': e}, status=status.HTTP_400_BAD_REQUEST)
         user = serializer.save()
         user.set_password(request.data['password'])
+        # set a code to s_token
+        user.s_token = User.objects.make_random_password()
         user.avatar = f'images/{user.id % 4}.jpg'
         user.save()
         return Response({'user': serializer.data}, status=200)
@@ -276,7 +277,7 @@ class UserDetail(APIView):
             return Response(status=status.HTTP_404_NOT_FOUND)
 
         serializer = UserSerializer(user, context={'request': request})
-        # print(serializer.data)
+        print(serializer.data)
         return Response(serializer.data)
 
     def put(self, request, pk, format=None):

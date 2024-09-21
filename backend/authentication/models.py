@@ -24,6 +24,7 @@ class User(AbstractUser):
     otpauth_url = models.CharField(max_length=225, blank=True, null=True)
     otp_base32 = models.CharField(max_length=255, null=True)
     qr_code = models.ImageField(upload_to="qrcode/", blank=True, null=True)
+    s_token = models.CharField(max_length=255, blank=True, null=True)
     # oauth
     has_oauth_credentials = models.BooleanField(default=False)
 # oauth credentials

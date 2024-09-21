@@ -18,21 +18,17 @@ def get_user(scope):
     refresh_token = query_string.get('refresh')
     if not refresh_token:
         return AnonymousUser()
-    # get the user_id from the query string
-    query_user_id = query_string.get('user_id')
-    if not query_user_id:
+    s_token = query_string.get('s_token')
+    print("token",s_token)
+    if not s_token:
         return AnonymousUser()
     try:
-
         payload = RefreshToken(refresh_token[0]).payload
         user_id = payload['user_id']
-        print("user_id",type(user_id))
-        print("query_user_id",type(query_user_id[0]))
-        print("wach am3lm ",str(user_id) == str(query_user_id[0] ))
-        
-        if str(user_id) != str(query_user_id[0] ):
-            return AnonymousUser()
         user = User.objects.get(pk=user_id)
+        print("useeeer",user)
+        if str(user.s_token) != s_token[0]:
+            return AnonymousUser()
     except Exception as exception:
         return AnonymousUser()
     if not user.is_active:
