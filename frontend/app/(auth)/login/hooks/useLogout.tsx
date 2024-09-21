@@ -17,7 +17,6 @@ export default function useLogout() {
       return response.data;
     },
     onSuccess: () => {
-      toast.info("Logged out!see you soon");
       deleteCookie("logged_in");
       deleteCookie("refresh");
       deleteCookie("access");
