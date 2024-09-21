@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card";
 import Invitations from "../components/invitations";
 import InviteFriends from "../components/inviteFriend";
-import Game from "./game";
+import Game from "./components/game";
 
 export default function Page() {
   return (

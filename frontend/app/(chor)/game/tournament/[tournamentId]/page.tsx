@@ -1,6 +1,6 @@
 "use client";
 import { Card } from "@/components/ui/card";
-import Game from "../../oneVone/game";
+import Game from "../../oneVone/components/game";
 import getCookie from "@/lib/functions/getCookie";
 import useGetUser from "@/app/(chor)/profile/hooks/useGetUser";
 import useCreateTournament from "../../hooks/useCreateTournament";

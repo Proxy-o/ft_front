@@ -4,14 +4,14 @@ import { useEffect, useRef, useState } from "react";
 import useGameSocket from "@/app/(chor)/game/hooks/sockets/useGameSocket";
 import { User } from "@/lib/types";
 import getCookie from "@/lib/functions/getCookie";
-import useGetUser from "../../profile/hooks/useGetUser";
-import NoGameFour from "../components/noGameFour";
-import useSurrenderGame from "../hooks/useSurrender";
-import PreGame from "../components/preGame";
-import useGetFourGame from "../hooks/useGetFourGame";
+import useGetUser from "../../../profile/hooks/useGetUser";
+import NoGameFour from "../../components/noGameFour";
+import useSurrenderGame from "../../hooks/useSurrender";
+import PreGame from "../../components/preGame";
+import useGetFourGame from "../../hooks/useGetFourGame";
 import Canvas from "./canvas";
-import useInvitationSocket from "../hooks/sockets/useInvitationSocket";
-import FourActions from "../components/fourActions";
+import useInvitationSocket from "../../hooks/sockets/useInvitationSocket";
+import FourActions from "./fourActions";
 
 const Game = () => {
   const playerReadyRef = useRef(0);

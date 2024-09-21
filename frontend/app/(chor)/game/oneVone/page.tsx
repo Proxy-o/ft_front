@@ -5,7 +5,7 @@ import Invitations from "../components/invitations";
 import InviteFriends from "../components/inviteFriend";
 import useGetGame from "../hooks/useGetGames";
 import getCookie from "@/lib/functions/getCookie";
-import Game from "./game";
+import Game from "./components/game";
 
 export default function Page() {
   const user_id = getCookie("user_id") || "";

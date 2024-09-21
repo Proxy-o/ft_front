@@ -24,6 +24,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/(chor)/game/oneVone"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/(chor)/game/oneVone", "app/(chor)/game/twoVtwo/components"],
   "exclude": ["node_modules"]
 }

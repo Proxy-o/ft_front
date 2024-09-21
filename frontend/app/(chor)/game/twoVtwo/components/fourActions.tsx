@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { DoorOpen, Flag, Gamepad } from "lucide-react";
-import useLeaveGame from "../hooks/useLeaveGame";
-import useSurrenderGame from "../hooks/useSurrender";
-import useGameSocket from "../hooks/sockets/useGameSocket";
+import useLeaveGame from "../../hooks/useLeaveGame";
+import useSurrenderGame from "../../hooks/useSurrender";
+import useGameSocket from "../../hooks/sockets/useGameSocket";
 
 const FourActions = ({
   playerReadyRef,
@@ -27,7 +27,7 @@ const FourActions = ({
 }) => {
   const { mutate: surrenderGame } = useSurrenderGame();
 
-  const { mutate: leaveGame } = useLeaveGame();
+  const { mutate: leaveGame } = useLeaveGame(undefined);
 
   const { handleStartGameFour } = useGameSocket();
   return (

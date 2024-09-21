@@ -1,32 +1,33 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { canvasParams } from "../types";
-import { draw, drawPlayers } from "../methods/draw";
-import { movePaddlesOnline } from "../methods/movePaddles";
-import { changeBallDirectionOnline } from "../methods/changeBallDirection";
-import { checkLoseConditionOnline } from "../methods/checkLoseCondition";
-import { changeScoreOnline } from "../methods/changeScore";
-import checkCollisionWithHorizontalWalls from "../methods/checkCollisionWithHorizontalWalls";
-import { moveBall } from "../methods/moveBall";
+import { canvasParams } from "../../types";
+import { draw, drawPlayers } from "../../methods/draw";
+import { movePaddlesOnline } from "../../methods/movePaddles";
+import { changeBallDirectionOnline } from "../../methods/changeBallDirection";
+import { checkLoseConditionOnline } from "../../methods/checkLoseCondition";
+import { changeScoreOnline } from "../../methods/changeScore";
+import checkCollisionWithHorizontalWalls from "../../methods/checkCollisionWithHorizontalWalls";
+import { moveBall } from "../../methods/moveBall";
 import { User } from "@/lib/types";
 import getCookie from "@/lib/functions/getCookie";
-import useGetGame from "../hooks/useGetGames";
-import useEndGame from "../hooks/useEndGame";
+import useGetGame from "../../hooks/useGetGames";
+import useEndGame from "../../hooks/useEndGame";
 import useGameSocket from "@/app/(chor)/game/hooks/sockets/useGameSocket";
 import useInvitationSocket from "@/app/(chor)/game/hooks/sockets/useInvitationSocket";
-import { enemyLeftGame } from "../methods/enemyLeftGame";
-import useGetUser from "../../profile/hooks/useGetUser";
-import useSurrenderGame from "../hooks/useSurrender";
-import useLeaveGame from "../hooks/useLeaveGame";
+import { enemyLeftGame } from "../../methods/enemyLeftGame";
+import useGetUser from "../../../profile/hooks/useGetUser";
+import useSurrenderGame from "../../hooks/useSurrender";
+import useLeaveGame from "../../hooks/useLeaveGame";
 import { Button } from "@/components/ui/button";
 import { DoorOpen, Flag, Gamepad } from "lucide-react";
 import { Card } from "@/components/ui/card";
-import NoGame from "../components/noGame";
-import PreGame from "../components/preGame";
-import Sockets from "../components/sockets";
+import NoGame from "../../components/noGame";
+import PreGame from "../../components/preGame";
+import Sockets from "../../components/sockets";
 import { Toaster } from "@/components/ui/sonner";
 import { useQueryClient } from "@tanstack/react-query";
+import Actions from "./actions";
 
 const Game = ({
   type,
@@ -77,15 +78,14 @@ const Game = ({
     handleSurrender,
   } = useGameSocket();
 
-  const { newNotif, handleAcceptTournamentInvitation, handleRefetchPlayers } =
-    useInvitationSocket();
+  const { newNotif } = useInvitationSocket();
 
   const query = useQueryClient();
 
   const user_id = getCookie("user_id") || "";
   const { data: user } = useGetUser(user_id || "0");
-  const { mutate: surrenderGame } = useSurrenderGame();
-  const { mutate: leaveGame } = useLeaveGame();
+  // const { mutate: surrenderGame } = useSurrenderGame();
+  // const { mutate: leaveGame } = useLeaveGame();
   const { mutate: endGame } = useEndGame();
 
   userRef.current = user;
@@ -112,6 +112,30 @@ const Game = ({
 
   gameIdRef.current = onGoingGame?.data?.game?.id || "";
 
+  const paddleHeight = 60;
+  const paddleWidth = 15;
+  let ballRadius = 10;
+
+  let canvasParams: canvasParams = {
+    canvas,
+    paddleRightX: 0,
+    paddleLeftX: 0,
+    paddleLeftYRef,
+    PaddleRightYRef,
+    paddleRightDirectionRef,
+    newBallPositionRef,
+    paddleWidth,
+    paddleHeight,
+    ballRadius,
+    upPressedRef,
+    downPressedRef,
+    isFirstTime,
+    rightScoreRef,
+    leftScoreRef,
+    leftUserRef: leftUser,
+    rightUserRef: rightUser,
+    gameIdRef,
+  };
   useEffect(() => {
     if (canvas === null && canvasRef.current) {
       setCanvas(canvasRef.current);
@@ -120,12 +144,11 @@ const Game = ({
     const ctx = canvas?.getContext("2d");
     if (!ctx) return;
 
-    let ballRadius = 10;
     let x = canvas.width / 2;
     let y = canvas.height / 2;
-    const paddleHeight = 60;
-    const paddleWidth = 15;
 
+    const paddleLeftX = 0;
+    const paddleRightX = canvas.width - paddleWidth;
     paddleLeftYRef.current = (canvas.height - paddleHeight) / 2;
     PaddleRightYRef.current = (canvas.height - paddleHeight) / 2;
 
@@ -134,29 +157,8 @@ const Game = ({
     rightScoreRef.current = 0;
     leftScoreRef.current = 0;
 
-    const paddleLeftX = 0;
-    const paddleRightX = canvas.width - paddleWidth;
-
-    let canvasParams: canvasParams = {
-      canvas,
-      paddleLeftYRef,
-      paddleRightX,
-      PaddleRightYRef,
-      paddleRightDirectionRef,
-      newBallPositionRef,
-      paddleLeftX,
-      paddleWidth,
-      paddleHeight,
-      ballRadius,
-      upPressedRef,
-      downPressedRef,
-      isFirstTime,
-      rightScoreRef,
-      leftScoreRef,
-      leftUserRef: leftUser,
-      rightUserRef: rightUser,
-      gameIdRef,
-    };
+    canvasParams.paddleRightX = paddleRightX;
+    canvasParams.paddleLeftX = paddleLeftX;
 
     const handleKeyEvent = (e: KeyboardEvent) => {
       // preventDefault to prevent the page from scrolling
@@ -242,11 +244,6 @@ const Game = ({
 
       // move paddles
       movePaddlesOnline(canvasParams);
-      // // console.log("move paddle" + movePaddleRef.current);
-      if (onGoingGame?.data?.game?.winner?.username) {
-        setGameStarted(false);
-        onGoingGame.refetch();
-      }
 
       // // Check for collision with left paddle
       changeBallDirectionOnline(
@@ -447,89 +444,24 @@ const Game = ({
                 className={`w-full h-full`}
               ></canvas>
             ) : (
-              <div
-                className={`w-full h-full flex justify-center items-center ${
-                  gameStartedRef.current ? "hidden" : "block"
-                }`}
-                style={{
-                  backgroundImage: "url('/game.jpeg')",
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }}
-              >
-                <PreGame
-                  type={type}
-                  leftUserTop={leftUser.current}
-                  rightUserTop={rightUser.current}
-                  leftUserBottom={null}
-                  rightUserBottom={null}
-                />
-              </div>
+              <PreGame
+                type={type}
+                leftUserTop={leftUser.current}
+                rightUserTop={rightUser.current}
+                leftUserBottom={null}
+                rightUserBottom={null}
+              />
             )}
           </>
         ) : (
           <NoGame state={state} />
         )}
       </Card>
-      {rightUser.current?.username && (
-        <div className="w-full md:w-5/6 h-[70px] max-w-[800px] flex justify-between items-center mt-4">
-          {!gameStartedRef.current ? (
-            <>
-              <div className="ml-[80px] h-5/6 w-1/6">
-                <Button
-                  onClick={() => {
-                    handleStartGame(
-                      leftUser.current?.username || "",
-                      rightUser.current?.username || "",
-                      gameIdRef.current
-                    );
-                  }}
-                  className="h-full w-full bg-primary"
-                >
-                  <Gamepad size={25} />
-                  Start
-                </Button>
-              </div>
-              {type !== "tournament" && (
-                <div className="mr-[80px] h-5/6 w-1/6">
-                  <Button
-                    onClick={() => {
-                      leaveGame();
-                      handleSurrender(
-                        leftUser.current?.username || "",
-                        rightUser.current?.username || "",
-                        gameIdRef.current
-                      );
-                    }}
-                    className="h-full w-full bg-primary"
-                  >
-                    <DoorOpen size={25} />
-                    Leave
-                  </Button>
-                </div>
-              )}
-            </>
-          ) : (
-            <div className="ml-auto mr-[80px] h-5/6 w-1/6">
-              <Button
-                onClick={() => {
-                  setCanvas(null);
-                  surrenderGame();
-                  handleSurrender(
-                    leftUser.current?.username || "",
-                    rightUser.current?.username || "",
-                    gameIdRef.current
-                  );
-                }}
-                className="h-full w-full bg-primary"
-              >
-                <Flag size={25} />
-                Surrender
-              </Button>
-            </div>
-          )}
-        </div>
-      )}
+      <Actions
+        canvasPrams={canvasParams}
+        gameStartedRef={gameStartedRef}
+        type={type}
+      />
     </>
   );
 };

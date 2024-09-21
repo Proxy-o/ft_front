@@ -271,6 +271,7 @@ class GameConsumer(WebsocketConsumer):
         #     )
 
     def handle_surrender(self, split):
+        time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         surrenderer = split[1]
         winner_username = split[2]
         async_to_sync(self.channel_layer.group_send)(
@@ -278,7 +279,7 @@ class GameConsumer(WebsocketConsumer):
             {
                 'type': 'send_message',
                 'user': surrenderer,
-                'message': f'/surrender {surrenderer} {winner_username}'
+                'message': f'/surrender {surrenderer} {winner_username} {time}'
             }
         )
         async_to_sync(self.channel_layer.group_send)(
@@ -286,7 +287,7 @@ class GameConsumer(WebsocketConsumer):
             {
                 'type': 'send_message',
                 'user': winner_username, 'message':
-                f'/surrender {surrenderer} {winner_username}'
+                f'/surrender {surrenderer} {winner_username} {time}'
             }
         )
 

@@ -1,17 +1,17 @@
 import { useEffect, useRef, useState } from "react";
-import { enemyLeftGameFour } from "../methods/enemyLeftGame";
-import checkCollisionWithHorizontalWalls from "../methods/checkCollisionWithHorizontalWalls";
-import { checkLoseConditionFour } from "../methods/checkLoseCondition";
-import { changeScoreFour } from "../methods/changeScore";
-import { changeBallDirectionFour } from "../methods/changeBallDirection";
-import { movePaddlesFour } from "../methods/movePaddles";
-import { drawFour } from "../methods/draw";
-import useGameSocket from "../hooks/sockets/useGameSocket";
-import useInvitationSocket from "../hooks/sockets/useInvitationSocket";
+import { enemyLeftGameFour } from "../../methods/enemyLeftGame";
+import checkCollisionWithHorizontalWalls from "../../methods/checkCollisionWithHorizontalWalls";
+import { checkLoseConditionFour } from "../../methods/checkLoseCondition";
+import { changeScoreFour } from "../../methods/changeScore";
+import { changeBallDirectionFour } from "../../methods/changeBallDirection";
+import { movePaddlesFour } from "../../methods/movePaddles";
+import { drawFour } from "../../methods/draw";
+import useGameSocket from "../../hooks/sockets/useGameSocket";
+import useInvitationSocket from "../../hooks/sockets/useInvitationSocket";
 import { User } from "@/lib/types";
-import { canvasParamsFour } from "../types";
-import { moveBallFour } from "../methods/moveBall";
-import useEndGameFour from "../hooks/useEndGameFour";
+import { canvasParamsFour } from "../../types";
+import { moveBallFour } from "../../methods/moveBall";
+import useEndGameFour from "../../hooks/useEndGameFour";
 import { toast } from "sonner";
 
 const Canvas = ({
