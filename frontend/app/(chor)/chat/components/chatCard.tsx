@@ -13,8 +13,9 @@ import { User } from "@/lib/types";
 import { Avatar } from "@radix-ui/react-avatar";
 import { AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import readMessages from "../hooks/useReadMessages";
-import { Message } from "../types";
+import { LastMessage, Message } from "../types";
 import Link from "next/link";
+import useChatSocket from "../../game/hooks/sockets/useChatSocket";
 
 export default function ChatCard({
   receiver,
@@ -25,14 +26,9 @@ export default function ChatCard({
 }) {
   const senderId = sender.id;
   const receiverId = receiver.id;
-  const token = getCookie("refresh");
-  const socketUrl = process.env.NEXT_PUBLIC_CHAT_URL + "2/?refresh=" + token;
-  const { sendJsonMessage, lastMessage, lastJsonMessage } = useWebSocket(
-    socketUrl,
-    {
-      share: true,
-    }
-  );
+
+  const { lastJsonMessage, sendJsonMessage, lastMessage } = useChatSocket();
+
   const [isBlocked, setIsBlocked] = useState(false);
 
   const [hasMore, setHasMore] = useState(true);

@@ -19,8 +19,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import useLogout from "@/app/(auth)/login/hooks/useLogout";
 import { useEffect, useState } from "react";
-import getCookie from "@/lib/functions/getCookie";
-import useWebSocket from "react-use-websocket";
 import { linksProps } from "./types";
 import { useQueryClient } from "@tanstack/react-query";
 import type { User } from "@/lib/types";
@@ -35,6 +33,9 @@ import {
 } from "@/components/ui/popover";
 import useGetInvitations from "@/app/(chor)/game/hooks/useGetInvitations";
 import useGetUser from "@/app/(chor)/profile/hooks/useGetUser";
+import useChatSocket from "@/app/(chor)/game/hooks/sockets/useChatSocket";
+import useInvitationSocket from "@/app/(chor)/game/hooks/sockets/useInvitationSocket";
+import getCookie from "@/lib/functions/getCookie";
 
 export default function MobilNav() {
   const [popOverOpen, setPopOverOpen] = useState(false);
@@ -82,23 +83,41 @@ export default function MobilNav() {
     variant: "default",
   };
 
-  const token = getCookie("refresh");
-  const socketUrl = process.env.NEXT_PUBLIC_CHAT_URL + "2/?refresh=" + token;
-  const invitationSocketUrl =
-    process.env.NEXT_PUBLIC_INVITATION_URL + "/?refresh=" + token;
+  const { data: user, isSuccess } = useGetUser("0");
 
-  const { lastJsonMessage }: { lastJsonMessage: LastMessage } = useWebSocket(
-    socketUrl,
-    {
-      share: true,
+  const {
+    lastJsonMessage,
+    readyState,
+  }: {
+    lastJsonMessage: LastMessage;
+    readyState: number;
+  } = useChatSocket();
+  const logged_in = getCookie("logged_in");
+
+  useEffect(() => {
+    if (
+      logged_in != "yes" &&
+      path != "/login" &&
+      path != "/register" &&
+      path != "/game/local"
+    ) {
+      return logout();
     }
-  );
+  }, [logged_in, router, logout, path]);
+
+  useEffect(() => {
+    if (readyState === 3 && isSuccess) {
+      logout();
+    }
+  }, [lastJsonMessage, readyState, logout, isSuccess]);
+
   const {
     lastJsonMessage: invitationLastMessage,
-  }: { lastJsonMessage: LastMessage } = useWebSocket(invitationSocketUrl);
+  }: {
+    lastJsonMessage: any;
+  } = useInvitationSocket();
   const [showNotif, setShowNotif] = useState(false);
   const [reqNotif, setReqNotif] = useState(false);
-  const {data: user} = useGetUser("0")
   const { data: friends, isSuccess: isSuccessFriends } = useGetFriends(
     user?.id
   );
@@ -169,7 +188,15 @@ export default function MobilNav() {
         if (request.to_user.id.toString() == user?.id) setReqNotif(true);
       });
     }
-  }, [isSuccessReq, requests, user?.id, lastJsonMessage, queryClient, router, path]);
+  }, [
+    isSuccessReq,
+    requests,
+    user?.id,
+    lastJsonMessage,
+    queryClient,
+    router,
+    path,
+  ]);
 
   useEffect(() => {
     if (lastJsonMessage?.type === "friendUpdate") {
@@ -185,9 +212,7 @@ export default function MobilNav() {
       queryClient.invalidateQueries({
         queryKey: ["blocked"],
       });
-      
-      
-   
+
       lastJsonMessage.type = "null";
     }
   }, [lastJsonMessage, queryClient, router, user?.id]);
@@ -231,96 +256,96 @@ export default function MobilNav() {
   const handleLogout = () => {
     logout();
   };
-  if (token)
-    return (
-      <div className=" bottom-0  w-full overflow-auto h-18 ">
-        <nav className=" h-full  flex justify-around w-full items-center gap-2 p-2 border-t-2">
-          {links.map((link, index) => (
-            <Link
-              key={index}
-              href={link.link}
-              className={cn(
-                buttonVariants({ variant: link.variant, size: "sm" }),
 
-                "justify-start "
-              )}
-            >
-              {link.title === "chat" && showNotif ? (
-                <div className="relative">
-                  <link.icon className=" size-5 " />
-                  <span className="h-3 w-3 bg-white rounded-full absolute top-0 right-0 "></span>
-                  <span className="h-1 w-1 bg-red-600  rounded-full absolute top-1 right-1 animate-ping"></span>
-                </div>
-              ) : link.title === "Requests" && reqNotif ? (
-                <div className="relative">
-                  <link.icon className=" size-5 " />
-                  <span className="h-3 w-3 bg-white rounded-full absolute top-0 right-0 "></span>
-                  <span className="h-1 w-1 bg-red-600  rounded-full absolute top-1 right-1 animate-ping"></span>
-                </div>
-              ) : link.title === "Play" && gameNotif ? (
-                <div className="relative">
-                  <link.icon className=" h-6 w-6 " />
-                  <span className="h-3 w-3 bg-white rounded-full absolute top-0 right-0 "></span>
-                  <span className="h-1 w-1 bg-red-600  rounded-full absolute top-1 right-1 animate-ping"></span>
-                </div>
-              ) : (
-                <link.icon
-                  className={cn(
-                    " mr-2 size-5 hover:scale-150",
-                    link.variant === "default" ? "scale-125" : ""
-                  )}
-                />
-              )}
-            </Link>
-          ))}
-          <Popover open={popOverOpen} onOpenChange={setPopOverOpen}>
-            <PopoverTrigger>
-              <AlignRight />
-            </PopoverTrigger>
-            <PopoverContent className="w-40">
-              <div
-                className="flex flex-col px-2"
-                onClick={() => setPopOverOpen(false)}
-              >
-                <Link
-                  href="/profile/settings"
-                  className={cn(
-                    buttonVariants({ variant: "ghost", size: "sm" }),
-                    "justify-start mb-2"
-                  )}
-                >
-                  <UserRoundCog className="mr-2 h-6 w-6 " />
-                  Sittings
-                </Link>
-                <Button
-                  variant={"ghost"}
-                  className={cn(
-                    buttonVariants({ variant: "ghost", size: "sm" }),
-                    "justify-start mb-2"
-                  )}
-                  onClick={() => handleLogout()}
-                >
-                  <LogOut className="mr-2 h-6 w-6 " />
-                  logout
-                </Button>
-                <button
-                  onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-                  className={cn(
-                    buttonVariants({ variant: "ghost", size: "sm" }),
-                    "justify-start text-primary mb-2"
-                  )}
-                >
-                  {theme === "dark" ? (
-                    <Sun className="mr-2 h-6 w-6 " />
-                  ) : (
-                    <Moon className="mr-2 h-6 w-6 " />
-                  )}
-                  {theme === "dark" ? "Light" : "Dark"}
-                </button>
+  return (
+    <div className=" bottom-0  w-full overflow-auto h-18 ">
+      <nav className=" h-full  flex justify-around w-full items-center gap-2 p-2 border-t-2">
+        {links.map((link, index) => (
+          <Link
+            key={index}
+            href={link.link}
+            className={cn(
+              buttonVariants({ variant: link.variant, size: "sm" }),
+
+              "justify-start "
+            )}
+          >
+            {link.title === "chat" && showNotif ? (
+              <div className="relative">
+                <link.icon className=" size-5 " />
+                <span className="h-3 w-3 bg-white rounded-full absolute top-0 right-0 "></span>
+                <span className="h-1 w-1 bg-red-600  rounded-full absolute top-1 right-1 animate-ping"></span>
               </div>
-            </PopoverContent>
-          </Popover>
-        </nav>
-      </div>
-    );
+            ) : link.title === "Requests" && reqNotif ? (
+              <div className="relative">
+                <link.icon className=" size-5 " />
+                <span className="h-3 w-3 bg-white rounded-full absolute top-0 right-0 "></span>
+                <span className="h-1 w-1 bg-red-600  rounded-full absolute top-1 right-1 animate-ping"></span>
+              </div>
+            ) : link.title === "Play" && gameNotif ? (
+              <div className="relative">
+                <link.icon className=" h-6 w-6 " />
+                <span className="h-3 w-3 bg-white rounded-full absolute top-0 right-0 "></span>
+                <span className="h-1 w-1 bg-red-600  rounded-full absolute top-1 right-1 animate-ping"></span>
+              </div>
+            ) : (
+              <link.icon
+                className={cn(
+                  " mr-2 size-5 hover:scale-150",
+                  link.variant === "default" ? "scale-125" : ""
+                )}
+              />
+            )}
+          </Link>
+        ))}
+        <Popover open={popOverOpen} onOpenChange={setPopOverOpen}>
+          <PopoverTrigger>
+            <AlignRight />
+          </PopoverTrigger>
+          <PopoverContent className="w-40">
+            <div
+              className="flex flex-col px-2"
+              onClick={() => setPopOverOpen(false)}
+            >
+              <Link
+                href="/profile/settings"
+                className={cn(
+                  buttonVariants({ variant: "ghost", size: "sm" }),
+                  "justify-start mb-2"
+                )}
+              >
+                <UserRoundCog className="mr-2 h-6 w-6 " />
+                Sittings
+              </Link>
+              <Button
+                variant={"ghost"}
+                className={cn(
+                  buttonVariants({ variant: "ghost", size: "sm" }),
+                  "justify-start mb-2"
+                )}
+                onClick={() => handleLogout()}
+              >
+                <LogOut className="mr-2 h-6 w-6 " />
+                logout
+              </Button>
+              <button
+                onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+                className={cn(
+                  buttonVariants({ variant: "ghost", size: "sm" }),
+                  "justify-start text-primary mb-2"
+                )}
+              >
+                {theme === "dark" ? (
+                  <Sun className="mr-2 h-6 w-6 " />
+                ) : (
+                  <Moon className="mr-2 h-6 w-6 " />
+                )}
+                {theme === "dark" ? "Light" : "Dark"}
+              </button>
+            </div>
+          </PopoverContent>
+        </Popover>
+      </nav>
+    </div>
+  );
 }

@@ -63,7 +63,6 @@ export default function UserInfo({
   const [sendReqId, setSendReqId] = useState<string | null>(null);
   useEffect(() => {
     if (friendReq) {
-      console.log(friendReq);
       const req = friendReq.find((req: any) => req.from_user.id === id);
       const sendReq = friendReq.find((req: any) => req.to_user.id === id);
       if (req) {
@@ -77,7 +76,7 @@ export default function UserInfo({
         setSendReqId(null);
       }
     }
-  }, [friendReq]);
+  }, [friendReq, id]);
 
   const handleLogout = () => {
     logout();

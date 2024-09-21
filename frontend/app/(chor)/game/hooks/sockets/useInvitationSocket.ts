@@ -7,7 +7,7 @@ export default function useInvitationSocket() {
   const socketUrl =
     process.env.NEXT_PUBLIC_INVITATION_URL + "/?refresh=" + token;
 
-  const { sendJsonMessage, lastMessage } = useWebSocket(socketUrl);
+  const { sendJsonMessage, lastMessage, lastJsonMessage } = useWebSocket(socketUrl);
 
   const handelSendInvitation = (receiver: string, gameType: string) => {
     const toSend = "/notif " + user_id + " " + receiver + " " + gameType;
@@ -55,5 +55,6 @@ export default function useInvitationSocket() {
     handleRefetchTournament,
     handleAcceptTournamentInvitation,
     handleInvitationDecline,
+    lastJsonMessage
   };
 }

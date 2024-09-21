@@ -1,8 +1,7 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
-import getCookie from "@/lib/functions/getCookie";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import useWebSocket from "react-use-websocket";
 import { toast } from "sonner";
+import useChatSocket from "../../game/hooks/sockets/useChatSocket";
 
 const inviteFriend = async (userId: string) => {
   try {
@@ -18,11 +17,7 @@ const inviteFriend = async (userId: string) => {
 
 export default function useAddFriend() {
   const queryClient = useQueryClient();
-  const token = getCookie("refresh");
-  const socketUrl = process.env.NEXT_PUBLIC_CHAT_URL + "2/?refresh=" + token;
-  const { sendJsonMessage } = useWebSocket(socketUrl, {
-    share: true,
-  });
+  const { sendJsonMessage } = useChatSocket()
   const info = useMutation({
     mutationFn: async (userId: string) => {
       const res = await inviteFriend(userId);

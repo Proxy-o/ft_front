@@ -29,6 +29,8 @@ import useGetFrdReq from "@/app/(chor)/friends/hooks/useGetFrReq";
 import { toast } from "sonner";
 import useGetInvitations from "@/app/(chor)/game/hooks/useGetInvitations";
 import useGetUser from "@/app/(chor)/profile/hooks/useGetUser";
+import useChatSocket from "@/app/(chor)/game/hooks/sockets/useChatSocket";
+import useInvitationSocket from "@/app/(chor)/game/hooks/sockets/useInvitationSocket";
 
 export default function Nav() {
   const { mutate: logout } = useLogout();
@@ -75,9 +77,7 @@ export default function Nav() {
     variant: "default",
   };
 
-  const token = getCookie("refresh");
   const logged_in = getCookie("logged_in");
-  const { data: user } = useGetUser("0");
 
   useEffect(() => {
     if (
@@ -89,20 +89,25 @@ export default function Nav() {
       return logout();
     }
   }, [logged_in, router, logout, path]);
+  const { data: user, isSuccess } = useGetUser("0");
 
-  const socketUrl = process.env.NEXT_PUBLIC_CHAT_URL + "2/?refresh=" + token;
-  const invitationSocketUrl =
-    process.env.NEXT_PUBLIC_INVITATION_URL + "?refresh=" + token;
-
-  const { lastJsonMessage }: { lastJsonMessage: LastMessage } = useWebSocket(
-    socketUrl,
-    {
-      share: true,
-    }
-  );
   const {
-    lastJsonMessage: invitationLastMessage,
-  }: { lastJsonMessage: LastMessage } = useWebSocket(invitationSocketUrl);
+    lastJsonMessage,
+    readyState,
+  }: {
+    lastJsonMessage: LastMessage;
+    readyState: number;
+  } = useChatSocket();
+
+  useEffect(() => {
+    if (readyState === 3 && isSuccess) {
+      logout();
+    }
+  }, [lastJsonMessage, readyState, logout, isSuccess]);
+
+  const { lastJsonMessage: invitationLastMessage }: { lastJsonMessage: any } =
+    useInvitationSocket();
+
   const [showNotif, setShowNotif] = useState(false);
   const [reqNotif, setReqNotif] = useState(false);
   const { data: friends, isSuccess: isSuccessFriends } = useGetFriends(
@@ -167,8 +172,7 @@ export default function Nav() {
       queryClient.invalidateQueries({
         queryKey: ["blocked"],
       });
-      
-   
+
       lastJsonMessage.type = "null";
     }
   }, [lastJsonMessage, queryClient, router, user?.id]);

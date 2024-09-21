@@ -18,6 +18,11 @@ class ChatConsumer(WebsocketConsumer):
 
     def connect(self):
         self.user = self.scope['user']
+        # if the user is anonymous, show an error and close the connection
+        if self.user.is_anonymous:
+            self.close(401)
+            return
+        
         self.user_inbox = f'inbox_{self.user.id}'
         # connection has to be accepted
         self.accept()
@@ -35,6 +40,8 @@ class ChatConsumer(WebsocketConsumer):
                 User.objects.filter(id=self.user.id).update(status='online')
             else:
                 User.objects.filter(id=self.user.id).update(status='playing')
+      
+            
 
     def disconnect(self, close_code):
         if self.user.is_authenticated:
