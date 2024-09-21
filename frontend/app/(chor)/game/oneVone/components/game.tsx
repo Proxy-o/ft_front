@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { canvasParams } from "../../types";
-import { draw, drawPlayers } from "../../methods/draw";
+import { draw } from "../../methods/draw";
 import { movePaddlesOnline } from "../../methods/movePaddles";
 import { changeBallDirectionOnline } from "../../methods/changeBallDirection";
 import { checkLoseConditionOnline } from "../../methods/checkLoseCondition";
@@ -11,21 +11,14 @@ import checkCollisionWithHorizontalWalls from "../../methods/checkCollisionWithH
 import { moveBall } from "../../methods/moveBall";
 import { User } from "@/lib/types";
 import getCookie from "@/lib/functions/getCookie";
-import useGetGame from "../../hooks/useGetGames";
 import useEndGame from "../../hooks/useEndGame";
 import useGameSocket from "@/app/(chor)/game/hooks/sockets/useGameSocket";
 import useInvitationSocket from "@/app/(chor)/game/hooks/sockets/useInvitationSocket";
 import { enemyLeftGame } from "../../methods/enemyLeftGame";
 import useGetUser from "../../../profile/hooks/useGetUser";
-import useSurrenderGame from "../../hooks/useSurrender";
-import useLeaveGame from "../../hooks/useLeaveGame";
-import { Button } from "@/components/ui/button";
-import { DoorOpen, Flag, Gamepad } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import NoGame from "../../components/noGame";
 import PreGame from "../../components/preGame";
-import Sockets from "../../components/sockets";
-import { Toaster } from "@/components/ui/sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import Actions from "./actions";
 import Score from "./score";
@@ -76,7 +69,6 @@ const Game = ({
     handleEnemyScore,
     handleTime,
     handleStartGame,
-    handleSurrender,
   } = useGameSocket();
 
   const { newNotif } = useInvitationSocket();
@@ -288,8 +280,8 @@ const Game = ({
       // Move the ball
       if (
         newAngleRef.current !== 0 &&
-        leftScoreRef.current < 3 &&
-        rightScoreRef.current < 3
+        leftScoreRef.current < 77777 &&
+        rightScoreRef.current < 77777
       ) {
         moveBall(canvasParams, user, leftUser.current, newAngleRef);
       }
@@ -395,11 +387,11 @@ const Game = ({
         setCanvas(null);
         onGoingGame.refetch();
       } else if (message[0] === "/endGame") {
-        if (leftScoreRef.current < 3 && rightScoreRef.current < 3) {
+        if (leftScoreRef.current < 77777 && rightScoreRef.current < 77777) {
           state.current = "leave";
-        } else if (leftScoreRef.current >= 3) {
+        } else if (leftScoreRef.current >= 77777) {
           state.current = "win";
-        } else if (rightScoreRef.current >= 3) {
+        } else if (rightScoreRef.current >= 77777) {
           state.current = "lose";
         } else {
           state.current = "none";
@@ -427,7 +419,7 @@ const Game = ({
   }, [newNotif()?.data]);
 
   return (
-    <div className="w-full h-fit flex flex-col max-w-[800px] justify-center items-center gap-2">
+    <div className="w-full h-fit flex flex-col max-w-[800px]  justify-center items-center gap-2">
       {gameStartedRef.current && (
           <Score
             leftScoreRef={leftScoreRef}
@@ -438,8 +430,8 @@ const Game = ({
         )}
       <Card className="w-full max-w-[900px] h-[350px] md:h-[400px]">
         {leftUser.current?.username &&
-        leftScoreRef.current < 3 &&
-        rightScoreRef.current < 3 ? (
+        leftScoreRef.current < 77777 &&
+        rightScoreRef.current < 77777 ? (
           <>
             {gameStartedRef.current ? (
               <canvas

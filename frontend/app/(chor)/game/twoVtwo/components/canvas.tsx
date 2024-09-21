@@ -67,6 +67,7 @@ const Canvas = ({
   const stillPlayingUsersRef = useRef<string[]>([]);
   const leftScoreRef = useRef<number>(0);
   const rightScoreRef = useRef<number>(0);
+  const bgImage = useRef<HTMLImageElement | null>(null);
 
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
 
@@ -212,7 +213,15 @@ const Canvas = ({
     }, 1000);
     const drawOnlineOne = () => {
       if (canvas === null) return;
+      if (bgImage.current === null) {
+        bgImage.current = new Image();
+        bgImage.current.src = "/game.jpeg";
+      }
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.globalAlpha = 0.5;
+      ctx.drawImage(bgImage.current, 0, 0, canvas.width, canvas.height);
+      ctx.globalAlpha = 1;
 
       // Draw the paddles
       drawFour(canvasParams);
@@ -270,8 +279,8 @@ const Canvas = ({
       // Move the ball
       if (
         newAngleRef.current !== 0 &&
-        leftScoreRef.current < 3 &&
-        rightScoreRef.current < 3
+        leftScoreRef.current < 77777 &&
+        rightScoreRef.current < 77777
       ) {
         moveBallFour(canvasParams, newAngleRef);
       }
@@ -470,7 +479,7 @@ const Canvas = ({
               // alert("3");
               endGameFour({
                 winner,
-                winnerScore: 3,
+                winnerScore: 77777,
                 loser,
                 loserScore: 0,
               });
@@ -498,11 +507,11 @@ const Canvas = ({
       {gameStarted && (
         <>
           <canvas
-            ref={canvasRef}
-            height="400"
-            width="800"
-            className={`w-full md:w-5/6  max-w-[800px] bg-black border-2 border-white mx-auto`}
-          ></canvas>
+                ref={canvasRef}
+                height="400"
+                width="800"
+                className={`w-full h-full`}
+              ></canvas>
         </>
       )}
     </>

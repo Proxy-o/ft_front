@@ -12,10 +12,11 @@ import useGetFourGame from "../../hooks/useGetFourGame";
 import Canvas from "./canvas";
 import useInvitationSocket from "../../hooks/sockets/useInvitationSocket";
 import FourActions from "./fourActions";
+import { Card } from "@/components/ui/card";
+import Score from "./score";
 
 const Game = () => {
   const playerReadyRef = useRef(0);
-
   const user_id = getCookie("user_id") || "";
   const [gameStarted, setGameStarted] = useState(false);
   const state = useRef<string>("none");
@@ -29,6 +30,9 @@ const Game = () => {
     id: "",
   };
 
+  const leftScoreRef = useRef<number>(0);
+  const rightScoreRef = useRef<number>(0);
+
   const leftUserTop = useRef<User>(dummyPlayer);
   const leftUserBottom = useRef<User>(dummyPlayer);
   const rightUserTop = useRef<User>(dummyPlayer);
@@ -38,6 +42,9 @@ const Game = () => {
   const username: string = user?.username || "";
 
   const { newNotif, handleRefetchPlayers } = useInvitationSocket();
+
+  leftScoreRef.current = onGoingGame.data?.game?.user1_score || 0;
+  rightScoreRef.current = onGoingGame.data?.game?.user2_score || 0;
 
   leftUserTop.current = onGoingGame.data?.game?.user1 || dummyPlayer;
   leftUserBottom.current = onGoingGame.data?.game?.user3 || dummyPlayer;
@@ -63,67 +70,79 @@ const Game = () => {
   }, [newNotif()?.data]);
 
   return (
-    <div className="p-4 flex flex-col mx-auto justify-center w-full h-full">
-      {onGoingGame.isSuccess && (
-        <>
-          {!gameStarted &&
-            (onGoingGame.data?.game &&
-            onGoingGame.data?.game?.user1_score < 3 &&
-            onGoingGame.data?.game?.user2_score < 3 ? (
-              <div
-                className={"w-full h-full flex justify-center items-center"}
-                style={{
-                  backgroundImage: "url('/game.jpeg')",
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }}
-              >
-                <PreGame
-                  type="four"
-                  leftUserTop={leftUserTop.current}
-                  leftUserBottom={leftUserBottom.current}
-                  rightUserTop={rightUserTop.current}
-                  rightUserBottom={rightUserBottom.current}
-                />
-              </div>
-            ) : (
-              <>
-                <NoGameFour state={state} />
-              </>
-            ))}
-          <Canvas
+    <>
+      {gameStarted && (
+        <Score
+          leftScoreRef={leftScoreRef}
+          rightScoreRef={rightScoreRef}
+          leftUserTop={leftUserTop}
+          leftUserBottom={leftUserBottom}
+          rightUserTop={rightUserTop}
+          rightUserBottom={rightUserBottom}
+        />
+      )}
+      <Card className="flex flex-col mx-auto justify-center w-full min-h-[350px]">
+        {onGoingGame.isSuccess && (
+          <>
+            {!gameStarted &&
+              (onGoingGame.data?.game &&
+              onGoingGame.data?.game?.user1_score < 77777 &&
+              onGoingGame.data?.game?.user2_score < 77777 ? (
+                <div
+                  className={"w-full h-full flex justify-center items-center"}
+                  style={{
+                    backgroundImage: "url('/game.jpeg')",
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }}
+                >
+                  <PreGame
+                    type="four"
+                    leftUserTop={leftUserTop.current}
+                    leftUserBottom={leftUserBottom.current}
+                    rightUserTop={rightUserTop.current}
+                    rightUserBottom={rightUserBottom.current}
+                  />
+                </div>
+              ) : (
+                <>
+                  <NoGameFour state={state} />
+                </>
+              ))}
+            <Canvas
+              leftUserTop={leftUserTop}
+              leftUserBottom={leftUserBottom}
+              rightUserTop={rightUserTop}
+              rightUserBottom={rightUserBottom}
+              gameId={gameId}
+              gameStarted={gameStarted}
+              setGameStarted={setGameStarted}
+              onGoingGame={onGoingGame}
+              username={username}
+              state={state}
+              playerReadyRef={playerReadyRef}
+            />
+          </>
+        )}
+        {/* {!gameChange && <NoGame state={state} />} */}
+        {/* </Game> */}
+      </Card>
+      {onGoingGame.data?.game &&
+        onGoingGame.data?.game?.user1_score < 77777 &&
+        onGoingGame.data?.game?.user2_score < 77777 && (
+          <FourActions
+            playerReadyRef={playerReadyRef}
+            gameStarted={gameStarted}
+            username={username}
             leftUserTop={leftUserTop}
             leftUserBottom={leftUserBottom}
-            rightUserTop={rightUserTop}
             rightUserBottom={rightUserBottom}
-            gameId={gameId}
-            gameStarted={gameStarted}
-            setGameStarted={setGameStarted}
+            rightUserTop={rightUserTop}
             onGoingGame={onGoingGame}
-            username={username}
-            state={state}
-            playerReadyRef={playerReadyRef}
+            handleRefetchPlayers={handleRefetchPlayers}
           />
-          {onGoingGame.data?.game &&
-            onGoingGame.data?.game?.user1_score < 3 &&
-            onGoingGame.data?.game?.user2_score < 3 && (
-              <FourActions
-                playerReadyRef={playerReadyRef}
-                gameStarted={gameStarted}
-                username={username}
-                leftUserTop={leftUserTop}
-                leftUserBottom={leftUserBottom}
-                rightUserBottom={rightUserBottom}
-                rightUserTop={rightUserTop}
-                onGoingGame={onGoingGame}
-                handleRefetchPlayers={handleRefetchPlayers}
-              />
-            )}
-        </>
-      )}
-      {/* {!gameChange && <NoGame state={state} />} */}
-      {/* </Game> */}
-    </div>
+        )}
+    </>
   );
 };
 

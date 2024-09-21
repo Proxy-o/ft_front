@@ -190,12 +190,12 @@ function drawFour(canvasParams: canvasParamsFour) {
     );
   };
 
-  drawScore();
-  drawRightPaddleTwo();
+  // drawScore();
+  // drawMiddleLine();
   drawBall();
-  drawMiddleLine();
   drawRightPaddle();
   drawLeftPaddle();
+  drawRightPaddleTwo();
   drawLeftPaddleTwo();
 }
 

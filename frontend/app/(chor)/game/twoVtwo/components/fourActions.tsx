@@ -3,6 +3,12 @@ import { DoorOpen, Flag, Gamepad } from "lucide-react";
 import useLeaveGame from "../../hooks/useLeaveGame";
 import useSurrenderGame from "../../hooks/useSurrender";
 import useGameSocket from "../../hooks/sockets/useGameSocket";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const FourActions = ({
   playerReadyRef,
@@ -33,44 +39,70 @@ const FourActions = ({
   return (
     <>
       {!gameStarted ? (
-        <div className="w-full flex flex-row justify-center items-center gap-4">
-          <Button
-            onClick={() => {
-              playerReadyRef.current = 0;
+        <div className="w-5/6 flex flex-row justify-between items-center gap-4">
+          <TooltipProvider delayDuration={0}>
+            <Tooltip delayDuration={0}>
+              <TooltipTrigger asChild>
+                <Button
+                  onClick={() => {
+                    playerReadyRef.current = 0;
 
-              handleStartGameFour(
-                username,
-                leftUserTop.current?.username || "",
-                leftUserBottom.current?.username || "",
-                rightUserBottom.current?.username || "",
-                rightUserTop.current?.username || ""
-              );
-            }}
-            className="h-full w-full"
-          >
-            <Gamepad size={25} />
-          </Button>
-          <Button
-            onClick={() => {
-              leaveGame();
-              handleRefetchPlayers(onGoingGame.data?.game.id || "");
-            }}
-            className="h-full w-full"
-          >
-            <DoorOpen size={25} />
-          </Button>
+                    handleStartGameFour(
+                      username,
+                      leftUserTop.current?.username || "",
+                      leftUserBottom.current?.username || "",
+                      rightUserBottom.current?.username || "",
+                      rightUserTop.current?.username || ""
+                    );
+                  }}
+                  className="h-fit w-fit bg-green-600/40"
+                >
+                  <Gamepad size={25} />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                Start
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          <TooltipProvider delayDuration={0}>
+            <Tooltip delayDuration={0}>
+              <TooltipTrigger asChild>
+                <Button
+                  onClick={() => {
+                    leaveGame();
+                    handleRefetchPlayers(onGoingGame.data?.game.id || "");
+                  }}
+                  className="h-fit w-fit bg-gray-700"
+                >
+                  <DoorOpen size={25} />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                Leave
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       ) : (
-        <Button
-          onClick={() => {
-            surrenderGame();
-            handleRefetchPlayers(onGoingGame.data?.game.id || "");
-          }}
-          className="h-full w-full"
-        >
-          <Flag size={25} />
-          Surrender
-        </Button>
+        <TooltipProvider delayDuration={0}>
+          <Tooltip delayDuration={0}>
+            <TooltipTrigger asChild>
+              <Button
+                onClick={() => {
+                  surrenderGame();
+                  handleRefetchPlayers(onGoingGame.data?.game.id || "");
+                }}
+                className="h-fit w-fit bg-red-600/40"
+              >
+                <Flag size={25} />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              Surrender
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       )}
     </>
   );

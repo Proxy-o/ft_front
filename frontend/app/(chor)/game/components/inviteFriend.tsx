@@ -24,7 +24,7 @@ const InviteFriends = ({ gameType }: { gameType: string }) => {
   const router = useRouter();
 
   return (
-    <Card className="w-full min-w-72 h-full bg-background p-2 mb-28">
+    <Card className="w-full min-w-72 h-full bg-background p-2">
       <div className="w-full h-full flex flex-col justify-start items-start">
         <div className="w-full text-center text-lg font-bold pb-2">Invite</div>
         <div className="flex flex-col w-full items-center justify-center pt-2 border-t gap-2">

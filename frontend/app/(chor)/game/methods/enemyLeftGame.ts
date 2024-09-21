@@ -34,7 +34,7 @@ function enemyLeftGame(
     // alert("2 time is " + time.current);
       endGame({
         winner: leftUserRef.current?.id || "",
-        winnerScore: 3,
+        winnerScore: 77777,
         loser: rightUserRef.current?.id || "",
         loserScore: 0,
       });

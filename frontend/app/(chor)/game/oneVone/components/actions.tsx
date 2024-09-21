@@ -4,71 +4,92 @@ import useGameSocket from "../../hooks/sockets/useGameSocket";
 import { DoorOpen, Flag, Gamepad } from "lucide-react";
 import useSurrenderGame from "../../hooks/useSurrender";
 import useLeaveGame from "../../hooks/useLeaveGame";
+import { TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
+import { Tooltip } from "@/components/ui/tooltip";
+import { TooltipTrigger } from "@/components/ui/tooltip";
 
-const Actions = (
-    {canvasPrams, gameStartedRef, type}: {canvasPrams: canvasParams, gameStartedRef: React.MutableRefObject<boolean>, type: string}
-) => {
-    const { handleStartGame, handleSurrender } = useGameSocket();
-    const {mutate: surrenderGame} = useSurrenderGame();
-    const {rightUserRef, leftUserRef, gameIdRef} = canvasPrams;
-    const {mutate: leaveGame} = useLeaveGame({leftUserRef, rightUserRef, gameIdRef});
+const Actions = ({
+  canvasPrams,
+  gameStartedRef,
+  type,
+}: {
+  canvasPrams: canvasParams;
+  gameStartedRef: React.MutableRefObject<boolean>;
+  type: string;
+}) => {
+  const { handleStartGame, handleSurrender } = useGameSocket();
+  const { mutate: surrenderGame } = useSurrenderGame();
+  const { rightUserRef, leftUserRef, gameIdRef } = canvasPrams;
+  const { mutate: leaveGame } = useLeaveGame({
+    leftUserRef,
+    rightUserRef,
+    gameIdRef,
+  });
 
-
-    return (
-        rightUserRef.current?.username && (
-            <div className="w-full md:w-5/6 h-[70px] max-w-[800px] flex justify-between items-center">
-              {!gameStartedRef.current ? (
-                <>
-                  <div className="ml-[80px] h-5/6 w-1/6">
-                    <Button
-                      onClick={() => {
-                        handleStartGame(
-                          leftUserRef.current?.username || "",
-                          rightUserRef.current?.username || "",
-                          gameIdRef.current
-                        );
-                      }}
-                      className="h-full w-full bg-primary"
-                    >
-                      <Gamepad size={25} />
-                      Start
-                    </Button>
-                  </div>
-                  {type !== "tournament" && (
-                    <div className="mr-[80px] h-5/6 w-1/6">
-                      <Button
-                        onClick={() => {
-                          leaveGame();
-                        }}
-                        className="h-full w-full bg-primary"
-                      >
-                        <DoorOpen size={25} />
-                        Leave
-                      </Button>
-                    </div>
-                  )}
-                </>
-              ) : (
-                <div className="ml-auto mr-[80px] h-5/6 w-1/6">
-                  <Button
-                    onClick={() => {
-                      surrenderGame();
-                      handleSurrender(
-                        leftUserRef.current?.username || "",
-                        rightUserRef.current?.username || "",
-                        gameIdRef.current
-                      );
-                    }}
-                    className="h-full w-full bg-primary"
-                  >
-                    <Flag size={25} />
-                    Surrender
-                  </Button>
-                </div>
-              )}
-            </div>
-          )
-    )
-}
+  return (
+    rightUserRef.current?.username &&
+    (!gameStartedRef.current ? (
+      <div className="w-5/6 flex flex-row justify-between items-center gap-4">
+        <TooltipProvider delayDuration={0}>
+          <Tooltip delayDuration={0}>
+            <TooltipTrigger asChild>
+              <Button
+                onClick={() => {
+                  handleStartGame(
+                    leftUserRef.current?.username || "",
+                    rightUserRef.current?.username || "",
+                    gameIdRef.current
+                  );
+                }}
+                className="h-fit w-fit bg-green-600/40"
+              >
+                <Gamepad size={25} />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Start</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        {type !== "tournament" && (
+          <TooltipProvider delayDuration={0}>
+            <Tooltip delayDuration={0}>
+              <TooltipTrigger asChild>
+                <Button
+                  onClick={() => {
+                    leaveGame();
+                  }}
+                  className="h-fit w-fit bg-gray-700"
+                >
+                  <DoorOpen size={25} />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Leave</TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        )}
+      </div>
+    ) : (
+      <TooltipProvider delayDuration={0}>
+        <Tooltip delayDuration={0}>
+          <TooltipTrigger asChild>
+            <Button
+              onClick={() => {
+                surrenderGame();
+                handleSurrender(
+                  leftUserRef.current?.username || "",
+                  rightUserRef.current?.username || "",
+                  gameIdRef.current
+                );
+              }}
+              className="h-fit w-fit bg-red-600/40"
+            >
+              <Flag size={25} />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>Surrender</TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    ))
+  );
+};
 
 export default Actions;
