@@ -12,7 +12,7 @@ export default function Page() {
   const user_id = getCookie("user_id") || "";
 
   // window.addEventListener('offline', () => {
-  //     console.log("offline");
+  //     // console.log("offline");
   // }
   // );
 

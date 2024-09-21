@@ -45,7 +45,7 @@ export default function Page({ params }: { params: { tournamentId: string } }) {
     if (notif) {
       const parsedMessage = JSON.parse(notif.data);
       const message = parsedMessage?.message.split(" ");
-      console.log(parsedMessage.message);
+      // console.log(parsedMessage.message);
       if (
         message[0] === "/refetchTournament" ||
         message[0] === "/refetchPlayers"

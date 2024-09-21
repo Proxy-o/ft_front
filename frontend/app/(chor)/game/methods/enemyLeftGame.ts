@@ -26,7 +26,7 @@ function enemyLeftGame(
   ) {
     enemyLeftGameRef.current = true;
     time.current = seconds;
-    // console.log("current time: " + time.current + "seconds: " + seconds);
+    // // console.log("current time: " + time.current + "seconds: " + seconds);
     handleTime(time.current, rightUserRef.current?.id || "");
   } else {
     if (seconds - time.current > 2) {
@@ -71,7 +71,7 @@ function enemyLeftGameFour(
   ) {
     enemyLeftGameRef.current = true;
     time.current = seconds;
-    // console.log("current time: " + time.current + "seconds: " + seconds);
+    // // console.log("current time: " + time.current + "seconds: " + seconds);
     handleTimeFour(time.current, username);
   } else {
     if (seconds - time.current > 4 && gameStarted) {

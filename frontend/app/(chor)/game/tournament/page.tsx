@@ -43,7 +43,7 @@ export default function Page() {
     if (notif) {
       const parsedMessage = JSON.parse(notif.data);
       const message = parsedMessage?.message.split(" ");
-      console.log(parsedMessage.message);
+      // console.log(parsedMessage.message);
       if (message[0] === "/acceptTournament") {
         refetch();
       } else if (message[0] === "/startTournament") {

@@ -30,7 +30,7 @@ for i in 1 2 3 4; do
     esac
     
     # Check if the user already exists
-    if ! echo "from django.contrib.auth import get_user_model; User = get_user_model(); print(User.objects.filter(username='$USERNAME').exists())" | python manage.py shell | grep True; then
+    if ! echo "from django.contrib.auth import get_user_model; User = get_user_model(); # print(User.objects.filter(username='$USERNAME').exists())" | python manage.py shell | grep True; then
         echo "Creating user $USERNAME..."
         
         # Create the user and assign an avatar

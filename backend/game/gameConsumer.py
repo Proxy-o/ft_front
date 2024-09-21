@@ -22,7 +22,7 @@ class GameConsumer(WebsocketConsumer):
         self.accept()
 
         if self.user.is_authenticated:
-            print("User authenticated")
+            # print("User authenticated")
             async_to_sync(self.channel_layer.group_add)(
                 self.user_inbox,
                 self.channel_name,
@@ -54,10 +54,10 @@ class GameConsumer(WebsocketConsumer):
         elif command == '/changeBallDirection':
             self.handle_change_ball_direction(split)
         elif command == '/fourDebut':
-            print("Four debut")
+            # print("Four debut")
             self.handle_four_debut(split)
         elif command == '/readyToStartFour':
-            print("Ready to start four")
+            # print("Ready to start four")
             self.handle_ready_to_start_four(split)
         elif command == '/fourChangeBallDirection':
             self.handle_four_change_ball_direction(split)
@@ -346,7 +346,7 @@ class GameConsumer(WebsocketConsumer):
         #     f'game_{split[5]}',
         #     {'type': 'send_message', 'user': split[5], 'message': f'/showFour {user} {split[5]} {time}'}
         # )
-        print(split[1], split[2], split[3], split[4], split[5])
+        # print(split[1], split[2], split[3], split[4], split[5])
 
 
     
@@ -457,7 +457,7 @@ class GameConsumer(WebsocketConsumer):
         )
 
     def handle_ready_four(self, split):
-        print("Handling ready four")
+        # print("Handling ready four")
         user = split[1]
         async_to_sync(self.channel_layer.group_send)(
             f'game_{user}',
@@ -465,7 +465,7 @@ class GameConsumer(WebsocketConsumer):
         )
 
     def handle_refetch_tournament(self, split):
-        print("Refetching tournament")
+        # print("Refetching tournament")
         time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         tournamentId = split[1]
         tournament = Tournament.objects.get(id=tournamentId)
@@ -486,7 +486,7 @@ class GameConsumer(WebsocketConsumer):
         )
 
     def handle_ready_to_start_four(self, split):
-        print("Handling ready to start four")
+        # print("Handling ready to start four")
         time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         async_to_sync(self.channel_layer.group_send)(
             f'game_{split[1]}',
@@ -555,7 +555,7 @@ class GameConsumer(WebsocketConsumer):
     
 
     def send_score_message(self, gameId):
-        print("Sending score message")
+        # print("Sending score message")
         game = Game.objects.get(id=gameId)
         if not game:
             return

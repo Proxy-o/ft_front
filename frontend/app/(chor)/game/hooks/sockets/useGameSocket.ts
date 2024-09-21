@@ -52,7 +52,7 @@ export default function useGameSocket() {
     user3: string,
     user4: string
   ) => {
-    console.log("sending ready to start");
+    // console.log("sending ready to start");
     const toSend =
       "/readyToStartFour " + user1 + " " + user2 + " " + user3 + " " + user4;
     sendJsonMessage({ message: toSend });

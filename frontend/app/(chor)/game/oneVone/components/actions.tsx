@@ -16,7 +16,7 @@ const Actions = (
 
     return (
         rightUserRef.current?.username && (
-            <div className="w-full md:w-5/6 h-[70px] max-w-[800px] flex justify-between items-center mt-4">
+            <div className="w-full md:w-5/6 h-[70px] max-w-[800px] flex justify-between items-center">
               {!gameStartedRef.current ? (
                 <>
                   <div className="ml-[80px] h-5/6 w-1/6">

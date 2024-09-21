@@ -28,6 +28,7 @@ import Sockets from "../../components/sockets";
 import { Toaster } from "@/components/ui/sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import Actions from "./actions";
+import Score from "./score";
 
 const Game = ({
   type,
@@ -294,7 +295,6 @@ const Game = ({
       }
 
       // Check if enemy has left the game
-      // console.log("timeRef.current", timeRef.current);
       enemyLeftGame(
         canvasParams,
         timeRef,
@@ -305,8 +305,9 @@ const Game = ({
       );
     };
 
-    const drawOnlineOne = () => {
+    const animate = () => {
       if (canvas === null) return;
+
       if (
         gameStartedRef.current &&
         leftUser.current !== undefined &&
@@ -314,12 +315,6 @@ const Game = ({
       ) {
         gameStarted();
       }
-    };
-
-    const animate = () => {
-      if (canvas === null) return;
-
-      drawOnlineOne();
       animationFrameId.current = requestAnimationFrame(animate);
     };
 
@@ -334,7 +329,7 @@ const Game = ({
     const gameMsge = gameMsg();
     if (gameMsge) {
       const parsedMessage = JSON.parse(gameMsge.data);
-      console.log(parsedMessage.message);
+      // console.log(parsedMessage.message);
       const message = parsedMessage?.message.split(" ");
 
       if (message[0] === "/move") {
@@ -360,7 +355,7 @@ const Game = ({
           newAngleRef.current = parseFloat(message[3]);
         }
       } else if (message[0] === "/show") {
-        console.log("showing");
+        // console.log("showing");
         if (!gameStartedRef.current) {
           handleStartGame(
             leftUser.current?.username || "",
@@ -382,7 +377,7 @@ const Game = ({
           onGoingGame.refetch();
         }
       } else if (message[0] === "/score") {
-        console.log("refetching");
+        // console.log("refetching");
         isFirstTime.current = true;
         onGoingGame.refetch();
       } else if (message[0] === "/time") {
@@ -432,9 +427,19 @@ const Game = ({
   }, [newNotif()?.data]);
 
   return (
-    <>
-      <Card className="w-full h-[350px] md:h-[400px]">
-        {leftUser.current?.username ? (
+    <div className="w-full h-fit flex flex-col max-w-[800px] justify-center items-center gap-2">
+      {gameStartedRef.current && (
+          <Score
+            leftScoreRef={leftScoreRef}
+            rightScoreRef={rightScoreRef}
+            leftUserRef={leftUser}
+            rightUserRef={rightUser}
+          />
+        )}
+      <Card className="w-full max-w-[900px] h-[350px] md:h-[400px]">
+        {leftUser.current?.username &&
+        leftScoreRef.current < 3 &&
+        rightScoreRef.current < 3 ? (
           <>
             {gameStartedRef.current ? (
               <canvas
@@ -454,7 +459,7 @@ const Game = ({
             )}
           </>
         ) : (
-          <NoGame state={state} />
+          !gameStartedRef.current && <NoGame state={state} />
         )}
       </Card>
       <Actions
@@ -462,7 +467,7 @@ const Game = ({
         gameStartedRef={gameStartedRef}
         type={type}
       />
-    </>
+    </div>
   );
 };
 

@@ -317,7 +317,7 @@ const Canvas = ({
     if (gameMsg()) {
       const gameMsge = gameMsg()?.data;
       const parsedMessage = JSON.parse(gameMsge);
-      console.log(parsedMessage);
+      // console.log(parsedMessage);
       const message = parsedMessage.message.split(" ");
       if (message[0] === "/showFour") {
         const sender = message[1];

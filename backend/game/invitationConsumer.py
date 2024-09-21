@@ -106,7 +106,7 @@ class InvitationConsumer(WebsocketConsumer):
         self.send(text_data=json.dumps({'status': 'success'}))
 
     def handle_refetch_players(self, split):
-        print(split)
+        # print(split)
         game = Game.objects.filter(id=split[1]).last()
         if not game:
             return
@@ -135,20 +135,20 @@ class InvitationConsumer(WebsocketConsumer):
 
 
     def handle_accept_tournament(self, split):
-        print("Accepting tournament")
+        # print("Accepting tournament")
         id = split[1]
-        print('toooornament ', id)
+        # print('toooornament ', id)
         tournament = Tournament.objects.get(id=id)
         if not tournament:
             return
         # check this is working todo 
-        print(id)
-        if not tournament:
-            print("Tournament not found")
-        if tournament.user1:
-            print("User1")
-            print(tournament.user1_left)
-            print(tournament.user1.username)
+        # print(id)
+        # if not tournament:
+            # print("Tournament not found")
+        # if tournament.user1:
+            # print("User1")
+            # print(tournament.user1_left)
+            # print(tournament.user1.username)
         if tournament.user1 and tournament.user1_left == False:
             async_to_sync(self.channel_layer.group_send)(
                 f'inbox_{tournament.user1.username}',
@@ -171,11 +171,11 @@ class InvitationConsumer(WebsocketConsumer):
             )
             
     def handle_start_tournament(self, split):
-        print("Starting tournament")
+        # print("Starting tournament")
         id = split[1]
         tournament = Tournament.objects.get(id=id)
-        if not tournament:
-            print("Tournament not found")
+        # if not tournament:
+            # print("Tournament not found")
         if tournament.user1 and tournament.user1_left == False:
             async_to_sync(self.channel_layer.group_send)(
                 f'inbox_{tournament.user1.username}',
@@ -226,7 +226,7 @@ class InvitationConsumer(WebsocketConsumer):
     
 
     def handle_decline(self, split):
-        print("Declining invitation")
+        # print("Declining invitation")
         invitation = Invitation.objects.get(id=split[1])
         return
         invitation.delete()

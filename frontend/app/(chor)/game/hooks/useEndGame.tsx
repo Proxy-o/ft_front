@@ -45,7 +45,7 @@ export default function useEndGame() {
       handleEndGame();
 
       if (tournamentId) {
-        console.log("tournamentId", tournamentId);
+        // console.log("tournamentId", tournamentId);
         handleRefetchTournament(tournamentId);
       }
     },

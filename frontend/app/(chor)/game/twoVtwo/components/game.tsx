@@ -49,7 +49,7 @@ const Game = () => {
     if (newNotif()) {
       const notif = newNotif();
       const parsedMessage = JSON.parse(notif?.data);
-      console.log(parsedMessage);
+      // console.log(parsedMessage);
       const message = parsedMessage.message.split(" ");
       if (message[0] === "/start") {
         // invitaionsData.refetch();

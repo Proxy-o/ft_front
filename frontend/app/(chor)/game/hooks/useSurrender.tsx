@@ -7,13 +7,13 @@ import { toast } from "sonner";
 const surrenderGame = async () => {
   try {
     const res = await axiosInstance.post("/game/surrender");
-    console.log(res);
+    // console.log(res);
     if (res.status === 200) {
       const returnData = {
         gameId: res.data.gameId,
         tournamentId: res.data.tournamentId,
       };
-      console.log("tournament surrender",res.data);
+      // console.log("tournament surrender",res.data);
       toast.success(res.data.message); // todo : refetch game when an enemy join tournament   done, to be tested
       return returnData;
     }
@@ -31,7 +31,7 @@ export default function useSurrenderGame() {
     mutationFn: () => surrenderGame(),
     onSuccess: (data) => {
       handleSurrenderFour(data?.gameId);
-      console.log(data);
+      // console.log(data);
       if (data?.tournamentId) {
         handleRefetchTournament(data?.tournamentId);
       }

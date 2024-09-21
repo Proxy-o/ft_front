@@ -33,7 +33,7 @@ const Invitations = ({ mode }: { mode: string }) => {
     try {
       await acceptInvitationMutation(invitationId);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 
@@ -41,7 +41,7 @@ const Invitations = ({ mode }: { mode: string }) => {
     try {
       acceptInvitationTournamentMutation(invitationId);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 
@@ -82,7 +82,7 @@ const Invitations = ({ mode }: { mode: string }) => {
     }
   }
   return (
-    <div className="w-full  h-full flex flex-col justify-start items-center mx-auto gap-2">
+    <div className="w-full  h-full min-w-72 flex flex-col justify-start items-center mx-auto gap-2">
       <div className="w-full flex flex-col justify-center items-center  space-y-2">
         <Card className="w-full flex flex-col p-2">
           <div className="w-full text-center text-lg font-bold pb-2">

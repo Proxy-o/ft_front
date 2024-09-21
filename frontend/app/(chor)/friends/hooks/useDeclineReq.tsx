@@ -8,7 +8,7 @@ import useWebSocket from "react-use-websocket";
 import { toast } from "sonner";
 
 async function reject(to_reject_id: string | null) {
-  console.log("to_reject_id", to_reject_id);
+  // console.log("to_reject_id", to_reject_id);
   if (!to_reject_id) {
     throw new Error("Invalid user id");
   }

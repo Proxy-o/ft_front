@@ -207,7 +207,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/'
 
 SERVER_URL = f'https://{SERVER_HOST}'
-print('======================================', SERVER_URL)
+# print('======================================', SERVER_URL)
 # oauth providers
 
 OAUTH_PROVIDERS = {

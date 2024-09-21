@@ -327,7 +327,7 @@ class EndGame(APIView):
         # )
         
         if game.type == "tournament":
-            print("tournament")
+            # print("tournament")
             tournament = Tournament.objects.get(
                 Q(semi1=game) | Q(semi2=game) | Q(final=game))
             if game == tournament.semi1:
@@ -503,7 +503,7 @@ class LeaveGame(APIView):
     authentication_classes = [CustomJWTAuthentication]
 
     def post(self, request):
-        print("leave game")
+        # print("leave game")
         username = request.user
         user = User.objects.get(username=username)
         game = Game.objects.filter(Q(user1=user) | Q(user2=user) | Q(
@@ -536,7 +536,7 @@ class OnGoingTournamentView(APIView):
     authentication_classes = [CustomJWTAuthentication]
 
     def get(self, request):
-        print("get ongoing tournament")
+        # print("get ongoing tournament")
         user = request.user
         tournament = Tournament.objects.filter(
             (Q(user1=user) & Q(user1_left=False)) |
@@ -545,7 +545,7 @@ class OnGoingTournamentView(APIView):
             (Q(user4=user) & Q(user4_left=False))
         ).filter(winner=None).last()
         if not tournament or (tournament.user1 and tournament.user1.username == user.username and tournament.user1_left) or (tournament.user2 and tournament.user2.username == user.username and tournament.user2_left) or (tournament.user3 and tournament.user3.username == user.username and tournament.user3_left) or (tournament.user4 and tournament.user4.username == user.username and tournament.user4_left):
-            print("no ongoing tournament")
+            # print("no ongoing tournament")
             return Response({'error': 'No ongoing tournament found'}, status=status.HTTP_204_NO_CONTENT)
         serializer = TournamentSerializer(tournament)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -584,7 +584,7 @@ class DeleteTournament(APIView): #todo: remove this
     authentication_classes = [CustomJWTAuthentication]
 
     def post(self, request):
-        print("delete tournament")
+        # print("delete tournament")
         tournament_id = request.data.get('tournamentId')
         try:
             tournament = Tournament.objects.get(id=tournament_id)
