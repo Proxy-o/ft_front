@@ -14,10 +14,12 @@ import { Card } from "@/components/ui/card";
 import { usePathname, useRouter } from "next/navigation";
 import useInvitationSocket from "@/app/(chor)/game/hooks/sockets/useInvitationSocket";
 import { toast } from "sonner";
+import useGetUser from "../../profile/hooks/useGetUser";
 
 const Invitations = ({ mode }: { mode: string }) => {
   const { newNotif } = useInvitationSocket();
-  const user_id = getCookie("user_id") || "";
+  const {data: user} = useGetUser("0");
+  const user_id = user?.id; // todo: replace cookie user_id with user.id
   const router = useRouter();
   let invitationsData = useGetInvitations(user_id || "0");
   const { mutate: declineMutation } = useDeclineInvitation();

@@ -1,6 +1,6 @@
 import React from "react";
 import useGetTournaments from "../hooks/useGetTournaments";
-import TournamentBoard from "../../game/components/tournamentBoard";
+import TournamentBoard from "../../game/tournament/components/tournamentBoard";
 import {
   Accordion,
   AccordionContent,
