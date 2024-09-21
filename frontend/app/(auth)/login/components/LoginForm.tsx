@@ -86,7 +86,7 @@ export default function LoginForm() {
         </CardContent>
         <CardFooter className="flex flex-col">
           <div className="flex w-full">
-            <Button className="w-full" onClick={onSubmit}>
+            <Button className="w-full" type="submit">
               {isPending ? (
                 <Loader className="h-5 w-5 animate-spin animation" />
               ) : (
