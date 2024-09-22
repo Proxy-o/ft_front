@@ -8,24 +8,28 @@ for i in 1 2 3 4; do
             EMAIL="t@example.com"
             PASSWORD="ttt"
             AVATAR="images/0.jpg"
+            S_TOKEN="OKDOFK"
             ;;
         2)
             USERNAME="y"
             EMAIL="y@example.com"
             PASSWORD="yyy"
             AVATAR="images/1.jpg"
+            S_TOKEN="OKDEREROFK"
             ;;
         3)
             USERNAME="u"
             EMAIL="u@example.com"
             PASSWORD="uuu"
             AVATAR="images/2.jpg"
+            S_TOKEN="OKDTTGOFK"
             ;;
         4)
             USERNAME="i"
             EMAIL="i@example.com"
             PASSWORD="iii"
             AVATAR="images/3.jpg"
+            S_TOKEN="OKDDFDFOFK"
             ;;
     esac
     
@@ -38,7 +42,7 @@ for i in 1 2 3 4; do
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
-user = User.objects.create_user(username='$USERNAME', email='$EMAIL', password='$PASSWORD')
+user = User.objects.create_user(username='$USERNAME', email='$EMAIL', password='$PASSWORD', s_token='$S_TOKEN')
 user.avatar = '$AVATAR'
 user.save()
 " | python manage.py shell
