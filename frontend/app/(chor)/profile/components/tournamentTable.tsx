@@ -23,12 +23,12 @@ export default function TournamentTable({ userid }: { userid: string }) {
 
   return (
     isSuccess && (
-      <Card className="w-full">
+      <Card className="w-full mb-2">
         <Accordion type="single" collapsible>
           {games?.length ? (
             games.map((tournament: any, index: number) => (
               <AccordionItem value={tournament.id} key={index}>
-                <AccordionTrigger className="p-2">
+                <AccordionTrigger className="p-2 ">
                   <div className="flex justify-between items-center border rounded-lg w-full p-1 gap-1">
                     <div className="flex items-center justify-center  gap-4 w-1/2 bg-primary/10 rounded-md relative">
                       <h1 className="w-full  text-center absolute text-5xl opacity-35 hover:scale-110 transition duration-300 ease-in-out blur-sm">
@@ -56,7 +56,7 @@ export default function TournamentTable({ userid }: { userid: string }) {
                         <div className="flex flex-col justify-center items-center p-2 hover:scale-110 transition duration-300 ease-in-out">
                           <Avatar className=" size-10 ">
                             <AvatarImage
-                              src={tournament.creator.avatar}
+                              src={tournament.winner.avatar}
                               alt="profile image"
                               className="rounded-full size-10"
                             />
@@ -64,13 +64,13 @@ export default function TournamentTable({ userid }: { userid: string }) {
                               R
                             </AvatarFallback>
                           </Avatar>
-                          <h1>{tournament.creator.username}</h1>
+                          <h1>{tournament.winner.username}</h1>
                         </div>
                       </div>
                     )}
                   </div>
                 </AccordionTrigger>
-                <AccordionContent className=" flex justify-center items-center">
+                <AccordionContent className=" flex justify-center items-center pr-4">
                   <TournamentBoard tournament={tournament} />
                 </AccordionContent>
               </AccordionItem>

@@ -14,7 +14,7 @@ const TournamentBoard = ({ tournament }: { tournament: any }) => {
     final.current = tournament.final;
   }
   return (
-    <Card className="p-4 h-fit w-full flex flex-col justify-center">
+    <Card className="p-4 h-fit w-full flex flex-col justify-center bg-secondary/30 m-2">
       <div className="mx-auto">Board</div>
       <Separator className="w-full h-[2px] my-4" />
       <div className="flex flex-row ">
