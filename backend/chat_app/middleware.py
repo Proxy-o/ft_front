@@ -19,15 +19,13 @@ def get_user(scope):
     if not refresh_token:
         return AnonymousUser()
     s_token = query_string.get('s_token')
-    print("token",s_token)
     if not s_token:
         return AnonymousUser()
     try:
         payload = RefreshToken(refresh_token[0]).payload
         user_id = payload['user_id']
         user = User.objects.get(pk=user_id)
-        print("useeeer",user)
-        if str(user.s_token) != s_token[0]:
+        if str(user.s_token) != str(s_token[0]):
             return AnonymousUser()
     except Exception as exception:
         return AnonymousUser()

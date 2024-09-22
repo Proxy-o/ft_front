@@ -1,12 +1,28 @@
+import useGetUser from "@/app/(chor)/profile/hooks/useGetUser";
 import getCookie from "@/lib/functions/getCookie";
+import { useEffect, useState } from "react";
 import useWebSocket from "react-use-websocket";
 
 export default function useGameSocket() {
   const token = getCookie("refresh");
-  const socketUrl = process.env.NEXT_PUBLIC_GAME_URL + "/?refresh=" + token;
+  const [socketUrl, setSocketUrl] = useState<string | null>(null);
+  const { data: user, isLoading } = useGetUser("0");
 
-  const { sendJsonMessage, lastMessage } = useWebSocket(socketUrl);
-
+  useEffect(() => {
+    if (!isLoading && user?.s_token) {
+      setSocketUrl(
+        process.env.NEXT_PUBLIC_GAME_URL +
+          "2/?refresh=" +
+          token +
+          "&s_token=" +
+          user?.s_token
+      );
+    }
+  }, [isLoading, user, token]);
+  const { sendJsonMessage, lastMessage } = useWebSocket(socketUrl, {
+    share: true,
+    shouldReconnect: () => !!socketUrl,
+  });
   const gameMsg = () => {
     return lastMessage;
   };
