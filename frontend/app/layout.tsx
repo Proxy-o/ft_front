@@ -3,7 +3,11 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import TanstackProvider from "@/lib/providers/TanstackProvider";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({
+  subsets: ["latin"],
+
+  weight: "800",
+});
 import { Suspense, lazy, useEffect, useState } from "react";
 import HomeSkel from "@/components/skeletons/homeSkel";
 import dynamic from "next/dynamic";
@@ -17,7 +21,11 @@ const ThemeProvider = dynamic(() => import("@/lib/providers/ThemeProvider"), {
 });
 const Nav = lazy(() => import("@/components/navBar/nav"));
 
-export default function RootLayout({children}: {children: React.ReactNode}) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const mb = useMediaQuery("(min-width: 768px)");
   const [showNav, setShowNav] = useState<boolean>(false);
   const path = usePathname();
