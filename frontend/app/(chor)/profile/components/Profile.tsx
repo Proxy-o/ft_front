@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { Suspense, useEffect, useRef, useState } from "react";
 import UserInfo from "./userInfo";
 import States from "./states";
 import useGetUser from "../hooks/useGetUser";
@@ -11,6 +11,7 @@ import ChatCard from "@/app/(chor)/chat/components/chatCard";
 import { UserRoundX, XCircle } from "lucide-react";
 import TabStates from "./tabStates";
 import { Card } from "@/components/ui/card";
+import ProfileSkel from "@/components/skeletons/profileSkel";
 
 export default function Profile({ id }: { id: string }) {
   const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
@@ -41,15 +42,10 @@ export default function Profile({ id }: { id: string }) {
     }
   }, [isChatOpen, isSender, isSuccess]);
 
-  return !data && isSender ? (
-    <div className="flex flex-col w-full  h-full justify-center  items-center gap-2">
-      <UserRoundX size={80} className="text-red-400" />
-      No User found.
-    </div>
-  ) : (
+  return (
     <Card className="max-w-[60rem] mx-auto  ">
       <div className="relative lg:flex justify-center gap-4 p-4 w-full  ">
-        {isSuccess && (
+        {isSuccess ? (
           <>
             <div className="flex flex-col gap-4   w-full ">
               <UserInfo
@@ -79,6 +75,8 @@ export default function Profile({ id }: { id: string }) {
               )}
             </div>
           </>
+        ) : (
+          <ProfileSkel/>
         )}
       </div>
     </Card>

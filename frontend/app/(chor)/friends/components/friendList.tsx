@@ -12,9 +12,10 @@ import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import useGetFriends from "@/app/(chor)/chat/hooks/useGetFriends";
 import { User } from "@/lib/types";
+import { cn } from "@/lib/utils";
 
 export default function FriendList({ user_id }: { user_id: string }) {
-  const { data: friends, isSuccess } = useGetFriends(user_id );
+  const { data: friends, isSuccess } = useGetFriends(user_id);
   return (
     <Card className="p-4   flex  lg:w-72 flex-col">
       <p className="text-center w-full">Friends</p>
@@ -33,9 +34,17 @@ export default function FriendList({ user_id }: { user_id: string }) {
                         className="rounded-sm"
                       />
                       <AvatarFallback className="rounded-sm">PF</AvatarFallback>
-                      {friend.status === "online" && (
-                        <div className="bg-green-500 size-2 rounded-full absolute bottom-[4px] right-1 z-50"></div>
-                      )}
+
+                      <div
+                        className={cn(
+                          " size-2 rounded-full absolute bottom-[0px] right-0 z-50 border border-white",
+                          friend.status === "online"
+                            ? "bg-green-500"
+                            : friend.status === "playing"
+                            ? "bg-yellow-500"
+                            : "bg-red-500"
+                        )}
+                      />
                     </Avatar>
                   </Link>
                 </TooltipTrigger>

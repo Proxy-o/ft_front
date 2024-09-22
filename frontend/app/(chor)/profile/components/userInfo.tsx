@@ -113,12 +113,11 @@ export default function UserInfo({
         )}
       </div>
       {canEdit && <EditProfile user={user} />}
-      <div className=" sm:w-40 sm:h-40">
+      <div className=" md:w-40 md:h-40">
         <ProfileAvatar user={user} canEdit={canEdit} isBlocked={isBlocked} />
       </div>
-      <div className=" flex-1 px-6">
-        <div className="text-2xl font-bold mt-4 sm:mt-0">{user.username}</div>
-
+      <div className=" flex-1 md:px-6">
+        <div className="text-2xl font-bold mt-4 md:mt-0">{user.username}</div>
         <div className="flex justify-around items-center w-full mt-6 ">
           <TooltipProvider delayDuration={0}>
             <Tooltip delayDuration={0}>
@@ -127,8 +126,12 @@ export default function UserInfo({
                   <Activity className="mb-2" />
                   <p
                     className={cn(
-                      "text-sm sm:text-m",
-                      user.status === "online" && "text-green-500"
+                      "text-sm md:text-m",
+                      user.status === "online"
+                        ? "text-green-500"
+                        : user.status === "playing"
+                        ? "text-yellow-500"
+                        : "text-red-500"
                     )}
                   >
                     {user.status}
@@ -145,7 +148,7 @@ export default function UserInfo({
               <TooltipTrigger asChild>
                 <div className="flex flex-col justify-center items-center  ">
                   <Users className="mb-2 ml-1" />
-                  <p className="text-sm sm:text-m">{friends?.length}</p>
+                  <p className="text-sm md:text-m">{friends?.length}</p>
                 </div>
               </TooltipTrigger>
               <TooltipContent>
@@ -158,7 +161,7 @@ export default function UserInfo({
               <TooltipTrigger asChild>
                 <div className="flex flex-col justify-center items-center ">
                   <Clock className="mb-2" />
-                  <p className="text-sm sm:text-m">
+                  <p className="text-sm md:text-m">
                     {user.date_joined?.split("T")[0]}
                   </p>
                 </div>
@@ -221,7 +224,9 @@ export default function UserInfo({
                     <Button
                       className="mt-6 w-full bg-red-400/20"
                       variant="outline"
-                      onClick={() => reject({ to_reject_id: recReqId, friend: user })}
+                      onClick={() =>
+                        reject({ to_reject_id: recReqId, friend: user })
+                      }
                     >
                       Decline
                     </Button>

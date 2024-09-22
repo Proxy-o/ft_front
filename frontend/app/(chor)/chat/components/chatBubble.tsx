@@ -3,6 +3,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User } from "@/lib/types";
 import React, { useState } from "react";
 import { Message } from "../types";
+import Link from "next/link";
 
 export default function ChatBubble({
   message,
@@ -30,7 +31,7 @@ export default function ChatBubble({
       </p>
     </div>
   ) : (
-    <div className="flex w-full h-fit items-center relative hover:cursor-pointer">
+    <Link href={`/profile/${receiver.id}`} className="flex w-full h-fit items-center relative hover:cursor-pointer">
       <Avatar className=" mr-2 size-4">
         <AvatarImage
           src={receiver.avatar}
@@ -51,6 +52,6 @@ export default function ChatBubble({
           {new Date(message.timestamp).toLocaleTimeString()}
         </span>
       </p>
-    </div>
+    </Link>
   );
 }
