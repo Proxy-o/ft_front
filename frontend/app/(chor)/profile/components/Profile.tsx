@@ -43,7 +43,7 @@ export default function Profile({ id }: { id: string }) {
   }, [isChatOpen, isSender, isSuccess]);
 
   return (
-    <Card className="max-w-[60rem] mx-auto  ">
+    <Card className="max-w-[60rem] mx-2  ">
       <div className="relative lg:flex justify-center gap-4 p-4 w-full  ">
         {isSuccess ? (
           <>

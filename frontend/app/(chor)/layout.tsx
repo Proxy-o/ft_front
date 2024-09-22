@@ -2,42 +2,58 @@
 import getCookie from "@/lib/functions/getCookie";
 import SearchFriend from "./profile/components/searchFriend";
 import { usePathname, useRouter } from "next/navigation";
-import MobilNav from "@/components/navBar/mobilNav";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
-import { useEffect } from "react";
+import { useState, useEffect, lazy } from "react";
 
-export default function RootLayout({
+const Nav = lazy(() => import("@/components/navBar/nav"));
+const MobilNav = lazy(() => import("@/components/navBar/mobilNav"));
+
+export default function AppLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  const is_logged_in = getCookie("logged_in");
   const mb = useMediaQuery("(min-width: 768px)");
-  const is_local = usePathname() === "/game/local";
+  const [showNav, setShowNav] = useState<number>(0);
+  const path = usePathname();
+  const is_local = path === "/game/local";
+  const logged_in = getCookie("logged_in");
 
   useEffect(() => {
-    if (!is_local && !is_logged_in) {
+    if (!is_local && !logged_in) {
       router.push("/login");
     }
-  }, [router, is_local, is_logged_in]);
+  }, [router, is_local, logged_in]);
+
+  useEffect(() => {
+    if (is_local) {
+      setShowNav(0);
+    } else if (mb) {
+      setShowNav(1);
+    } else {
+      setShowNav(2);
+    }
+  }, [is_local, mb, logged_in]);
 
   return (
-    (is_logged_in || is_local) && (
-      <div className="h-full relative">
+    (logged_in || is_local) && (
+      <div className=" h-full relative flex flex-row ">
+        {(showNav === 1) && <Nav />}
         <div
           className={cn(
-            "flex w-full  overflow-auto",
+            "flex  border-l-[0.04rem] sm:mx-0 h-screen overflow-auto  md:p-0",
+            // "flex w-full  overflow-auto",
             !mb && "h-[calc(100vh-3.7rem)]"
           )}
-        >
-          <div className="w-full h-full ">
+          >
+          <div className=" w-full h-full py-0.5">
             {!is_local && <SearchFriend />}
             {children}
           </div>
         </div>
-        {!mb && !is_local && <MobilNav />}
+        {(showNav === 2) && <MobilNav />}
       </div>
     )
   );

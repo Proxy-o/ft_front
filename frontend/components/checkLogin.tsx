@@ -1,18 +1,22 @@
 "use client";
 
-import useGetUser from "@/app/(chor)/profile/hooks/useGetUser";
+import getCookie from "@/lib/functions/getCookie";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 const CheckLogin = () => {
-  const { data: user, isSuccess } = useGetUser( "0");
+  const path = usePathname()
+  const is_logged = getCookie("logged_in") === "yes";
   const router = useRouter();
 
   useEffect(() => {
-    if (!user && isSuccess) {
-      router.push("/login");
+    if (is_logged && ["/", "/login", "/register"].includes(path)) {
+      router.push("/game")
+    } else if (is_logged) {
+      router.push("/")
     }
-  }, [user, isSuccess, router]);
+  }, [is_logged, path, router])
 
   return <></>;
 };

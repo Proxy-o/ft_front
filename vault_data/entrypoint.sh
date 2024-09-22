@@ -63,8 +63,8 @@ vault kv put secret/db \
 vault kv put secret/front \
   NEXT_PUBLIC_BACKEND_URL=https://${SERVER_HOST}:443 \
   NEXT_PUBLIC_CHAT_URL=wss://${SERVER_HOST}:443/ws/chat/ \
-  NEXT_PUBLIC_INVITATION_URL=wss://${SERVER_HOST}:443/ws/game/invitation/ \
-  NEXT_PUBLIC_GAME_URL=wss://${SERVER_HOST}:443/ws/game/game/
+  NEXT_PUBLIC_INVITATION_URL=wss://${SERVER_HOST}:443/ws/game/invitation \
+  NEXT_PUBLIC_GAME_URL=wss://${SERVER_HOST}:443/ws/game/game
 
 vault kv put secret/oauth \
   OAUTH_42_CLIENT_ID=$OAUTH_42_CLIENT_ID \

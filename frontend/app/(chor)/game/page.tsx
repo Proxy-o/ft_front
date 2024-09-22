@@ -19,7 +19,7 @@ export default function Page() {
   return (
     <div className="relative w-full max-w-[60rem] mx-auto   ">
       {/* <GameNav setTab={setTab} tab={tab} /> */}
-      <Card className=" flex flex-col justify-center items-center  mx-auto gap-2 p-4 h-full ">
+      <Card className=" flex flex-col justify-center items-center  mx-2 gap-2 p-4 h-full ">
         <div className="pb-2  w-full">Modes</div>
         <div className="flex flex-wrap gap-5 justify-center  max-h-full  p-6  bg-secondary/40 rounded-md">
           <Link href="/game/local" >

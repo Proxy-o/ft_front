@@ -30,7 +30,7 @@ export default function Page() {
     user && (
       <div className="h-[calc(100vh-7.3rem)]  w-full flex flex-col max-w-[60rem] mx-auto">
 
-        <Card className=" w-full border    flex flex-col     p-1 mr-2 h-full overflow-y-auto">
+        <Card className=" border    flex flex-col     p-1 mx-2 h-full overflow-y-auto">
           
           <div className="flex w-full justify-center items-center border-b-2  py-4">
             Friends
