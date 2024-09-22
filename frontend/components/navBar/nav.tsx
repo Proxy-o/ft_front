@@ -77,18 +77,18 @@ export default function Nav() {
     variant: "default",
   };
 
-  const logged_in = getCookie("logged_in");
+  // const logged_in = getCookie("logged_in");
 
-  useEffect(() => {
-    if (
-      logged_in != "yes" &&
-      path != "/login" &&
-      path != "/register" &&
-      path != "/game/local"
-    ) {
-      return logout();
-    }
-  }, [logged_in, router, logout, path]);
+  // useEffect(() => {
+  //   if (
+  //     logged_in != "yes" &&
+  //     path != "/login" &&
+  //     path != "/register" &&
+  //     path != "/game/local"
+  //   ) {
+  //     return logout();
+  //   }
+  // }, [logged_in, router, logout, path]);
   const { data: user, isSuccess } = useGetUser("0");
 
   const {

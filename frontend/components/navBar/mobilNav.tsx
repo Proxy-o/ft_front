@@ -92,18 +92,18 @@ export default function MobilNav() {
     lastJsonMessage: LastMessage;
     readyState: number;
   } = useChatSocket();
-  const logged_in = getCookie("logged_in");
+  // const logged_in = getCookie("logged_in");
 
-  useEffect(() => {
-    if (
-      logged_in != "yes" &&
-      path != "/login" &&
-      path != "/register" &&
-      path != "/game/local"
-    ) {
-      return logout();
-    }
-  }, [logged_in, router, logout, path]);
+  // useEffect(() => {
+  //   if (
+  //     logged_in != "yes" &&
+  //     path != "/login" &&
+  //     path != "/register" &&
+  //     path != "/game/local"
+  //   ) {
+  //     return logout();
+  //   }
+  // }, [logged_in, router, logout, path]);
 
   useEffect(() => {
     if (readyState === 3 && isSuccess) {
@@ -258,7 +258,7 @@ export default function MobilNav() {
   };
 
   return (
-    <div className=" bottom-0  w-full overflow-auto h-18 ">
+    <div className="fixed bottom-0 w-full overflow-auto h-18 ">
       <nav className=" h-full  flex justify-around w-full items-center gap-2 p-2 border-t-2">
         {links.map((link, index) => (
           <Link

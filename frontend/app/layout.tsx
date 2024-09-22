@@ -4,32 +4,28 @@ import "./globals.css";
 import TanstackProvider from "@/lib/providers/TanstackProvider";
 
 const inter = Inter({ subsets: ["latin"] });
-import { Suspense, lazy, useEffect, useState } from "react";
+import { Suspense, useEffect } from "react";
 import HomeSkel from "@/components/skeletons/homeSkel";
 import dynamic from "next/dynamic";
-import useMediaQuery from "@/lib/hooks/useMediaQuery";
 import { Toaster } from "@/components/ui/sonner";
 import { usePathname } from "next/navigation";
 import getCookie from "@/lib/functions/getCookie";
+import { useRouter } from "next/navigation";
 
 const ThemeProvider = dynamic(() => import("@/lib/providers/ThemeProvider"), {
   ssr: false,
 });
-const Nav = lazy(() => import("@/components/navBar/nav"));
 
 export default function RootLayout({children}: {children: React.ReactNode}) {
-  const mb = useMediaQuery("(min-width: 768px)");
-  const [showNav, setShowNav] = useState<boolean>(false);
+  const router = useRouter();
   const path = usePathname();
   const logged_in = getCookie("logged_in");
 
   useEffect(() => {
-    if (mb && path != "/login" && path != "/register" && logged_in == "yes") {
-      setShowNav(true);
-    } else {
-      setShowNav(false);
+    if (logged_in == "yes" && ["/", "/login", "/register"].includes(path)) {
+      router.push("game")
     }
-  }, [path, mb, logged_in]);
+  }, [path, logged_in, router]);
 
   return (
     <html lang="en">
@@ -43,9 +39,8 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
           >
             <h1></h1>
             <Suspense fallback={<HomeSkel />}>
-              <div className="md:flex relative">
-                {showNav && <Nav />}
-                <main className="border-l-[0.04rem] w-full sm:mx-0 h-screen overflow-auto  md:p-0">
+              <div className=" relative bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/20 via-primary/10 to-background/20">
+                <main>
                   {children}
                 </main>
                 <Toaster duration={3000} />

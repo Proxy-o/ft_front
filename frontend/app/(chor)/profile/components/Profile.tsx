@@ -42,12 +42,12 @@ export default function Profile({ id }: { id: string }) {
   }, [isChatOpen, isSender, isSuccess]);
 
   return !data && isSender ? (
-    <div className="flex flex-col w-full  h-full justify-center  items-center gap-2">
+    <div className="flex flex-col w-full  h-full justify-center items-center gap-2">
       <UserRoundX size={80} className="text-red-400" />
       No User found.
     </div>
   ) : (
-    <Card className="max-w-[60rem] mx-auto  ">
+    <Card className="max-w-[60rem] mx-2">
       <div className="relative lg:flex justify-center gap-4 p-4 w-full  ">
         {isSuccess && (
           <>
