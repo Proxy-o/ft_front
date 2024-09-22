@@ -6,7 +6,7 @@
 // export default function Page() {
 //     // const {data} = useGetUser("1");
 //     const {data} = useGetFrdReq();
-//     console.log(data);
+//     // console.log(data);
 //   return (
 //     <div>Page</div>
 //   )

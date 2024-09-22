@@ -284,12 +284,12 @@ const OneOffline = () => {
     }
     function checkLoseConditionOffline() {
       if (canvas === null) return;
-      if (leftScoreRef.current === 10) {
+      if (leftScoreRef.current === 77777) {
         state.current = "left";
-      } else if (rightScoreRef.current === 10) {
+      } else if (rightScoreRef.current === 77777) {
         state.current = "right";
       }
-      if (leftScoreRef.current === 10 || rightScoreRef.current === 10) {
+      if (leftScoreRef.current === 77777 || rightScoreRef.current === 77777) {
         rightScoreRef.current = 0;
         leftScoreRef.current = 0;
         setGameStarted(false);

@@ -18,10 +18,10 @@ function checkLoseConditionOnline(
   setCanvas: React.Dispatch<React.SetStateAction<HTMLCanvasElement | null>>
 ) {
   if (canvas === null) return;
-  if (rightScoreRef.current >= 3) {
+  if (rightScoreRef.current >= 77777) {
     gameStartedRef.current = false;
     setCanvas(null);
-    // alert("1");
+    // alert("1 score is " + rightScoreRef.current);
     endGame({
       winner: rightUser?.id || "",
       winnerScore: rightScoreRef.current,
@@ -53,10 +53,10 @@ function checkLoseConditionFour(
     userRightTop: rightUserTop,
     userRightBottom: rightUserBottom,
   } = canvasParams;
-  if (rightScoreRef.current >= 3 || leftScoreRef.current >= 3) {
-    handleRefetchPlayers(canvasParams.gameId);
+  if (rightScoreRef.current >= 77777 || leftScoreRef.current >= 77777) {
+    // handleRefetchPlayers(canvasParams.gameId);
     setGameStarted(false);
-    if (rightScoreRef.current >= 3) {
+    if (rightScoreRef.current >= 77777) {
       if (username === leftUserTop.current?.username) {
         endGameFour({
           winner: rightUserTop.current?.id || "",
@@ -72,7 +72,7 @@ function checkLoseConditionFour(
         toast.success("You have won the game");
       }
     }
-    if (leftScoreRef.current >= 3) {
+    if (leftScoreRef.current >= 77777) {
       if (username === rightUserTop.current?.username) {
         endGameFour({
           winner: leftUserTop.current?.id || "",

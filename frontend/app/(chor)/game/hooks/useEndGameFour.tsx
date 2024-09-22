@@ -1,6 +1,8 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import useInvitationSocket from "./sockets/useInvitationSocket";
+import useGameSocket from "./sockets/useGameSocket";
 
 const endGameFour = async (data: {
   winner: string;
@@ -24,6 +26,7 @@ const endGameFour = async (data: {
 
 export default function useEndGameFour() {
   const queryClient = useQueryClient();
+  const {handleEndGame} = useGameSocket();
   const mutation = useMutation({
     mutationFn: (data: {
       winner: string;
@@ -33,6 +36,7 @@ export default function useEndGameFour() {
     }) => endGameFour(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["gameFour"] });
+      handleEndGame();
     },
   });
   return mutation;

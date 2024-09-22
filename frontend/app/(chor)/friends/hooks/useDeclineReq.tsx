@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import useChatSocket from "../../game/hooks/sockets/useChatSocket";
 
 async function reject(to_reject_id: string | null) {
-  console.log("to_reject_id", to_reject_id);
+  // console.log("to_reject_id", to_reject_id);
   if (!to_reject_id) {
     throw new Error("Invalid user id");
   }

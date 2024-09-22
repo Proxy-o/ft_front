@@ -14,7 +14,7 @@ const invite = async ({
   gameType: string;
 }) => {
   let res;
-  console.log("user_id zbbi");
+  // console.log("user_id zbbi");
   try {
     res = await axiosInstance.post("game/send_invitation", {
       sender: user_id,

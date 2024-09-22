@@ -18,9 +18,9 @@ const OAuthCallbackPage: React.FC = () => {
 
   useEffect(() => {
     if (isClient) {
-      console.log('isClient',provider, code, state);
+      // console.log('isClient',provider, code, state);
       if (provider && code && state) {
-        // console.log('provider, code, state');
+        // // console.log('provider, code, state');
         // console.table({ provider, code, state });
         handleCallback({ provider, code, state } as OAuthCallbackParams);
       }

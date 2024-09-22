@@ -1,32 +1,27 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { canvasParams } from "../types";
-import { draw, drawPlayers } from "../methods/draw";
-import { movePaddlesOnline } from "../methods/movePaddles";
-import { changeBallDirectionOnline } from "../methods/changeBallDirection";
-import { checkLoseConditionOnline } from "../methods/checkLoseCondition";
-import { changeScoreOnline } from "../methods/changeScore";
-import checkCollisionWithHorizontalWalls from "../methods/checkCollisionWithHorizontalWalls";
-import { moveBall } from "../methods/moveBall";
+import { canvasParams } from "../../types";
+import { draw } from "../../methods/draw";
+import { movePaddlesOnline } from "../../methods/movePaddles";
+import { changeBallDirectionOnline } from "../../methods/changeBallDirection";
+import { checkLoseConditionOnline } from "../../methods/checkLoseCondition";
+import { changeScoreOnline } from "../../methods/changeScore";
+import checkCollisionWithHorizontalWalls from "../../methods/checkCollisionWithHorizontalWalls";
+import { moveBall } from "../../methods/moveBall";
 import { User } from "@/lib/types";
 import getCookie from "@/lib/functions/getCookie";
-import useGetGame from "../hooks/useGetGames";
-import useEndGame from "../hooks/useEndGame";
+import useEndGame from "../../hooks/useEndGame";
 import useGameSocket from "@/app/(chor)/game/hooks/sockets/useGameSocket";
 import useInvitationSocket from "@/app/(chor)/game/hooks/sockets/useInvitationSocket";
-import { enemyLeftGame } from "../methods/enemyLeftGame";
-import useGetUser from "../../profile/hooks/useGetUser";
-import useSurrenderGame from "../hooks/useSurrender";
-import useLeaveGame from "../hooks/useLeaveGame";
-import { Button } from "@/components/ui/button";
-import { DoorOpen, Flag, Gamepad } from "lucide-react";
+import { enemyLeftGame } from "../../methods/enemyLeftGame";
+import useGetUser from "../../../profile/hooks/useGetUser";
 import { Card } from "@/components/ui/card";
-import NoGame from "../components/noGame";
-import PreGame from "../components/preGame";
-import Sockets from "../components/sockets";
-import { Toaster } from "@/components/ui/sonner";
+import NoGame from "../../components/noGame";
+import PreGame from "../../components/preGame";
 import { useQueryClient } from "@tanstack/react-query";
+import Actions from "./actions";
+import Score from "./score";
 
 const Game = ({
   type,
@@ -74,18 +69,16 @@ const Game = ({
     handleEnemyScore,
     handleTime,
     handleStartGame,
-    handleSurrender,
   } = useGameSocket();
 
-  const { newNotif, handleAcceptTournamentInvitation, handleRefetchPlayers } =
-    useInvitationSocket();
+  const { newNotif } = useInvitationSocket();
 
   const query = useQueryClient();
 
   const user_id = getCookie("user_id") || "";
   const { data: user } = useGetUser(user_id || "0");
-  const { mutate: surrenderGame } = useSurrenderGame();
-  const { mutate: leaveGame } = useLeaveGame();
+  // const { mutate: surrenderGame } = useSurrenderGame();
+  // const { mutate: leaveGame } = useLeaveGame();
   const { mutate: endGame } = useEndGame();
 
   userRef.current = user;
@@ -112,6 +105,30 @@ const Game = ({
 
   gameIdRef.current = onGoingGame?.data?.game?.id || "";
 
+  const paddleHeight = 60;
+  const paddleWidth = 15;
+  let ballRadius = 10;
+
+  let canvasParams: canvasParams = {
+    canvas,
+    paddleRightX: 0,
+    paddleLeftX: 0,
+    paddleLeftYRef,
+    PaddleRightYRef,
+    paddleRightDirectionRef,
+    newBallPositionRef,
+    paddleWidth,
+    paddleHeight,
+    ballRadius,
+    upPressedRef,
+    downPressedRef,
+    isFirstTime,
+    rightScoreRef,
+    leftScoreRef,
+    leftUserRef: leftUser,
+    rightUserRef: rightUser,
+    gameIdRef,
+  };
   useEffect(() => {
     if (canvas === null && canvasRef.current) {
       setCanvas(canvasRef.current);
@@ -120,12 +137,11 @@ const Game = ({
     const ctx = canvas?.getContext("2d");
     if (!ctx) return;
 
-    let ballRadius = 10;
     let x = canvas.width / 2;
     let y = canvas.height / 2;
-    const paddleHeight = 60;
-    const paddleWidth = 15;
 
+    const paddleLeftX = 0;
+    const paddleRightX = canvas.width - paddleWidth;
     paddleLeftYRef.current = (canvas.height - paddleHeight) / 2;
     PaddleRightYRef.current = (canvas.height - paddleHeight) / 2;
 
@@ -134,29 +150,8 @@ const Game = ({
     rightScoreRef.current = 0;
     leftScoreRef.current = 0;
 
-    const paddleLeftX = 0;
-    const paddleRightX = canvas.width - paddleWidth;
-
-    let canvasParams: canvasParams = {
-      canvas,
-      paddleLeftYRef,
-      paddleRightX,
-      PaddleRightYRef,
-      paddleRightDirectionRef,
-      newBallPositionRef,
-      paddleLeftX,
-      paddleWidth,
-      paddleHeight,
-      ballRadius,
-      upPressedRef,
-      downPressedRef,
-      isFirstTime,
-      rightScoreRef,
-      leftScoreRef,
-      leftUserRef: leftUser,
-      rightUserRef: rightUser,
-      gameIdRef,
-    };
+    canvasParams.paddleRightX = paddleRightX;
+    canvasParams.paddleLeftX = paddleLeftX;
 
     const handleKeyEvent = (e: KeyboardEvent) => {
       // preventDefault to prevent the page from scrolling
@@ -209,16 +204,16 @@ const Game = ({
           newAngleRef.current = Math.random() * Math.PI;
           while (
             (newAngleRef.current > Math.PI / 6 &&
-            newAngleRef.current < (Math.PI * 5) / 6) ||
+              newAngleRef.current < (Math.PI * 5) / 6) ||
             (newAngleRef.current > (Math.PI * 7) / 6 &&
-            newAngleRef.current < (Math.PI * 11) / 6)
+              newAngleRef.current < (Math.PI * 11) / 6)
           ) {
             newAngleRef.current = Math.random() * 2 * Math.PI;
           }
           let enemyX = canvas.width - newBallPositionRef.current.x;
           let enemyY = newBallPositionRef.current.y;
           let enemyAngle = Math.PI - newAngleRef.current;
-          
+
           handleChangeBallDirection(
             enemyX,
             enemyY,
@@ -227,27 +222,22 @@ const Game = ({
           );
         }
       }, 1000);
-      
+
       if (bgImage.current === null) {
         bgImage.current = new Image();
         bgImage.current.src = "/game.jpeg";
       }
-      
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.globalAlpha = 0.5;
       ctx.drawImage(bgImage.current, 0, 0, canvas.width, canvas.height);
       ctx.globalAlpha = 1;
       // draw paddles and ball
       draw(canvasParams, ctx);
-      
+
       // move paddles
       movePaddlesOnline(canvasParams);
-      // // console.log("move paddle" + movePaddleRef.current);
-      if (onGoingGame?.data?.game?.winner?.username) {
-        setGameStarted(false);
-        onGoingGame.refetch();
-      }
-      
+
       // // Check for collision with left paddle
       changeBallDirectionOnline(
         canvasParams,
@@ -256,7 +246,7 @@ const Game = ({
         handleChangeBallDirection,
         rightUser.current
       );
-      
+
       // Check for score
       checkLoseConditionOnline(
         canvas,
@@ -290,14 +280,13 @@ const Game = ({
       // Move the ball
       if (
         newAngleRef.current !== 0 &&
-        leftScoreRef.current < 3 &&
-        rightScoreRef.current < 3
+        leftScoreRef.current < 77777 &&
+        rightScoreRef.current < 77777
       ) {
         moveBall(canvasParams, user, leftUser.current, newAngleRef);
       }
 
       // Check if enemy has left the game
-      // console.log("timeRef.current", timeRef.current);
       enemyLeftGame(
         canvasParams,
         timeRef,
@@ -308,8 +297,9 @@ const Game = ({
       );
     };
 
-    const drawOnlineOne = () => {
+    const animate = () => {
       if (canvas === null) return;
+
       if (
         gameStartedRef.current &&
         leftUser.current !== undefined &&
@@ -317,12 +307,6 @@ const Game = ({
       ) {
         gameStarted();
       }
-    };
-
-    const animate = () => {
-      if (canvas === null) return;
-
-      drawOnlineOne();
       animationFrameId.current = requestAnimationFrame(animate);
     };
 
@@ -337,7 +321,7 @@ const Game = ({
     const gameMsge = gameMsg();
     if (gameMsge) {
       const parsedMessage = JSON.parse(gameMsge.data);
-      console.log(parsedMessage.message);
+      // console.log(parsedMessage.message);
       const message = parsedMessage?.message.split(" ");
 
       if (message[0] === "/move") {
@@ -363,7 +347,7 @@ const Game = ({
           newAngleRef.current = parseFloat(message[3]);
         }
       } else if (message[0] === "/show") {
-        console.log("showing");
+        // console.log("showing");
         if (!gameStartedRef.current) {
           handleStartGame(
             leftUser.current?.username || "",
@@ -385,7 +369,7 @@ const Game = ({
           onGoingGame.refetch();
         }
       } else if (message[0] === "/score") {
-        console.log("refetching");
+        // console.log("refetching");
         isFirstTime.current = true;
         onGoingGame.refetch();
       } else if (message[0] === "/time") {
@@ -403,20 +387,17 @@ const Game = ({
         setCanvas(null);
         onGoingGame.refetch();
       } else if (message[0] === "/endGame") {
-        if (leftScoreRef.current < 3 && rightScoreRef.current < 3) {
+        if (leftScoreRef.current < 77777 && rightScoreRef.current < 77777) {
           state.current = "leave";
-        } else if (leftScoreRef.current >= 3) {
+        } else if (leftScoreRef.current >= 77777) {
           state.current = "win";
-        } else if (rightScoreRef.current >= 3) {
+        } else if (rightScoreRef.current >= 77777) {
           state.current = "lose";
         } else {
           state.current = "none";
         }
         gameStartedRef.current = false;
         setCanvas(null);
-        if (type === "tournament") {
-          handleRefetchPlayers(onGoingGame.data.game.id);
-        }
         onGoingGame.refetch();
       }
     }
@@ -427,16 +408,30 @@ const Game = ({
     if (notif) {
       const parsedMessage = JSON.parse(notif.data);
       const message = parsedMessage?.message.split(" ");
-      if (message[0] === "/start" || message[0] === "/refetchTournament" || message[0] === "/refetchPlayers") {
+      if (
+        message[0] === "/start" ||
+        message[0] === "/refetchTournament" ||
+        message[0] === "/refetchPlayers"
+      ) {
         onGoingGame.refetch();
       }
     }
   }, [newNotif()?.data]);
 
   return (
-    <>
-      <Card className="w-full h-[350px] md:h-[400px]">
-        {leftUser.current?.username ? (
+    <div className="w-full h-fit flex flex-col max-w-[800px]  justify-center items-center gap-2">
+      {gameStartedRef.current && (
+          <Score
+            leftScoreRef={leftScoreRef}
+            rightScoreRef={rightScoreRef}
+            leftUserRef={leftUser}
+            rightUserRef={rightUser}
+          />
+        )}
+      <Card className="w-full max-w-[900px] h-[350px] md:h-[400px]">
+        {leftUser.current?.username &&
+        leftScoreRef.current < 77777 &&
+        rightScoreRef.current < 77777 ? (
           <>
             {gameStartedRef.current ? (
               <canvas
@@ -446,90 +441,25 @@ const Game = ({
                 className={`w-full h-full`}
               ></canvas>
             ) : (
-              <div
-                className={`w-full h-full flex justify-center items-center ${
-                  gameStartedRef.current ? "hidden" : "block"
-                }`}
-                style={{
-                  backgroundImage: "url('/game.jpeg')",
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }}
-              >
-                <PreGame
-                  type={type}
-                  leftUserTop={leftUser.current}
-                  rightUserTop={rightUser.current}
-                  leftUserBottom={null}
-                  rightUserBottom={null}
-                />
-              </div>
+              <PreGame
+                type={type}
+                leftUserTop={leftUser.current}
+                rightUserTop={rightUser.current}
+                leftUserBottom={null}
+                rightUserBottom={null}
+              />
             )}
           </>
         ) : (
-          <NoGame state={state} />
+          !gameStartedRef.current && <NoGame state={state} />
         )}
       </Card>
-      {rightUser.current?.username && (
-        <div className="w-full md:w-5/6 h-[70px] max-w-[800px] flex justify-between items-center mt-4">
-          {!gameStartedRef.current ? (
-            <>
-              <div className="ml-[80px] h-5/6 w-1/6">
-                <Button
-                  onClick={() => {
-                    handleStartGame(
-                      leftUser.current?.username || "",
-                      rightUser.current?.username || "",
-                      gameIdRef.current
-                    );
-                  }}
-                  className="h-full w-full bg-primary"
-                >
-                  <Gamepad size={25} />
-                  Start
-                </Button>
-              </div>
-              {type !== "tournament" && (
-                <div className="mr-[80px] h-5/6 w-1/6">
-                  <Button
-                    onClick={() => {
-                      leaveGame();
-                      handleSurrender(
-                        leftUser.current?.username || "",
-                        rightUser.current?.username || "",
-                        gameIdRef.current
-                      );
-                    }}
-                    className="h-full w-full bg-primary"
-                  >
-                    <DoorOpen size={25} />
-                    Leave
-                  </Button>
-                </div>
-              )}
-            </>
-          ) : (
-            <div className="ml-auto mr-[80px] h-5/6 w-1/6">
-              <Button
-                onClick={() => {
-                  setCanvas(null);
-                  surrenderGame();
-                  handleSurrender(
-                    leftUser.current?.username || "",
-                    rightUser.current?.username || "",
-                    gameIdRef.current
-                  );
-                }}
-                className="h-full w-full bg-primary"
-              >
-                <Flag size={25} />
-                Surrender
-              </Button>
-            </div>
-          )}
-        </div>
-      )}
-    </>
+      <Actions
+        canvasPrams={canvasParams}
+        gameStartedRef={gameStartedRef}
+        type={type}
+      />
+    </div>
   );
 };
 

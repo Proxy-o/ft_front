@@ -22,7 +22,7 @@ class GameConsumer(WebsocketConsumer):
         self.accept()
 
         if self.user.is_authenticated:
-            print("User authenticated")
+            # print("User authenticated")
             async_to_sync(self.channel_layer.group_add)(
                 self.user_inbox,
                 self.channel_name,
@@ -54,10 +54,10 @@ class GameConsumer(WebsocketConsumer):
         elif command == '/changeBallDirection':
             self.handle_change_ball_direction(split)
         elif command == '/fourDebut':
-            print("Four debut")
+            # print("Four debut")
             self.handle_four_debut(split)
         elif command == '/readyToStartFour':
-            print("Ready to start four")
+            # print("Ready to start four")
             self.handle_ready_to_start_four(split)
         elif command == '/fourChangeBallDirection':
             self.handle_four_change_ball_direction(split)
@@ -92,7 +92,20 @@ class GameConsumer(WebsocketConsumer):
         user2 = split[2]
         gameId = split[3]
         # print("gaaaaame group", self.game_group, self.user.username)
-        user = ''
+        game = Game.objects.get(id=gameId)
+        if not game:
+            return
+        if game.type == "two" and (game.user1.status == 'offline' or game.user2.status == 'offline'): #todo:this is unfinished
+            async_to_sync(self.channel_layer.group_send)(
+                f'game_{game.user1.username}',
+                {'type': 'send_message', 'user': user1, 'message': f'/endGame {user1}'}
+            )
+            async_to_sync(self.channel_layer.group_send)(
+                f'game_{game.user2.username}',
+                {'type': 'send_message', 'user': user2, 'message': f'/endGame {user2}'}
+            )
+            game.delete()
+            
         if self.user.username == user1:
             user = user2
         else:
@@ -116,7 +129,6 @@ class GameConsumer(WebsocketConsumer):
         gameId = split[1]
         game = Game.objects.get(id=gameId)
         if not game:
-            self.send_error('Game not found')
             return
         async_to_sync(self.channel_layer.group_send)(
             f'game_{game.user1.username}',
@@ -221,14 +233,8 @@ class GameConsumer(WebsocketConsumer):
         # print("Handling time")
         time = split[1]
         game = Game.objects.filter(Q(user1=self.user) | Q(user2=self.user) | Q(user3=self.user) | Q(user4=self.user)).filter(winner=None).last()
-        # async_to_sync(self.channel_layer.group_send)(
-        #     self.game_group,
-        #     {
-        #         'type': 'send_message',
-        #         'user': self.user.username,
-        #         'message': f'/time {time} {self.user.username}'
-        #     }
-        # )
+        if not game:
+            return
         async_to_sync(self.channel_layer.group_send)(
             f'game_{game.user1.username}',
             {
@@ -265,6 +271,7 @@ class GameConsumer(WebsocketConsumer):
         #     )
 
     def handle_surrender(self, split):
+        time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         surrenderer = split[1]
         winner_username = split[2]
         async_to_sync(self.channel_layer.group_send)(
@@ -272,7 +279,7 @@ class GameConsumer(WebsocketConsumer):
             {
                 'type': 'send_message',
                 'user': surrenderer,
-                'message': f'/surrender {surrenderer} {winner_username}'
+                'message': f'/surrender {surrenderer} {winner_username} {time}'
             }
         )
         async_to_sync(self.channel_layer.group_send)(
@@ -280,7 +287,7 @@ class GameConsumer(WebsocketConsumer):
             {
                 'type': 'send_message',
                 'user': winner_username, 'message':
-                f'/surrender {surrenderer} {winner_username}'
+                f'/surrender {surrenderer} {winner_username} {time}'
             }
         )
 
@@ -288,6 +295,8 @@ class GameConsumer(WebsocketConsumer):
         time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         user = split[1]
         game = Game.objects.filter(Q(user1=self.user) | Q(user2=self.user) | Q(user3=self.user) | Q(user4=self.user)).filter(winner=None).last()
+        if not game:
+            return
         async_to_sync(self.channel_layer.group_send)(
             f'game_{game.user1.username}',
             {
@@ -337,7 +346,7 @@ class GameConsumer(WebsocketConsumer):
         #     f'game_{split[5]}',
         #     {'type': 'send_message', 'user': split[5], 'message': f'/showFour {user} {split[5]} {time}'}
         # )
-        print(split[1], split[2], split[3], split[4], split[5])
+        # print(split[1], split[2], split[3], split[4], split[5])
 
 
     
@@ -345,6 +354,8 @@ class GameConsumer(WebsocketConsumer):
         # print("Handling four time")
         time = split[1]
         game = Game.objects.filter(Q(user1=self.user) | Q(user2=self.user) | Q(user3=self.user) | Q(user4=self.user)).filter(winner=None).last()
+        if not game:
+            return
         # async_to_sync(self.channel_layer.group_send)(
         #     self.game_group,
         #     {
@@ -446,7 +457,7 @@ class GameConsumer(WebsocketConsumer):
         )
 
     def handle_ready_four(self, split):
-        print("Handling ready four")
+        # print("Handling ready four")
         user = split[1]
         async_to_sync(self.channel_layer.group_send)(
             f'game_{user}',
@@ -454,10 +465,12 @@ class GameConsumer(WebsocketConsumer):
         )
 
     def handle_refetch_tournament(self, split):
-        print("Refetching tournament")
+        # print("Refetching tournament")
         time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         tournamentId = split[1]
         tournament = Tournament.objects.get(id=tournamentId)
+        if not tournament:
+            return
         self.refresh_tournament(tournament)
 
 
@@ -473,7 +486,7 @@ class GameConsumer(WebsocketConsumer):
         )
 
     def handle_ready_to_start_four(self, split):
-        print("Handling ready to start four")
+        # print("Handling ready to start four")
         time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         async_to_sync(self.channel_layer.group_send)(
             f'game_{split[1]}',
@@ -496,6 +509,8 @@ class GameConsumer(WebsocketConsumer):
         # print("Handling user left game")
         user = split[1]
         game = Game.objects.filter(Q(user1=self.user) | Q(user2=self.user) | Q(user3=self.user) | Q(user4=self.user)).filter(winner=None).last()
+        if not game:
+            return
         # async_to_sync(self.channel_layer.group_send)(
         #     self.game_group,
         #     {
@@ -540,8 +555,10 @@ class GameConsumer(WebsocketConsumer):
     
 
     def send_score_message(self, gameId):
-        print("Sending score message")
+        # print("Sending score message")
         game = Game.objects.get(id=gameId)
+        if not game:
+            return
         if game.user1 == self.user:
             game.user2_score += 1
         else:
@@ -608,6 +625,8 @@ class GameConsumer(WebsocketConsumer):
     def send_move_message(self, direction, paddle_y):
         # print("Sending move message")
         game = Game.objects.filter(Q(user1=self.user) | Q(user2=self.user) | Q(user3=self.user) | Q(user4=self.user)).filter(winner=None).last()
+        if not game:
+            return
         # async_to_sync(self.channel_layer.group_send)(
         #     self.game_group,
         #     {
@@ -655,6 +674,8 @@ class GameConsumer(WebsocketConsumer):
         # print("Sending four move message")
         time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         game = Game.objects.filter(Q(user1=self.user) | Q(user2=self.user) | Q(user3=self.user) | Q(user4=self.user)).filter(winner=None).last()
+        if not game:
+            return
         # async_to_sync(self.channel_layer.group_send)(
         #     self.game_group,
         #     {
@@ -699,14 +720,8 @@ class GameConsumer(WebsocketConsumer):
     def send_ball_direction_message(self, ball_x, ball_y, ball_angle):
         # print("Sending ball direction message")
         game = Game.objects.filter(Q(user1=self.user) | Q(user2=self.user) | Q(user3=self.user) | Q(user4=self.user)).filter(winner=None).last()
-        # async_to_sync(self.channel_layer.group_send)(
-        #     self.game_group,
-        #     {
-        #         'type': 'send_message',
-        #         'user': self.user.username,
-        #         'message': f'/ballDirection {ball_x} {ball_y} {ball_angle} {self.user.username}'
-        #     }
-        # )
+        if not game:
+            return
         async_to_sync(self.channel_layer.group_send)(
             f'game_{game.user1.username}',
             {

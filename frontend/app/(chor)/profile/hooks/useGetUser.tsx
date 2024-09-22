@@ -4,7 +4,6 @@ import { useQuery } from "@tanstack/react-query";
 const fetchUser = async ({ id }: { id: string }) => {
   try {
     const response = await axiosInstance.get(`/user/${id}`);
-    console.log(response.data);
     return response.data;
   } catch (error: any) {
     throw new Error(error.response.data.message);

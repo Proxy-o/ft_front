@@ -23,7 +23,7 @@ export default function useAcceptInvitationTournament() {
   const mutation = useMutation({
     mutationFn: accept,
     onSuccess: (tournamentId: string) => {
-      console.log("tournamentId", tournamentId);
+      // console.log("tournamentId", tournamentId);
       handleAcceptTournamentInvitation(tournamentId);
       queryClient.invalidateQueries({ queryKey: ["tournament"] });
       queryClient.invalidateQueries({ queryKey: ["invitations"] });

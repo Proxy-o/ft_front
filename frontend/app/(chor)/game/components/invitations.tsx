@@ -11,19 +11,22 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import useAcceptInvitationTournament from "../hooks/useAccepteInvitationTournament";
 import { Card } from "@/components/ui/card";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import useInvitationSocket from "@/app/(chor)/game/hooks/sockets/useInvitationSocket";
 import { toast } from "sonner";
+import useGetUser from "../../profile/hooks/useGetUser";
 
 const Invitations = ({ mode }: { mode: string }) => {
   const { newNotif } = useInvitationSocket();
-  const user_id = getCookie("user_id") || "";
+  const {data: user} = useGetUser("0");
+  const user_id = user?.id; // todo: replace cookie user_id with user.id
   const router = useRouter();
   let invitationsData = useGetInvitations(user_id || "0");
   const { mutate: declineMutation } = useDeclineInvitation();
   const { mutate: acceptInvitationMutation } = useAcceptInvitation();
   const { mutate: acceptInvitationTournamentMutation } =
     useAcceptInvitationTournament();
+  const path = usePathname();
   const invitations: Invitation[] = invitationsData.data
     ? invitationsData.data
     : [];
@@ -32,7 +35,7 @@ const Invitations = ({ mode }: { mode: string }) => {
     try {
       await acceptInvitationMutation(invitationId);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 
@@ -40,7 +43,7 @@ const Invitations = ({ mode }: { mode: string }) => {
     try {
       acceptInvitationTournamentMutation(invitationId);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 
@@ -81,7 +84,7 @@ const Invitations = ({ mode }: { mode: string }) => {
     }
   }
   return (
-    <div className="w-full  h-full flex flex-col justify-start items-center mx-auto gap-2">
+    <div className="w-full  h-full min-w-72 flex flex-col justify-start items-center mx-auto gap-2">
       <div className="w-full flex flex-col justify-center items-center  space-y-2">
         <Card className="w-full flex flex-col p-2">
           <div className="w-full text-center text-lg font-bold pb-2">
@@ -125,24 +128,38 @@ const Invitations = ({ mode }: { mode: string }) => {
                           </div>
                         </div>
                       </div>
+
                       <div className="flex flex-row justify-end items-center gap-2">
-                        <Button
-                          // className="rounded-md bg-primary hover:bg-secondary hover:text-primary hover:border-primary border-2  border-primary mr-2"
-                          size={"xs"}
-                          onClick={() => {
-                            acceptInvitation(invitation.id);
-                            router.push("/game/oneVone");
-                          }}
-                        >
-                          <Check size={20} />
-                        </Button>
-                        <Button
-                          variant={"secondary"}
-                          size={"xs"}
-                          onClick={() => declineMutation(invitation.id)}
-                        >
-                          <X size={20} />
-                        </Button>
+                        {path == "/game/oneVone" ? (
+                          <>
+                            <Button
+                              // className="rounded-md bg-primary hover:bg-secondary hover:text-primary hover:border-primary border-2  border-primary mr-2"
+                              size={"xs"}
+                              onClick={() => {
+                                acceptInvitation(invitation.id);
+                              }}
+                            >
+                              <Check size={20} />
+                            </Button>
+                            <Button
+                              variant={"secondary"}
+                              size={"xs"}
+                              onClick={() => declineMutation(invitation.id)}
+                            >
+                              <X size={20} />
+                            </Button>
+                          </>
+                        ) : (
+                          <Button
+                            // className="rounded-md bg-primary hover:bg-secondary hover:text-primary hover:border-primary border-2  border-primary mr-2"
+                            size={"sm"}
+                            onClick={() => {
+                              router.push("/game/oneVone");
+                            }}
+                          >
+                            Go to one vs one
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -178,23 +195,37 @@ const Invitations = ({ mode }: { mode: string }) => {
                         </div>
                       </div>
                       <div className="flex flex-row justify-end items-center gap-2">
-                        <Button
-                          // className="rounded-md bg-primary hover:bg-secondary hover:text-primary hover:border-primary border-2  border-primary mr-2"
-                          size={"sm"}
-                          onClick={() => {
-                            acceptInvitation(invitation.id);
-                            router.push("/game/twoVtwo");
-                          }}
-                        >
-                          <Check size={20} />
-                        </Button>
-                        <Button
-                          variant={"secondary"}
-                          size={"sm"}
-                          onClick={() => declineMutation(invitation.id)}
-                        >
-                          <X size={20} />
-                        </Button>
+                        {path == "/game/twoVtwo" ? (
+                          <>
+                            <Button
+                              // className="rounded-md bg-primary hover:bg-secondary hover:text-primary hover:border-primary border-2  border-primary mr-2"
+                              size={"sm"}
+                              onClick={() => {
+                                acceptInvitation(invitation.id);
+                              }}
+                            >
+                              <Check size={20} />
+                            </Button>
+                            <Button
+                              variant={"secondary"}
+                              size={"sm"}
+                              onClick={() => declineMutation(invitation.id)}
+                            >
+                              <X size={20} />
+                            </Button>
+                          </>
+                        ) : (
+                          <Button
+                            // className="rounded-md bg-primary hover:bg-secondary hover:text-primary hover:border-primary border-2  border-primary mr-2"
+
+                            size={"sm"}
+                            onClick={() => {
+                              router.push("/game/twoVtwo");
+                            }}
+                          >
+                            Go to two vs two
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -230,23 +261,38 @@ const Invitations = ({ mode }: { mode: string }) => {
                         </div>
                       </div>
                       <div className="flex flex-row justify-end items-center gap-2">
-                        <Button
-                          // className="rounded-md bg-primary hover:bg-secondary hover:text-primary hover:border-primary border-2  border-primary mr-2"
-                          size={"sm"}
-                          onClick={() => {
-                            acceptInvitationTournament(invitation.id);
-                            router.push("/game/tournament");
-                          }}
-                        >
-                          <Check size={20} />
-                        </Button>
-                        <Button
-                          variant={"secondary"}
-                          size={"sm"}
-                          onClick={() => declineMutation(invitation.id)}
-                        >
-                          <X size={20} />
-                        </Button>
+                        {path == "/game/tournament" ? (
+                          <>
+                            <Button
+                              // className="rounded-md bg-primary hover:bg-secondary hover:text-primary hover:border-primary border-2  border-primary mr-2"
+                              size={"sm"}
+                              onClick={() => {
+                                acceptInvitationTournament(invitation.id);
+                                router.push("/game/tournament");
+                              }}
+                            >
+                              <Check size={20} />
+                            </Button>
+                            <Button
+                              variant={"secondary"}
+                              size={"sm"}
+                              onClick={() => declineMutation(invitation.id)}
+                            >
+                              <X size={20} />
+                            </Button>
+                          </>
+                        ) : (
+                          <Button
+                            // className="rounded-md bg-primary hover:bg-secondary hover:text-primary hover:border-primary border-2  border-primary mr-2"
+
+                            size={"sm"}
+                            onClick={() => {
+                              router.push("/game/tournament");
+                            }}
+                          >
+                            Go to tournament
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </div>

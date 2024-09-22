@@ -88,14 +88,14 @@ class OAuthService:
             new_username = f"{prefix}{request_data['username']}"
             while User.objects.filter(username=new_username).exists():
                 new_username = f"{prefix}{request_data['username']}_{counter}"
-                print("### try : ", new_username)
+                # print("### try : ", new_username)
                 counter += 1
             request_data['username'] = new_username
             user, error = OAuthService.create_user(request_data)
             if error:
                 return None, None, error
         else:
-            print("### credentials : ", credentials.user.id)
+            # print("### credentials : ", credentials.user.id)
             user = User.objects.filter(id=credentials.user.id).first()
 
         user_credentials['user'] = user.id

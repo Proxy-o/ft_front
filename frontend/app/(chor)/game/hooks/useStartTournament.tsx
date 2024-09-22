@@ -12,12 +12,12 @@ const startTournament = async (tournamentId: string) => {
       tournamentId,
     });
 
-    console.log(res);
+    // console.log(res);
     if (res.data.tournamentId) {
         return res.data.tournamentId;
     }
 } catch (error: any) {
-      console.log(res.data);
+      // console.log(res.data);
     toast.error(error.response.data.error);
   }
   return null;

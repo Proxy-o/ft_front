@@ -7,7 +7,7 @@ const editUser = async (user: User) => {
 
     delete user.avatar;
     const response = await axiosInstance.put(`/user/${user.id}`, user);
-    console.log(response.data);
+    // console.log(response.data);
     return response.data;
   
 };

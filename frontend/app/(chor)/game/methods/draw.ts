@@ -75,8 +75,8 @@ function draw(canvasParams: canvasParams, ctx: CanvasRenderingContext2D) {
   };
 
   // drawPlayer();
-  drawMiddleLine();
-  drawScore();
+  // drawMiddleLine();
+  // drawScore();
   drawBall();
   drawRightPaddle();
   drawLeftPaddle();
@@ -190,12 +190,12 @@ function drawFour(canvasParams: canvasParamsFour) {
     );
   };
 
-  drawScore();
-  drawRightPaddleTwo();
+  // drawScore();
+  // drawMiddleLine();
   drawBall();
-  drawMiddleLine();
   drawRightPaddle();
   drawLeftPaddle();
+  drawRightPaddleTwo();
   drawLeftPaddleTwo();
 }
 
@@ -215,7 +215,7 @@ const drawPlayers = (
   if (leftUser.current === undefined) return;
   // italic and bold
   if (leftPositionRef.current < 100) leftPositionRef.current += 20;
-  // console.log(userRef.current?.username);
+  // // console.log(userRef.current?.username);
   ctx.fillStyle = "#ee95DD";
   ctx.font = "50px bold";
   ctx.fillText(

@@ -26,15 +26,15 @@ function enemyLeftGame(
   ) {
     enemyLeftGameRef.current = true;
     time.current = seconds;
-    // console.log("current time: " + time.current + "seconds: " + seconds);
+    // // console.log("current time: " + time.current + "seconds: " + seconds);
     handleTime(time.current, rightUserRef.current?.id || "");
   } else {
-    if (seconds - time.current > 3) {
+    if (seconds - time.current > 2) {
       toast.error("Enemy left the game");
-    // alert("2");
+    // alert("2 time is " + time.current);
       endGame({
         winner: leftUserRef.current?.id || "",
-        winnerScore: 3,
+        winnerScore: 77777,
         loser: rightUserRef.current?.id || "",
         loserScore: 0,
       });
@@ -71,7 +71,7 @@ function enemyLeftGameFour(
   ) {
     enemyLeftGameRef.current = true;
     time.current = seconds;
-    // console.log("current time: " + time.current + "seconds: " + seconds);
+    // // console.log("current time: " + time.current + "seconds: " + seconds);
     handleTimeFour(time.current, username);
   } else {
     if (seconds - time.current > 4 && gameStarted) {

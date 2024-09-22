@@ -4,15 +4,15 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const deleteTournament = async (tournamentId: string) => {
   try {
-    console.log(tournamentId);
+    // console.log(tournamentId);
     const res = await axiosInstance.post("/game/deleteTournament", {
       tournamentId: tournamentId,
     });
     if (res.status === 404) {
-      console.log("Tournament not found");
+      // console.log("Tournament not found");
     }
   } catch (error) {
-    console.log(error);
+    // console.log(error);
   }
   return tournamentId;
 }; // todo: work on the delete tournament logic

@@ -1,17 +1,18 @@
 import { useEffect, useRef, useState } from "react";
-import { enemyLeftGameFour } from "../methods/enemyLeftGame";
-import checkCollisionWithHorizontalWalls from "../methods/checkCollisionWithHorizontalWalls";
-import { checkLoseConditionFour } from "../methods/checkLoseCondition";
-import { changeScoreFour } from "../methods/changeScore";
-import { changeBallDirectionFour } from "../methods/changeBallDirection";
-import { movePaddlesFour } from "../methods/movePaddles";
-import { drawFour } from "../methods/draw";
-import useGameSocket from "../hooks/sockets/useGameSocket";
-import useInvitationSocket from "../hooks/sockets/useInvitationSocket";
+import { enemyLeftGameFour } from "../../methods/enemyLeftGame";
+import checkCollisionWithHorizontalWalls from "../../methods/checkCollisionWithHorizontalWalls";
+import { checkLoseConditionFour } from "../../methods/checkLoseCondition";
+import { changeScoreFour } from "../../methods/changeScore";
+import { changeBallDirectionFour } from "../../methods/changeBallDirection";
+import { movePaddlesFour } from "../../methods/movePaddles";
+import { drawFour } from "../../methods/draw";
+import useGameSocket from "../../hooks/sockets/useGameSocket";
+import useInvitationSocket from "../../hooks/sockets/useInvitationSocket";
 import { User } from "@/lib/types";
-import { canvasParamsFour } from "../types";
-import { moveBallFour } from "../methods/moveBall";
-import useEndGameFour from "../hooks/useEndGameFour";
+import { canvasParamsFour } from "../../types";
+import { moveBallFour } from "../../methods/moveBall";
+import useEndGameFour from "../../hooks/useEndGameFour";
+import { toast } from "sonner";
 
 const Canvas = ({
   leftUserTop,
@@ -66,6 +67,7 @@ const Canvas = ({
   const stillPlayingUsersRef = useRef<string[]>([]);
   const leftScoreRef = useRef<number>(0);
   const rightScoreRef = useRef<number>(0);
+  const bgImage = useRef<HTMLImageElement | null>(null);
 
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
 
@@ -211,7 +213,15 @@ const Canvas = ({
     }, 1000);
     const drawOnlineOne = () => {
       if (canvas === null) return;
+      if (bgImage.current === null) {
+        bgImage.current = new Image();
+        bgImage.current.src = "/game.jpeg";
+      }
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.globalAlpha = 0.5;
+      ctx.drawImage(bgImage.current, 0, 0, canvas.width, canvas.height);
+      ctx.globalAlpha = 1;
 
       // Draw the paddles
       drawFour(canvasParams);
@@ -269,8 +279,8 @@ const Canvas = ({
       // Move the ball
       if (
         newAngleRef.current !== 0 &&
-        leftScoreRef.current < 3 &&
-        rightScoreRef.current < 3
+        leftScoreRef.current < 77777 &&
+        rightScoreRef.current < 77777
       ) {
         moveBallFour(canvasParams, newAngleRef);
       }
@@ -316,7 +326,7 @@ const Canvas = ({
     if (gameMsg()) {
       const gameMsge = gameMsg()?.data;
       const parsedMessage = JSON.parse(gameMsge);
-      console.log(parsedMessage);
+      // console.log(parsedMessage);
       const message = parsedMessage.message.split(" ");
       if (message[0] === "/showFour") {
         const sender = message[1];
@@ -397,10 +407,10 @@ const Canvas = ({
       } else if (message[0] === "/fourTime") {
         if (gameStarted) {
           handleTimeResponse(parseInt(message[1]), message[2]);
-        } else if (message[0] === "/whoLeftGame") {
-          const whoAsked = message[1];
-          handleStillPlaying(username, whoAsked);
         }
+      } else if (message[0] === "/whoLeftGame") {
+        const whoAsked = message[1];
+        handleStillPlaying(username, whoAsked);
       } else if (message[0] === "/fourSurrender") {
         const surrenderer = message[1];
         if (surrenderer !== username) {
@@ -435,7 +445,7 @@ const Canvas = ({
         if (whoAsked === username) {
           stillPlayingUsersRef.current.push(user);
           // handleWhoLeftGame();
-          if (stillPlayingUsersRef.current.length === 4) {
+          if (stillPlayingUsersRef.current.length === 3) {
             // find the user who did not respond
             if (
               leftUserTop.current.username &&
@@ -469,16 +479,20 @@ const Canvas = ({
               // alert("3");
               endGameFour({
                 winner,
-                winnerScore: 3,
+                winnerScore: 77777,
                 loser,
                 loserScore: 0,
               });
+              // handleRefetchPlayers(gameId);
             }
           }
         }
-      } else if (message[0] === "/userLeftGame") {
+      } else if (
+        message[0] === "/userLeftGame" ||
+        message[0] === "/refetchPlayers"
+      ) {
         onGoingGame.refetch();
-      } else if (message[0] === "/end") {
+      } else if (message[0] === "/endGame") {
         leftScoreRef.current = 0;
         rightScoreRef.current = 0;
         setGameStarted(false);
@@ -493,11 +507,11 @@ const Canvas = ({
       {gameStarted && (
         <>
           <canvas
-            ref={canvasRef}
-            height="400"
-            width="800"
-            className={`w-full md:w-5/6  max-w-[800px] bg-black border-2 border-white mx-auto`}
-          ></canvas>
+                ref={canvasRef}
+                height="400"
+                width="800"
+                className={`w-full h-full`}
+              ></canvas>
         </>
       )}
     </>

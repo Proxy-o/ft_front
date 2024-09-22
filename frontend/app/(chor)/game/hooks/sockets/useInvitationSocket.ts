@@ -30,7 +30,7 @@ export default function useInvitationSocket() {
 
   const handleAcceptTournamentInvitation = (invitationId: string) => {
     const toSend = "/acceptTournament " + invitationId;
-    console.log(toSend);
+    // console.log(toSend);
     sendJsonMessage({ message: toSend });
   };
 
