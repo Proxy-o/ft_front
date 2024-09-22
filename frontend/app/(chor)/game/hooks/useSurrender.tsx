@@ -4,9 +4,9 @@ import useInvitationSocket from "@/app/(chor)/game/hooks/sockets/useInvitationSo
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-const surrenderGame = async () => {
+const surrenderGame = async (gameId: string) => {
   try {
-    const res = await axiosInstance.post("/game/surrender");
+    const res = await axiosInstance.post("/game/surrender", { gameId });
     // console.log(res);
     if (res.status === 200) {
       const returnData = {
@@ -24,12 +24,17 @@ const surrenderGame = async () => {
 };
 
 export default function useSurrenderGame() {
-  const { handleSurrenderFour } = useGameSocket();
-  const { handleRefetchTournament } = useInvitationSocket();
+  const { handleSurrenderFour, handleSurrender } = useGameSocket();
+  const { handleRefetchTournament, handleRefetchPlayers } =
+    useInvitationSocket();
   const queryClient = useQueryClient();
   const mutation = useMutation({
-    mutationFn: () => surrenderGame(),
+    mutationFn: surrenderGame,
     onSuccess: (data) => {
+      handleRefetchPlayers(data?.gameId);
+      handleSurrender(data?.gameId);
+      console.log(data);
+
       handleSurrenderFour(data?.gameId);
       // console.log(data);
       if (data?.tournamentId) {

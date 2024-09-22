@@ -17,7 +17,6 @@ import { routeModule } from "next/dist/build/templates/app-page";
 import { useRouter } from "next/navigation";
 import useGameSocket from "../../hooks/sockets/useGameSocket";
 
-
 export default function Page({ params }: { params: { tournamentId: string } }) {
   const tournamentId = params.tournamentId;
   const user_id = getCookie("user_id") || "";
@@ -31,8 +30,12 @@ export default function Page({ params }: { params: { tournamentId: string } }) {
   );
   const router = useRouter();
   const { mutate: deleteTournament } = useDeletetournament();
-  const { data, isSuccess, isLoading, refetch: refetchTournament } = useGetTournament(tournamentId);
-  
+  const {
+    data,
+    isSuccess,
+    isLoading,
+    refetch: refetchTournament,
+  } = useGetTournament(tournamentId);
 
   useEffect(() => {
     if (!data?.tournament?.started && isSuccess) {
@@ -58,23 +61,18 @@ export default function Page({ params }: { params: { tournamentId: string } }) {
   return (
     <div className={`flex flex-col w-full h-full justify-center items-center`}>
       <div className="flex flex-col p-4 lg:flex-row w-full h-full lg:justify-center items-center lg:items-start gap-2">
-        
-            <Game
-              type="tournament"
-              onGoingGame={onGoingGame}
-              tournamentId={tournamentId}
-            />
+        <Game
+          type="tournament"
+          onGoingGame={onGoingGame}
+          tournamentId={tournamentId}
+        />
         <div className="flex flex-col gap-4 w-full min-w-80 lg:max-w-[350px] lg:mr-auto">
           {isSuccess && data.tournament && (
             <>
               <Button
                 onClick={() => {
                   leavetournament(tournamentId);
-                  handleSurrender(
-                    (onGoingGame.data?.game?.user1?.id || "0") === user_id ? onGoingGame.data?.game?.user1?.username : onGoingGame.data?.game?.user2?.username,
-                    (onGoingGame.data?.game?.user1?.id || "0") === user_id ? onGoingGame.data?.game?.user2?.username : onGoingGame.data?.game?.user1?.username,
-                    onGoingGame.data?.game?.id || "0"
-                  );
+                  handleSurrender(onGoingGame.data?.game?.id || "0");
                 }}
               >
                 Leave Tournament

@@ -60,9 +60,7 @@ const FourActions = ({
                   <Gamepad size={25} />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>
-                Start
-              </TooltipContent>
+              <TooltipContent>Start</TooltipContent>
             </Tooltip>
           </TooltipProvider>
           <TooltipProvider delayDuration={0}>
@@ -78,9 +76,7 @@ const FourActions = ({
                   <DoorOpen size={25} />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>
-                Leave
-              </TooltipContent>
+              <TooltipContent>Leave</TooltipContent>
             </Tooltip>
           </TooltipProvider>
         </div>
@@ -90,17 +86,14 @@ const FourActions = ({
             <TooltipTrigger asChild>
               <Button
                 onClick={() => {
-                  surrenderGame();
-                  handleRefetchPlayers(onGoingGame.data?.game.id || "");
+                  surrenderGame(onGoingGame.data?.game.id || "");
                 }}
                 className="h-fit w-fit bg-red-600/40"
               >
                 <Flag size={25} />
               </Button>
             </TooltipTrigger>
-            <TooltipContent>
-              Surrender
-            </TooltipContent>
+            <TooltipContent>Surrender</TooltipContent>
           </Tooltip>
         </TooltipProvider>
       )}

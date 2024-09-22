@@ -6,7 +6,6 @@ import { User } from "@/lib/types";
 import getCookie from "@/lib/functions/getCookie";
 import useGetUser from "../../../profile/hooks/useGetUser";
 import NoGameFour from "../../components/noGameFour";
-import useSurrenderGame from "../../hooks/useSurrender";
 import PreGame from "../../components/preGame";
 import useGetFourGame from "../../hooks/useGetFourGame";
 import Canvas from "./canvas";

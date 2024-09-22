@@ -18,7 +18,15 @@ const leaveGame = async () => {
   return null;
 };
 
-export default function useLeaveGame(props: {leftUserRef: React.MutableRefObject<any>, rightUserRef: React.MutableRefObject<any>, gameIdRef: React.MutableRefObject<any>} | undefined) {
+export default function useLeaveGame(
+  props:
+    | {
+        leftUserRef: React.MutableRefObject<any>;
+        rightUserRef: React.MutableRefObject<any>;
+        gameIdRef: React.MutableRefObject<any>;
+      }
+    | undefined
+) {
   const { leftUserRef, rightUserRef, gameIdRef } = props || {};
   const { handleSurrender } = useGameSocket();
   const { handleRefetchTournament } = useInvitationSocket();
@@ -28,11 +36,7 @@ export default function useLeaveGame(props: {leftUserRef: React.MutableRefObject
     onSuccess: (data) => {
       // handleSurrenderFour(data?.gameId);
       if (leftUserRef && rightUserRef && gameIdRef)
-      handleSurrender(
-        leftUserRef.current?.username || "",
-        rightUserRef.current?.username || "",
-        gameIdRef.current
-      );
+        handleSurrender(gameIdRef.current);
       if (data?.tournamentId) {
         handleRefetchTournament(data?.tournamentId);
       }

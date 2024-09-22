@@ -203,10 +203,8 @@ class OnGoingGame(APIView):
 
     def get(self, request):
         # print("get ongoing game")
-        username = request.user
-        user = User.objects.get(username=username)
-        game = Game.objects.filter((Q(user1=user) | Q(user2=user)) & Q(
-            winner=None) & Q(type="two")).last()
+        user = request.user
+        game = Game.objects.filter((Q(user1=user) | Q(user2=user)) & Q(winner=None) & Q(type="two")).last()
         if not game:
             user.status = "online"
             user.save()
@@ -432,10 +430,9 @@ class Surrender(APIView):
     def post(self, request):
         # print("surrender")
         # channel_layer = get_channel_layer()
-        username = request.user
-        user = User.objects.get(username=username)
-        game = Game.objects.filter(Q(user1=user) | Q(user2=user) | Q(
-            user3=user) | Q(user4=user)).filter(winner=None).last()
+        user = request.user
+        game_id = request.data.get('gameId')
+        game = Game.objects.get(id=game_id)
         if not game:
             return Response({'error': 'No ongoing game found'}, status=status.HTTP_204_NO_CONTENT)
         if game.type == 'two' or game.type == 'tournament':
@@ -443,11 +440,17 @@ class Surrender(APIView):
                 game.winner = game.user2
                 game.user2_score = 77777
                 game.user1_score = 0
+                game.save()
             else:
                 game.winner = game.user1
                 game.user1_score = 77777
                 game.user2_score = 0
-            game.save()
+                game.save()
+            game.user1.status = "online"
+            game.user1.save()
+            game.user2.status = "online"
+            game.user2.save()
+            return Response({'message': 'Game tragically ended', 'gameId': game.id}, status=status.HTTP_200_OK)
         if game.type == 'four':
             if game.user1 == user or game.user3 == user:
                 game.winner = game.user2
@@ -495,6 +498,10 @@ class Surrender(APIView):
                 # return Response({'message': 'Tournament ended', 'tournamentId': tournament.id}, status=status.HTTP_200_OK)
             return Response({'message': 'Game ended', 'gameId': game.id, 'tournamentId': tournament.id}, status=status.HTTP_200_OK)
 
+        game.user1.status = "online"
+        game.user1.save()
+        game.user2.status = "online"
+        game.user2.save()
         return Response({'message': 'Game ended', 'gameId': game.id}, status=status.HTTP_200_OK)
 
 

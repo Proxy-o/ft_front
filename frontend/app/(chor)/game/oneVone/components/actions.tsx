@@ -7,6 +7,7 @@ import useLeaveGame from "../../hooks/useLeaveGame";
 import { TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 import { Tooltip } from "@/components/ui/tooltip";
 import { TooltipTrigger } from "@/components/ui/tooltip";
+import useInvitationSocket from "../../hooks/sockets/useInvitationSocket";
 
 const Actions = ({
   canvasPrams,
@@ -17,7 +18,7 @@ const Actions = ({
   gameStartedRef: React.MutableRefObject<boolean>;
   type: string;
 }) => {
-  const { handleStartGame, handleSurrender } = useGameSocket();
+  const { handleStartGame } = useGameSocket();
   const { mutate: surrenderGame } = useSurrenderGame();
   const { rightUserRef, leftUserRef, gameIdRef } = canvasPrams;
   const { mutate: leaveGame } = useLeaveGame({
@@ -73,12 +74,7 @@ const Actions = ({
           <TooltipTrigger asChild>
             <Button
               onClick={() => {
-                surrenderGame();
-                handleSurrender(
-                  leftUserRef.current?.username || "",
-                  rightUserRef.current?.username || "",
-                  gameIdRef.current
-                );
+                surrenderGame(gameIdRef.current);
               }}
               className="h-fit w-fit bg-red-600/40"
             >
