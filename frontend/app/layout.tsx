@@ -43,7 +43,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
             <h1></h1>
             <Suspense fallback={<HomeSkel />}>
               <div className="relative bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/20 via-primary/10 to-background/20">
-                <main className="border-l-[0.04rem] mx-0 sm:mx-2 md:p-0">
+                <main className="border-l-[0.04rem] mx-2 md:p-0">
                   {children}
                 </main>
                 <Toaster duration={3000} />
