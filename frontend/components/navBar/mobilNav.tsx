@@ -258,7 +258,7 @@ export default function MobilNav() {
   };
 
   return (
-    <div className="fixed bottom-0 w-full overflow-auto h-18 no-scrollbar">
+    <div className="fixed bottom-0 w-full overflow-auto h-14 no-scrollbar">
       <nav className=" h-full  flex justify-around w-full items-center gap-2 p-2 border-t-2">
         {links.map((link, index) => (
           <Link
