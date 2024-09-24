@@ -1,3 +1,9 @@
 - fix status button
 - add playing status 
 - add loading status
+
+- unhandled exception:
+File "/usr/local/lib/python3.12/site-packages/channels/routing.py".
+    raise ValueError("No route found for path %r." % path)
+    ValueError: No route found for path 'ws/game/invitation2/'.
+    Exception inside application: No route found for path 'ws/game/invitation2/'.
