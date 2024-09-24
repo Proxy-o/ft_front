@@ -256,8 +256,8 @@ export default function Nav() {
   };
 
   return (
-    <div className=" group flex flex-col gap-4 py-2 h-screen shadow-lg md:w-[8.5rem] ">
-      <nav className="flex flex-col gap-1 px-2 h-full ">
+    <div className=" group flex flex-col gap-4 py-2 h-screen shadow-lg md:w-[9rem] overflow-y-auto no-scrollbar">
+      <nav className="flex flex-col gap-1 px-1 h-full ">
         {links.map((link, index) => (
           <Link
             key={index}
@@ -265,29 +265,29 @@ export default function Nav() {
             className={cn(
               buttonVariants({ variant: link.variant, size: "sm" }),
 
-              "justify-start mb-2"
+              "flex flex-row justify-start mb-2"
             )}
           >
             {link.title === "chat" && showNotif ? (
-              <div className="relative">
+              <div >
                 <link.icon className=" h-6 w-6 " />
                 <span className="h-3 w-3 bg-white rounded-full absolute top-0 right-0 "></span>
                 <span className="h-1 w-1 bg-red-600 rounded-full absolute top-1 right-1 animate-ping"></span>
               </div>
             ) : link.title === "Requests" && reqNotif ? (
-              <div className="relative">
+              <div >
                 <link.icon className=" h-6 w-6 " />
                 <span className="h-3 w-3 bg-white rounded-full absolute top-0 right-0 "></span>
                 <span className="h-1 w-1 bg-red-600  rounded-full absolute top-1 right-1 animate-ping"></span>
               </div>
             ) : link.title === "Play" && gameNotif ? (
-              <div className="relative">
+              <div >
                 <link.icon className=" h-6 w-6 " />
                 <span className="h-3 w-3 bg-white rounded-full absolute top-0 right-0 "></span>
                 <span className="h-1 w-1 bg-red-600  rounded-full absolute top-1 right-1 animate-ping"></span>
               </div>
             ) : (
-              <link.icon className=" mr-2 h-6 w-6 " />
+              <link.icon className=" mr-1 h-6 w-6 " />
             )}
             {link.title}
           </Link>

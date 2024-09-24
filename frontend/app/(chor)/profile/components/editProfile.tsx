@@ -2,9 +2,9 @@ import React from "react";
 import {
   Dialog,
   DialogContent,
+  DialogTrigger,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { SquarePen } from "lucide-react";
 import { User } from "@/lib/types";
@@ -18,10 +18,7 @@ export default function EditProfile({ user }: { user: User }) {
           Edit
           <SquarePen className="ml-2" size={15} />
         </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle className="text-center mb-4">Edit profile</DialogTitle>
-          </DialogHeader>
+        <DialogContent className="p-0 max-h-[calc(100vh-7.8rem)] overflow-auto md:scrollbar scrollbar-thumb-primary/10 scrollbar-w-2 no-scrollbar">
           <EditProfileForm user={user} />
         </DialogContent>
       </Dialog>

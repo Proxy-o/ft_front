@@ -5,7 +5,6 @@ import { Check, Inbox, X } from "lucide-react";
 import useGetInvitations from "../hooks/useGetInvitations";
 import useDeclineInvitation from "../hooks/useDeclineMutation";
 import useAcceptInvitation from "../hooks/useAccepteInvitation";
-import getCookie from "@/lib/functions/getCookie";
 import { Invitation } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -58,7 +57,7 @@ const Invitations = ({ mode }: { mode: string }) => {
         toast.error(message[1] + " has declined your invitation");
       }
     }
-  }, [newNotif()?.data]);
+  }, [invitationsData, newNotif]);
 
   // Separate invitations by type
   const oneVsOneInvitations = invitations.filter(
@@ -84,7 +83,7 @@ const Invitations = ({ mode }: { mode: string }) => {
     }
   }
   return (
-    <div className="w-full  h-full min-w-72 flex flex-col justify-start items-center mx-auto gap-2">
+    <div className="w-full  h-full flex flex-col justify-start items-center mx-auto gap-2">
       <div className="w-full flex flex-col justify-center items-center  space-y-2">
         <Card className="w-full flex flex-col p-2">
           <div className="w-full text-center text-lg font-bold pb-2">
@@ -96,7 +95,7 @@ const Invitations = ({ mode }: { mode: string }) => {
             (mode === "two" && oneVsOneInvitations.length === 0)) && (
             <div className="flex flex-row justify-center items-center gap-2 text-primary border-t p-2">
               <Inbox size={30} />
-              No invitationsg
+              No invitations
             </div>
           )}
           {oneVsOneInvitations.length !== 0 ? (

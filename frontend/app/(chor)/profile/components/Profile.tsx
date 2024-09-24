@@ -43,8 +43,8 @@ export default function Profile({ id }: { id: string }) {
   }, [isChatOpen, isSender, isSuccess]);
 
   return (
-    <Card className="max-w-[60rem] mx-2  ">
-      <div className="relative lg:flex justify-center gap-4 p-4 w-full  ">
+    <Card className="max-h-[calc(100vh-7.8rem)] mx-2 overflow-y-auto md:scrollbar scrollbar-thumb-primary/10 scrollbar-w-2 no-scrollbar">
+      <div className="relative lg:flex  gap-4 p-4 w-full  ">
         {isSuccess ? (
           <>
             <div className="flex flex-col gap-4   w-full ">

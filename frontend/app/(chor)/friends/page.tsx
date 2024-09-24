@@ -28,9 +28,9 @@ export default function Page() {
 
   return (
     user && (
-      <div className="h-[calc(100vh-7.3rem)]  w-full flex flex-col max-w-[60rem] mx-auto">
+      <div className="h-[calc(100vh-7.8rem)] w-full flex flex-col">
 
-        <Card className=" border    flex flex-col     p-1 mx-2 h-full overflow-y-auto">
+        <Card className=" border    flex flex-col     p-1 mx-2 h-full overflow-hidden">
           
           <div className="flex w-full justify-center items-center border-b-2  py-4">
             Friends
@@ -42,12 +42,12 @@ export default function Page() {
           href="/friend_requests"
           className={cn(
             buttonVariants({ variant: "outline", size: "lg" }),
-            " ml-auto mt-2"
+            " ml-0 sm:ml-auto  my-2"
           )}
         >
           Friend Requests
         </Link>
-          <div className="overflow-y-auto">
+          <div className="overflow-y-auto md:scrollbar scrollbar-thumb-primary/10 scrollbar-w-2 no-scrollbar">
             {friendsIsSuccess && friends.length > 0 ? (
               friends.map((friend: User) => {
                 return (

@@ -20,7 +20,7 @@ export default function AppLayout({
   const path = usePathname();
   const is_local = path === "/game/local";
   const logged_in = getCookie("logged_in");
-
+  
   useEffect(() => {
     if (!is_local && !logged_in) {
       router.push("/login");
@@ -39,16 +39,15 @@ export default function AppLayout({
 
   return (
     (logged_in || is_local) && (
-      <div className=" h-full relative flex flex-row ">
+      <div className="md:flex h-full relative">
         {(showNav === 1) && <Nav />}
         <div
           className={cn(
-            "flex  border-l-[0.04rem] sm:mx-0 h-screen overflow-auto  md:p-0",
-            // "flex w-full  overflow-auto",
+            "flex w-full border-l-[0.04rem]",
             !mb && "h-[calc(100vh-3.7rem)]"
           )}
           >
-          <div className=" w-full h-full py-0.5">
+          <div className="relative max-w-[60rem] mx-auto w-full h-full py-0.5">
             {!is_local && <SearchFriend />}
             {children}
           </div>

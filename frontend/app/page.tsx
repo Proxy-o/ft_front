@@ -4,14 +4,14 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col h-screen overflow-auto">
 
-      <main className="flex-1 pt-32 px-6 md:px-12 lg:px-24">
+      <main className="flex-1 pt-32 md:px-12 lg:px-24">
         <section className="mb-12">
           <div className="container mx-auto">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
               <div>
-                <h2 className="text-4xl font-bold mb-4">
+                <h2 className="sm:text-4xl text-xl font-bold mb-4">
                   Welcome to Ft_transcendence
                 </h2>
                 <p className="text-muted-foreground text-lg mb-6 mt-6">

@@ -34,10 +34,10 @@ export default function LoginForm() {
 
   return (
     <form
-      className="flex flex-col items-center justify-center min-h-screen overflow-hidden"
+      className="flex flex-col items-center justify-center h-screen"
       action={onSubmit}
     >
-      <Card className="w-full max-w-md ">
+      <Card className="w-full max-w-md overflow-auto m-2">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl">Login</CardTitle>
           <CardDescription>Enter your username and password</CardDescription>

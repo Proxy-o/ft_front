@@ -41,14 +41,14 @@ export default function ChatList() {
     }
   }, []);
   return (
-    <Card className="relative flex max-w-[60rem] mx-2 " ref={chatRef}>
+    <Card className="relative flex mx-2 h-[calc(100vh-7.8rem)]" ref={chatRef}>
       {receiverId && isSender ? (
         <ChatCard receiver={receiver!} sender={sender} />
       ) : null}
       {mb || !receiverId ? (
         <div
           className={cn(
-            "flex flex-col    overflow-y-auto  p-2",
+            "flex flex-col    overflow-y-auto md:scrollbar scrollbar-thumb-primary/10 scrollbar-w-2 no-scrollbar p-2",
             !isChatOpen ? "w-full" : "w-1/3"
           )}
         >
@@ -78,7 +78,7 @@ export default function ChatList() {
         <>
           <Drawer>
             <DrawerContent className=" max-h-96 h-full ">
-              <div className="h-full overflow-auto">
+              <div className="h-full overflow-auto scrollbar scrollbar-thumb-primary/10 scrollbar-w-1">
                 {isSuccess &&
                   friends.map((friend: User) => {
                     return (

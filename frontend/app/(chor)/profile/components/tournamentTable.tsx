@@ -76,7 +76,7 @@ export default function TournamentTable({ userid }: { userid: string }) {
               </AccordionItem>
             ))
           ) : (
-            <div className="w-full text-center m-4">No tournaments</div>
+            <div className="w-full text-center mx-auto my-4 overflow-x-auto ">No tournaments</div>
           )}
         </Accordion>
         <div className="w-full flex justify-center items-center p-2 border-t">

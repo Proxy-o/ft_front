@@ -16,7 +16,7 @@ const {data: states , isSuccess} = useGetStates(id);
   return (
    isSuccess &&  <Card className="p-4   h-[22rem]  flex justify-center lg:w-72">
       <Tabs defaultValue="Classic" className="w-full">
-        <TabsList className="flex ">
+        <TabsList className="flex justify-around overflow-x-auto no-scrollbar">
           <TabsTrigger value="Classic" className="w-full">
             Classic
           </TabsTrigger>

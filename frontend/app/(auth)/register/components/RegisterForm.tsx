@@ -23,10 +23,10 @@ export default function RegisterForm() {
   const { mutate: register } = useRegister();
   return (
     <form
-      className="flex flex-col items-center justify-center min-h-screen overflow-hidden"
+      className="flex flex-col items-center justify-center h-screen"
       action={() => register({ username, email, password })}
     >
-      <Card className="w-full max-w-md ">
+      <Card className="w-full max-w-md overflow-auto m-2">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl">Register</CardTitle>
           <CardDescription>Enter your credentials to register</CardDescription>

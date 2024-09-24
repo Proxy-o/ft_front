@@ -24,7 +24,7 @@ export default function FriendRequests() {
   const reqCount = filteredData.length;
   return (
     isSuccess && (
-      <Card className="mx-2 border h-full    flex flex-col     p-1 overflow-auto">
+      <Card className="mx-2 border h-full    flex flex-col     p-1 overflow-hidden">
         <div className="flex w-full justify-center items-center border-b-2  py-4">
           Friend Requests
           <p className="border bg-primary mx-2 rounded-full size-6  text-center">
@@ -35,13 +35,13 @@ export default function FriendRequests() {
           href="/friends"
           className={cn(
             buttonVariants({ variant: "outline", size: "lg" }),
-            " ml-auto my-2"
+            "ml-0 sm:ml-auto  my-2"
           )}
         >
           Friends
         </Link>
         {reqCount !== 0 ? (
-          <>
+          <div className="overflow-auto md:scrollbar scrollbar-thumb-primary/10 scrollbar-w-2 no-scrollbar">
             {filteredData.map(
               ({ id, from_user }: { id: string; from_user: User }) => (
                 <div
@@ -86,7 +86,7 @@ export default function FriendRequests() {
                 </div>
               )
             )}
-          </>
+          </div>
         ) : (
           <div className="w-full text-center h-16 flex justify-center items-center bg-primary/5">
             You don&apos;t have any requests

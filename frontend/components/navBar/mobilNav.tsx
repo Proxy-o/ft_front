@@ -258,7 +258,7 @@ export default function MobilNav() {
   };
 
   return (
-    <div className="fixed bottom-0 w-full overflow-auto h-18 ">
+    <div className="fixed bottom-0 w-full overflow-auto h-18 no-scrollbar">
       <nav className=" h-full  flex justify-around w-full items-center gap-2 p-2 border-t-2">
         {links.map((link, index) => (
           <Link
@@ -267,7 +267,7 @@ export default function MobilNav() {
             className={cn(
               buttonVariants({ variant: link.variant, size: "sm" }),
 
-              "justify-start "
+              "justify-center "
             )}
           >
             {link.title === "chat" && showNotif ? (
@@ -291,7 +291,7 @@ export default function MobilNav() {
             ) : (
               <link.icon
                 className={cn(
-                  " mr-2 size-5 hover:scale-150",
+                  "size-5 hover:scale-150",
                   link.variant === "default" ? "scale-125" : ""
                 )}
               />
@@ -315,7 +315,7 @@ export default function MobilNav() {
                 )}
               >
                 <UserRoundCog className="mr-2 h-6 w-6 " />
-                Sittings
+                Settings
               </Link>
               <Button
                 variant={"ghost"}

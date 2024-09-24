@@ -1,8 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import getCookie from "@/lib/functions/getCookie";
 import React, { useState, useCallback, useEffect, useRef } from "react";
-import useWebSocket from "react-use-websocket";
 import useGetMessages from "../hooks/useGetMessages";
 import ChatBubble from "./chatBubble";
 import { Input } from "@/components/ui/input";
@@ -13,7 +11,7 @@ import { User } from "@/lib/types";
 import { Avatar } from "@radix-ui/react-avatar";
 import { AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import readMessages from "../hooks/useReadMessages";
-import { LastMessage, Message } from "../types";
+import { Message } from "../types";
 import Link from "next/link";
 import useChatSocket from "../../game/hooks/sockets/useChatSocket";
 import { cn } from "@/lib/utils";
@@ -100,7 +98,7 @@ export default function ChatCard({
 
   return (
     <div
-      className=" flex flex-col md:h-[calc(100vh-4.3rem)] h-[calc(100vh-7.8rem)] border-r w-full  relative "
+      className=" flex flex-col h-[calc(100vh-7.8rem)] border-r w-full  relative "
       ref={chatRef}
     >
       <Link

@@ -17,9 +17,7 @@ export default function Page() {
   // );
 
   return (
-    <div className="relative w-full max-w-[60rem] mx-auto   ">
-      {/* <GameNav setTab={setTab} tab={tab} /> */}
-      <Card className=" flex flex-col justify-center items-center  mx-2 gap-2 p-4 h-full ">
+      <Card className=" flex flex-col gap-2 p-4 max-h-[calc(100vh-7.8rem)] mx-2 overflow-auto md:scrollbar scrollbar-thumb-primary/10 scrollbar-w-2 no-scrollbar">
         <div className="pb-2  w-full">Modes</div>
         <div className="flex flex-wrap gap-5 justify-center  max-h-full  p-6  bg-secondary/40 rounded-md">
           <Link href="/game/local" >
@@ -50,6 +48,5 @@ export default function Page() {
           <TabStates id={user_id} />
         </div>
       </Card>
-    </div>
   );
 }
