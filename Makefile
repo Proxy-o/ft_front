@@ -5,7 +5,7 @@ all: build up
 	@echo "\033[0;32mSERVER IS READY TO USE \033[0m"
 	@echo "\033[0;32m######################### \033[0m"
 	@echo ""
-	@echo "\033[0;31mServer address: https://$(shell ipconfig getifaddr en0) \033[0m"
+	@echo "\033[0;31mServer address: https://$(shell grep SERVER_URL .env | cut -d '=' -f 2) \033[0m"
 	@echo ""
 
 up:
