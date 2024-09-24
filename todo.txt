@@ -1,7 +1,7 @@
 - fix status button
 - add playing status 
 - add loading status
-
+- useGetClient returns 404 not found when no user is logged in
 - unhandled exception:
 File "/usr/local/lib/python3.12/site-packages/channels/routing.py".
     raise ValueError("No route found for path %r." % path)
