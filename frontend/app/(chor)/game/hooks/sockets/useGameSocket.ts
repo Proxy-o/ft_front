@@ -12,7 +12,7 @@ export default function useGameSocket() {
     if (!isLoading && user?.s_token) {
       setSocketUrl(
         process.env.NEXT_PUBLIC_GAME_URL +
-          "2/?refresh=" +
+          "/?refresh=" +
           token +
           "&s_token=" +
           user?.s_token

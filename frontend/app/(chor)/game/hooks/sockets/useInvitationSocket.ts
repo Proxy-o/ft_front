@@ -11,10 +11,10 @@ export default function useInvitationSocket() {
 
   useEffect(() => {
     if (!isLoading && user?.s_token) {
-      console.log("user?.s_token", user?.s_token);
+      // console.log("user?.s_token", user?.s_token);
       setSocketUrl(
         process.env.NEXT_PUBLIC_INVITATION_URL +
-          "2/?refresh=" +
+          "/?refresh=" +
           token +
           "&s_token=" +
           user?.s_token

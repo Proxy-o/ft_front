@@ -1,36 +1,29 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useParams, useSearchParams } from 'next/navigation';
 import useOAuthCallback from './hooks/useOAuthCallback';
-import { OAuthCallbackParams } from '@/lib/types';
+import { type OAuthCallbackParams } from '@/lib/types';
+import HomeSkel from "@/components/skeletons/homeSkel";
 
 const OAuthCallbackPage: React.FC = () => {
   const searchParams = useSearchParams();
-  const provider = useParams().provider;
-  const code = searchParams.get('code');
-  const state = searchParams.get('state');
+  const provider = useParams().provider as string ?? null;
+  const code = searchParams.get('code') ?? null;
+  const state = searchParams.get('state') ?? null;
+
   const { mutate: handleCallback } = useOAuthCallback();
-  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  useEffect(() => {
-    if (isClient) {
-      // console.log('isClient',provider, code, state);
-      if (provider && code && state) {
-        // // console.log('provider, code, state');
-        // console.table({ provider, code, state });
-        handleCallback({ provider, code, state } as OAuthCallbackParams);
-      }
+    const params: OAuthCallbackParams = {
+      'provider': provider,
+      'code': code,
+      'state': state,
     }
-  }, [provider, code, state, handleCallback, isClient]);
+    handleCallback(params);
+  }, [provider, code, state, handleCallback]);
 
   return (
-    <div>
-      <p >Processing...</p>
-    </div>
+    <HomeSkel />
   );
 };
 

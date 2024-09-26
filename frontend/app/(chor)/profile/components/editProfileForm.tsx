@@ -19,7 +19,7 @@ export default function EditProfileForm({ user }: { user: User }) {
   const { mutate: editUser } = useEditUser();
   return (
     <Dialog>
-      <Card className="bg-none w-full max-w-lg border p-2">
+      <Card className="bg-none w-full max-w-lg">
         <CardHeader className="text-center">Edit profile</CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">

@@ -35,7 +35,6 @@ import useGetInvitations from "@/app/(chor)/game/hooks/useGetInvitations";
 import useGetUser from "@/app/(chor)/profile/hooks/useGetUser";
 import useChatSocket from "@/app/(chor)/game/hooks/sockets/useChatSocket";
 import useInvitationSocket from "@/app/(chor)/game/hooks/sockets/useInvitationSocket";
-import getCookie from "@/lib/functions/getCookie";
 
 export default function MobilNav() {
   const [popOverOpen, setPopOverOpen] = useState(false);

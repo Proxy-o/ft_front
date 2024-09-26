@@ -312,7 +312,7 @@ export default function Nav() {
               buttonVariants({ variant: "ghost", size: "sm" }),
               "justify-start mb-2"
             )}
-            onClick={() => handleLogout()}
+            onClick={handleLogout}
           >
             <LogOut className="mr-2 h-6 w-6" />
             logout

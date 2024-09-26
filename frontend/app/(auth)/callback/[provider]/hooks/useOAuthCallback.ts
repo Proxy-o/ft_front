@@ -2,13 +2,17 @@ import { useMutation } from '@tanstack/react-query';
 import axiosInstance from '@/lib/functions/axiosInstance';
 import { useRouter } from 'next/navigation';
 import { setCookie } from '@/lib/functions/getCookie';
-import { OAuthCallbackParams, OAuthCallbackResponse } from '@/lib/types';
+import type { OAuthCallbackParams, OAuthCallbackResponse } from '@/lib/types';
+import { toast } from 'sonner';
 
 const useOAuthCallback = () => {
   const router = useRouter();
 
   return useMutation({
     mutationFn: async ({ provider, code, state }: OAuthCallbackParams) => {
+      if (!provider || !code || !state) {
+        throw Error("Error: can't process authentification: missing params")
+      }
       try {
         const response = await axiosInstance.get<OAuthCallbackResponse>(`/callback/${provider}`, {
           params: { code, state },
@@ -20,21 +24,25 @@ const useOAuthCallback = () => {
             if (responseData.detail === "2FA required") {
               setCookie('user_id', responseData.user_id);
               router.push("/verifyOTP");
-              return;
+              return ;
             }
         }
         throw new Error(error.response?.data?.detail || "An error occurred during login");
       }
     },
     onSuccess: (data) => {
+        console.log(data)
         if (!data || !data.user) {
           router.push("/login");
-          return;
         }
         setCookie('logged_in', 'yes');
         setCookie('user_id', data.user.id);
         router.push("/game");
     },
+    onError: (error) => {
+      toast.error(error.message)
+      router.push("/login")
+    }
   });
 };
 

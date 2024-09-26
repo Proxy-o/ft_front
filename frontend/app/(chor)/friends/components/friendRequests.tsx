@@ -24,7 +24,7 @@ export default function FriendRequests() {
   const reqCount = filteredData.length;
   return (
     isSuccess && (
-      <Card className="mx-2 border h-full    flex flex-col     p-1 overflow-hidden">
+      <Card className="mx-2 border h-full    flex flex-col     p-1 overflow-auto md:scrollbar scrollbar-thumb-primary/10 scrollbar-w-2 no-scrollbar">
         <div className="flex w-full justify-center items-center border-b-2  py-4">
           Friend Requests
           <p className="border bg-primary mx-2 rounded-full size-6  text-center">
@@ -41,7 +41,7 @@ export default function FriendRequests() {
           Friends
         </Link>
         {reqCount !== 0 ? (
-          <div className="overflow-auto md:scrollbar scrollbar-thumb-primary/10 scrollbar-w-2 no-scrollbar">
+          <div>
             {filteredData.map(
               ({ id, from_user }: { id: string; from_user: User }) => (
                 <div

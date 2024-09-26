@@ -19,16 +19,17 @@ export default function Page() {
   const router = useRouter();
 
   useEffect(() => {
-    if (value.length === 6 && user) {
+    if (!user) router.push("/login")
+    if (value.length === 6) {
       mutate({
         otp: value,
         user_id: user?.id,
       });
     }
-  }, [value, user, mutate]);
+  }, [value, user, mutate, router]);
 
   return (
-    <div className="space-y-2 w-full  h-full flex flex-col justify-center items-center">
+    <div className="space-y-2 w-full  h-screen flex flex-col justify-center items-center">
       <h1 className="text-2xl font-bold">Verify the OTP : </h1>
       <InputOTP
         maxLength={6}

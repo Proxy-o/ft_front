@@ -32,7 +32,7 @@ export default function GamesState({
               <TableHead></TableHead>
               <TableHead>Players</TableHead>
               <TableHead>Result</TableHead>
-              <TableHead className="text-right">Date</TableHead>
+              <TableHead className="text-center">Date</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

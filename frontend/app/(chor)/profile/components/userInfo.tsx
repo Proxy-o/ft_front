@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/tooltip";
 import { User } from "@/lib/types";
 import { Activity, Clock, Users } from "lucide-react";
-import React, { use, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import EditProfile from "./editProfile";
 import ProfileAvatar from "./profileAvatar";
 
@@ -172,7 +172,7 @@ export default function UserInfo({
             </Tooltip>
           </TooltipProvider>
         </div>
-        <div className="flex justify-center items-center space-x-3 ">
+        <div className="flex justify-around items-center space-x-3 overflow-x-auto">
           {canEdit ? (
             <Button
               className="mt-6 w-full bg-red-500/30"

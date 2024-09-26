@@ -1,9 +1,8 @@
 "use client";
-import React, { Suspense, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import UserInfo from "./userInfo";
 import States from "./states";
 import useGetUser from "../hooks/useGetUser";
-import getCookie from "@/lib/functions/getCookie";
 import FriendList from "@/app/(chor)/friends/components/friendList";
 import useGetBlocked from "@/app/(chor)/friends/hooks/useGetBlocked";
 import useGetFriends from "@/app/(chor)/chat/hooks/useGetFriends";
@@ -26,8 +25,7 @@ export default function Profile({ id }: { id: string }) {
     if (user.id == id && user.blocked_by_user == true) return true;
   });
 
-  const logged_in = getCookie("logged_in");
-  const canEdit = logged_in === "yes" && id == sender?.id ? true : false;
+  const canEdit = sender && id == sender?.id ? true : false;
   const chatRef = useRef<HTMLDivElement>(null); // Specify the type as React.RefObject<HTMLDivElement>
 
   useEffect(() => {
@@ -58,13 +56,13 @@ export default function Profile({ id }: { id: string }) {
               />
               {isChatOpen && isSender && isSuccess && (
                 // get the high of the screen and put it in the bottom
-                <div className="relative  " ref={chatRef}>
+                <Card className="relative  " ref={chatRef}>
                   <XCircle
-                    className="absolute z-40 top-2 right-2 text-red-600 hover:cursor-pointer hover:scale-[1.05] transition duration-300 ease-in-out"
+                    className="absolute z-40 top-[18px] right-[18px] opacity-20 hover:cursor-pointer hover:scale-[1.05] transition duration-300 ease-in-out"
                     onClick={() => setIsChatOpen(false)}
                   />
                   <ChatCard sender={sender} receiver={data} />
-                </div>
+                </Card>
               )}
               <div className="">{!isBlocked && <TabStates id={id} />}</div>
             </div>

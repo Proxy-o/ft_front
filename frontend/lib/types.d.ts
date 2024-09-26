@@ -42,9 +42,9 @@ export type Invitation = {
 };
 
 export type OAuthCallbackParams = {
-  provider: string;
-  code: string;
-  state: string;
+  provider: string | null;
+  code: string | null;
+  state: string | null;
 };
 
 export type OAuthCallbackResponse = {
