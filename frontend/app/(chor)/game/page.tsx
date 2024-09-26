@@ -17,7 +17,7 @@ export default function Page() {
   // );
 
   return (
-      <Card className=" flex flex-col gap-2 p-4 max-h-[calc(100vh-7.8rem)] mx-2 overflow-auto md:scrollbar scrollbar-thumb-primary/10 scrollbar-w-2 no-scrollbar">
+      <Card className=" flex flex-col gap-2 p-4">
         <div className="pb-2  w-full">Modes</div>
         <div className="flex flex-wrap gap-5 justify-center  max-h-full  p-6  bg-secondary/40 rounded-md">
           <Link href="/game/local" >

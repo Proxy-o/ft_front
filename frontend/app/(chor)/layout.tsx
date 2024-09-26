@@ -19,7 +19,7 @@ export default function AppLayout({
   const [showNav, setShowNav] = useState<number>(0);
   const path = usePathname();
   const is_local = path === "/game/local";
-  const logged_in = getCookie("logged_in");
+  const logged_in = getCookie("logged_in") ==='yes' ;
   
   useEffect(() => {
     if (!is_local && !logged_in) {
@@ -28,7 +28,7 @@ export default function AppLayout({
   }, [router, is_local, logged_in]);
 
   useEffect(() => {
-    if (is_local) {
+    if (is_local && !logged_in) {
       setShowNav(0);
     } else if (mb) {
       setShowNav(1);
@@ -39,7 +39,7 @@ export default function AppLayout({
 
   return (
     (logged_in || is_local) && (
-      <div className="md:flex h-full relative">
+      <div className="md:flex relative">
         {(showNav === 1) && <Nav />}
         <div
           className={cn(
@@ -48,7 +48,7 @@ export default function AppLayout({
           )}
           >
           <div className="relative max-w-[60rem] mx-auto w-full h-full py-0.5">
-            {!is_local && <SearchFriend />}
+            {(!is_local || logged_in) && <SearchFriend />}
             {children}
           </div>
         </div>

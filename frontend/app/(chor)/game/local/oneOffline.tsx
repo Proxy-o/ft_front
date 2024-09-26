@@ -394,7 +394,7 @@ const OneOffline = () => {
       }
       isAnimating.current = false;
     };
-  }, [gameStarted]);
+  }, [gameStarted, bgImage]);
 
   return (
     <>
