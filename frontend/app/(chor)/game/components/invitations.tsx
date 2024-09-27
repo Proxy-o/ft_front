@@ -17,7 +17,7 @@ import useGetUser from "../../profile/hooks/useGetUser";
 
 const Invitations = ({ mode }: { mode: string }) => {
   const { newNotif } = useInvitationSocket();
-  const {data: user} = useGetUser("0");
+  const { data: user } = useGetUser("0");
   const user_id = user?.id; // todo: replace cookie user_id with user.id
   const router = useRouter();
   let invitationsData = useGetInvitations(user_id || "0");
@@ -83,17 +83,17 @@ const Invitations = ({ mode }: { mode: string }) => {
     }
   }
   return (
-    <div className="w-full  h-full flex flex-col justify-start items-center mx-auto gap-2">
-      <div className="w-full flex flex-col justify-center items-center  space-y-2">
-        <Card className="w-full flex flex-col p-2">
-          <div className="w-full text-center text-lg font-bold pb-2">
-            Invitations
-          </div>
+    <Card className="w-full h-fit md:aspect-[2] max-h-[50vw] flex flex-col p-2 overflow-hidden">
+      <div className="w-full h-fit flex flex-col justify-start items-center mx-auto gap-2 overflow-hidden">
+        <div className="w-full h-fit text-center text-lg font-bold pb-2">
+          Invitations
+        </div>
+        <div className="w-full h-fit max-h-[50vw] flex flex-col items-center justify-start gap-2 overflow-auto">
           {((mode === "all" && invitations.length === 0) ||
             (mode === "tournament" && tournamentInvitations.length === 0) ||
             (mode === "four" && twoVsTwoInvitations.length === 0) ||
             (mode === "two" && oneVsOneInvitations.length === 0)) && (
-            <div className="flex flex-row justify-center items-center gap-2 text-primary border-t p-2">
+            <div className="flex flex-row w-full justify-center items-center gap-2 text-primary border-t p-2">
               <Inbox size={30} />
               No invitations
             </div>
@@ -118,14 +118,6 @@ const Invitations = ({ mode }: { mode: string }) => {
                             PF
                           </AvatarFallback>
                         </Avatar>
-                        <div className="flex flex-col justify-between items-start ml-2 w-full">
-                          <div className="flex flex-row items-center gap-2  w-full">
-                            <h1>{invitation.sender.username}</h1>
-                            <p className="flex text-md text-primary font-bold mx-auto items-center min-w-10">
-                              1 vs 1
-                            </p>
-                          </div>
-                        </div>
                       </div>
 
                       <div className="flex flex-row justify-end items-center gap-2">
@@ -156,7 +148,7 @@ const Invitations = ({ mode }: { mode: string }) => {
                               router.push("/game/oneVone");
                             }}
                           >
-                            Go to one vs one
+                            1 VS 1
                           </Button>
                         )}
                       </div>
@@ -186,12 +178,6 @@ const Invitations = ({ mode }: { mode: string }) => {
                             PF
                           </AvatarFallback>
                         </Avatar>
-                        <div className="flex flex-col justify-start items-start ml-2">
-                          <h1>{invitation.sender.username}</h1>
-                          <p className="text-xs text-primary font-bold">
-                            2 vs 2
-                          </p>
-                        </div>
                       </div>
                       <div className="flex flex-row justify-end items-center gap-2">
                         {path == "/game/twoVtwo" ? (
@@ -222,7 +208,7 @@ const Invitations = ({ mode }: { mode: string }) => {
                               router.push("/game/twoVtwo");
                             }}
                           >
-                            Go to two vs two
+                            2 VS 2
                           </Button>
                         )}
                       </div>
@@ -252,12 +238,6 @@ const Invitations = ({ mode }: { mode: string }) => {
                             PF
                           </AvatarFallback>
                         </Avatar>
-                        <div className="flex flex-col justify-start items-start ml-2">
-                          <h1>{invitation.sender.username}</h1>
-                          <p className="text-xs text-primary font-bold">
-                            Tournament
-                          </p>
-                        </div>
                       </div>
                       <div className="flex flex-row justify-end items-center gap-2">
                         {path == "/game/tournament" ? (
@@ -289,7 +269,7 @@ const Invitations = ({ mode }: { mode: string }) => {
                               router.push("/game/tournament");
                             }}
                           >
-                            Go to tournament
+                            Tournament
                           </Button>
                         )}
                       </div>
@@ -299,9 +279,9 @@ const Invitations = ({ mode }: { mode: string }) => {
               })}
             </>
           ) : null}
-        </Card>
+        </div>
       </div>
-    </div>
+    </Card>
   );
 };
 

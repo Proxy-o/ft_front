@@ -419,7 +419,7 @@ const Game = ({
   }, [newNotif()?.data]);
 
   return (
-    <div className="w-full h-fit flex flex-col max-w-[800px]  justify-center items-center gap-2">
+    <div className="w-full h-fit flex flex-col  justify-center items-center gap-2">
       {gameStartedRef.current && (
           <Score
             leftScoreRef={leftScoreRef}
@@ -428,7 +428,7 @@ const Game = ({
             rightUserRef={rightUser}
           />
         )}
-      <Card className="w-full max-w-[900px] h-[350px] md:h-[400px]">
+      <Card className="w-full aspect-[2]">
         {leftUser.current?.username &&
         leftScoreRef.current < 77777 &&
         rightScoreRef.current < 77777 ? (

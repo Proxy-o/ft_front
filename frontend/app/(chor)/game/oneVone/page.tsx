@@ -18,11 +18,11 @@ export default function Page() {
         <div className="text-3xl font-bold">One V One</div>
         <div className="text-xl">Play with your friends</div>
       </div>
-      <div className="w-full h-full flex flex-col justify-center items-center">
-        <div className="flex flex-col p-4 lg:flex-row w-11/12 h-full lg:justify-center items-center lg:items-start gap-2">
+      <div className="w-full h-full flex flex-row justify-center items-center">
+        <div className="flex flex-col p-4 w-full md:justify-center items-center md:items-start gap-2">
           <Game type={"two"} onGoingGame={onGoingGame}/>
-          <div className="lg:w-4/12 w-full lg:max-w-96 h-fit flex flex-col justify-start items-start gap-2">
-            <div className="w-full h-full flex flex-col justify-start items-start">
+          <div className="w-full h-fit flex flex-col md:flex-row justify-start items-start gap-2">
+            <div className="w-full h-fit flex flex-col justify-start items-start">
               <Invitations mode="two" />
             </div>
             <div className="w-full h-full mb-8">

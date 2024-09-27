@@ -37,7 +37,7 @@ const NoGame = ({ state }: { state: React.MutableRefObject<string> }) => {
 
   return (
     <div
-      className="w-full h-[350px] md:h-[400px] flex flex-col rounded-lg"
+      className="w-full h-full flex flex-col rounded-lg"
       style={{
         backgroundImage: "url('/game.jpeg')",
         backgroundSize: "cover",
