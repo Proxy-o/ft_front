@@ -64,9 +64,6 @@ services:
   vault:
     container_name: vault_container
     image: hashicorp/vault:1.7
-    ports:
-      - "8200:8200"
-      - "8201:8201"
     networks:
       - mynetwork
     volumes:
