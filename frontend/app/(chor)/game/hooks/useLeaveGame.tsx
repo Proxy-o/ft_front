@@ -28,15 +28,15 @@ export default function useLeaveGame(
     | undefined
 ) {
   const { leftUserRef, rightUserRef, gameIdRef } = props || {};
-  const { handleSurrender } = useGameSocket();
-  const { handleRefetchTournament } = useInvitationSocket();
+  // const { handleSurrender, handleSurrenderFour } = useGameSocket();
+  const { handleRefetchTournament, handleLeaveGame } = useInvitationSocket();
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: leaveGame,
     onSuccess: (data) => {
-      // handleSurrenderFour(data?.gameId);
-      if (leftUserRef && rightUserRef && gameIdRef)
-        handleSurrender(gameIdRef.current);
+      handleLeaveGame(leftUserRef?.current.username, rightUserRef?.current.username);
+      // if (leftUserRef && rightUserRef && gameIdRef)
+      //   handleSurrender(gameIdRef.current);
       if (data?.tournamentId) {
         handleRefetchTournament(data?.tournamentId);
       }

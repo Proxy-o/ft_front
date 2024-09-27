@@ -51,6 +51,8 @@ class InvitationConsumer(WebsocketConsumer):
             self.handle_refetch_players(split)
         elif command == '/acceptTournament':
             self.handle_accept_tournament(split)
+        elif command == '/leaveGame':
+            self.handle_leave_game(split)
         elif command == '/startTournament':
             self.handle_start_tournament(split)
         elif command == '/refetchTournament':
@@ -258,5 +260,27 @@ class InvitationConsumer(WebsocketConsumer):
                 'type': 'send_message',
                 'user': self.user.username,
                 'message': f'/decline {invitation.receiver}'
+            }
+        )
+
+    def handle_leave_game(self, split):
+        right_user = split[1]
+        left_user = split[2]
+        print("Handling leave game")
+        print(right_user, left_user)
+        async_to_sync(self.channel_layer.group_send)(
+            f'inbox_{right_user}',
+            {
+                'type': 'send_message',
+                'user': right_user,
+                'message': f'/refetchPlayers {right_user} {left_user}'
+            }
+        )
+        async_to_sync(self.channel_layer.group_send)(
+            f'inbox_{left_user}',
+            {
+                'type': 'send_message',
+                'user': left_user,
+                'message': f'/refetchPlayers {right_user} {left_user}'
             }
         )

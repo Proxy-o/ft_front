@@ -66,6 +66,12 @@ export default function useInvitationSocket() {
     sendJsonMessage({ message: "/decline " + invitationId });
   };
 
+  const handleLeaveGame = (leftUser: string, rightUser: string) => {
+    const toSend = "/leaveGame " + leftUser + " " + rightUser;
+    sendJsonMessage({ message: toSend });
+  }
+    handleLeaveGame,
+
   return {
     handelSendInvitation,
     newNotif,

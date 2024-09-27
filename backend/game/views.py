@@ -450,7 +450,6 @@ class Surrender(APIView):
             game.user1.save()
             game.user2.status = "online"
             game.user2.save()
-            return Response({'message': 'Game tragically ended', 'gameId': game.id}, status=status.HTTP_200_OK)
         if game.type == 'four':
             if game.user1 == user or game.user3 == user:
                 game.winner = game.user2
@@ -516,6 +515,7 @@ class LeaveGame(APIView):
         user = User.objects.get(username=username)
         game = Game.objects.filter(Q(user1=user) | Q(user2=user) | Q(
             user3=user) | Q(user4=user)).filter(winner=None).last()
+        game_id = game.id
         if not game:
             return Response({'error': 'No ongoing game found'}, status=status.HTTP_204_NO_CONTENT)
         if game.type == 'two':
@@ -536,7 +536,7 @@ class LeaveGame(APIView):
                 game.save()
             user.status = "online"
             user.save()
-        return Response({'message': 'Game left'}, status=status.HTTP_200_OK)
+        return Response({'message': 'Game left', 'gameId': game_id}, status=status.HTTP_200_OK)
 
 
 class OnGoingTournamentView(APIView):
