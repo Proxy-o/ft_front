@@ -32,12 +32,12 @@ const PreGame = ({
           </div>
           <div className="flex flex-row w-fit h-full m-auto">
             {type !== "four" && (
-              <div className="text-5xl lg:text-7xl text-white font-bold h-fit my-auto">
+              <div className="text-2xl md:text-5xl lg:text-7xl text-white font-bold h-fit my-auto">
                 VS
               </div>
             )}
             {type === "four" && (
-              <div className="text-5xl lg:text-7xl text-white font-bold h-fit mt-auto">
+              <div className="text-2xl md:text-5xl lg:text-7xl text-white font-bold h-fit mt-auto">
                 VS
               </div>
             )}

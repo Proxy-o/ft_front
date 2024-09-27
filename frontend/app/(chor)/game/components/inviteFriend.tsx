@@ -24,9 +24,8 @@ const InviteFriends = ({ gameType }: { gameType: string }) => {
   const router = useRouter();
 
   return (
-    <Card className="w-full aspect-[2] min-h-44 max-h-60 bg-background p-2">
-      <div className="w-full h-full flex flex-col justify-start items-start">
-        <div className="w-full h-fit text-center text-lg font-bold pb-2">Invite</div>
+    <Card className="w-full md:aspect-[2] flex flex-col min-h-44 max-h-60 bg-background p-2">
+        <div className="w-full h-full text-center text-lg font-bold pb-2">Invite</div>
         <div className="flex flex-col w-full h-full items-center justify-start pt-2 border-t gap-2 overflow-auto">
           {data.length ? (
             data.map(
@@ -85,7 +84,6 @@ const InviteFriends = ({ gameType }: { gameType: string }) => {
             </div>
           )}
         </div>
-      </div>
     </Card>
   );
 };
