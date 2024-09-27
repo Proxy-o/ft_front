@@ -70,12 +70,12 @@ export default function useInvitationSocket() {
     const toSend = "/leaveGame " + leftUser + " " + rightUser;
     sendJsonMessage({ message: toSend });
   }
-    handleLeaveGame,
 
   return {
     handelSendInvitation,
     newNotif,
     handleAcceptInvitation,
+    handleLeaveGame,
     handleStartTournament,
     handleRefetchPlayers,
     handleRefetchTournament,
