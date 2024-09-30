@@ -26,7 +26,7 @@ export default function useVerifyOtp() {
     onSuccess: (data) => {
       toast.success("OTP verified successfully.");
       setCookie("logged_in", "yes", 1);
-      route.push("/");
+      route.push("/game");
     },
     onError: (err) => {
       toast.error("Invalid OTP. Please try again.");

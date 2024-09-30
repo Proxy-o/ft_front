@@ -97,7 +97,8 @@ class OAuthService:
         else:
             # print("### credentials : ", credentials.user.id)
             user = User.objects.filter(id=credentials.user.id).first()
-
+        if user.otp_active:
+            return {'detail': '2FA required', 'user_id': user.id}, None, None
         user_credentials['user'] = user.id
         user_credentials['user_oauth_uid'] = user_infos['id']
         return user, user_credentials, None

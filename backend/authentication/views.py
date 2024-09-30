@@ -87,7 +87,7 @@ class Login(TokenObtainPairView):
             return Response({'detail': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)
 
         if user.otp_active:
-            return Response({'detail': '2FA required', 'user_id': user.id}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'detail': '2FA required', 'user_id': user.id}, status=status.HTTP_200_OK)
 
         response = super().post(request, *args, **kwargs)
 
@@ -127,6 +127,9 @@ class OAuthCallback(APIView):
             provider, code, state)
         if error:
             return Response(error, status=status.HTTP_400_BAD_REQUEST)
+
+        if user['detail'] == '2FA required':
+            return Response(user, status=status.HTTP_200_OK)
 
         serializers = OAuthCredentialSerializer(data=user_credentials)
         if serializers.is_valid():
