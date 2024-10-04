@@ -5,9 +5,12 @@ import { Card } from "@/components/ui/card";
 
 export default function Page() {
   return (
-    <Card className="w-11/12 max-w-[900px] flex flex-col justify-center items-start pb-8 mx-auto mt-12 gap-2 p-4">
-      <h1 className="text-4xl m-auto">Ping Pong</h1>
+    <div className="flex flex-col items-center w-full h-full gap-4">
+      <h1 className="text-3xl md:text-7xl mt-5">Ping Pong</h1>
+      <div className="text-base font-light mb-5 text-center">
+        Play a game of ping pong with the same keyboard!
+      </div>
       <OneOffline />
-    </Card>
+    </div>
   );
 }

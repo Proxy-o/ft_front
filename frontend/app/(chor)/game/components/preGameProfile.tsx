@@ -49,9 +49,15 @@ const ScoreProfile = ({
             {avatar !== "none" && (
               <AvatarImage src={avatar} alt="profile image" />
             )}
-            <AvatarFallback className="rounded-sm w-20 h-20 text-3xl font-bold bg-primary/35 text-secondary">
-              ?
-            </AvatarFallback>
+            {avatar === "local" ? (
+              <AvatarFallback className="rounded-sm w-20 h-20 text-sm font-bold ">
+                Player 1
+              </AvatarFallback>
+            ) : (
+              <AvatarFallback className="rounded-sm w-20 h-20 text-3xl font-bold bg-primary/35 text-secondary">
+                ?
+              </AvatarFallback>
+            )}
           </Avatar>
         </div>
       </div>
@@ -64,9 +70,15 @@ const ScoreProfile = ({
             {avatar !== "none" && (
               <AvatarImage src={avatar} alt="profile image" />
             )}
-            <AvatarFallback className="rounded-sm w-20 h-20 text-3xl font-bold bg-primary/35 text-secondary">
-              ?
-            </AvatarFallback>
+            {avatar === "local" ? (
+              <AvatarFallback className="rounded-sm w-20 h-20 text-sm font-bold ">
+                Player 2
+              </AvatarFallback>
+            ) : (
+              <AvatarFallback className="rounded-sm w-20 h-20 text-3xl font-bold bg-primary/35 text-secondary">
+                ?
+              </AvatarFallback>
+            )}
           </Avatar>
         </div>
       </div>

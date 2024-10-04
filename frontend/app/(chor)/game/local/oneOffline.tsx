@@ -4,18 +4,20 @@ import React, { useRef, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import NoGame from "../components/noGame";
+import Score from "../oneVone/components/score";
 
 const OneOffline = () => {
   const newBallPositionRef = useRef({ x: 0, y: 0 }); // Use a ref to store the current state
   const newAngleRef = useRef(0); // Use a ref to store the current state
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [gameStarted, setGameStarted] = useState(false);
-  const leftScoreRef = useRef(0);
-  const rightScoreRef = useRef(0);
   const animationFrameId = useRef(0); // To keep track of the animation frame ID
   const isAnimating = useRef(false);
   const state = useRef<string>("local");
   const ai = useRef<boolean>(false);
+
+  const [leftScore, setLeftScore] = useState(0);
+  const [rightScore, setRightScore] = useState(0);
 
   let bgImage = new Image();
   bgImage.src = "/game.jpeg";
@@ -27,9 +29,6 @@ const OneOffline = () => {
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return; // Exit if context is not available
-
-    rightScoreRef.current = 0;
-    leftScoreRef.current = 0;
 
     let firstTime = true;
 
@@ -52,12 +51,12 @@ const OneOffline = () => {
     }
 
     const paddleHeight = 60;
-    const paddleWidth = 10;
+    const paddleWidth = 15;
     let paddleRightY = (canvas.height - paddleHeight) / 2;
     let paddleLeftY = (canvas.height - paddleHeight) / 2;
 
-    const paddleLeftX = 25;
-    const paddleRightX = canvas.width - 25 - paddleWidth;
+    const paddleLeftX = 0;
+    const paddleRightX = canvas.width - paddleWidth;
 
     let upPressed = false;
     let downPressed = false;
@@ -248,7 +247,7 @@ const OneOffline = () => {
       if (canvas === null) return;
       if (newBallPositionRef.current.x < 0) {
         if (newBallPositionRef.current.x < -50) {
-          rightScoreRef.current = rightScoreRef.current + 1;
+          setRightScore(rightScore + 1);
           x = canvas.width / 2;
           y = Math.random() * (canvas.height - ballRadius * 2) + ballRadius;
           firstTime = true;
@@ -265,7 +264,7 @@ const OneOffline = () => {
         }
       } else if (newBallPositionRef.current.x > canvas.width) {
         if (newBallPositionRef.current.x > canvas.width + 50) {
-          leftScoreRef.current = leftScoreRef.current + 1;
+          setLeftScore(leftScore + 1);
           x = canvas.width / 2;
           y = Math.random() * (canvas.height - ballRadius * 2) + ballRadius;
           firstTime = true;
@@ -284,14 +283,14 @@ const OneOffline = () => {
     }
     function checkLoseConditionOffline() {
       if (canvas === null) return;
-      if (leftScoreRef.current === 77777) {
+      if (leftScore === 77777) {
         state.current = "left";
-      } else if (rightScoreRef.current === 77777) {
+      } else if (rightScore === 77777) {
         state.current = "right";
       }
-      if (leftScoreRef.current === 77777 || rightScoreRef.current === 77777) {
-        rightScoreRef.current = 0;
-        leftScoreRef.current = 0;
+      if (leftScore === 77777 || rightScore === 77777) {
+        setRightScore(0);
+        setLeftScore(0);
         setGameStarted(false);
       }
     }
@@ -310,12 +309,12 @@ const OneOffline = () => {
       ctx.font = "italic bold 50px Arial";
       ctx.fillStyle = "#0095DD";
       ctx.fillText(
-        "" + leftScoreRef.current,
+        "" + leftScore,
         canvas.width / 2 - 150,
         canvas.height / 2 - 20
       );
       ctx.fillText(
-        "" + rightScoreRef.current,
+        "" + rightScore,
         canvas.width / 2 + 150,
         canvas.height / 2 - 20
       );
@@ -328,7 +327,7 @@ const OneOffline = () => {
 
       // Draw the background
       gameNotStarted();
-      drawScore();
+      // drawScore();
       drawBall();
       drawRightPaddle();
       drawLeftPaddle();
@@ -398,50 +397,41 @@ const OneOffline = () => {
 
   return (
     <>
-      {gameStarted ? (
-        <>
-          <Card className="w-full h-[300px] md:h-[400px] mt-3">
-            <canvas
-              ref={canvasRef}
-              height="400"
-              width="800"
-              className="w-full h-full"
-            ></canvas>
-          </Card>
-          <Button
-            onClick={() => {
-              rightScoreRef.current = 0;
-              leftScoreRef.current = 0;
-              setGameStarted(false);
-            }}
-            className="w-1/2 mt-4 mx-auto"
-          >
-            End Game
-          </Button>
-        </>
-      ) : (
-        <div className="flex flex-col items-center w-full">
-          <Card className="w-full">
+      {gameStarted && <Score leftScore={leftScore} rightScore={rightScore} />}
+      <Card className="w-full aspect-[2]">
+        {gameStarted ? (
+          <canvas
+            ref={canvasRef}
+            height="400"
+            width="800"
+            className="w-full h-full"
+          ></canvas>
+        ) : (
+          <div className="flex flex-col items-center w-full h-full">
             <NoGame state={state} />
-          </Card>
-          <Button
-            onClick={() => {
-              setGameStarted(true);
-            }}
-            className="w-1/2 mt-4 mx-auto h-10 p-3"
-          >
-            play with friend
-          </Button>
-          {/* <Button
-            onClick={() => {
-              setGameStarted(true);
-              ai.current = true;
-            }}
-            className="w-1/2 mt-4 mx-auto"
-          >
-            play with AI
-          </Button> */}
-        </div>
+          </div>
+        )}
+      </Card>
+      {gameStarted ? (
+        <Button
+          onClick={() => {
+            setLeftScore(0);
+            setRightScore(0);
+            setGameStarted(false);
+          }}
+          className="w-1/3 mx-auto bg-red-500/25"
+        >
+          End Game
+        </Button>
+      ) : (
+        <Button
+          onClick={() => {
+            setGameStarted(true);
+          }}
+          className="w-1/3 mx-auto h-10 p-3 bg-green-500/25"
+        >
+          Start Game
+        </Button>
       )}
     </>
   );

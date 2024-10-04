@@ -421,13 +421,13 @@ const Game = ({
   return (
     <div className="w-full h-fit flex flex-col  justify-center items-center gap-2">
       {gameStartedRef.current && (
-          <Score
-            leftScoreRef={leftScoreRef}
-            rightScoreRef={rightScoreRef}
-            leftUserRef={leftUser}
-            rightUserRef={rightUser}
-          />
-        )}
+        <Score
+          leftScore={leftScoreRef.current}
+          rightScore={rightScoreRef.current}
+          leftUserRef={leftUser}
+          rightUserRef={rightUser}
+        />
+      )}
       <Card className="w-full aspect-[2]">
         {leftUser.current?.username &&
         leftScoreRef.current < 77777 &&
