@@ -2,22 +2,17 @@
 
 import getCookie from "@/lib/functions/getCookie";
 import TournamentTable from "../../profile/components/tournamentTable";
-import useGetTournament from "../hooks/useGetTournament";
 import { useRouter } from "next/navigation";
 import useCreateTournament from "../hooks/useCreateTournament";
 import Invitations from "../components/invitations";
 import InviteFriends from "../components/inviteFriend";
-import TournamentBoard from "./components/tournamentBoard";
 import { Button } from "@/components/ui/button";
 import useInvitationSocket from "../hooks/sockets/useInvitationSocket";
 import { useEffect } from "react";
 import useStartTournament from "../hooks/useStartTournament";
-import { useQueryClient } from "@tanstack/react-query";
 import useGetOnGoingTournament from "../hooks/useGetOnGoingTournament";
 import useAborttournament from "../hooks/useAbortTournament";
 import { Participants } from "./components/participants";
-import TournamentNav from "../components/gameNav/tournament";
-import NoGame from "../components/noGame";
 import { Card } from "@/components/ui/card";
 import {
   Tooltip,
@@ -29,8 +24,7 @@ import { DoorOpen, Plus } from "lucide-react";
 
 export default function Page() {
   const user_id = getCookie("user_id") || "";
-  const queryClient = useQueryClient();
-  const { data, isLoading, isSuccess, refetch } = useGetOnGoingTournament();
+  const { data, isSuccess, refetch } = useGetOnGoingTournament();
   const tournament = data?.tournament;
   const { newNotif } = useInvitationSocket();
   const { mutate: createTournament } = useCreateTournament(user_id);

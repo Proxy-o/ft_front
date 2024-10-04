@@ -19,7 +19,6 @@ import useGetUser from "../../../profile/hooks/useGetUser";
 import { Card } from "@/components/ui/card";
 import NoGame from "../../components/noGame";
 import PreGame from "../../components/preGame";
-import { useQueryClient } from "@tanstack/react-query";
 import Actions from "./actions";
 import Score from "./score";
 
@@ -72,8 +71,6 @@ const Game = ({
   } = useGameSocket();
 
   const { newNotif } = useInvitationSocket();
-
-  const query = useQueryClient();
 
   const user_id = getCookie("user_id") || "";
   const { data: user } = useGetUser(user_id || "0");

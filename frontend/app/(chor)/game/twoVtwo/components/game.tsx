@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import useGameSocket from "@/app/(chor)/game/hooks/sockets/useGameSocket";
 import { User } from "@/lib/types";
 import getCookie from "@/lib/functions/getCookie";
 import useGetUser from "../../../profile/hooks/useGetUser";

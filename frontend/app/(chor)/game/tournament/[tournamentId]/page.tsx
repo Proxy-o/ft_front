@@ -1,20 +1,14 @@
 "use client";
-import { Card } from "@/components/ui/card";
 import Game from "../../oneVone/components/game";
 import getCookie from "@/lib/functions/getCookie";
-import useGetUser from "@/app/(chor)/profile/hooks/useGetUser";
-import useCreateTournament from "../../hooks/useCreateTournament";
 import useLeavetournament from "../../hooks/useLeaveTournament";
 import useInvitationSocket from "../../hooks/sockets/useInvitationSocket";
 import useDeletetournament from "../../hooks/useDeleteTournament";
 import useGetGame from "../../hooks/useGetGames";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import useGetTournament from "../../hooks/useGetTournament";
 import { Button } from "@/components/ui/button";
 import TournamentBoard from "../components/tournamentBoard";
-import Invitations from "../../components/invitations";
-import { routeModule } from "next/dist/build/templates/app-page";
-import { useRouter } from "next/navigation";
 import useGameSocket from "../../hooks/sockets/useGameSocket";
 
 export default function Page({ params }: { params: { tournamentId: string } }) {
@@ -28,12 +22,10 @@ export default function Page({ params }: { params: { tournamentId: string } }) {
     "tournament",
     tournamentId
   );
-  const router = useRouter();
   const { mutate: deleteTournament } = useDeletetournament();
   const {
     data,
     isSuccess,
-    isLoading,
     refetch: refetchTournament,
   } = useGetTournament(tournamentId);
 

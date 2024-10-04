@@ -7,7 +7,6 @@ import useLeaveGame from "../../hooks/useLeaveGame";
 import { TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 import { Tooltip } from "@/components/ui/tooltip";
 import { TooltipTrigger } from "@/components/ui/tooltip";
-import useInvitationSocket from "../../hooks/sockets/useInvitationSocket";
 
 const Actions = ({
   canvasPrams,

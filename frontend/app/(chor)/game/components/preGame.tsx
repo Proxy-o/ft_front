@@ -1,6 +1,4 @@
-import { AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User } from "@/lib/types";
-import { Avatar } from "@radix-ui/react-avatar";
 import { PreGameProfile } from "./preGameProfile";
 
 const PreGame = ({

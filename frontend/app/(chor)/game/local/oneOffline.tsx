@@ -303,23 +303,6 @@ const OneOffline = () => {
       ctx.globalAlpha = 1;
     };
 
-    const drawScore = () => {
-      if (canvas === null) return;
-      // italic and bold
-      ctx.font = "italic bold 50px Arial";
-      ctx.fillStyle = "#0095DD";
-      ctx.fillText(
-        "" + leftScore,
-        canvas.width / 2 - 150,
-        canvas.height / 2 - 20
-      );
-      ctx.fillText(
-        "" + rightScore,
-        canvas.width / 2 + 150,
-        canvas.height / 2 - 20
-      );
-    };
-
     const drawOfflineOne = () => {
       if (canvas === null) return;
       if (!gameStarted) return;

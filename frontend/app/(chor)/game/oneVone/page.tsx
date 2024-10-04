@@ -1,6 +1,5 @@
 "use client";
 
-import { Card } from "@/components/ui/card";
 import Invitations from "../components/invitations";
 import InviteFriends from "../components/inviteFriend";
 import useGetGame from "../hooks/useGetGames";

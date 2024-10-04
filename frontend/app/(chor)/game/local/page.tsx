@@ -1,7 +1,6 @@
 "use client";
 
 import OneOffline from "./oneOffline";
-import { Card } from "@/components/ui/card";
 
 export default function Page() {
   return (
