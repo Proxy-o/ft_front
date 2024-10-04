@@ -72,8 +72,9 @@ export default function Page() {
   return (
     <div className="flex flex-col w-11/12 max-w-[800px] h-full justify-start items-center mx-auto">
       <div className="w-full flex flex-col justify-center items-center gap-4 relative">
-        <div className="text-3xl lg:text-7xl font-bold h-fit my-auto">
-          Tournament
+        <h1 className="text-3xl md:text-7xl mt-5">Tournament</h1>
+        <div className="text-sm font-light mb-8 text-center">
+          Create and invite three friends to play and determine who is the best!
         </div>
         {!tournament && (
           <TooltipProvider delayDuration={0}>
@@ -83,7 +84,7 @@ export default function Page() {
                   onClick={() => {
                     createTournament(user_id);
                   }}
-                  className="w-10 h-10 p-0 rounded-md absolute top-1 lg:top-4 left-0"
+                  className="w-10 h-10 p-0 rounded-md absolute top-6 md:top-12 right-3"
                 >
                   <Plus size={25} />
                 </Button>

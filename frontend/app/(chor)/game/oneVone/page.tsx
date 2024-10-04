@@ -15,12 +15,14 @@ export default function Page() {
   return (
     <>
       <div className="w-full h-fit min-w-72 flex flex-col justify-center items-center">
-        <div className="text-3xl font-bold">One V One</div>
-        <div className="text-xl">Play with your friends</div>
+        <h1 className="text-3xl md:text-7xl mt-5">One V One</h1>
+        <div className="text-sm font-light mb-5 mt-3 text-center">
+          Invite a friend to play a game of ping pong with you!
+        </div>
       </div>
       <div className="w-full min-w-72 h-full flex flex-row justify-center items-center">
         <div className="flex flex-col p-4 w-full md:justify-center items-center md:items-start gap-2">
-          <Game type={"two"} onGoingGame={onGoingGame}/>
+          <Game type={"two"} onGoingGame={onGoingGame} />
           <div className="w-full h-fit flex flex-col md:flex-row justify-start items-start gap-2">
             <div className="w-full h-fit flex flex-col justify-start items-start">
               <Invitations mode="two" />
