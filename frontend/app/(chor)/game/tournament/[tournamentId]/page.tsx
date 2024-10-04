@@ -37,11 +37,11 @@ export default function Page({ params }: { params: { tournamentId: string } }) {
     refetch: refetchTournament,
   } = useGetTournament(tournamentId);
 
-  useEffect(() => {
-    if (!data?.tournament?.started && isSuccess) {
-      router.push(`/game/tournament`);
-    }
-  }, [isSuccess, isLoading]);
+  // useEffect(() => {
+  //   if (!data?.tournament?.started && isSuccess) {
+  //     router.push(`/game/tournament`);
+  //   }
+  // }, [isSuccess, isLoading]);
 
   useEffect(() => {
     const notif = newNotif();
@@ -60,6 +60,10 @@ export default function Page({ params }: { params: { tournamentId: string } }) {
   }, [newNotif()?.data]);
   return (
     <div className={`flex flex-col w-full h-full justify-center items-center`}>
+      <h1 className="text-3xl md:text-7xl mt-5">Tournament</h1>
+      <div className="text-sm font-light mb-8 text-center">
+        Create and invite three friends to play and determine who is the best!
+      </div>
       <div className="flex flex-col p-4 lg:flex-row w-full h-full lg:justify-center items-center lg:items-start gap-2">
         <Game
           type="tournament"
