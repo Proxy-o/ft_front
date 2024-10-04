@@ -83,201 +83,208 @@ const Invitations = ({ mode }: { mode: string }) => {
     }
   }
   return (
-    <Card className="flex flex-col w-full md:aspect-[2] min-h-44 items-start justify-start max-h-60 bg-background p-2 bg-green-500">
-      {/* <div className="w-full h-fit text-center text-lg font-bold pb-2">
-        Invitations
-      </div> */}
-      <div className="w-full h-full flex flex-col items-center justify-center gap-2 overflow-auto bg-yellow-400">
-        {/* {((mode === "all" && invitations.length === 0) ||
-          (mode === "tournament" && tournamentInvitations.length === 0) ||
-          (mode === "four" && twoVsTwoInvitations.length === 0) ||
-          (mode === "two" && oneVsOneInvitations.length === 0)) && (
-          <div className="flex flex-row w-full h-full justify-center items-center gap-2 text-primary border-t p-2 bg-blue-400">
-            <Inbox size={30} />
-            No invitations
-          </div>
-        )} */}
-        {oneVsOneInvitations.length !== 0 ? (
-          <>
-            {oneVsOneInvitations.map((invitation, index) => {
-              return (
-                <div
-                  key={invitation.id}
-                  className="w-full mr-auto pt-2 border-t"
-                >
-                  <div className="flex flex-row justify-between items-center mx-auto gap-2 w-10/12">
-                    <div className="flex flex-row justify-start items-center gap-2 w-full">
-                      <Avatar className=" mr-2">
-                        <AvatarImage
-                          src={invitation.sender.avatar}
-                          alt="profile image"
-                          className="rounded-md h-8 w-8"
-                        />
-                        <AvatarFallback className="rounded-md">
-                          PF
-                        </AvatarFallback>
-                      </Avatar>
-                    </div>
+    <Card
+      className={`w-full h-fit max-h-[50vw] flex flex-col p-2 overflow-hidden ${
+        (path === "/game/oneVone" || path === "/game/twoVtwo") &&
+        "md:aspect-[2]"
+      }`}
+    >
+      <div className="w-full h-fit flex flex-col justify-start items-center mx-auto gap-2 overflow-hidden">
+        <div className="w-full h-fit text-center text-lg font-bold">
+          Invitations
+        </div>
+        <div className="w-full h-fit max-h-[50vw] flex flex-col items-center justify-start gap-2 overflow-auto">
+          {((mode === "all" && invitations.length === 0) ||
+            (mode === "tournament" && tournamentInvitations.length === 0) ||
+            (mode === "four" && twoVsTwoInvitations.length === 0) ||
+            (mode === "two" && oneVsOneInvitations.length === 0)) && (
+            <div className="flex flex-row w-full justify-center items-center gap-2 text-primary border-t p-2">
+              <Inbox size={30} />
+              No invitations
+            </div>
+          )}
+          {oneVsOneInvitations.length !== 0 ? (
+            <>
+              {oneVsOneInvitations.map((invitation, index) => {
+                return (
+                  <div
+                    key={invitation.id}
+                    className="w-full mr-auto pt-2 border-t"
+                  >
+                    <div className="flex flex-row justify-between items-center mx-auto gap-2 w-10/12">
+                      <div className="flex flex-row justify-start items-center gap-2 w-full">
+                        <Avatar className=" mr-2">
+                          <AvatarImage
+                            src={invitation.sender.avatar}
+                            alt="profile image"
+                            className="rounded-md h-8 w-8"
+                          />
+                          <AvatarFallback className="rounded-md">
+                            PF
+                          </AvatarFallback>
+                        </Avatar>
+                      </div>
 
-                    <div className="flex flex-row justify-end items-center gap-2">
-                      {path == "/game/oneVone" ? (
-                        <>
+                      <div className="flex flex-row justify-end items-center gap-2">
+                        {path == "/game/oneVone" ? (
+                          <>
+                            <Button
+                              // className="rounded-md bg-primary hover:bg-secondary hover:text-primary hover:border-primary border-2  border-primary mr-2"
+                              size={"xs"}
+                              onClick={() => {
+                                acceptInvitation(invitation.id);
+                              }}
+                            >
+                              <Check size={20} />
+                            </Button>
+                            <Button
+                              variant={"secondary"}
+                              size={"xs"}
+                              onClick={() => declineMutation(invitation.id)}
+                            >
+                              <X size={20} />
+                            </Button>
+                          </>
+                        ) : (
                           <Button
                             // className="rounded-md bg-primary hover:bg-secondary hover:text-primary hover:border-primary border-2  border-primary mr-2"
-                            size={"xs"}
+                            size={"sm"}
                             onClick={() => {
-                              acceptInvitation(invitation.id);
+                              router.push("/game/oneVone");
                             }}
                           >
-                            <Check size={20} />
+                            1 VS 1
                           </Button>
-                          <Button
-                            variant={"secondary"}
-                            size={"xs"}
-                            onClick={() => declineMutation(invitation.id)}
-                          >
-                            <X size={20} />
-                          </Button>
-                        </>
-                      ) : (
-                        <Button
-                          // className="rounded-md bg-primary hover:bg-secondary hover:text-primary hover:border-primary border-2  border-primary mr-2"
-                          size={"sm"}
-                          onClick={() => {
-                            router.push("/game/oneVone");
-                          }}
-                        >
-                          1 VS 1
-                        </Button>
-                      )}
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
-          </>
-        ) : null}
-        {twoVsTwoInvitations.length !== 0 ? (
-          <>
-            {twoVsTwoInvitations.map((invitation) => {
-              return (
-                <div
-                  key={invitation.id}
-                  className="gap-2 w-full mr-auto p-2 border-t"
-                >
-                  <div className="flex flex-row justify-between items-center mx-auto gap-2 w-10/12">
-                    <div className="flex flex-row justify-start items-center gap-2">
-                      <Avatar className=" mr-2">
-                        <AvatarImage
-                          src={invitation.sender.avatar}
-                          alt="profile image"
-                          className="rounded-md h-8 w-8"
-                        />
-                        <AvatarFallback className="rounded-md">
-                          PF
-                        </AvatarFallback>
-                      </Avatar>
-                    </div>
-                    <div className="flex flex-row justify-end items-center gap-2">
-                      {path == "/game/twoVtwo" ? (
-                        <>
+                );
+              })}
+            </>
+          ) : null}
+          {twoVsTwoInvitations.length !== 0 ? (
+            <>
+              {twoVsTwoInvitations.map((invitation) => {
+                return (
+                  <div
+                    key={invitation.id}
+                    className="gap-2 w-full mr-auto p-2 border-t"
+                  >
+                    <div className="flex flex-row justify-between items-center mx-auto gap-2 w-10/12">
+                      <div className="flex flex-row justify-start items-center gap-2">
+                        <Avatar className=" mr-2">
+                          <AvatarImage
+                            src={invitation.sender.avatar}
+                            alt="profile image"
+                            className="rounded-md h-8 w-8"
+                          />
+                          <AvatarFallback className="rounded-md">
+                            PF
+                          </AvatarFallback>
+                        </Avatar>
+                      </div>
+                      <div className="flex flex-row justify-end items-center gap-2">
+                        {path == "/game/twoVtwo" ? (
+                          <>
+                            <Button
+                              // className="rounded-md bg-primary hover:bg-secondary hover:text-primary hover:border-primary border-2  border-primary mr-2"
+                              size={"sm"}
+                              onClick={() => {
+                                acceptInvitation(invitation.id);
+                              }}
+                            >
+                              <Check size={20} />
+                            </Button>
+                            <Button
+                              variant={"secondary"}
+                              size={"sm"}
+                              onClick={() => declineMutation(invitation.id)}
+                            >
+                              <X size={20} />
+                            </Button>
+                          </>
+                        ) : (
                           <Button
                             // className="rounded-md bg-primary hover:bg-secondary hover:text-primary hover:border-primary border-2  border-primary mr-2"
+
                             size={"sm"}
                             onClick={() => {
-                              acceptInvitation(invitation.id);
+                              router.push("/game/twoVtwo");
                             }}
                           >
-                            <Check size={20} />
+                            2 VS 2
                           </Button>
-                          <Button
-                            variant={"secondary"}
-                            size={"sm"}
-                            onClick={() => declineMutation(invitation.id)}
-                          >
-                            <X size={20} />
-                          </Button>
-                        </>
-                      ) : (
-                        <Button
-                          // className="rounded-md bg-primary hover:bg-secondary hover:text-primary hover:border-primary border-2  border-primary mr-2"
-
-                          size={"sm"}
-                          onClick={() => {
-                            router.push("/game/twoVtwo");
-                          }}
-                        >
-                          2 VS 2
-                        </Button>
-                      )}
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
-          </>
-        ) : null}
-        {tournamentInvitations.length !== 0 ? (
-          <>
-            {tournamentInvitations.map((invitation) => {
-              return (
-                <div
-                  key={invitation.id}
-                  className="gap-2 w-full mr-auto p-2  border-t"
-                >
-                  <div className="flex flex-row justify-between items-center my-2 mx-auto gap-2 w-10/12">
-                    <div className="flex flex-row justify-start items-center gap-2">
-                      <Avatar className=" mr-2">
-                        <AvatarImage
-                          src={invitation.sender.avatar}
-                          alt="profile image"
-                          className="rounded-md h-8 w-8"
-                        />
-                        <AvatarFallback className="rounded-md">
-                          PF
-                        </AvatarFallback>
-                      </Avatar>
-                    </div>
-                    <div className="flex flex-row justify-end items-center gap-2">
-                      {path == "/game/tournament" ? (
-                        <>
+                );
+              })}
+            </>
+          ) : null}
+          {tournamentInvitations.length !== 0 ? (
+            <>
+              {tournamentInvitations.map((invitation) => {
+                return (
+                  <div
+                    key={invitation.id}
+                    className="gap-2 w-full mr-auto p-2  border-t"
+                  >
+                    <div className="flex flex-row justify-between items-center my-2 mx-auto gap-2 w-10/12">
+                      <div className="flex flex-row justify-start items-center gap-2">
+                        <Avatar className=" mr-2">
+                          <AvatarImage
+                            src={invitation.sender.avatar}
+                            alt="profile image"
+                            className="rounded-md h-8 w-8"
+                          />
+                          <AvatarFallback className="rounded-md">
+                            PF
+                          </AvatarFallback>
+                        </Avatar>
+                      </div>
+                      <div className="flex flex-row justify-end items-center gap-2">
+                        {path == "/game/tournament" ? (
+                          <>
+                            <Button
+                              // className="rounded-md bg-primary hover:bg-secondary hover:text-primary hover:border-primary border-2  border-primary mr-2"
+                              size={"sm"}
+                              onClick={() => {
+                                acceptInvitationTournament(invitation.id);
+                                router.push("/game/tournament");
+                              }}
+                            >
+                              <Check size={20} />
+                            </Button>
+                            <Button
+                              variant={"secondary"}
+                              size={"sm"}
+                              onClick={() => declineMutation(invitation.id)}
+                            >
+                              <X size={20} />
+                            </Button>
+                          </>
+                        ) : (
                           <Button
                             // className="rounded-md bg-primary hover:bg-secondary hover:text-primary hover:border-primary border-2  border-primary mr-2"
+
                             size={"sm"}
                             onClick={() => {
-                              acceptInvitationTournament(invitation.id);
                               router.push("/game/tournament");
                             }}
                           >
-                            <Check size={20} />
+                            Tournament
                           </Button>
-                          <Button
-                            variant={"secondary"}
-                            size={"sm"}
-                            onClick={() => declineMutation(invitation.id)}
-                          >
-                            <X size={20} />
-                          </Button>
-                        </>
-                      ) : (
-                        <Button
-                          // className="rounded-md bg-primary hover:bg-secondary hover:text-primary hover:border-primary border-2  border-primary mr-2"
-
-                          size={"sm"}
-                          onClick={() => {
-                            router.push("/game/tournament");
-                          }}
-                        >
-                          Tournament
-                        </Button>
-                      )}
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
-          </>
-        ) : null}
+                );
+              })}
+            </>
+          ) : null}
+        </div>
       </div>
     </Card>
   );
