@@ -34,7 +34,13 @@ const PreGameProfile = ({ avatar, side }: { avatar: string; side: string }) => {
   }
 };
 
-const ScoreProfile = ({ avatar, side= "left" }: { avatar: string; side?: string }) => {
+const ScoreProfile = ({
+  avatar,
+  side = "left",
+}: {
+  avatar: string;
+  side?: string;
+}) => {
   if (side === "left") {
     return (
       <div className="w-24 h-24 rounded-md justify-center items-center flex flex-row animate-getBigger animate-biggerSmaller gap-4">
@@ -66,7 +72,6 @@ const ScoreProfile = ({ avatar, side= "left" }: { avatar: string; side?: string 
       </div>
     );
   }
-}
+};
 
-
-export {PreGameProfile, ScoreProfile};
+export { PreGameProfile, ScoreProfile };

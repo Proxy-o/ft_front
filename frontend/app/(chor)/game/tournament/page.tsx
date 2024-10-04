@@ -168,18 +168,9 @@ export default function Page() {
                 !tournament?.user4) && <InviteFriends gameType="tournament" />}
           </>
         )}
-        {/* {!tournament && (
-          <Card className="w-full h-fit">
-            <NoGame
-              tournament={"tournament"}
-              createTournament={createTournament}
-              user_id={user_id}
-            />
-          </Card>
-        )} */}
         {isSuccess && !tournament && <Invitations mode="tournament" />}
 
-        <TournamentTable userid={user_id} />
+        {tournament && <TournamentTable userid={user_id} />}
       </div>
     </div>
   );
