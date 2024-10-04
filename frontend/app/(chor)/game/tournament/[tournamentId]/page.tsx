@@ -64,16 +64,17 @@ export default function Page({ params }: { params: { tournamentId: string } }) {
       <div className="text-sm font-light mb-8 text-center">
         Create and invite three friends to play and determine who is the best!
       </div>
-      <div className="flex flex-col p-4 lg:flex-row w-full h-full lg:justify-center items-center lg:items-start gap-2">
+      <div className="flex flex-col p-4 w-full h-full lg:justify-center items-center lg:items-start gap-2">
         <Game
           type="tournament"
           onGoingGame={onGoingGame}
           tournamentId={tournamentId}
         />
-        <div className="flex flex-col gap-4 w-full min-w-80 lg:max-w-[350px] lg:mr-auto">
+        <div className="flex flex-col gap-4 w-full min-w-80 lg:mr-auto items-center">
           {isSuccess && data.tournament && (
             <>
               <Button
+                className="w-1/3"
                 onClick={() => {
                   leavetournament(tournamentId);
                   handleSurrender(onGoingGame.data?.game?.id || "0");

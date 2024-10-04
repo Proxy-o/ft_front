@@ -28,63 +28,65 @@ const Actions = ({
   });
 
   return (
-    rightUserRef.current?.username &&
-    (!gameStartedRef.current ? (
-      <div className="w-5/6 flex flex-row justify-between items-center gap-4">
-        <TooltipProvider delayDuration={0}>
-          <Tooltip delayDuration={0}>
-            <TooltipTrigger asChild>
-              <Button
-                onClick={() => {
-                  handleStartGame(
-                    leftUserRef.current?.username || "",
-                    rightUserRef.current?.username || "",
-                    gameIdRef.current
-                  );
-                }}
-                className="h-fit w-fit bg-green-600/40"
-              >
-                <Gamepad size={25} />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Start</TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-        {type !== "tournament" && (
+    <div className="w-full h-fit absolute bottom-4 items-center justify-center flex">
+      {rightUserRef.current?.username &&
+        (!gameStartedRef.current ? (
+          <div className="w-5/6 flex flex-row justify-between items-center gap-4">
+            <TooltipProvider delayDuration={0}>
+              <Tooltip delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <Button
+                    onClick={() => {
+                      handleStartGame(
+                        leftUserRef.current?.username || "",
+                        rightUserRef.current?.username || "",
+                        gameIdRef.current
+                      );
+                    }}
+                    className="h-fit w-fit bg-green-600/40"
+                  >
+                    <Gamepad size={25} />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Start</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            {type !== "tournament" && (
+              <TooltipProvider delayDuration={0}>
+                <Tooltip delayDuration={0}>
+                  <TooltipTrigger asChild>
+                    <Button
+                      onClick={() => {
+                        leaveGame();
+                      }}
+                      className="h-fit w-fit bg-red-600/40"
+                    >
+                      <DoorOpen size={25} />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>Leave</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            )}
+          </div>
+        ) : (
           <TooltipProvider delayDuration={0}>
             <Tooltip delayDuration={0}>
               <TooltipTrigger asChild>
                 <Button
                   onClick={() => {
-                    leaveGame();
+                    surrenderGame(gameIdRef.current);
                   }}
-                  className="h-fit w-fit bg-gray-700"
+                  className="h-fit w-fit bg-red-600/40"
                 >
-                  <DoorOpen size={25} />
+                  <Flag size={25} />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>Leave</TooltipContent>
+              <TooltipContent>Surrender</TooltipContent>
             </Tooltip>
           </TooltipProvider>
-        )}
-      </div>
-    ) : (
-      <TooltipProvider delayDuration={0}>
-        <Tooltip delayDuration={0}>
-          <TooltipTrigger asChild>
-            <Button
-              onClick={() => {
-                surrenderGame(gameIdRef.current);
-              }}
-              className="h-fit w-fit bg-red-600/40"
-            >
-              <Flag size={25} />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>Surrender</TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-    ))
+        ))}
+    </div>
   );
 };
 

@@ -428,7 +428,7 @@ const Game = ({
           rightUserRef={rightUser}
         />
       )}
-      <Card className="w-full aspect-[2]">
+      <Card className="w-full aspect-[2] relative">
         {leftUser.current?.username &&
         leftScoreRef.current < 77777 &&
         rightScoreRef.current < 77777 ? (
@@ -453,12 +453,12 @@ const Game = ({
         ) : (
           !gameStartedRef.current && <NoGame state={state} />
         )}
+        <Actions
+          canvasPrams={canvasParams}
+          gameStartedRef={gameStartedRef}
+          type={type}
+        />
       </Card>
-      <Actions
-        canvasPrams={canvasParams}
-        gameStartedRef={gameStartedRef}
-        type={type}
-      />
     </div>
   );
 };

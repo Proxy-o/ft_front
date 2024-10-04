@@ -37,7 +37,7 @@ const FourActions = ({
 
   const { handleStartGameFour } = useGameSocket();
   return (
-    <>
+    <div className="w-full h-fit absolute bottom-4 items-center justify-center flex">
       {!gameStarted ? (
         <div className="w-5/6 flex flex-row justify-between items-center gap-4">
           <TooltipProvider delayDuration={0}>
@@ -71,7 +71,7 @@ const FourActions = ({
                     leaveGame();
                     handleRefetchPlayers(onGoingGame.data?.game.id || "");
                   }}
-                  className="h-fit w-fit bg-gray-700"
+                  className="h-fit w-fit bg-red-600/40"
                 >
                   <DoorOpen size={25} />
                 </Button>
@@ -97,7 +97,7 @@ const FourActions = ({
           </Tooltip>
         </TooltipProvider>
       )}
-    </>
+    </div>
   );
 };
 

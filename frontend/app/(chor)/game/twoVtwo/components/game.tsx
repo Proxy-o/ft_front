@@ -80,7 +80,7 @@ const Game = () => {
           rightUserBottom={rightUserBottom}
         />
       )}
-      <Card className="flex flex-col mx-auto justify-center w-full aspect-[2]">
+      <Card className="flex flex-col mx-auto justify-center w-full aspect-[2] relative">
         {onGoingGame.isSuccess && (
           <>
             {!gameStarted &&
@@ -125,22 +125,22 @@ const Game = () => {
         )}
         {/* {!gameChange && <NoGame state={state} />} */}
         {/* </Game> */}
+        {onGoingGame.data?.game &&
+          onGoingGame.data?.game?.user1_score < 77777 &&
+          onGoingGame.data?.game?.user2_score < 77777 && (
+            <FourActions
+              playerReadyRef={playerReadyRef}
+              gameStarted={gameStarted}
+              username={username}
+              leftUserTop={leftUserTop}
+              leftUserBottom={leftUserBottom}
+              rightUserBottom={rightUserBottom}
+              rightUserTop={rightUserTop}
+              onGoingGame={onGoingGame}
+              handleRefetchPlayers={handleRefetchPlayers}
+            />
+          )}
       </Card>
-      {onGoingGame.data?.game &&
-        onGoingGame.data?.game?.user1_score < 77777 &&
-        onGoingGame.data?.game?.user2_score < 77777 && (
-          <FourActions
-            playerReadyRef={playerReadyRef}
-            gameStarted={gameStarted}
-            username={username}
-            leftUserTop={leftUserTop}
-            leftUserBottom={leftUserBottom}
-            rightUserBottom={rightUserBottom}
-            rightUserTop={rightUserTop}
-            onGoingGame={onGoingGame}
-            handleRefetchPlayers={handleRefetchPlayers}
-          />
-        )}
     </>
   );
 };
