@@ -32,7 +32,6 @@ const useOAuthCallback = () => {
         return ;
       }
       setCookie('logged_in', 'yes');
-      setCookie('user_id', data.user.id);
       router.push("/game");
     },
     onError: (error) => {

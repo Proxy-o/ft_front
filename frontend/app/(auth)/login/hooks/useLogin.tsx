@@ -1,9 +1,9 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { setCookie } from '@/lib/functions/getCookie';
-import { LoginParams } from '@/lib/types';
-import { toast } from 'sonner';
+import { setCookie } from "@/lib/functions/getCookie";
+import { LoginParams } from "@/lib/types";
+import { toast } from "sonner";
 
 const useLogin = () => {
   const router = useRouter();
@@ -14,27 +14,28 @@ const useLogin = () => {
         const response = await axiosInstance.post("/login", data);
         return response.data;
       } catch (error: any) {
-        throw new Error(error.response?.data?.detail || "An error occurred during login");
+        throw new Error(
+          error.response?.data?.detail || "An error occurred during login"
+        );
       }
     },
     onSuccess: (data) => {
       if (!data) {
         router.push("/login");
-        return ;
+        return;
       }
       if (data.detail === "2FA required") {
         router.push("/verifyOTP?user_id=" + data.user_id);
-        return ;
+        return;
       }
-      setCookie('logged_in', 'yes');
-      setCookie('user_id', data.user.id);
+      setCookie("logged_in", "yes");
       router.push("/game");
     },
     onError: (error) => {
-      console.log('onError => ', error.message)
-      toast.error(error.message)
-      router.push("/login")
-    }
+      console.log("onError => ", error.message);
+      toast.error(error.message);
+      router.push("/login");
+    },
   });
 
   return mutation;
