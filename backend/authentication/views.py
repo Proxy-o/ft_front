@@ -48,7 +48,6 @@ def signup(request):
 
 def set_auth_cookies_and_response(user, refresh_token, access_token, request):
     response = Response({
-        'refresh': str(refresh_token),
         'user': UserSerializer(user, context={'request': request}).data,
     })
 
@@ -58,15 +57,6 @@ def set_auth_cookies_and_response(user, refresh_token, access_token, request):
         max_age=36000,
         expires=36000,
         httponly=True,
-        secure=True,  # Use secure=True if your site is served over HTTPS
-        samesite='None'  # Adjust as needed, could also be 'Strict' or 'None'
-    )
-    response.set_cookie(
-        'refresh',
-        str(refresh_token),
-        max_age=36000,
-        expires=36000,
-        httponly=False,
         secure=True,  # Use secure=True if your site is served over HTTPS
         samesite='None'  # Adjust as needed, could also be 'Strict' or 'None'
     )
