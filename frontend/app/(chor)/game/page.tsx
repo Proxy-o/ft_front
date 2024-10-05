@@ -7,9 +7,11 @@ import TournamentNav from "./components/gameNav/tournament";
 import Invitations from "./components/invitations";
 import Link from "next/link";
 import TabStates from "../profile/components/tabStates";
+import useGetUser from "../profile/hooks/useGetUser";
 
 export default function Page() {
-  const user_id = getCookie("user_id") || "";
+  const { data: user } = useGetUser("0");
+  const user_id = user?.id;
 
   // window.addEventListener('offline', () => {
   //     // console.log("offline");

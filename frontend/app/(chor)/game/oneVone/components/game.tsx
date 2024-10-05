@@ -72,8 +72,7 @@ const Game = ({
 
   const { newNotif } = useInvitationSocket();
 
-  const user_id = getCookie("user_id") || "";
-  const { data: user } = useGetUser(user_id || "0");
+  const { data: user } = useGetUser("0");
   // const { mutate: surrenderGame } = useSurrenderGame();
   // const { mutate: leaveGame } = useLeaveGame();
   const { mutate: endGame } = useEndGame();

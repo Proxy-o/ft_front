@@ -5,9 +5,11 @@ import InviteFriends from "../components/inviteFriend";
 import useGetGame from "../hooks/useGetGames";
 import getCookie from "@/lib/functions/getCookie";
 import Game from "./components/game";
+import useGetUser from "../../profile/hooks/useGetUser";
 
 export default function Page() {
-  const user_id = getCookie("user_id") || "";
+  const { data: user } = useGetUser("0");
+  const user_id = user?.id;
 
   const { onGoingGame } = useGetGame(user_id || "0", "two");
 

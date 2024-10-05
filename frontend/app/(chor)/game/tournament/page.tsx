@@ -21,9 +21,11 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { DoorOpen, Plus } from "lucide-react";
+import useGetUser from "../../profile/hooks/useGetUser";
 
 export default function Page() {
-  const user_id = getCookie("user_id") || "";
+  const { data: user } = useGetUser("0");
+  const user_id = user?.id;
   const { data, isSuccess, refetch } = useGetOnGoingTournament();
   const tournament = data?.tournament;
   const { newNotif } = useInvitationSocket();

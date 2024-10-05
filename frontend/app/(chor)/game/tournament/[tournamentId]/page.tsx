@@ -10,10 +10,12 @@ import useGetTournament from "../../hooks/useGetTournament";
 import { Button } from "@/components/ui/button";
 import TournamentBoard from "../components/tournamentBoard";
 import useGameSocket from "../../hooks/sockets/useGameSocket";
+import useGetUser from "@/app/(chor)/profile/hooks/useGetUser";
 
 export default function Page({ params }: { params: { tournamentId: string } }) {
   const tournamentId = params.tournamentId;
-  const user_id = getCookie("user_id") || "";
+  const { data: user } = useGetUser("0");
+  const user_id = user?.id;
   const { mutate: leavetournament } = useLeavetournament();
   const { newNotif } = useInvitationSocket();
   const { handleSurrender } = useGameSocket();

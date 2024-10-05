@@ -15,7 +15,8 @@ import Score from "./score";
 
 const Game = () => {
   const playerReadyRef = useRef(0);
-  const user_id = getCookie("user_id") || "";
+  const { data: user } = useGetUser("0");
+  const user_id = user?.id;
   const [gameStarted, setGameStarted] = useState(false);
   const state = useRef<string>("none");
 
@@ -36,7 +37,6 @@ const Game = () => {
   const rightUserTop = useRef<User>(dummyPlayer);
   const rightUserBottom = useRef<User>(dummyPlayer);
 
-  const { data: user } = useGetUser(user_id || "0");
   const username: string = user?.username || "";
 
   const { newNotif, handleRefetchPlayers } = useInvitationSocket();
