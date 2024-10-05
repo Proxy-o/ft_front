@@ -268,7 +268,7 @@ export default function Nav() {
               "flex flex-row justify-start mb-2"
             )}
           >
-            {link.title === "chat" && showNotif ? (
+            {link.title === "Chat" && showNotif ? (
               <div className="relative">
                 <link.icon className=" h-6 w-6 " />
                 <span className="h-3 w-3 bg-white rounded-full absolute top-0 right-0 "></span>

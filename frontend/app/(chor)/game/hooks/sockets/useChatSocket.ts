@@ -7,20 +7,19 @@ import useWebSocket from "react-use-websocket";
 export default function useChatSocket() {
   const [socketUrl, setSocketUrl] = useState<string | null>(null);
   const { data: user, isLoading } = useGetUser("0");
-  const token = getCookie("refresh");
 
   useEffect(() => {
 
     if (!isLoading && user?.s_token) {
       setSocketUrl(
         process.env.NEXT_PUBLIC_CHAT_URL +
-          "2/?refresh=" +
-          token +
+          "2/?user_id=" +
+          user?.id +
           "&s_token=" +
           user?.s_token
       );
     }
-  }, [isLoading, user, token]);
+  }, [isLoading, user]);
 
   const {
     lastJsonMessage,

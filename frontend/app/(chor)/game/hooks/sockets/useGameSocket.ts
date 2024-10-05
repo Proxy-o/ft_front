@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import useWebSocket from "react-use-websocket";
 
 export default function useGameSocket() {
-  const token = getCookie("refresh");
   const [socketUrl, setSocketUrl] = useState<string | null>(null);
   const { data: user, isLoading } = useGetUser("0");
 
@@ -12,13 +11,13 @@ export default function useGameSocket() {
     if (!isLoading && user?.s_token) {
       setSocketUrl(
         process.env.NEXT_PUBLIC_GAME_URL +
-          "/?refresh=" +
-          token +
+          "/?user_id=" +
+          user?.id +
           "&s_token=" +
           user?.s_token
       );
     }
-  }, [isLoading, user, token]);
+  }, [isLoading, user]);
   const { sendJsonMessage, lastMessage } = useWebSocket(socketUrl, {
     share: true,
     shouldReconnect: () => !!socketUrl,

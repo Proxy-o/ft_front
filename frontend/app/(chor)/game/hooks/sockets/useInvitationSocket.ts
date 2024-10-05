@@ -4,8 +4,6 @@ import { useEffect, useState } from "react";
 import useWebSocket from "react-use-websocket";
 
 export default function useInvitationSocket() {
-  const user_id = getCookie("user_id");
-  const token = getCookie("refresh");
   const [socketUrl, setSocketUrl] = useState<string | null>(null);
   const { data: user, isLoading } = useGetUser("0");
 
@@ -14,13 +12,13 @@ export default function useInvitationSocket() {
       // console.log("user?.s_token", user?.s_token);
       setSocketUrl(
         process.env.NEXT_PUBLIC_INVITATION_URL +
-          "/?refresh=" +
-          token +
+          "/?user_id=" +
+          user?.id +
           "&s_token=" +
           user?.s_token
       );
     }
-  }, [isLoading, user, token]);
+  }, [isLoading, user]);
   const { sendJsonMessage, lastMessage, lastJsonMessage } = useWebSocket(
     socketUrl,
     {
@@ -30,7 +28,7 @@ export default function useInvitationSocket() {
   );
 
   const handelSendInvitation = (receiver: string, gameType: string) => {
-    const toSend = "/notif " + user_id + " " + receiver + " " + gameType;
+    const toSend = "/notif " + user?.id + " " + receiver + " " + gameType;
     sendJsonMessage({ message: toSend });
   };
 

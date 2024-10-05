@@ -15,15 +15,13 @@ User = get_user_model()
 def get_user(scope):
     close_old_connections()
     query_string = parse_qs(scope['query_string'].decode())
-    refresh_token = query_string.get('refresh')
-    if not refresh_token:
+    user_id = query_string.get('user_id')[0]
+    if not user_id:
         return AnonymousUser()
     s_token = query_string.get('s_token')
     if not s_token:
         return AnonymousUser()
     try:
-        payload = RefreshToken(refresh_token[0]).payload
-        user_id = payload['user_id']
         user = User.objects.get(pk=user_id)
         if str(user.s_token) != str(s_token[0]):
             return AnonymousUser()
@@ -32,6 +30,7 @@ def get_user(scope):
     if not user.is_active:
         return AnonymousUser()
     return user
+
 
 class TokenAuthMiddleware(AuthMiddleware):
     async def resolve_scope(self, scope):
