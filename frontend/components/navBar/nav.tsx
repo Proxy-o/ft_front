@@ -52,7 +52,7 @@ export default function Nav() {
       variant: "ghost",
     },
     {
-      title: "chat",
+      title: "Chat",
       link: "/chat",
       icon: Send,
       variant: "ghost",
@@ -269,19 +269,19 @@ export default function Nav() {
             )}
           >
             {link.title === "chat" && showNotif ? (
-              <div >
+              <div className="relative">
                 <link.icon className=" h-6 w-6 " />
                 <span className="h-3 w-3 bg-white rounded-full absolute top-0 right-0 "></span>
                 <span className="h-1 w-1 bg-red-600 rounded-full absolute top-1 right-1 animate-ping"></span>
               </div>
             ) : link.title === "Requests" && reqNotif ? (
-              <div >
+              <div className="relative">
                 <link.icon className=" h-6 w-6 " />
                 <span className="h-3 w-3 bg-white rounded-full absolute top-0 right-0 "></span>
                 <span className="h-1 w-1 bg-red-600  rounded-full absolute top-1 right-1 animate-ping"></span>
               </div>
             ) : link.title === "Play" && gameNotif ? (
-              <div >
+              <div className="relative">
                 <link.icon className=" h-6 w-6 " />
                 <span className="h-3 w-3 bg-white rounded-full absolute top-0 right-0 "></span>
                 <span className="h-1 w-1 bg-red-600  rounded-full absolute top-1 right-1 animate-ping"></span>
