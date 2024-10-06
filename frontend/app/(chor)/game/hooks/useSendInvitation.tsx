@@ -8,17 +8,14 @@ import useGetUser from "../../profile/hooks/useGetUser";
 const invite = async ({
   userid,
   gameType,
-  user_id,
 }: {
   userid: string;
   gameType: string;
-  user_id: string;
 }) => {
   let res;
   // console.log("user_id zbbi");
   try {
     res = await axiosInstance.post("game/send_invitation", {
-      sender: user_id,
       receiver: userid,
       gameType: gameType,
     });
@@ -27,21 +24,14 @@ const invite = async ({
     toast.error(error?.response?.data.error);
     return { userid: "", gameType: "", user_id: "" };
   }
-  return { userid, gameType, user_id };
+  return { userid, gameType };
 };
 
 export default function useSendInvitation() {
   const { handelSendInvitation } = useInvitationSocket();
   const mutation = useMutation({
-    mutationFn: ({
-      userid,
-      gameType,
-      user_id,
-    }: {
-      userid: string;
-      gameType: string;
-      user_id: string;
-    }) => invite({ userid, gameType, user_id }),
+    mutationFn: ({ userid, gameType }: { userid: string; gameType: string }) =>
+      invite({ userid, gameType }),
     onSuccess: ({ userid, gameType }: { userid: string; gameType: string }) => {
       if (userid === "") return;
       handelSendInvitation(userid, gameType);

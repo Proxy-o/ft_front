@@ -519,6 +519,10 @@ class LeaveGame(APIView):
         if not game:
             return Response({'error': 'No ongoing game found'}, status=status.HTTP_204_NO_CONTENT)
         if game.type == 'two':
+            game.user1.status = "online"
+            game.user1.save()
+            game.user2.status = "online"
+            game.user2.save()
             # remove the game from the database
             game.delete()
         elif game.type == 'four':
@@ -583,6 +587,8 @@ class TournamentView(APIView):
         tournament = Tournament(creator=user, user1=user,
                                 semi1=semi1, semi2=semi2, final=final)
         tournament.save()
+        user.status = "playing"
+        user.save()
         serializer = TournamentSerializer(tournament)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -679,6 +685,8 @@ class AbortTournament(APIView):
         if not tournament:
             return Response({'error': 'No ongoing tournament found'}, status=status.HTTP_204_NO_CONTENT)
         # if user != tournament.creator:
+        user.status = "online"
+        user.save()
         if user == tournament.creator:
             if tournament.user1 and tournament.user1 != tournament.creator:
                 tournament.creator = tournament.user1
@@ -773,7 +781,8 @@ class AcceptInvitationTournament(APIView):
             tournament.user4 = user
             tournament.semi2.user2 = user
             tournament.semi2.save()
-
+        user.status = "playing"
+        user.save()
         tournament.save()
         return Response({'message': 'Invitation accepted', 'tournamentId': tournament.id}, status=status.HTTP_200_OK)
 

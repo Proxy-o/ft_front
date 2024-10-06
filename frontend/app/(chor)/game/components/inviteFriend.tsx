@@ -54,7 +54,13 @@ const InviteFriends = ({ gameType }: { gameType: string }) => {
                         className="rounded-md"
                       />
                       <AvatarFallback className="rounded-sm">PF</AvatarFallback>
-                      <div className="absolute bottom-1 right-1 w-2 h-2 rounded-full bg-green-400 border border-white"></div>
+                      <div
+                        className={`absolute bottom-1 right-1 w-2 h-2 rounded-full border border-white 
+                        ${friend.status === "online" && "bg-green-500"}
+                        ${friend.status === "offline" && "bg-red-500"}
+                        ${friend.status === "playing" && "bg-yellow-500"}
+                        `}
+                      ></div>
                     </Avatar>
                     <div className="w-full h-full flex justify-center items-center">
                       {friend.username}

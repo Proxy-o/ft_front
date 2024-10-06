@@ -10,7 +10,6 @@ import { changeScoreOnline } from "../../methods/changeScore";
 import checkCollisionWithHorizontalWalls from "../../methods/checkCollisionWithHorizontalWalls";
 import { moveBall } from "../../methods/moveBall";
 import { User } from "@/lib/types";
-import getCookie from "@/lib/functions/getCookie";
 import useEndGame from "../../hooks/useEndGame";
 import useGameSocket from "@/app/(chor)/game/hooks/sockets/useGameSocket";
 import useInvitationSocket from "@/app/(chor)/game/hooks/sockets/useInvitationSocket";
@@ -383,14 +382,10 @@ const Game = ({
         setCanvas(null);
         onGoingGame.refetch();
       } else if (message[0] === "/endGame") {
-        if (leftScoreRef.current < 77777 && rightScoreRef.current < 77777) {
-          state.current = "leave";
-        } else if (leftScoreRef.current >= 77777) {
-          state.current = "win";
-        } else if (rightScoreRef.current >= 77777) {
+        if (message[1] !== username) {
           state.current = "lose";
         } else {
-          state.current = "none";
+          state.current = "win";
         }
         gameStartedRef.current = false;
         setCanvas(null);
