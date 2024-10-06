@@ -410,6 +410,15 @@ const Game = ({
         message[0] === "/refetchPlayers"
       ) {
         onGoingGame.refetch();
+      } else if (message[0] === "/leaveGame") {
+        if (message[1] !== username) {
+          state.current = "leave";
+        } else {
+          state.current = "none";
+        }
+        gameStartedRef.current = false;
+        setCanvas(null);
+        onGoingGame.refetch();
       }
     }
   }, [newNotif()?.data]);

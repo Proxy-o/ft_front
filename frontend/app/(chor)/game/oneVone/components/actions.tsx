@@ -30,7 +30,7 @@ const Actions = ({
     <div className="w-full h-fit absolute bottom-4 items-center justify-center flex">
       {rightUserRef.current?.username &&
         (!gameStartedRef.current ? (
-          <div className="w-5/6 flex flex-row justify-between items-center gap-4">
+          <div className="w-1/2 flex flex-row justify-between items-center gap-4">
             <TooltipProvider delayDuration={0}>
               <Tooltip delayDuration={0}>
                 <TooltipTrigger asChild>
