@@ -36,8 +36,6 @@ const useOAuthCallback = () => {
     },
     onError: (error) => {
       toast.error(error.message)
-      router.push("/login")
-      return;
     }
   });
 };
