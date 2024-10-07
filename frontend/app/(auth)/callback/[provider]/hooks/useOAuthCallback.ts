@@ -35,9 +35,9 @@ const useOAuthCallback = () => {
       router.push("/game");
     },
     onError: (error) => {
-      console.log('onError => ', error.message)
       toast.error(error.message)
       router.push("/login")
+      return;
     }
   });
 };

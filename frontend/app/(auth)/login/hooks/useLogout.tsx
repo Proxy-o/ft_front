@@ -17,7 +17,6 @@ export default function useLogout() {
     onSuccess: () => {
       deleteCookie("logged_in");
       deleteCookie("access");
-      deleteCookie("user_id");
       queryClient.removeQueries({
         queryKey: ["user"],
       });

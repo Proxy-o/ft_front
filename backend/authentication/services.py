@@ -43,6 +43,9 @@ class OAuthService:
         if provider not in settings.OAUTH_PROVIDERS:
             return None, None, {'detail': 'Invalid provider'}
 
+        if not code:
+            return None, None, {'detail': 'Code is required'}
+       
         if state != settings.OAUTH_PROVIDERS[provider]['state']:
             return None, None, {'detail': 'Invalid state'}
 
@@ -95,10 +98,7 @@ class OAuthService:
             if error:
                 return None, None, error
         else:
-            # print("### credentials : ", credentials.user.id)
             user = User.objects.filter(id=credentials.user.id).first()
-        if user.otp_active:
-            return {'detail': '2FA required', 'user_id': user.id}, None, None
         user_credentials['user'] = user.id
         user_credentials['user_oauth_uid'] = user_infos['id']
         return user, user_credentials, None

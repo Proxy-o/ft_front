@@ -116,9 +116,9 @@ export default function UserInfo({
       <div className=" md:w-40 md:h-40">
         <ProfileAvatar user={user} canEdit={canEdit} isBlocked={isBlocked} />
       </div>
-      <div className=" flex-1 md:px-6">
+      <div className=" flex-1 md:px-3">
         <div className="text-2xl font-bold mt-4 md:mt-0">{user.username}</div>
-        <div className="flex justify-around items-center w-full mt-6 ">
+        <div className="flex justify-around items-center w-full mt-3 ">
           <TooltipProvider delayDuration={0}>
             <Tooltip delayDuration={0}>
               <TooltipTrigger asChild>

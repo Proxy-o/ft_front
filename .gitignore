@@ -4,5 +4,5 @@ frontend/.next
 frontend/.env
 log_nginx
 postgres
-backend/media
+backend/media/qrcode/*
 .venv

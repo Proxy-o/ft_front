@@ -61,10 +61,6 @@ class UserSerializer(serializers.ModelSerializer):
         user.qr_code = ContentFile(
             stream.getvalue(), name=f"qr{get_random_string(10)}.png"
         )
-        # set the avatar to the default avatar
-        avatar_id = user.id % 4
-        
-        user.avatar = f"images/{avatar_id}.jpg"
         user.save()
         return user
 

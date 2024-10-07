@@ -35,6 +35,7 @@ const useLogin = () => {
       console.log("onError => ", error.message);
       toast.error(error.message);
       router.push("/login");
+      return;
     },
   });
 

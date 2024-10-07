@@ -13,9 +13,7 @@ axiosInstance.interceptors.response.use(
   (error) => {
     if (error.response && error.response.status === 401) {
       deleteCookie("logged_in");
-      deleteCookie("refresh");
       deleteCookie("access");
-      deleteCookie("user_id");
     }
 
     return Promise.reject(error);

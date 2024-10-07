@@ -4,10 +4,8 @@ from urllib.parse import urlencode
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from django.conf import settings
-from django.shortcuts import redirect
 from rest_framework.response import Response
 from rest_framework import status, serializers
-from .serializers import UserSerializer, AvatarSerializer, VerifyOTPSerializer, EditUserSerializer, OAuthCredentialSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from django.http import Http404
@@ -17,11 +15,11 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework.parsers import MultiPartParser, FormParser
 from django.db.models import Q
 from django.contrib.auth.password_validation import validate_password
-from authentication.customJWTAuthentication import CustomJWTAuthentication
 from django.contrib.auth import get_user_model
 from .services import OAuthService
+from .serializers import UserSerializer, AvatarSerializer, VerifyOTPSerializer, EditUserSerializer, OAuthCredentialSerializer
 User = get_user_model()
-
+from pprint import pp
 
 @api_view(['POST'])
 @authentication_classes([])  # No authentication required
@@ -39,7 +37,6 @@ def signup(request):
         user.set_password(request.data['password'])
         # set a code to s_token
         user.s_token = User.objects.make_random_password()
-        user.avatar = f'images/{user.id % 4}.jpg'
         user.save()
         return Response({'user': serializer.data}, status=200)
 
@@ -110,16 +107,13 @@ class OAuthCallback(APIView):
         code = request.query_params.get('code')
         state = request.query_params.get('state')
 
-        if not code:
-            return Response({'detail': 'Code is required'}, status=status.HTTP_400_BAD_REQUEST)
-
         user, user_credentials, error = OAuthService.handle_callback(
             provider, code, state)
         if error:
             return Response(error, status=status.HTTP_400_BAD_REQUEST)
 
-        if user['detail'] == '2FA required':
-            return Response(user, status=status.HTTP_200_OK)
+        if user.otp_active:
+            return Response({'detail': '2FA required', 'user_id': user.id}, status=status.HTTP_200_OK)
 
         serializers = OAuthCredentialSerializer(data=user_credentials)
         if serializers.is_valid():
