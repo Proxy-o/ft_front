@@ -24,6 +24,7 @@ export default function AppLayout({
   useEffect(() => {
     if (!is_local && !logged_in) {
       router.push("/login");
+      return;
     }
   }, [router, is_local, logged_in]);
 

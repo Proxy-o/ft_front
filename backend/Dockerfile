@@ -1,5 +1,5 @@
 # Use an official Python runtime as a parent image
-FROM python:3-alpine3.20
+FROM python:3.9-alpine
 
 RUN apk add --no-cache \
     zlib-dev \

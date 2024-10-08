@@ -10,18 +10,14 @@ import ChatFriendCard from "@/app/(chor)/chat/components/chatFriendCard";
 export default function SearchFriend() {
   const { mutate: search, isPending, isSuccess, data } = useSearchFriend();
   const [resVisible, setResVisible] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('')
-
-
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
-      // Send Axios request here
       search({ slug: searchTerm });
+    }, 500);
 
-    }, 500)
-
-    return () => clearTimeout(delayDebounceFn)
+    return () => clearTimeout(delayDebounceFn);
   }, [searchTerm, search]);
   return (
     <div
@@ -45,7 +41,7 @@ export default function SearchFriend() {
                 <div>Loading...</div>
               ) : (
                 data && (
-                  <div>
+                  <div className="h-96 p-2 rounded-sm  overflow-auto no-scrollbar">
                     {data.map((friend: User) => (
                       <Link
                         key={friend.id}

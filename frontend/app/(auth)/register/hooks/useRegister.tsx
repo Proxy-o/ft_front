@@ -17,6 +17,7 @@ export default function useRegister() {
     onSuccess: (data) => {
       toast.success("Account created successfully");
       router.push("/login");
+      return;
     },
     onError: (error) => {
       if ((error as any).response.data.username) {

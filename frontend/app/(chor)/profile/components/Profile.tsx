@@ -11,6 +11,7 @@ import { UserRoundX, XCircle } from "lucide-react";
 import TabStates from "./tabStates";
 import { Card } from "@/components/ui/card";
 import ProfileSkel from "@/components/skeletons/profileSkel";
+import ResCard from "@/components/ui/resCard";
 
 export default function Profile({ id }: { id: string }) {
   const [isChatOpen, setIsChatOpen] = useState<boolean>(false);
@@ -41,11 +42,11 @@ export default function Profile({ id }: { id: string }) {
   }, [isChatOpen, isSender, isSuccess]);
 
   return (
-    <Card className="max-h-[calc(100vh-7.8rem)] mx-2 overflow-y-auto md:scrollbar scrollbar-thumb-primary/10 scrollbar-w-2 no-scrollbar">
+    <ResCard>
       <div className="relative lg:flex  gap-4 p-4 w-full  ">
         {isSuccess ? (
           <>
-            <div className="flex flex-col gap-4   w-full ">
+            <div className="flex flex-col gap-4  w-full feedLeft ">
               <UserInfo
                 user={data}
                 canEdit={canEdit}
@@ -66,7 +67,7 @@ export default function Profile({ id }: { id: string }) {
               )}
               <div className="">{!isBlocked && <TabStates id={id} />}</div>
             </div>
-            <div className="flex flex-col gap-4 mb-6">
+            <div className="flex flex-col gap-4 mb-6 feedRight">
               <States id={id} />
               {((!isBlocked && isFriend) || sender?.id == id) && (
                 <FriendList user_id={id} />
@@ -74,9 +75,9 @@ export default function Profile({ id }: { id: string }) {
             </div>
           </>
         ) : (
-          <ProfileSkel/>
+          <ProfileSkel />
         )}
       </div>
-    </Card>
+    </ResCard>
   );
 }

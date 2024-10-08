@@ -1,5 +1,5 @@
+from random import randint
 from django.contrib.auth.models import AbstractUser
-
 from django.db import models
 
 
@@ -8,8 +8,10 @@ def upload_to(instance, filename):
     return f'images/{instance.username}.{ext}'
 
 
+
 def get_default_avatar():
-    return 'images/default_avatar.jpg'
+    i = randint(0, 4)
+    return f'images/default{i}.jpg'
 
 class User(AbstractUser):
     username = models.CharField(max_length=15, unique=True)
