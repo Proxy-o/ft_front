@@ -17,15 +17,24 @@ const LocalTournament = () => {
   console.log(semi1, semi2, final);
   const [currentGame, setCurrentGame] = useState("semi1");
   useEffect(() => {
+    if (semi2Winner === -1) {
+      if (semi2.score1 === 3) {
+        setSemi2Winner(3);
+      } else if (semi2.score2 === 3) {
+        setSemi2Winner(4);
+      }
+    }
+    if (semi1Winner === -1) {
+      if (semi1.score1 === 3) {
+        setSemi1Winner(1);
+      } else if (semi1.score2 === 3) {
+        setSemi1Winner(2);
+      }
+    }
     if (leftScore !== 0 || rightScore !== 0) {
       if (currentGame == "semi1") {
         console.log("semi1");
         setSemi1({ score1: leftScore, score2: rightScore });
-        if (semi1.score1 > semi1.score2) {
-          setSemi1Winner(1);
-        } else {
-          setSemi1Winner(2);
-        }
         if (leftScore === 3 || rightScore === 3) {
           setRightScore(0);
           setLeftScore(0);
@@ -33,11 +42,6 @@ const LocalTournament = () => {
         }
       } else if (currentGame === "semi2") {
         setSemi2({ score1: leftScore, score2: rightScore });
-        if (semi2.score1 > semi2.score2) {
-          setSemi2Winner(3);
-        } else {
-          setSemi2Winner(4);
-        }
         if (leftScore === 3 || rightScore === 3) {
           setRightScore(0);
           setLeftScore(0);
@@ -69,20 +73,19 @@ const LocalTournament = () => {
   }, [leftScore, rightScore, gameStarted]);
   return (
     <>
-      {gameStarted && <Score leftScore={leftScore} rightScore={rightScore} />}
-      {!gameStarted && (
-        <LocalTournamentBoard
-          score1={semi1.score1}
-          score2={semi1.score2}
-          score3={semi2.score1}
-          score4={semi2.score2}
-          finalScore1={final.score1}
-          finalScore2={final.score2}
-          semi1Winner={semi1Winner}
-          semi2Winner={semi2Winner}
-          currentGame={currentGame}
-        />
-      )}
+      <LocalTournamentBoard
+        score1={semi1.score1}
+        score2={semi1.score2}
+        score3={semi2.score1}
+        score4={semi2.score2}
+        finalScore1={final.score1}
+        finalScore2={final.score2}
+        semi1Winner={semi1Winner}
+        semi2Winner={semi2Winner}
+        currentGame={currentGame}
+        gameStarted={gameStarted}
+      />
+
       {finalWinner === -1 ? (
         <OneOffline
           gameStarted={gameStarted}
