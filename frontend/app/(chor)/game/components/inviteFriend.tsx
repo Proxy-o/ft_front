@@ -67,7 +67,6 @@ const InviteFriends = ({ gameType }: { gameType: string }) => {
                     </div>
                   </div>
                   <Button
-                    // disabled={friend.status !== "online"} // todo: enable this when game is ready and fix it
                     size={"xs"}
                     onClick={() => {
                       invite({

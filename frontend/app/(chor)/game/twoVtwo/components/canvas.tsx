@@ -493,6 +493,22 @@ const Canvas = ({
       ) {
         onGoingGame.refetch();
       } else if (message[0] === "/endGame") {
+        const team1 = [
+          leftUserTop.current.username,
+          leftUserBottom.current.username,
+        ];
+        const team2 = [
+          rightUserTop.current.username,
+          rightUserBottom.current.username,
+        ];
+        const loser = message[1];
+        const winner = loser === team1[0] || loser === team1[1] ? team2 : team1;
+        if (username === winner[0] || username === winner[1]) {
+          state.current = "win";
+        } else {
+          state.current = "lose";
+        }
+        console.log("end game");
         leftScoreRef.current = 0;
         rightScoreRef.current = 0;
         setGameStarted(false);
