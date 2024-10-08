@@ -37,13 +37,15 @@ const PreGameProfile = ({ avatar, side }: { avatar: string; side: string }) => {
 const ScoreProfile = ({
   avatar,
   side = "left",
+  number,
 }: {
   avatar: string;
   side?: string;
+  number?: number;
 }) => {
   if (side === "left") {
     return (
-      <div className="w-24 h-24 rounded-md justify-center items-center flex flex-row animate-getBigger animate-biggerSmaller gap-4">
+      <div className="w-24 h-24 rounded-md scale-75 sm:scale-100 justify-center items-center flex flex-row animate-getBigger animate-biggerSmaller gap-4 bg-blue-500">
         <div className="h-full w-full bg-primary flex justify-center items-center bg-gray-700 rounded-md">
           <Avatar className="w-20 h-20 rounded-md bg-primary/35">
             {avatar !== "none" && (
@@ -51,7 +53,7 @@ const ScoreProfile = ({
             )}
             {avatar === "local" ? (
               <AvatarFallback className="rounded-sm w-20 h-20 text-sm font-bold ">
-                Player 1
+                Player {number || 1}
               </AvatarFallback>
             ) : (
               <AvatarFallback className="rounded-sm w-20 h-20 text-3xl font-bold bg-primary/35 text-secondary">
@@ -64,7 +66,7 @@ const ScoreProfile = ({
     );
   } else if (side === "right") {
     return (
-      <div className="w-24 h-24 rounded-md justify-center items-center flex flex-row animate-getBigger animate-biggerSmaller gap-4">
+      <div className="w-24 h-24 rounded-md scale-75 sm:scale-100 justify-center items-center flex flex-row animate-getBigger animate-biggerSmaller gap-4">
         <div className="h-full w-full bg-primary flex justify-center items-center bg-gray-700 rounded-md">
           <Avatar className="w-20 h-20 rounded-md bg-primary/35">
             {avatar !== "none" && (

@@ -6,18 +6,30 @@ import { Card } from "@/components/ui/card";
 import NoGame from "../components/noGame";
 import Score from "../oneVone/components/score";
 
-const OneOffline = () => {
+const OneOffline = ({
+  gameStarted,
+  setGameStarted,
+  leftScore,
+  rightScore,
+  setLeftScore,
+  setRightScore,
+  type,
+}: {
+  gameStarted: boolean;
+  setGameStarted: React.Dispatch<React.SetStateAction<boolean>>;
+  leftScore: number;
+  rightScore: number;
+  setLeftScore: React.Dispatch<React.SetStateAction<number>>;
+  setRightScore: React.Dispatch<React.SetStateAction<number>>;
+  type: "game" | "tournament";
+}) => {
   const newBallPositionRef = useRef({ x: 0, y: 0 }); // Use a ref to store the current state
   const newAngleRef = useRef(0); // Use a ref to store the current state
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [gameStarted, setGameStarted] = useState(false);
   const animationFrameId = useRef(0); // To keep track of the animation frame ID
   const isAnimating = useRef(false);
   const state = useRef<string>("local");
   const ai = useRef<boolean>(false);
-
-  const [leftScore, setLeftScore] = useState(0);
-  const [rightScore, setRightScore] = useState(0);
 
   let bgImage = new Image();
   bgImage.src = "/game.jpeg";
@@ -64,6 +76,9 @@ const OneOffline = () => {
     let sPressed = false;
 
     const handleKeyEvent = (e: KeyboardEvent) => {
+      if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+        e.preventDefault();
+      }
       if (e.type === "keydown") {
         if (e.key === "ArrowUp") {
           upPressed = true;
@@ -380,7 +395,9 @@ const OneOffline = () => {
 
   return (
     <>
-      {gameStarted && <Score leftScore={leftScore} rightScore={rightScore} />}
+      {gameStarted && type === "game" && (
+        <Score leftScore={leftScore} rightScore={rightScore} />
+      )}
       <Card className="w-full aspect-[2]">
         {gameStarted ? (
           <canvas
@@ -396,6 +413,7 @@ const OneOffline = () => {
         )}
       </Card>
       {gameStarted ? (
+        type === "game" && (
         <Button
           onClick={() => {
             setLeftScore(0);
@@ -406,6 +424,7 @@ const OneOffline = () => {
         >
           End Game
         </Button>
+        )
       ) : (
         <Button
           onClick={() => {

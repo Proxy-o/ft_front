@@ -13,9 +13,9 @@ export default function Page() {
   const user_id = user?.id;
 
   return (
-    <Card className=" flex flex-col gap-2 p-4 h-[calc(100vh-7.8rem)] ">
-      <div className="pb-2  w-full">Modes</div>
-      <div className="flex flex-wrap gap-5 justify-center  max-h-full  p-6  bg-secondary/40 rounded-md">
+    <Card className=" flex flex-col gap-7 rounded-lg p-4 h-fit mb-2">
+      <div className="pb-2 w-full">Modes</div>
+      <div className="flex flex-wrap gap-7 justify-center h-fit  p-6 rounded-md">
         <Link href="/game/local">
           <div>
             <OneVOne type="local" />
@@ -37,13 +37,11 @@ export default function Page() {
           </div>
         </Link>
       </div>
-      <div className="pb-2  w-full h-full flex flex-col gap-2">
-        <div className="w-full h-fit feedBot ">
-          <Invitations mode="all" />
-        </div>
-        <div className=" h-full w-full flex flex-col md:flex-row gap-4 feedLeft">
-          <TabStates id={user_id} />
-        </div>
+      <div className="w-full h-fit feedBot ">
+        <Invitations mode="all" />
+      </div>
+      <div className=" h-full w-full flex flex-col md:flex-row gap-4 feedLeft">
+        <TabStates id={user_id} />
       </div>
     </Card>
   );
