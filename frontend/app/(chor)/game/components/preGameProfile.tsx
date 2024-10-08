@@ -74,7 +74,7 @@ const ScoreProfile = ({
             )}
             {avatar === "local" ? (
               <AvatarFallback className="rounded-sm w-20 h-20 text-sm font-bold ">
-                Player 2
+                Player {number || 2}
               </AvatarFallback>
             ) : (
               <AvatarFallback className="rounded-sm w-20 h-20 text-3xl font-bold bg-primary/35 text-secondary">
