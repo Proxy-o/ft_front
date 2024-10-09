@@ -55,6 +55,8 @@ append_or_replace /etc/nginx/modsec/modsecurity.conf "SecAuditLog" "SecAuditLog 
 # Set the debug log level (0-9)
 append_or_replace /etc/nginx/modsec/modsecurity.conf "SecDebugLog" "SecDebugLog /var/log/nginx/modsec_debug.log"
 append_or_replace /etc/nginx/modsec/modsecurity.conf "SecDebugLogLevel" "SecDebugLogLevel 3"
+# Set Strict rules: block SQLi, XSS, etc.
+echo "SecRule ARGS \"@rx (select|union|insert|delete|drop|alter)\" \"id:1001,phase:2,deny,status:403,msg:'SQL Injection Detected'\"" >> /etc/nginx/modsec/modsecurity.conf
 
 wget https://raw.githubusercontent.com/SpiderLabs/ModSecurity/v3/master/unicode.mapping -O /etc/nginx/modsec/unicode.mapping
 
@@ -81,6 +83,18 @@ echo "SecAction \
 # include OWASP ModSecurity Core Rule Set
 echo "Include /etc/nginx/modsec/owasp-crs/crs-setup.conf" >> /etc/nginx/modsec/modsecurity.conf
 echo "Include /etc/nginx/modsec/owasp-crs/rules/*.conf" >> /etc/nginx/modsec/modsecurity.conf
+
+# Harden the security (log rotate, secutiry policy)
+echo "/var/log/nginx/audit.log { \
+    daily \
+    rotate 7 \
+    compress \
+    delaycompress \
+    notifempty \
+    create 640 root adm \
+    missingok \
+}" >> /etc/logrotate.d/nginx
+
 
 # clean up
 apt-get purge -y \
