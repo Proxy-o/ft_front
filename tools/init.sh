@@ -15,3 +15,4 @@ fi
 mkdir -p ./postgres_data
 mkdir -p ./log_nginx
 
+

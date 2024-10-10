@@ -10,7 +10,7 @@ all: build up
 
 up:
 	bash tools/init.sh
-	docker-compose -f ./docker-compose.yml up -d
+	docker-compose -f ./docker-compose.yml up #-d
 
 build:
 	docker-compose -f ./docker-compose.yml build
@@ -27,7 +27,7 @@ test_waf:
 
 clean:
 	docker-compose -f ./docker-compose.yml down --rmi all --volumes
-	rm -rf log_nginx postgres_data
+	rm -rf log_nginx postgres_data vault_data/data
 
 oclean:
 	docker-compose stop $(s)
@@ -36,7 +36,7 @@ oclean:
 	docker volume ls -qf dangling=true | xargs -r docker volume rm
 
 fclean:
-	rm -rf ./postgres_data  
+	rm -rf ./postgres_data ./log_nginx ./vault_data/data
 	docker stop $$(docker ps -qa) 2>/dev/null || true
 	docker rm $$(docker ps -qa) 2>/dev/null || true
 	docker rmi -f $$(docker images -qa) 2>/dev/null || true
