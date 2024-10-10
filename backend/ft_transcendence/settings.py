@@ -16,7 +16,7 @@ from datetime import timedelta  # new
 from .fetchSec import fetchSec
 
 # fetch secrets from vault
-get_secret, err = fetchSec('root')
+get_secret, err = fetchSec()
 if err:
     raise err
 

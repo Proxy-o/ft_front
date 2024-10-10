@@ -1,17 +1,31 @@
 from hvac import Client
 from typing import Callable, Dict, Tuple
 import base64
+import os
 
-def fetchSec(vault_token: str) -> Tuple[Callable[[str], str], Callable[[str], str]]:
-    client = Client(url='http://vault:8200', token=vault_token)
+def fetchSec() -> Tuple[Callable[[str], str], Exception]:
+    with open('/.vault/role-id') as f:
+        role_id = f.read().strip()
+    with open('/.vault/secret-id') as f:
+        secret_id = f.read().strip()
+    
+    # os.remove('/.vault/role-id')
+    # os.remove('/.vault/secret-id')
+
+    # Authenticate with Vault using AppRole
+    client = Client(url=os.environ['VAULT_API_ADDR'])
+    client.auth.approle.login(
+        role_id=role_id,
+        secret_id=secret_id,
+    )
     if not client.is_authenticated():
         raise Exception("Vault is not authenticated")
 
     def read_secret(path: str) -> Dict[str, str]:
-        secret = client.read(f'secret/data/{path}')
+        secret = client.read(f'secret/{path}')
         if secret is None:
             raise Exception(f"Error: {path} secret not found")
-        return secret['data']['data']
+        return secret['data']
     
     def decrypt64_secret(bytes: str) -> str:
         return base64.b64decode(bytes).decode('utf-8')
@@ -21,6 +35,7 @@ def fetchSec(vault_token: str) -> Tuple[Callable[[str], str], Callable[[str], st
         if decrypted is None:
             raise Exception("Error: failed to decrypt secret")
         return decrypt64_secret(decrypted['data']['plaintext'])
+
     try:
         be_secrets = read_secret('backend')
         db_secrets = read_secret('db')
