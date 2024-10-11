@@ -14,9 +14,13 @@ import { usePathname } from "next/navigation";
 import getCookie from "@/lib/functions/getCookie";
 import { useRouter } from "next/navigation";
 import Providers from "@/lib/providers/Providers";
+import ThemeButton from "@/components/ui/themeButton";
 
-
-export default function RootLayout({children}: {children: React.ReactNode}) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const router = useRouter();
   const logged_in = getCookie("logged_in");
   const is_public_route = ["/", "/login", "/register"].includes(usePathname());
@@ -25,7 +29,7 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
       router.push("/game");
     }
   }, [is_public_route, logged_in, router]);
-
+  console.log("not logged")
   return (
     <html lang="en">
       <body className={inter.className}>
@@ -33,7 +37,8 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
           <h1></h1>
           <Suspense fallback={<HomeSkel />}>
             <div className="relative bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/20 via-primary/10 to-background/20">
-              <main >
+              <main>
+                { !logged_in &&  <ThemeButton />}
                 {children}
               </main>
               <Toaster duration={3000} />
