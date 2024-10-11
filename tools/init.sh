@@ -14,5 +14,7 @@ fi
 
 mkdir -p ./postgres_data
 mkdir -p ./log_nginx
-
-
+mkdir -p vault_data/cre/backend
+mkdir -p vault_data/cre/frontend
+mkdir -p vault_data/cre/database
+mkdir -p vault_data/cre/vault
