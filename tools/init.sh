@@ -2,21 +2,43 @@
 
 set -e
 
+# vars
+REQUIRED_DIR="postgres_data log_nginx vault_data/cre/{backend,frontend,database,vault}"
+OAUTH_PROVIDERS=("42")
+IPADDR=0.0.0.0
 
+# create necessary directories
+mkdir -p $REQUIRED_DIR
+
+# get the Host Ip address
 if [ "$(uname)" == "Linux" ]
 then
     IPADDR=$(hostname -I | cut -d ' ' -f 1 | tr -d ' ')
-    sed -i "s/^SERVER_HOST=.*/SERVER_HOST=$IPADDR/" .env
-    sed -i "s/^SERVER_HOST=.*/SERVER_HOST=$IPADDR/" frontend/.env
 else
     IPADDR=$(ipconfig getifaddr en0)
-   sed -i '' "s/^SERVER_HOST=.*/SERVER_HOST=$IPADDR/" .env
-   sed -i '' "s/^SERVER_HOST=.*/SERVER_HOST=$IPADDR/" frontend/.env
 fi
 
-mkdir -p ./postgres_data
-mkdir -p ./log_nginx
-mkdir -p vault_data/cre/backend
-mkdir -p vault_data/cre/frontend
-mkdir -p vault_data/cre/database
-mkdir -p vault_data/cre/vault
+# generate /frontend/.env if not exist
+if [ ! -f ./frontend/.env ]; then
+    echo -e "\
+NEXT_PUBLIC_BACKEND_URL=https://$IPADDR:443\n\
+NEXT_PUBLIC_CHAT_URL=wss://$IPADDR:443/ws/chat/\n\
+NEXT_PUBLIC_GAME_URL=wss://$IPADDR:443/ws/game/game\n\
+NEXT_PUBLIC_INVITATION_URL=wss://$IPADDR:443/ws/game/invitation\
+" > ./frontend/.env
+else
+    echo "./frontend/.env exist, Skipping..."
+fi
+
+# generate .env if not exist
+if [ ! -f .env ]; then
+    echo "SERVER_HOST=$IPADDR" > .env
+    echo "VAULT_ADDR=http://vault:8200" >> .env
+
+    for provider in $OAUTH_PROVIDERS; do
+        read -p "Enter $provider client id: " CLIENT_ID && echo "OAUTH_${provider}_CLIENT_ID=\"$CLIENT_ID\"" >> .env
+        read -p "Enter $provider client secret: " CLIENT_SECRET && echo "OAUTH_${provider}_CLIENT_SECRET=\"$CLIENT_SECRET\"" >> .env
+    done
+else
+    echo ".env exist, Skipping..."
+fi
