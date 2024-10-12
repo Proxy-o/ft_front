@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="flex flex-col h-screen overflow-auto">
+    <div className="flex flex-col h-[calc(100vh-40px)] overflow-auto">
 
       <main className="flex-1 pt-32 md:px-12 lg:px-24">
         <section className="mb-12">

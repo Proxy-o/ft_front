@@ -14,7 +14,7 @@ import { usePathname } from "next/navigation";
 import getCookie from "@/lib/functions/getCookie";
 import { useRouter } from "next/navigation";
 import Providers from "@/lib/providers/Providers";
-import ThemeButton from "@/components/ui/themeButton";
+import PublicNav from "@/components/navBar/publicNav";
 
 export default function RootLayout({
   children,
@@ -23,13 +23,14 @@ export default function RootLayout({
 }) {
   const router = useRouter();
   const logged_in = getCookie("logged_in");
-  const is_public_route = ["/", "/login", "/register"].includes(usePathname());
+  const current_path = usePathname();
+  const is_public_route = ["/", "/login", "/register"].includes(current_path);
   useEffect(() => {
     if (logged_in === "yes" && is_public_route) {
       router.push("/game");
     }
   }, [is_public_route, logged_in, router]);
-  console.log("not logged")
+
   return (
     <html lang="en">
       <body className={inter.className}>
@@ -38,7 +39,7 @@ export default function RootLayout({
           <Suspense fallback={<HomeSkel />}>
             <div className="relative bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/20 via-primary/10 to-background/20">
               <main>
-                { !logged_in &&  <ThemeButton />}
+                {!logged_in && <PublicNav path={current_path}/>}
                 {children}
               </main>
               <Toaster duration={3000} />
