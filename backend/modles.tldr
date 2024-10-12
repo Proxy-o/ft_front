@@ -41,14 +41,6 @@
 			"typeName": "document"
 		},
 		{
-			"id": "pointer:pointer",
-			"typeName": "pointer",
-			"x": 257.72514481537837,
-			"y": 593.9525676279345,
-			"lastActivityTimestamp": 1725270355253,
-			"meta": {}
-		},
-		{
 			"meta": {},
 			"id": "page:page",
 			"name": "Page 1",
@@ -56,80 +48,8 @@
 			"typeName": "page"
 		},
 		{
-			"x": 35.72407393462163,
-			"y": -76.17913012793446,
-			"z": 1,
-			"meta": {},
-			"id": "camera:page:page",
-			"typeName": "camera"
-		},
-		{
-			"editingShapeId": null,
-			"croppingShapeId": null,
-			"selectedShapeIds": [
-				"shape:g0Z98aXA3-00p2a4R1pcH",
-				"shape:iDdO9NB-u3xA4uSiToTDv",
-				"shape:rRpe6qVX-iDrs6RhRPnvH"
-			],
-			"hoveredShapeId": null,
-			"erasingShapeIds": [],
-			"hintingShapeIds": [],
-			"focusedGroupId": null,
-			"meta": {},
-			"id": "instance_page_state:page:page",
-			"pageId": "page:page",
-			"typeName": "instance_page_state"
-		},
-		{
-			"followingUserId": null,
-			"opacityForNextShape": 1,
-			"stylesForNextShape": {
-				"tldraw:color": "red"
-			},
-			"brush": null,
-			"scribbles": [],
-			"cursor": {
-				"type": "move",
-				"rotation": 0
-			},
-			"isFocusMode": false,
-			"exportBackground": true,
-			"isDebugMode": false,
-			"isToolLocked": false,
-			"screenBounds": {
-				"x": 0,
-				"y": 0,
-				"w": 956,
-				"h": 966
-			},
-			"zoomBrush": null,
-			"isGridMode": false,
-			"isPenMode": false,
-			"chatMessage": "",
-			"isChatting": false,
-			"highlightedUserIds": [],
-			"isFocused": true,
-			"devicePixelRatio": 2.4000000953674316,
-			"isCoarsePointer": false,
-			"isHoveringCanvas": true,
-			"openMenus": [],
-			"isChangingStyle": false,
-			"isReadonly": false,
-			"meta": {},
-			"currentPageId": "page:page",
-			"insets": [
-				false,
-				false,
-				true,
-				false
-			],
-			"duplicateProps": null,
-			"id": "instance:instance",
-			"typeName": "instance"
-		},
-		{
-			"x": 102.65483231537837,
-			"y": 232.45256762793446,
+			"x": 102.89196825379713,
+			"y": 182.25271358727588,
 			"rotation": 0,
 			"isLocked": false,
 			"opacity": 1,
@@ -137,7 +57,7 @@
 			"id": "shape:rAP4ISgED3j5vhQutKawY",
 			"type": "text",
 			"props": {
-				"color": "red",
+				"color": "light-green",
 				"size": "m",
 				"w": 577.2265625,
 				"text": "◦ Major module: Use a Framework as backend.",
@@ -151,8 +71,8 @@
 			"typeName": "shape"
 		},
 		{
-			"x": 94.61186356537837,
-			"y": 675.4291301279345,
+			"x": 101.65297681381372,
+			"y": 142.28825657784756,
 			"rotation": 0,
 			"isLocked": false,
 			"opacity": 1,
@@ -174,8 +94,8 @@
 			"typeName": "shape"
 		},
 		{
-			"x": 102.30717606537837,
-			"y": 282.3822551279345,
+			"x": 101.49088120043669,
+			"y": 300.2449757199821,
 			"rotation": 0,
 			"isLocked": false,
 			"opacity": 1,
@@ -183,7 +103,7 @@
 			"id": "shape:UKkf6VlbAJI9H8EWEA7E2",
 			"type": "text",
 			"props": {
-				"color": "red",
+				"color": "light-blue",
 				"size": "m",
 				"w": 860.3984375,
 				"text": "◦ Major module: Standard user management, authentication, users",
@@ -197,8 +117,8 @@
 			"typeName": "shape"
 		},
 		{
-			"x": 99.16264481537837,
-			"y": 338.08147387793446,
+			"x": 92.8785424472799,
+			"y": 694.6381588231536,
 			"rotation": 0,
 			"isLocked": false,
 			"opacity": 1,
@@ -206,7 +126,7 @@
 			"id": "shape:D_uysWhfWrPtdkA3ItmFN",
 			"type": "text",
 			"props": {
-				"color": "red",
+				"color": "black",
 				"size": "m",
 				"w": 698.765625,
 				"text": "◦ Major module: Implementing a remote authentication.",
@@ -220,8 +140,8 @@
 			"typeName": "shape"
 		},
 		{
-			"x": 100.13530106537837,
-			"y": 391.67131762793446,
+			"x": 91.19710030959237,
+			"y": 530.1313438254705,
 			"rotation": 0,
 			"isLocked": false,
 			"opacity": 1,
@@ -229,7 +149,7 @@
 			"id": "shape:ecCFn2GmGg6olNNyWiY6o",
 			"type": "text",
 			"props": {
-				"color": "red",
+				"color": "violet",
 				"size": "m",
 				"w": 402.1875,
 				"text": "◦ Major module: Remote players",
@@ -243,8 +163,8 @@
 			"typeName": "shape"
 		},
 		{
-			"x": 100.51420731537837,
-			"y": 466.5736613779345,
+			"x": 99.45621620550989,
+			"y": 356.00446978365693,
 			"rotation": 0,
 			"isLocked": false,
 			"opacity": 1,
@@ -252,7 +172,7 @@
 			"id": "shape:CGzZV2XJB5_t_OgsORCbQ",
 			"type": "text",
 			"props": {
-				"color": "red",
+				"color": "light-blue",
 				"size": "m",
 				"w": 323.8828125,
 				"text": "◦ Major module: Live chat.",
@@ -266,8 +186,8 @@
 			"typeName": "shape"
 		},
 		{
-			"x": 102.22514481537837,
-			"y": 507.0267863779345,
+			"x": 100.28701454945545,
+			"y": 404.3788471881467,
 			"rotation": 0,
 			"isLocked": false,
 			"opacity": 1,
@@ -275,7 +195,7 @@
 			"id": "shape:I6Z6ukk7FM1mkMV4QXM6h",
 			"type": "text",
 			"props": {
-				"color": "red",
+				"color": "light-blue",
 				"size": "m",
 				"w": 860.3984375,
 				"text": "◦ Major module: Implement Two-Factor Authentication (2FA) and JWT.",
@@ -289,8 +209,8 @@
 			"typeName": "shape"
 		},
 		{
-			"x": 99.74076981537837,
-			"y": 580.1244426279345,
+			"x": 100.43849671111047,
+			"y": 100.8681507770138,
 			"rotation": 0,
 			"isLocked": false,
 			"opacity": 1,
@@ -312,8 +232,8 @@
 			"typeName": "shape"
 		},
 		{
-			"x": 94.13139481537837,
-			"y": 624.5775676279345,
+			"x": 100.4793414745896,
+			"y": 58.702813963035865,
 			"rotation": 0,
 			"isLocked": false,
 			"opacity": 1,
@@ -335,8 +255,8 @@
 			"typeName": "shape"
 		},
 		{
-			"x": 100.22123856537837,
-			"y": 430.51897387793446,
+			"x": 91.28303780959237,
+			"y": 568.9790000754705,
 			"rotation": 0,
 			"isLocked": false,
 			"opacity": 1,
@@ -344,7 +264,7 @@
 			"id": "shape:Vj16P0f5-rpuwyPqAEake",
 			"type": "text",
 			"props": {
-				"color": "red",
+				"color": "violet",
 				"size": "m",
 				"w": 780.3125,
 				"text": "◦ Major module: Multiplayers (more than 2 in the same game).",
@@ -355,6 +275,107 @@
 			},
 			"parentId": "page:page",
 			"index": "aA3WW",
+			"typeName": "shape"
+		},
+		{
+			"id": "pointer:pointer",
+			"typeName": "pointer",
+			"x": 193.8151347749311,
+			"y": 420.5216526670527,
+			"lastActivityTimestamp": 1728729912834,
+			"meta": {}
+		},
+		{
+			"followingUserId": null,
+			"opacityForNextShape": 1,
+			"stylesForNextShape": {
+				"tldraw:color": "light-green"
+			},
+			"brush": null,
+			"scribbles": [],
+			"cursor": {
+				"type": "move",
+				"rotation": 0
+			},
+			"isFocusMode": false,
+			"exportBackground": true,
+			"isDebugMode": false,
+			"isToolLocked": false,
+			"screenBounds": {
+				"x": 0,
+				"y": 0,
+				"w": 872,
+				"h": 1060
+			},
+			"insets": [
+				false,
+				false,
+				true,
+				false
+			],
+			"zoomBrush": null,
+			"isGridMode": false,
+			"isPenMode": false,
+			"chatMessage": "",
+			"isChatting": false,
+			"highlightedUserIds": [],
+			"isFocused": true,
+			"devicePixelRatio": 2,
+			"isCoarsePointer": false,
+			"isHoveringCanvas": true,
+			"openMenus": [],
+			"isChangingStyle": false,
+			"isReadonly": false,
+			"meta": {},
+			"duplicateProps": null,
+			"id": "instance:instance",
+			"currentPageId": "page:page",
+			"typeName": "instance"
+		},
+		{
+			"editingShapeId": null,
+			"croppingShapeId": null,
+			"selectedShapeIds": [
+				"shape:I6Z6ukk7FM1mkMV4QXM6h"
+			],
+			"hoveredShapeId": null,
+			"erasingShapeIds": [],
+			"hintingShapeIds": [],
+			"focusedGroupId": null,
+			"meta": {},
+			"id": "instance_page_state:page:page",
+			"pageId": "page:page",
+			"typeName": "instance_page_state"
+		},
+		{
+			"x": -19.41533298742138,
+			"y": 41.69733406977816,
+			"z": 0.8565761957230554,
+			"meta": {},
+			"id": "camera:page:page",
+			"typeName": "camera"
+		},
+		{
+			"x": 96.23825642209925,
+			"y": 735.0592334519835,
+			"rotation": 0,
+			"isLocked": false,
+			"opacity": 1,
+			"meta": {},
+			"id": "shape:poBR9h03nNB4qken9bJCO",
+			"type": "text",
+			"props": {
+				"color": "black",
+				"size": "m",
+				"w": 938.0078125,
+				"text": "◦ Major module: Implement WAF/ModSecurity with Hardened Configuration\nand HashiCorp Vault for Secrets Management.",
+				"font": "draw",
+				"textAlign": "start",
+				"autoSize": true,
+				"scale": 1
+			},
+			"parentId": "page:page",
+			"index": "aCAGi",
 			"typeName": "shape"
 		}
 	]
