@@ -1,9 +1,7 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
-import getCookie from "@/lib/functions/getCookie";
 import { User } from "@/lib/types";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import useWebSocket from "react-use-websocket";
 
 import { toast } from "sonner";
 import useChatSocket from "../../game/hooks/sockets/useChatSocket";

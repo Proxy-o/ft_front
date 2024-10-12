@@ -30,7 +30,6 @@ export default function RootLayout({
       router.push("/game");
     }
   }, [is_public_route, logged_in, router]);
-
   return (
     <html lang="en">
       <body className={inter.className}>

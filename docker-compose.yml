@@ -61,12 +61,12 @@ services:
   frontend:
     container_name: frontend_container
     build:
-      context: .
-      dockerfile: ./frontend/Dockerfile
+      context: ./frontend
+      dockerfile: ./Dockerfile
     volumes:
       - ./vault_data/cre/frontend:/.vault
-      - ./frontend:/app:cached  # Mount the code directory
-      - /app/node_modules        # Ensure node_modules is not overwritten by host
+      # - ./frontend:/app:cached  # Mount the code directory
+      # - /app/node_modules        # Ensure node_modules is not overwritten by host
     networks:
       - mynetwork
       - vault_nework

@@ -1,6 +1,5 @@
 "use client";
 import Game from "../../oneVone/components/game";
-import getCookie from "@/lib/functions/getCookie";
 import useLeavetournament from "../../hooks/useLeaveTournament";
 import useInvitationSocket from "../../hooks/sockets/useInvitationSocket";
 import useDeletetournament from "../../hooks/useDeleteTournament";

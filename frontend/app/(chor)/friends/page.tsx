@@ -4,7 +4,6 @@ import useGetUser from "../profile/hooks/useGetUser";
 import useGetFriends from "../chat/hooks/useGetFriends";
 import ChatFriendCard from "../chat/components/chatFriendCard";
 import { User } from "@/lib/types";
-import { Card } from "@/components/ui/card";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";

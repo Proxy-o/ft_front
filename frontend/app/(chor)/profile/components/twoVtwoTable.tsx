@@ -3,7 +3,6 @@ import React from "react";
 import GamesState from "./gamesState";
 import useGetTwoGames from "../hooks/useGetTwoGames";
 import { Button } from "@/components/ui/button";
-import { ArrowBigDownDash } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
 export default function TwoVtwoTable({ id }: { id: string }) {

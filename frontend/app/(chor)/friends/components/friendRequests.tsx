@@ -2,7 +2,6 @@
 import React from "react";
 import useGetFrdReq from "../hooks/useGetFrReq";
 import { User } from "@/lib/types";
-import { Card } from "@/components/ui/card";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { CheckCircle, XCircle } from "lucide-react";

@@ -7,11 +7,11 @@ import FriendList from "@/app/(chor)/friends/components/friendList";
 import useGetBlocked from "@/app/(chor)/friends/hooks/useGetBlocked";
 import useGetFriends from "@/app/(chor)/chat/hooks/useGetFriends";
 import ChatCard from "@/app/(chor)/chat/components/chatCard";
-import { UserRoundX, XCircle } from "lucide-react";
 import TabStates from "./tabStates";
 import { Card } from "@/components/ui/card";
 import ProfileSkel from "@/components/skeletons/profileSkel";
 import ResCard from "@/components/ui/resCard";
+import { XCircle } from "lucide-react";
 
 export default function Profile({ id }: { id: string }) {
   const [isChatOpen, setIsChatOpen] = useState<boolean>(false);

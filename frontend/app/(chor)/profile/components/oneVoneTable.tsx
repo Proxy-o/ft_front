@@ -3,7 +3,6 @@ import React from "react";
 import useGetGames from "../hooks/useGetGames";
 import GamesState from "./gamesState";
 import { Button } from "@/components/ui/button";
-import { ArrowBigDownDash } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
 export default function OneVoneTable({ id }: { id: string }) {
