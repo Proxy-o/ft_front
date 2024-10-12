@@ -222,5 +222,16 @@ OAUTH_PROVIDERS = {
         'scope': 'public',
         'state': get_secret('OAUTH_42_STATE'),
     },
+    'github': {
+        'base_url': 'https://github.com',
+        'authorize_url': '/login/oauth/authorize',
+        'token_url': '/login/oauth/access_token',
+        'user_info_url': '/user',
+        'client_id': get_secret('OAUTH_GITHUB_CLIENT_ID'),
+        'client_secret': get_secret('OAUTH_GITHUB_CLIENT_SECRET'),
+        'redirect_uri': f'{SERVER_URL}/callback/github',
+        'scope': 'public',
+        'state': get_secret('OAUTH_GITHUB_STATE'),
+    },
 }
 

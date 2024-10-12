@@ -3,12 +3,11 @@
 set -e
 
 # vars
-REQUIRED_DIR="postgres_data log_nginx vault_data/cre/{backend,frontend,database,vault}"
-OAUTH_PROVIDERS=("42")
+OAUTH_PROVIDERS=("42" "GITHUB")
 IPADDR=0.0.0.0
 
 # create necessary directories
-mkdir -p $REQUIRED_DIR
+mkdir -p postgres_data log_nginx vault_data/cre/{backend,frontend,database,vault}
 
 # get the Host Ip address
 if [ "$(uname)" == "Linux" ]
@@ -35,7 +34,7 @@ if [ ! -f .env ]; then
     echo "SERVER_HOST=$IPADDR" > .env
     echo "VAULT_ADDR=http://vault:8200" >> .env
 
-    for provider in $OAUTH_PROVIDERS; do
+    for provider in ${OAUTH_PROVIDERS[@]}; do
         read -p "Enter $provider client id: " CLIENT_ID && echo "OAUTH_${provider}_CLIENT_ID=\"$CLIENT_ID\"" >> .env
         read -p "Enter $provider client secret: " CLIENT_SECRET && echo "OAUTH_${provider}_CLIENT_SECRET=\"$CLIENT_SECRET\"" >> .env
     done

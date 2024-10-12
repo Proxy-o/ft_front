@@ -99,12 +99,21 @@ export default function LoginForm() {
             OR
             <Separator className="my-4 ml-2" />
           </div>
-          <div className="flex w-full">
+          <div className="flex w-full my-1">
             <Button type="button" className="w-full" onClick={() => onOauthSubmit("42")}>
             {isLoading ? (
                 <Loader className="h-5 w-5 animate-spin animation" />
               ) : (
                 "Login with 42"
+              )}
+            </Button>
+          </div>
+          <div className="flex w-full my-1">
+            <Button type="button" className="w-full" onClick={() => onOauthSubmit("github")}>
+            {isLoading ? (
+                <Loader className="h-5 w-5 animate-spin animation" />
+              ) : (
+                "Login with Github"
               )}
             </Button>
           </div>
