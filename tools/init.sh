@@ -3,12 +3,11 @@
 set -e
 
 # vars
-REQUIRED_DIR="postgres_data log_nginx vault_data/cre/{backend,frontend,database,vault}"
 OAUTH_PROVIDERS=("42")
 IPADDR=0.0.0.0
 
 # create necessary directories
-mkdir -p $REQUIRED_DIR
+mkdir -p postgres_data log_nginx vault_data/cre/{backend,frontend,database,vault}
 
 # get the Host Ip address
 if [ "$(uname)" == "Linux" ]
