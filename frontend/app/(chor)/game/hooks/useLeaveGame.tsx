@@ -1,5 +1,4 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
-import useGameSocket from "@/app/(chor)/game/hooks/sockets/useGameSocket";
 import useInvitationSocket from "@/app/(chor)/game/hooks/sockets/useInvitationSocket";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -27,7 +26,7 @@ export default function useLeaveGame(
       }
     | undefined
 ) {
-  const { leftUserRef, rightUserRef, gameIdRef } = props || {};
+  const { leftUserRef, rightUserRef } = props || {};
   // const { handleSurrender, handleSurrenderFour } = useGameSocket();
   const { handleRefetchTournament, handleLeaveGame } = useInvitationSocket();
   const queryClient = useQueryClient();

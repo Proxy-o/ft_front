@@ -10,7 +10,6 @@ import { changeScoreOnline } from "../../methods/changeScore";
 import checkCollisionWithHorizontalWalls from "../../methods/checkCollisionWithHorizontalWalls";
 import { moveBall } from "../../methods/moveBall";
 import { User } from "@/lib/types";
-import getCookie from "@/lib/functions/getCookie";
 import useEndGame from "../../hooks/useEndGame";
 import useGameSocket from "@/app/(chor)/game/hooks/sockets/useGameSocket";
 import useInvitationSocket from "@/app/(chor)/game/hooks/sockets/useInvitationSocket";

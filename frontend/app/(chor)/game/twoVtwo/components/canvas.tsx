@@ -12,7 +12,6 @@ import { User } from "@/lib/types";
 import { canvasParamsFour } from "../../types";
 import { moveBallFour } from "../../methods/moveBall";
 import useEndGameFour from "../../hooks/useEndGameFour";
-import { toast } from "sonner";
 
 const Canvas = ({
   leftUserTop,

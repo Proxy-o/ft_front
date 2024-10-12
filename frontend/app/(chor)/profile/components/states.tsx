@@ -2,11 +2,9 @@ import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FrownIcon, LineChart, PlusSquare, SwordsIcon } from "lucide-react";
-import React, { useEffect, useState } from "react";
-import useGetGames from "../hooks/useGetGames";
-import useGetTwoGames from "../hooks/useGetTwoGames";
-import useGetTournaments from "../hooks/useGetTournaments";
+import React from "react";
 import useGetStates from "../hooks/useGateState";
+
 
 export default function States({ id }: { id: string }) {
 const {data: states , isSuccess} = useGetStates(id);

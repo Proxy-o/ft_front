@@ -1,6 +1,4 @@
-import { useEffect } from "react";
-import useGameSocket from "../hooks/useGameSocket";
-import useInvitationSocket from "../hooks/useInvitationSocket";
+
 import { User } from "@/lib/types";
 
 const Sockets = (

@@ -3,8 +3,7 @@ import {
   Dialog,
   DialogContent,
   DialogTrigger,
-  DialogHeader,
-  DialogTitle,
+
 } from "@/components/ui/dialog";
 import { SquarePen } from "lucide-react";
 import { User } from "@/lib/types";

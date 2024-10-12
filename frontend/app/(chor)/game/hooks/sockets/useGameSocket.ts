@@ -1,5 +1,4 @@
 import useGetUser from "@/app/(chor)/profile/hooks/useGetUser";
-import getCookie from "@/lib/functions/getCookie";
 import { useEffect, useState } from "react";
 import useWebSocket from "react-use-websocket";
 

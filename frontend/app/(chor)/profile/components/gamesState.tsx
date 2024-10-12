@@ -7,7 +7,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Card } from "@/components/ui/card";
 import { Flame, MinusSquare, PlusSquare } from "lucide-react";
 import { Game } from "../types";
 import { cn } from "@/lib/utils";

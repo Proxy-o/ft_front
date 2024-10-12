@@ -1,9 +1,7 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
-import getCookie from "@/lib/functions/getCookie";
 import useInvitationSocket from "@/app/(chor)/game/hooks/sockets/useInvitationSocket";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
-import useGetUser from "../../profile/hooks/useGetUser";
 
 const invite = async ({
   userid,

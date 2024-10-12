@@ -4,7 +4,6 @@ import useEditAvatar from "../hooks/useEditAvatar";
 import { User } from "@/lib/types";
 import { PenBox } from "lucide-react";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 
 export default function ProfileAvatar({
   user,

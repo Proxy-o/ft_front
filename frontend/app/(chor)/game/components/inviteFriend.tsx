@@ -67,6 +67,7 @@ const InviteFriends = ({ gameType }: { gameType: string }) => {
                       invite({
                         userid: friend.id,
                         gameType: gameType,
+                        user_id: user?.id,
                       });
                     }}
                   >

@@ -2,7 +2,6 @@ import { canvasParams, canvasParamsFour } from "../types";
 
 function draw(canvasParams: canvasParams, ctx: CanvasRenderingContext2D) {
   const {
-    canvas,
     paddleLeftYRef,
     paddleRightX,
     PaddleRightYRef,
@@ -11,8 +10,6 @@ function draw(canvasParams: canvasParams, ctx: CanvasRenderingContext2D) {
     paddleWidth,
     paddleHeight,
     ballRadius,
-    leftScoreRef,
-    rightScoreRef,
   } = canvasParams;
   const drawBall = () => {
     ctx.beginPath();
@@ -44,35 +41,35 @@ function draw(canvasParams: canvasParams, ctx: CanvasRenderingContext2D) {
     ctx.closePath();
   };
 
-  const drawMiddleLine = () => {
-    if (canvas === null) return;
-    let i = 0;
-    while (i < canvas.width) {
-      ctx.beginPath();
-      ctx.rect(i, canvas.height / 2 - 2, 7, 4);
-      ctx.fillStyle = "#ee95DD";
-      ctx.fill();
-      ctx.closePath();
-      i += 15;
-    }
-  };
+  // const drawMiddleLine = () => {
+  //   if (canvas === null) return;
+  //   let i = 0;
+  //   while (i < canvas.width) {
+  //     ctx.beginPath();
+  //     ctx.rect(i, canvas.height / 2 - 2, 7, 4);
+  //     ctx.fillStyle = "#ee95DD";
+  //     ctx.fill();
+  //     ctx.closePath();
+  //     i += 15;
+  //   }
+  // };
 
-  const drawScore = () => {
-    if (canvas === null) return;
-    // italic and bold
-    ctx.font = "italic bold 50px Arial";
-    ctx.fillStyle = "#0095DD";
-    ctx.fillText(
-      "" + leftScoreRef.current,
-      canvas.width / 2 - 150,
-      canvas.height / 2 - 20
-    );
-    ctx.fillText(
-      "" + rightScoreRef.current,
-      canvas.width / 2 + 150,
-      canvas.height / 2 - 20
-    );
-  };
+  // const drawScore = () => {
+  //   if (canvas === null) return;
+  //   // italic and bold
+  //   ctx.font = "italic bold 50px Arial";
+  //   ctx.fillStyle = "#0095DD";
+  //   ctx.fillText(
+  //     "" + leftScoreRef.current,
+  //     canvas.width / 2 - 150,
+  //     canvas.height / 2 - 20
+  //   );
+  //   ctx.fillText(
+  //     "" + rightScoreRef.current,
+  //     canvas.width / 2 + 150,
+  //     canvas.height / 2 - 20
+  //   );
+  // };
 
   // drawPlayer();
   // drawMiddleLine();
@@ -84,7 +81,6 @@ function draw(canvasParams: canvasParams, ctx: CanvasRenderingContext2D) {
 
 function drawFour(canvasParams: canvasParamsFour) {
   const {
-    canvas,
     ctx,
     paddleLeftTopYRef,
     paddleLeftBottomYRef,
@@ -96,8 +92,7 @@ function drawFour(canvasParams: canvasParamsFour) {
     paddleHeight,
     ballRadius,
     paddleRightX,
-    leftScoreRef,
-    rightScoreRef,
+
   } = canvasParams;
   const drawBall = () => {
     ctx.beginPath();
@@ -160,35 +155,35 @@ function drawFour(canvasParams: canvasParamsFour) {
     ctx.closePath();
   };
 
-  const drawMiddleLine = () => {
-    if (canvas === null) return;
-    let i = 0;
-    while (i < canvas.width) {
-      ctx.beginPath();
-      ctx.rect(i, canvas.height / 2 - 2, 7, 4);
-      ctx.fillStyle = "#ee95DD";
-      ctx.fill();
-      ctx.closePath();
-      i += 15;
-    }
-  };
+  // const drawMiddleLine = () => {
+  //   if (canvas === null) return;
+  //   let i = 0;
+  //   while (i < canvas.width) {
+  //     ctx.beginPath();
+  //     ctx.rect(i, canvas.height / 2 - 2, 7, 4);
+  //     ctx.fillStyle = "#ee95DD";
+  //     ctx.fill();
+  //     ctx.closePath();
+  //     i += 15;
+  //   }
+  // };
 
-  const drawScore = () => {
-    if (canvas === null) return;
-    // italic and bold
-    ctx.font = "italic bold 50px Arial";
-    ctx.fillStyle = "#0095DD";
-    ctx.fillText(
-      "" + leftScoreRef.current,
-      canvas.width / 2 - 150,
-      canvas.height / 2 - 20
-    );
-    ctx.fillText(
-      "" + rightScoreRef.current,
-      canvas.width / 2 + 150,
-      canvas.height / 2 - 20
-    );
-  };
+  // const drawScore = () => {
+  //   if (canvas === null) return;
+  //   // italic and bold
+  //   ctx.font = "italic bold 50px Arial";
+  //   ctx.fillStyle = "#0095DD";
+  //   ctx.fillText(
+  //     "" + leftScoreRef.current,
+  //     canvas.width / 2 - 150,
+  //     canvas.height / 2 - 20
+  //   );
+  //   ctx.fillText(
+  //     "" + rightScoreRef.current,
+  //     canvas.width / 2 + 150,
+  //     canvas.height / 2 - 20
+  //   );
+  // };
 
   // drawScore();
   // drawMiddleLine();

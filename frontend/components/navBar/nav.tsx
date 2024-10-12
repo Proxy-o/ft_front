@@ -18,8 +18,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import useLogout from "@/app/(auth)/login/hooks/useLogout";
 import { useEffect, useState } from "react";
-import getCookie from "@/lib/functions/getCookie";
-import useWebSocket from "react-use-websocket";
+
 import { linksProps } from "./types";
 import { useQueryClient } from "@tanstack/react-query";
 import type { User } from "@/lib/types";

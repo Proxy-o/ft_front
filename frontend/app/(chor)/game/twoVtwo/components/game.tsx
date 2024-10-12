@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import { User } from "@/lib/types";
-import getCookie from "@/lib/functions/getCookie";
 import useGetUser from "../../../profile/hooks/useGetUser";
 import NoGameFour from "../../components/noGameFour";
 import PreGame from "../../components/preGame";

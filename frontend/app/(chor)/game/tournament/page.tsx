@@ -1,6 +1,5 @@
 "use client";
 
-import getCookie from "@/lib/functions/getCookie";
 import TournamentTable from "../../profile/components/tournamentTable";
 import { useRouter } from "next/navigation";
 import useCreateTournament from "../hooks/useCreateTournament";
