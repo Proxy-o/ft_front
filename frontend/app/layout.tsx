@@ -29,7 +29,6 @@ export default function RootLayout({
       router.push("/game");
     }
   }, [is_public_route, logged_in, router]);
-  console.log("not logged")
   return (
     <html lang="en">
       <body className={inter.className}>

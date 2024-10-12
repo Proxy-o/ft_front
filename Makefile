@@ -9,10 +9,10 @@ all: build up
 	@echo ""
 
 up:
-	bash tools/init.sh
 	docker-compose -f ./docker-compose.yml up -d
 
 build:
+	bash tools/init.sh
 	docker-compose -f ./docker-compose.yml build
 
 down:
