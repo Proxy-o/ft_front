@@ -20,7 +20,7 @@ export default function Page() {
   return (
     user && (
       <ResCard>
-        <div className="     flex flex-col     p-1 mx-2 h-full overflow-y-auto  no-scrollbar">
+        <div className=" feedLeft    flex flex-col     p-1 mx-2 h-full overflow-y-auto  no-scrollbar">
           <div className="flex w-full justify-center items-center border-b-2  py-4">
             Friends
             <p className="border  mx-2 rounded-lg  text-center p-1">

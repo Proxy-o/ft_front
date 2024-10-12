@@ -46,7 +46,7 @@ export default function Profile({ id }: { id: string }) {
       <div className="relative lg:flex  gap-4 p-4 w-full  ">
         {isSuccess ? (
           <>
-            <div className="flex flex-col gap-4  w-full feedLeft ">
+            <div className="flex flex-col gap-4  w-full  ">
               <UserInfo
                 user={data}
                 canEdit={canEdit}
@@ -57,7 +57,7 @@ export default function Profile({ id }: { id: string }) {
               />
               {isChatOpen && isSender && isSuccess && (
                 // get the high of the screen and put it in the bottom
-                <Card className="relative  " ref={chatRef}>
+                <Card className="relative feedRight " ref={chatRef}>
                   <XCircle
                     className="absolute z-40 top-[18px] right-[18px] opacity-20 hover:cursor-pointer hover:scale-[1.05] transition duration-300 ease-in-out"
                     onClick={() => setIsChatOpen(false)}
@@ -65,7 +65,7 @@ export default function Profile({ id }: { id: string }) {
                   <ChatCard sender={sender} receiver={data} />
                 </Card>
               )}
-              <div className="">{!isBlocked && <TabStates id={id} />}</div>
+              <div className="feedLeft">{!isBlocked && <TabStates id={id} />}</div>
             </div>
             <div className="flex flex-col gap-4 mb-6 feedRight">
               <States id={id} />

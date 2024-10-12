@@ -23,20 +23,22 @@ export default function FriendRequests() {
   const reqCount = filteredData.length;
   return (
     isSuccess && (
-      <div className="mx-2  h-full    flex flex-col     p-1 overflow-auto md:scrollbar scrollbar-thumb-primary/10 scrollbar-w-2 no-scrollbar">
+      <div className="mx-2 feedLeft h-full    flex flex-col     p-1 overflow-auto md:scrollbar scrollbar-thumb-primary/10 scrollbar-w-2 no-scrollbar">
         <div className="flex w-full justify-center items-center border-b-2  py-4">
           Friend Requests
           <p className="border  mx-2 rounded-lg  text-center p-1">{reqCount}</p>
         </div>
-        <Link
-          href="/friends"
-          className={cn(
-            buttonVariants({ variant: "outline", size: "lg" }),
-            "ml-0 sm:ml-auto  my-2"
-          )}
-        >
-          Friends
-        </Link>
+        <div className="w-full flex justify-end">
+            <Link
+              href="/friends"
+              className={cn(
+                buttonVariants({ variant: "outline", size: "lg" }),
+                "ml-0 sm:ml-auto  my-2 "
+              )}
+            >
+              Friends
+            </Link>
+          </div>
         {reqCount !== 0 ? (
           <div>
             {filteredData.map(

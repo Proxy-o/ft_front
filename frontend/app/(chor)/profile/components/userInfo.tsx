@@ -88,7 +88,7 @@ export default function UserInfo({
         isBlocked && " cursor-not-allowed"
       )}
     >
-      <div className="absolute top-0 right-0 p-2">
+      <div className="absolute top-0 right-0 p-2 z-50 feedBot">
         {isBlocked && blocked_by_current_user ? (
           <Button
             className="bg-green-800/25"
@@ -101,7 +101,7 @@ export default function UserInfo({
           !isBlocked &&
           current_user_id != id && (
             <Button
-              className="bg-red-800/85 relative z-50"
+              className="bg-red-800/85 "
               variant={"default"}
               onClick={() =>
                 block({ to_block: user, user_id: current_user_id })
@@ -113,7 +113,7 @@ export default function UserInfo({
         )}
       </div>
       {canEdit && <EditProfile user={user} />}
-      <div className=" md:w-40 md:h-40">
+      <div className=" md:w-40 md:h-40 feedBot">
         <ProfileAvatar user={user} canEdit={canEdit} isBlocked={isBlocked} />
       </div>
       <div className=" flex-1 md:px-3">
@@ -172,7 +172,7 @@ export default function UserInfo({
             </Tooltip>
           </TooltipProvider>
         </div>
-        <div className="flex justify-around items-center space-x-3 overflow-x-auto">
+        <div className="feedRight flex justify-around items-center space-x-3 overflow-x-auto">
           {canEdit ? (
             <Button
               className="mt-6 w-full bg-red-500/30"
