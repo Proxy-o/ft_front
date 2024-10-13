@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -ex
 
 # vars
 OAUTH_PROVIDERS=("42" "GITHUB")
@@ -9,35 +9,43 @@ IPADDR=0.0.0.0
 # create necessary directories
 mkdir -p postgres_data log_nginx vault_data/cre/{backend,frontend,database,vault}
 
-# get the Host Ip address
-if [ "$(uname)" == "Linux" ]
-then
+# get the Host IP address
+if [ "$(uname)" == "Linux" ]; then
     IPADDR=$(hostname -I | cut -d ' ' -f 1 | tr -d ' ')
 else
     IPADDR=$(ipconfig getifaddr en0)
 fi
 
-# generate /frontend/.env if not exist
-if [ ! -f ./frontend/.env ]; then
-    echo -e "\
+# generate /frontend/.env
+echo -e "\
 NEXT_PUBLIC_BACKEND_URL=https://$IPADDR:443\n\
 NEXT_PUBLIC_CHAT_URL=wss://$IPADDR:443/ws/chat/\n\
 NEXT_PUBLIC_GAME_URL=wss://$IPADDR:443/ws/game/game\n\
 NEXT_PUBLIC_INVITATION_URL=wss://$IPADDR:443/ws/game/invitation\
 " > ./frontend/.env
-else
-    echo "./frontend/.env exist, Skipping..."
+
+# backup existing oauth credentials
+if grep -qs "OAUTH" .env; then
+    SWAP_CRE=$(grep -s "OAUTH" .env)
 fi
 
-# generate .env if not exist
-if [ ! -f .env ]; then
-    echo "SERVER_HOST=$IPADDR" > .env
-    echo "VAULT_ADDR=http://vault:8200" >> .env
+# generate .env
+echo "SERVER_HOST=$IPADDR" > .env
+echo "VAULT_ADDR=http://vault:8200" >> .env
 
-    for provider in ${OAUTH_PROVIDERS[@]}; do
-        read -p "Enter $provider client id: " CLIENT_ID && echo "OAUTH_${provider}_CLIENT_ID=\"$CLIENT_ID\"" >> .env
-        read -p "Enter $provider client secret: " CLIENT_SECRET && echo "OAUTH_${provider}_CLIENT_SECRET=\"$CLIENT_SECRET\"" >> .env
-    done
-else
-    echo ".env exist, Skipping..."
-fi
+# swap back or read required oauth credentials
+swap_back_or_read() {
+    local provider=$1
+    local credential=$2
+    if echo "$SWAP_CRE" | grep -q "OAUTH_${provider}_${credential}"; then
+        echo "$SWAP_CRE" | grep "OAUTH_${provider}_${credential}" >> .env
+    else
+        read -p "Enter $provider ${credential}: " TMP
+        echo "OAUTH_${provider}_${credential}=\"$TMP\"" >> .env
+    fi
+}
+
+for provider in "${OAUTH_PROVIDERS[@]}"; do
+    swap_back_or_read "$provider" "CLIENT_ID"
+    swap_back_or_read "$provider" "CLIENT_SECRET"
+done

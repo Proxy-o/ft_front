@@ -1,3 +1,5 @@
+RUNDIR = ./postgres_data ./log_nginx ./vault_data/data ./vault_data/cre
+
 
 all: build up
 	@echo ""
@@ -16,7 +18,6 @@ build:
 	docker-compose -f ./docker-compose.yml build
 
 down:
-	
 	docker-compose -f ./docker-compose.yml down
 
 logs:
@@ -36,13 +37,19 @@ oclean:
 	docker volume ls -qf dangling=true | xargs -r docker volume rm
 
 fclean:
-	rm -rf ./postgres_data ./log_nginx ./vault_data/data ./vault_data/cre
 	docker stop $$(docker ps -qa) 2>/dev/null || true
 	docker rm $$(docker ps -qa) 2>/dev/null || true
 	docker rmi -f $$(docker images -qa) 2>/dev/null || true
 	docker volume rm $$(docker volume ls -q) 2>/dev/null || true
 	docker network rm $$(docker network ls -q) 2>/dev/null || true
 
-re:	clean all
+delenv:
+	@rm -f .env frontend/.env
+	echo "Environment files removed"
 
-.PHONY	: all build down re clean fclean logs test_waf oclean start
+deldir:
+	rm -rf $(RUNDIR)
+
+re:	clean deldir all
+
+.PHONY	: all build down re clean fclean logs test_waf oclean start stop up delenv deldir
