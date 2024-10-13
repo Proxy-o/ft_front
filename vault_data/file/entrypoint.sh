@@ -6,7 +6,7 @@ trap 'echo "Caught SIGTERM, shutting down..."; kill %1' SIGTERM
 trap 'echo "Caught SIGINT, shutting down..."; kill %1' SIGINT
 
 ## vars
-POLICIES_FILE=/vault/config/policies
+POLICIES_FILE=/vault/file/policies
 VAULT_CLIENT=$(cat $POLICIES_FILE | tr '\n' ' ')
 
 # Check if the policies file exists
@@ -14,6 +14,32 @@ if [ ! -f $POLICIES_FILE ]; then
   echo "Policies file not found."
   exit 1
 fi
+
+# generate the config file from a template
+mkdir -p /vault/config
+cp /vault/file/conf.template /vault/config/conf.hcl
+
+# add auto_auth block to the config file for each client
+for client in $VAULT_CLIENT; do
+  cat <<EOF >> /vault/config/conf.hcl
+auto_auth {
+  method "approle" {
+    mount_path = "auth/approle"
+    config = {
+      role_id_file_path   = "/vault/cre/${client}/role-id"
+      secret_id_file_path = "/vault/cre/${client}/secret-id"
+    }
+  }
+
+  sink "file" {
+    config = {
+      path = "/vault/token/vault-token"
+    }
+  }
+}
+
+EOF
+done
 
 ## helper funcs
 create_policy() {
@@ -39,9 +65,8 @@ create_approle() {
     echo "Creating AppRole for ${client}-role..."
     vault write auth/approle/role/${client}-role \
       token_policies="${client}_policy" \
-      secret_id_ttl="24h" \
-      token_ttl="1h" \
-      token_max_ttl="4h"
+      secret_id_ttl="0"
+
 
     # Save the Role ID and Secret ID for later use
     vault read -field=role_id auth/approle/role/${client}-role/role-id > /vault/cre/${client}/role-id
@@ -61,21 +86,21 @@ while vault status | grep -q 'connection refused'; do
 done
 
 # Initialize Vault if not already initialized
-if ! vault status | grep -q 'initialized'; then
+if [ $(set +e; vault operator init -status &>/dev/null; echo $?) -eq 2 ]; then
   echo "Initializing Vault..."
   vault operator init -key-shares=1 -key-threshold=1 > /vault/init-keys.txt
 
-  # Extract the unseal key and root token securely
-  VAULT_UNSEAL_KEY=$(grep 'Unseal Key 1:' /vault/init-keys.txt | awk '{print $NF}')
-  VAULT_ROOT_TOKEN=$(grep 'Initial Root Token:' /vault/init-keys.txt | awk '{print $NF}')
-
-  rm /vault/init-keys.txt
+  chmod 600 /vault/init-keys.txt
 
   echo "Vault initialized."
 
 else
   echo "Vault is already initialized."
 fi
+
+# Extract the unseal key and root token securely
+VAULT_UNSEAL_KEY=$(grep 'Unseal Key 1:' /vault/init-keys.txt | awk '{print $NF}')
+VAULT_ROOT_TOKEN=$(grep 'Initial Root Token:' /vault/init-keys.txt | awk '{print $NF}')
 
 # Unseal Vault
 
