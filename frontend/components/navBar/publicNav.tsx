@@ -4,6 +4,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
+import { cn } from "@/lib/utils";
 
 const PublicNav: React.FC<{path: string}> = ({ path }) => {
     const { theme, setTheme } = useTheme();
@@ -17,7 +18,7 @@ const PublicNav: React.FC<{path: string}> = ({ path }) => {
     <div className="flex flex-row justify-between w-full">
         <div>
             { path != "/" && links.filter(l => l.href != path).map((l, k) =>  (
-                <Link key={k} href={l.href} className={buttonVariants({variant: "link"})}>
+                <Link key={k} href={l.href} className={cn(buttonVariants({variant: "link"}), "hover:text-secondary-foreground")}>
                     {l.name}
                 </Link>
             ))}
