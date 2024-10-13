@@ -33,7 +33,5 @@ class User(AbstractUser):
 class OAuthCredential(models.Model):
     user = models.ForeignKey('User', on_delete=models.CASCADE, related_name='oauth_credentials')
     provider = models.CharField(max_length=50)
-    refresh_token = models.CharField(max_length=255)
     access_token = models.CharField(max_length=255)
-    expires_at = models.DateTimeField()
     user_oauth_uid = models.CharField(max_length=255, default='')

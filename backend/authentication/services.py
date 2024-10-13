@@ -62,35 +62,36 @@ class OAuthService:
             'client_secret': client_secret,
             'redirect_uri': redirect_uri
         }
-
-        response = requests.post(token_url, data=data)
-        if response.status_code != 200:
-            return None, None, {'detail': 'Invalid credentials'}
+        headers = {
+            'Accept': 'application/json'
+        }
+        response = requests.post(token_url, data=data, headers=headers)
         data = response.json()
-        expires_at = datetime.fromtimestamp(data['created_at']) + timedelta(seconds=data['expires_in'])
+        if response.status_code != 200 or 'access_token' not in data:
+            return None, None, {'detail': 'Invalid credentials'}
+
+
         user_credentials = {
             'provider': provider,
-            'refresh_token': data['refresh_token'],
             'access_token': data['access_token'],
-            'expires_at': expires_at.isoformat()
         }
-        user_info_url = base_url + settings.OAUTH_PROVIDERS[provider]['user_info_url']
-        response = requests.get(user_info_url, headers={'Authorization': f'Bearer {user_credentials["access_token"]}'})
-
-        user_infos = response.json()
+        headers['Authorization'] = f'Bearer {user_credentials["access_token"]}'
+        user_infos, error = OAuthService.get_user_infos(provider, headers)
+        if error:
+            return None, None, error
+        
         credentials = OAuthCredential.objects.filter(user_oauth_uid=user_infos['id']).first()
         if not credentials:
             request_data = {
                 'username': user_infos['login'],
                 'password': User.objects.make_random_password(),
                 'has_oauth_credentials': True,
-                'avatar': user_infos["image"]["link"]
+                'avatar': user_infos['avatar_url']
             }
-            prefix = "ft_"
             counter = 1
-            new_username = f"{prefix}{request_data['username']}"
+            new_username = f"{request_data['username']}"
             while User.objects.filter(username=new_username).exists():
-                new_username = f"{prefix}{request_data['username']}_{counter}"
+                new_username = f"{request_data['username']}_{counter}"
                 # print("### try : ", new_username)
                 counter += 1
             request_data['username'] = new_username
@@ -128,5 +129,26 @@ class OAuthService:
             return user, None
         except Exception as e:
             return None, {'detail': str(e)}
+    
+    @staticmethod
+    def get_user_infos(provider, headers):
+        user_info_url = settings.OAUTH_PROVIDERS[provider]['user_info_url']
+
+        response = requests.get(user_info_url, headers=headers)
+        if response.status_code != 200 or 'error' in response.json():
+            return None, {'detail': 'Invalid credentials'}
+        
+        user_infos = response.json()
+        # if 'email' not in user_infos or not user_infos['email']:
+        #     email_response = requests.get(f"{user_info_url}/emails", headers=headers)
+        #     if email_response.status_code == 200:
+        #         emails = email_response.json()
+        #         print('emails:', emails)
+        #         primary_emails = [email for email in emails if email.get('primary') and email.get('verified')]
+        #         if primary_emails:
+        #             user_infos['email'] = primary_emails[0]['email']
+        if 'image' in user_infos:
+            user_infos['avatar_url'] = user_infos['image']['link']
+        return user_infos, None
         
         
