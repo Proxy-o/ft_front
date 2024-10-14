@@ -40,9 +40,11 @@ def fetchSec() -> Tuple[Callable[[str], str], Exception]:
         be_secrets = read_secret('backend')
         db_secrets = read_secret('db')
         oa_secrets = read_secret('oauth')
-        oa_secrets['OAUTH_42_CLIENT_ID'] = decrypt_secret(oa_secrets['OAUTH_42_CLIENT_ID'])
-        oa_secrets['OAUTH_42_CLIENT_SECRET'] = decrypt_secret(oa_secrets['OAUTH_42_CLIENT_SECRET'])
-        oa_secrets['OAUTH_42_STATE'] = decrypt64_secret(oa_secrets['OAUTH_42_STATE'])
+        for key in list(oa_secrets.keys()):
+            if "CLIENT_ID" in key or "CLIENT_SECRET" in key:
+                oa_secrets[key] = decrypt_secret(oa_secrets[key])
+            elif "STATE" in key:
+                oa_secrets[key] = decrypt64_secret(oa_secrets[key])
     except Exception as e:
         return None, e
 
