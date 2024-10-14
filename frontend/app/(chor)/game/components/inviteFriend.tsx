@@ -23,7 +23,7 @@ const InviteFriends = ({ gameType }: { gameType: string }) => {
   const router = useRouter();
 
   return (
-    <Card className="w-full md:aspect-[2] flex flex-col min-h-44 max-h-60 bg-background p-2">
+    <Card className="w-full md:aspect-[2] flex flex-col min-h-44 max-h-60 p-2">
       <div className="w-full h-fit text-center text-lg font-bold pb-2">
         Invite
       </div>

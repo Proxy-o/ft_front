@@ -31,7 +31,7 @@ export default function TournamentTable({ userid }: { userid: string }) {
                 <AccordionTrigger className="p-2 ">
                   <div className="flex justify-between items-center border rounded-lg w-full p-1 gap-1">
                     <div className="flex items-center justify-center  gap-4 w-1/2 bg-primary/10 rounded-md relative">
-                      <h1 className="w-full  text-center absolute text-5xl opacity-35 hover:scale-110 transition duration-300 ease-in-out blur-sm">
+                      <h1 className="w-full  text-center absolute text-5xl opacity-70 hover:scale-110 transition duration-300 ease-in-out blur-sm">
                         Creator
                       </h1>
                       <div className="flex flex-col justify-center items-center p-2 hover:scale-110 transition duration-300 ease-in-out ">
