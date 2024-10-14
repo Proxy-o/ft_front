@@ -34,14 +34,19 @@ const NoGameFour = ({ state }: { state: React.MutableRefObject<string> }) => {
 
   return (
     <div
-      className="w-full h-full bg-black flex flex-col rounded-lg justify-between p-4"
-      style={{
-        backgroundImage: "url('/game.jpeg')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
+      className="w-full h-full relative bg-black flex flex-col rounded-lg justify-between p-4"
+      
     >
-      <div className="text-white text-2xl m-auto">{text}</div>
+      <div
+        className="absolute inset-0 rounded-lg"
+        style={{
+          backgroundImage: "url('/bg.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          opacity: 0.75,
+        }}
+      />
+      <div className="text-white z-10 text-2xl m-auto">{text}</div>
     </div>
   );
 };

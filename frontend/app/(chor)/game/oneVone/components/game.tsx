@@ -220,7 +220,7 @@ const Game = ({
 
       if (bgImage.current === null) {
         bgImage.current = new Image();
-        bgImage.current.src = "/game.jpeg";
+        bgImage.current.src = "/bg.jpg";
       }
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);

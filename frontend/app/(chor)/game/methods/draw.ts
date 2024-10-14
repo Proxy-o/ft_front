@@ -23,7 +23,7 @@ function draw(canvasParams: canvasParams, ctx: CanvasRenderingContext2D) {
       0,
       Math.PI * 2
     );
-    ctx.fillStyle = "#0095DD";
+    ctx.fillStyle = "#FFFFFF";
     ctx.fill();
     ctx.closePath();
   };

@@ -37,9 +37,9 @@ export default function Page() {
           </div>
         </Link>
       </div>
-      <div className="w-full h-fit feedBot ">
+      {/* <div className="w-full h-fit feedBot ">
         <Invitations mode="all" />
-      </div>
+      </div> */}
       <div className=" h-full w-full flex flex-col md:flex-row gap-4 feedLeft">
         <TabStates id={user_id} />
       </div>
