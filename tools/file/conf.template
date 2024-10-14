@@ -1,5 +1,5 @@
 ui            = false
-api_addr      = "https://127.0.0.1:8200"
+api_addr      = "https://vault:8200"
 disable_mlock = true
 default_lease_ttl = "1h"
 max_lease_ttl     = "4h"
@@ -32,3 +32,4 @@ secrets {
 cache {
   use_auto_auth_token = true
 }
+

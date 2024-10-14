@@ -6,6 +6,4 @@ log_nginx
 postgres
 backend/media/qrcode/*
 .venv
-vault_data/cre/*
-vault_data/data
-vault_data/logs
+vault_data

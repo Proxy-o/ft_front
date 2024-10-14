@@ -2,50 +2,59 @@
 
 set -ex
 
-# vars
-OAUTH_PROVIDERS=("42" "GITHUB")
-IPADDR=0.0.0.0
+# source vars
+source $(pwd)/tools/vars.sh
 
 # create necessary directories
-mkdir -p postgres_data log_nginx vault_data/cre/{backend,frontend,database,vault}
+mkdir -p postgres_data log_nginx $VAULTDIR/{file,config,policies} $VAULTDIR/cre/{backend,frontend,database,vault}
 
-# get the Host IP address
-if [ "$(uname)" == "Linux" ]; then
-    IPADDR=$(hostname -I | cut -d ' ' -f 1 | tr -d ' ')
-else
-    IPADDR=$(ipconfig getifaddr en0)
-fi
-
-# generate /frontend/.env
+# generate/overwrite the frontend env file
 echo -e "\
 NEXT_PUBLIC_BACKEND_URL=https://$IPADDR:443\n\
 NEXT_PUBLIC_CHAT_URL=wss://$IPADDR:443/ws/chat/\n\
 NEXT_PUBLIC_GAME_URL=wss://$IPADDR:443/ws/game/game\n\
 NEXT_PUBLIC_INVITATION_URL=wss://$IPADDR:443/ws/game/invitation\
-" > ./frontend/.env
+" > $NEXTENV
 
-# backup existing oauth credentials
-if grep -qs "OAUTH" .env; then
-    SWAP_CRE=$(grep -s "OAUTH" .env)
-fi
-
-# generate .env
-echo "SERVER_HOST=$IPADDR" > .env
-echo "VAULT_ADDR=http://vault:8200" >> .env
-
-# swap back or read required oauth credentials
-swap_back_or_read() {
-    local provider=$1
-    local credential=$2
-    if echo "$SWAP_CRE" | grep -q "OAUTH_${provider}_${credential}"; then
-        echo "$SWAP_CRE" | grep "OAUTH_${provider}_${credential}" >> .env
-    else
-        read -p "Enter $provider ${credential}: " TMP
-        echo "OAUTH_${provider}_${credential}=\"$TMP\"" >> .env
-    fi
-}
+# generate vault envfile
+echo "SERVER_HOST=$IPADDR" > $VAULT_ENV
+echo "VAULT_ADDR=http://vault:8200" >> $VAULT_ENV
+echo "VAULT_CLIENTS=\"${VAULT_CLIENTS[@]}\"" >> $VAULT_ENV
+echo "OAUTH_PROVIDERS=\"${OAUTH_PROVIDERS[@]}\"" >> $VAULT_ENV
 
 for provider in "${OAUTH_PROVIDERS[@]}"; do
     swap_back_or_read "$provider" "CLIENT_ID"
     swap_back_or_read "$provider" "CLIENT_SECRET"
+done
+
+# copy necessary files for vault service
+cp $WORKDIR/tools/file/entrypoint.sh $VAULTDIR/file/entrypoint.sh
+cp $WORKDIR/tools/file/init_secrets.sh $VAULTDIR/file/init_secrets.sh
+cp $WORKDIR/tools/file/conf.template $VAULTDIR/config/conf.hcl
+for policy in ${VAULT_CLIENTS[@]}; do
+  cp $WORKDIR/tools/policies/${policy}_policy.hcl $VAULTDIR/policies/${policy}_policy.hcl
+done
+
+# add auto_auth block to the config file for each client
+for client in ${VAULT_CLIENTS[@]}; do
+  cat <<EOF >> $VAULTDIR/config/conf.hcl
+
+auto_auth {
+  method {
+    type       = "approle"
+    mount_path = "auth/approle"
+    config = {
+      role_id_file_path   = "/vault/cre/${client}/role-id"
+      secret_id_file_path = "/vault/cre/${client}/secret-id"
+    }
+  }
+
+  sink "file" {
+    config = {
+      path = "/vault/token/${client}-token"
+    }
+  }
+}
+
+EOF
 done
