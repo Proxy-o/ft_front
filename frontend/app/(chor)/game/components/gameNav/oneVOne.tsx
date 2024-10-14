@@ -1,5 +1,6 @@
 "use client";
 
+import { Card } from "@/components/ui/card";
 import { Diamond, User } from "lucide-react";
 import { useState } from "react";
 
@@ -7,8 +8,8 @@ const OneVOne = ({ type }: { type: string }) => {
   const [hover, setHover] = useState(false);
   return (
     <>
-      <div
-        className={`w-44 h-44 bg-background flex flex-col justify-center items-center rounded-xl shadow-primary shadow-sm transition duration-300 ease-in-out hover:shadow-lg hover:shadow-primary/20 relative`}
+      <Card
+        className={`w-44 h-44 bg-background flex flex-col justify-center items-center rounded-xl shadow-primary shadow-sm transition duration-300 ease-in-out relative overflow-hidden`}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
       >
@@ -65,7 +66,7 @@ const OneVOne = ({ type }: { type: string }) => {
           </div>
           <div className="bg-primary  h-[68px] w-3 animate-moveUpOne"></div>
         </div>
-      </div>
+      </Card>
     </>
   );
 };

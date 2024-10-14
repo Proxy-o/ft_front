@@ -384,8 +384,9 @@
     }
 }
 
+/* rgba(168,85,247) */
 .sckeliton2 {
-  background-image: linear-gradient(270deg, rgb(239 68 68 / var(--tw-bg-opacity)), hsl(300, 0%, 20%), hsl(300, 0%, 20%),hsl(300, 0%, 20%),hsl(300, 0%, 20%),hsl(300, 0%, 20%), rgb(239 68 68 / var(--tw-bg-opacity)));
+  background-image: linear-gradient(270deg, rgb(168 85 247 / var(--tw-bg-opacity)), hsl(300, 0%, 20%), hsl(300, 0%, 20%),hsl(300, 0%, 20%),hsl(300, 0%, 20%),hsl(300, 0%, 20%), rgb(168 85 247 / var(--tw-bg-opacity)));
 	background-size: 200% 200%;
   background-position: -140% 0;
 	animation: sckeliton2 2s ease-in-out infinite;
