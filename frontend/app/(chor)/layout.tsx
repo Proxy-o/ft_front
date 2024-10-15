@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import useMediaQuery from "@/lib/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
 import { useState, useEffect, lazy } from "react";
+import UserProviders from "@/lib/providers/UserProvider";
 
 const Nav = lazy(() => import("@/components/navBar/nav"));
 const MobilNav = lazy(() => import("@/components/navBar/mobilNav"));
@@ -40,21 +41,23 @@ export default function AppLayout({
 
   return (
     (logged_in || is_local) && (
-      <div className="md:flex relative">
-        {(showNav === 1) && <Nav />}
-        <div
-          className={cn(
-            "flex w-full border-l-[0.04rem]",
-            !mb && "h-[calc(100vh-3.7rem)]"
-          )}
-          >
-          <div className="relative max-w-[60rem] mx-auto w-full h-full py-0.5">
-            {(!is_local || logged_in) && <SearchFriend />}
-            {children}
+      <UserProviders>
+        <div className="md:flex relative">
+          {(showNav === 1) && <Nav />}
+          <div
+            className={cn(
+              "flex w-full border-l-[0.04rem]",
+              !mb && "h-[calc(100vh-3.7rem)]"
+            )}
+            >
+            <div className="relative max-w-[60rem] mx-auto w-full h-full py-0.5">
+              {(!is_local || logged_in) && <SearchFriend />}
+              {children}
+            </div>
           </div>
+          {(showNav === 2) && <MobilNav />}
         </div>
-        {(showNav === 2) && <MobilNav />}
-      </div>
+      </UserProviders>
     )
   );
 }
