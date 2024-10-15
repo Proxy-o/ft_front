@@ -1,7 +1,7 @@
 "use client";
 
 import { Card } from "@/components/ui/card";
-import { Diamond, User } from "lucide-react";
+import { Diamond, User, Wifi } from "lucide-react";
 import { useState } from "react";
 
 const OneVOne = ({ type }: { type: string }) => {
@@ -9,7 +9,7 @@ const OneVOne = ({ type }: { type: string }) => {
   return (
     <>
       <Card
-        className={`w-44 h-44 bg-background flex flex-col justify-center items-center rounded-xl shadow-primary shadow-sm transition duration-300 ease-in-out relative overflow-hidden`}
+        className={`w-44 h-44 bg-background flex cursor-pointer flex-col justify-center items-center rounded-xl shadow-primary shadow-sm transition duration-300 ease-in-out relative overflow-hidden`}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
       >
@@ -53,6 +53,29 @@ const OneVOne = ({ type }: { type: string }) => {
               </div>
             </div>
             {hover && <div className="text-2xl font-bold">Local</div>}
+          </>
+        )}
+        {type === "online" && (
+          <>
+            <div
+              className={
+                `absolute w-full h-full flex flex-col justify-center items-center transition duration-300 ease-in-out` +
+                (hover
+                  ? "transform scale-75 blur-sm opacity-25"
+                  : "transform scale-100")
+              }
+            >
+              <div
+                className={
+                  `transition duration-300 ease-in-out` +
+                  (hover ? "transform animate-in" : "transform animate-none")
+
+                }
+              >
+                <Wifi size={150} />
+              </div>
+            </div>
+            {hover && <div className="text-2xl font-bold">Online</div>}
           </>
         )}
         <div

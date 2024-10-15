@@ -21,7 +21,7 @@ export default function Page() {
           Invite a friend to play a game of ping pong with you!
         </div>
       </div>
-      <div className="w-full min-w-72 h-full flex flex-row justify-center items-center">
+      <div className="w-full min-w-72 h-fit flex flex-row justify-center items-start">
         <div className="flex flex-col p-4 w-full md:justify-center items-center md:items-start gap-2">
           <Game type={"two"} onGoingGame={onGoingGame} />
           <div className="w-full h-fit flex flex-col md:flex-row justify-start items-start gap-2">

@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import NoGame from "../components/noGame";
 import Score from "../oneVone/components/score";
 import Canvas from "./canvas";
+import Actions from "./actions";
 
 const OneOffline = ({
   gameStarted,
@@ -31,7 +32,7 @@ const OneOffline = ({
       {gameStarted && type === "game" && (
         <Score leftScore={leftScore} rightScore={rightScore} />
       )}
-      <Card className="w-full aspect-[2]">
+      <Card className="w-full relative aspect-[2]">
         {gameStarted ? (
           <Canvas 
             gameStarted={gameStarted}
@@ -47,30 +48,8 @@ const OneOffline = ({
             <NoGame state={state} />
           </div>
         )}
+      <Actions gameStarted={gameStarted} setGameStarted={setGameStarted} />
       </Card>
-      {gameStarted ? (
-        type === "game" && (
-        <Button
-          onClick={() => {
-            setLeftScore(0);
-            setRightScore(0);
-            setGameStarted(false);
-          }}
-          className="w-1/3 mx-auto bg-red-500/25"
-        >
-          End Game
-        </Button>
-        )
-      ) : (
-        <Button
-          onClick={() => {
-            setGameStarted(true);
-          }}
-          className="w-1/3 mx-auto h-10 p-3 bg-green-500/25"
-        >
-          Start Game
-        </Button>
-      )}
     </>
   );
 };

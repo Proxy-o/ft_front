@@ -10,7 +10,7 @@ const TournamentNav = () => {
   return (
     <>
       <Card
-        className={`w-44 h-44 bg-background flex flex-col justify-center items-center rounded-xl shadow-primary shadow-sm transition duration-300 ease-in-out relative overflow-hidden`}
+        className={`w-44 h-44 bg-background cursor-pointer flex flex-col justify-center items-center rounded-xl shadow-primary shadow-sm transition duration-300 ease-in-out relative overflow-hidden`}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
       >

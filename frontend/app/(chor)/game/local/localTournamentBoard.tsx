@@ -27,7 +27,7 @@ const LocalTournamentBoard = ({
     // <div className="w-full h-full flex flex-col items-center gap-4">
     <>
       {semi1Winner !== -1 && semi2Winner !== -1 && (
-        <div className="w-full h-full flex flex-row items-center gap-4 bg-yellow-400/20 rounded-lg">
+        <div className="w-full h-fit py-2 flex flex-row items-center gap-4 bg-yellow-400/20 rounded-lg">
           <div className="w-full h-24 rounded-md justify-center items-center flex flex-row animate-getBigger animate-biggerSmaller gap-4">
             <div className="h-full w-fit bg-primary flex justify-center items-center bg-gray-700 rounded-md">
               <ScoreProfile avatar="local" side="left" number={semi1Winner} />
@@ -47,10 +47,10 @@ const LocalTournamentBoard = ({
         </div>
       )}
       {(semi1Winner === -1 || semi2Winner === -1) && (
-        <div className="text-xs sm:text-base w-full flex flex-col md:flex-row justify-between items-center gap-4 overflow-auto sm:overflow-visible">
+        <div className="text-xs sm:text-base w-full h-fit  flex flex-col md:flex-row justify-between items-center gap-4 overflow-auto sm:overflow-visible">
           {(!gameStarted || (gameStarted && currentGame === "semi1")) && (
             <div
-              className={`w-full h-full flex justify-between  items-center rounded-sm
+              className={`w-full h-full p-2 flex justify-between  items-center rounded-sm
             ${currentGame === "semi1" ? "bg-yellow-400/20" : ""}`}
             >
               <div className="w-fit h-24 rounded-md justify-center items-center flex flex-row animate-getBigger animate-biggerSmaller gap-4 ">
@@ -72,7 +72,7 @@ const LocalTournamentBoard = ({
           )}
           {(!gameStarted || (gameStarted && currentGame === "semi2")) && (
             <div
-              className={`w-full h-full flex justify-between  items-center rounded-sm
+              className={`w-full h-full p-2 flex justify-between  items-center rounded-sm
             ${currentGame === "semi2" ? "bg-yellow-400/20" : ""}`}
             >
               <div className="w-fit h-24 rounded-md justify-center items-center flex flex-row animate-getBigger animate-biggerSmaller gap-4">

@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useState } from "react";
 import LocalTournamentBoard from "./localTournamentBoard";
 import OneOffline from "./oneOffline";
@@ -38,6 +39,7 @@ const LocalTournament = () => {
         if (leftScore === 3 || rightScore === 3) {
           setRightScore(0);
           setLeftScore(0);
+          setGameStarted(false);
           setCurrentGame("semi2");
         }
       } else if (currentGame === "semi2") {
@@ -45,6 +47,7 @@ const LocalTournament = () => {
         if (leftScore === 3 || rightScore === 3) {
           setRightScore(0);
           setLeftScore(0);
+          setGameStarted(false);
           setCurrentGame("final");
         }
       } else if (currentGame === "final") {
@@ -66,6 +69,7 @@ const LocalTournament = () => {
           }
           setRightScore(0);
           setLeftScore(0);
+          setGameStarted(false);
           setCurrentGame("semi1");
         }
       }

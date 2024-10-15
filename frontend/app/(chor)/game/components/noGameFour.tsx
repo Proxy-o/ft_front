@@ -34,7 +34,7 @@ const NoGameFour = ({ state }: { state: React.MutableRefObject<string> }) => {
 
   return (
     <div
-      className="w-full h-full relative bg-black flex flex-col rounded-lg justify-between p-4"
+      className="w-full h-full relative flex flex-col rounded-lg justify-between p-4"
       
     >
       <div
