@@ -1,7 +1,6 @@
-import { useRouter } from "next/navigation";
 import OneVOne from "./oneVOne";
 import TournamentNav from "./tournament";
-import { ArrowLeft, X } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
 const OnlineNav = ({
@@ -11,7 +10,6 @@ const OnlineNav = ({
   mode: string;
   setMode: React.Dispatch<React.SetStateAction<"local" | "online" | "main">>;
 }) => {
-  const router = useRouter();
   return (
     <>
       <div

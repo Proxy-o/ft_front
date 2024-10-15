@@ -4,10 +4,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import useGameSocket from "../hooks/sockets/useGameSocket";
-import { canvasParams } from "../types";
 import { Button } from "@/components/ui/button";
-import { DoorOpen, Flag, Gamepad, Pause } from "lucide-react";
+import {  Gamepad, Pause } from "lucide-react";
 
 const Actions = ({
   gameStarted,

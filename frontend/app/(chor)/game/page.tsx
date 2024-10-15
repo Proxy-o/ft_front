@@ -2,7 +2,6 @@
 import { Card } from "@/components/ui/card";
 import OneVOne from "./components/gameNav/oneVOne";
 import TwoVTwo from "./components/gameNav/twoVTwo";
-import TournamentNav from "./components/gameNav/tournament";
 import Invitations from "./components/invitations";
 import Link from "next/link";
 import TabStates from "../profile/components/tabStates";

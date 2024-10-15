@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import LocalTournamentBoard from "./localTournamentBoard";
 import OneOffline from "./oneOffline";
-import Score from "../oneVone/components/score";
 
 const LocalTournament = () => {
   const [gameStarted, setGameStarted] = useState(false);

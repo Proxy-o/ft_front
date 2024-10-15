@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { useEffect, useRef, useState } from "react";
 
 const NoGameFour = ({ state }: { state: React.MutableRefObject<string> }) => {
