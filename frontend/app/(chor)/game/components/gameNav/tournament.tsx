@@ -51,14 +51,14 @@ const TournamentNav = () => {
                 <User size={24} className="text-primary" />
               </div>
               <div className="flex flex-col justify-start items-start gap-[116px] my-auto py-4">
-                <Separator className="w-6 h-[2px] bg-white " />
-                <Separator className="w-6 h-[2px] bg-white" />
+                <Separator className="w-6 h-[2px] bg-black dark:bg-white " />
+                <Separator className="w-6 h-[2px] bg-black dark:bg-white" />
               </div>
               <div className="m-auto flex flex-col justify-start items-start gap-14">
-                <Separator className="h-[120px] w-[2px] bg-white" />
+                <Separator className="h-[120px] w-[2px] bg-black dark:bg-white" />
               </div>
               <div className="flex flex-col justify-start items-start gap-[118px] my-auto">
-                <Separator className="w-6 h-[2px] bg-white" />
+                <Separator className="w-6 h-[2px] bg-black dark:bg-white" />
               </div>
               <div className="flex flex-col justify-start items-start my-auto"></div>
               <div className="flex flex-col justify-center items-center gap-4 my-auto py-4">
@@ -69,14 +69,14 @@ const TournamentNav = () => {
               </div>
               <div className="flex flex-col justify-start items-start my-auto"></div>
               <div className="flex flex-col justify-start items-start gap-[118px] my-auto">
-                <Separator className="w-6 h-[2px] bg-white" />
+                <Separator className="w-6 h-[2px] bg-black dark:bg-white" />
               </div>
               <div className="m-auto flex flex-col justify-start items-start gap-14">
-                <Separator className="h-[120px] w-[2px] bg-white" />
+                <Separator className="h-[120px] w-[2px] bg-black dark:bg-white" />
               </div>
               <div className="flex flex-col justify-start items-start gap-[116px] my-auto py-4">
-                <Separator className="w-6 h-[2px] bg-white " />
-                <Separator className="w-6 h-[2px] bg-white" />
+                <Separator className="w-6 h-[2px] bg-black dark:bg-white " />
+                <Separator className="w-6 h-[2px] bg-black dark:bg-white" />
               </div>
               <div className="flex flex-col justify-start items-start gap-20 my-auto">
                 <User size={24} className="text-primary" />

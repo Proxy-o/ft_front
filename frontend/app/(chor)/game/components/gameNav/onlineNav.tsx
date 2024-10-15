@@ -22,7 +22,7 @@ const OnlineNav = ({
         <ArrowLeft
           height={20}
           width={20}
-          className="absolute -top-6 left-0 cursor-pointer text-white rounded-sm hover:text-gray-300"
+          className="absolute -top-6 left-0 cursor-pointer text-black dark:text-white rounded-sm hover:text-gray-700 dark:hover:text-gray-300"
           onClick={() => setMode("main")}
         />
         <div className="rounded-md flex flex-col items-center justify-center">

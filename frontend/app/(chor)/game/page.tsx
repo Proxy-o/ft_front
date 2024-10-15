@@ -17,8 +17,8 @@ export default function Page() {
   const [mode, setMode] = useState<"local" | "online" | "main">("main");
   return (
     <div className="w-full h-full flex flex-col justify-start items-center gap-5">
-      <h1 className="text-3xl md:text-6xl mt-5">Ping Pong</h1>
-      <Card className="flex flex-col gap-5 rounded-lg p-4 h-[690px] min-h-[650px] bg-green-500 md:min-h-48 mb-2 w-full items-center justify-center">
+      <h1 className="text-3xl text-white md:text-6xl mt-5">Ping Pong</h1>
+      <Card className="flex flex-col gap-5 rounded-lg p-4 h-[690px] min-h-[650px] md:min-h-48 mb-2 w-full items-center justify-center">
         <div className="pb-2 w-full">Modes</div>
         <div className="relative w-full h-full flex flex-col justify-center items-center text-white">
           <LocalNav setMode={setMode} mode={mode} />
