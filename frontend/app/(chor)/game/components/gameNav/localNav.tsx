@@ -15,7 +15,7 @@ const LocalNav = ({
   return (
     <>
       <div
-        className={`absolute flex w-full h-fit top-0 z-30 flex-wrap items-start justify-center gap-4 ${
+        className={`absolute flex flex-col md:flex-row w-full h-fit top-0 z-30 flex-wrap items-center md:items-start justify-center gap-4 ${
           mode === "local"
             ? "left-0 transition-all duration-500 ease-in-out"
             : "-left-[1000px] transition-all duration-500 ease-in-out"
@@ -24,7 +24,8 @@ const LocalNav = ({
           <ArrowLeft
             height={20}
             width={20}
-            className="absolute top-3 left-3 cursor-pointer text-white rounded-sm hover:text-gray-300"
+            className="absolute -top-6 left-0 cursor-pointer text-white rounded-sm hover:text-gray-300"
+
             onClick={() => setMode("main")}
           />
             <div

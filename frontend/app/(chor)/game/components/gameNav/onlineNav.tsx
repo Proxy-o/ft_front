@@ -13,7 +13,7 @@ const OnlineNav = ({
   return (
     <>
       <div
-        className={`absolute flex w-full h-fit top-0 z-30 flex-wrap items-start justify-center gap-4 ${
+        className={`absolute flex flex-col md:flex-row w-full h-fit top-0 z-30 flex-wrap items-center md:items-start justify-center gap-4 ${
           mode === "online"
             ? "left-0 transition-all duration-500 ease-in-out"
             : "-left-[1000px] transition-all duration-500 ease-in-out"
@@ -22,12 +22,10 @@ const OnlineNav = ({
         <ArrowLeft
           height={20}
           width={20}
-          className="absolute top-3 left-3 cursor-pointer text-white rounded-sm hover:text-gray-300"
+          className="absolute -top-6 left-0 cursor-pointer text-white rounded-sm hover:text-gray-300"
           onClick={() => setMode("main")}
         />
-        <div
-          className="rounded-md flex flex-col items-center justify-center"
-        >
+        <div className="rounded-md flex flex-col items-center justify-center">
           <Link href="/game/oneVone">
             <div>
               <OneVOne type="two" />
@@ -35,9 +33,7 @@ const OnlineNav = ({
           </Link>
           <div className="text-2xl">One V One</div>
         </div>
-        <div
-          className=" rounded-md flex flex-col items-center justify-center"
-        >
+        <div className=" rounded-md flex flex-col items-center justify-center">
           <Link href="/game/tournament">
             <div>
               <TournamentNav />
