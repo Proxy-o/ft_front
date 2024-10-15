@@ -214,7 +214,7 @@ const Canvas = ({
       if (canvas === null) return;
       if (bgImage.current === null) {
         bgImage.current = new Image();
-        bgImage.current.src = "/game.jpeg";
+        bgImage.current.src = "/bg.jpg";
       }
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -325,6 +325,7 @@ const Canvas = ({
     if (gameMsg()) {
       const gameMsge = gameMsg()?.data;
       const parsedMessage = JSON.parse(gameMsge);
+      console.log(parsedMessage);
       // console.log(parsedMessage);
       const message = parsedMessage.message.split(" ");
       if (message[0] === "/showFour") {
@@ -421,14 +422,14 @@ const Canvas = ({
               surrenderer === rightUserTop.current.username ||
               surrenderer === rightUserBottom.current.username
             ) {
-              state.current = "surrendered";
-            } else {
               state.current = "surrender";
+            } else {
+              state.current = "surrendered";
             }
           } else {
             if (
-              surrenderer === leftUserTop.current.username ||
-              surrenderer === leftUserBottom.current.username
+              surrenderer === rightUserTop.current.username ||
+              surrenderer === rightUserBottom.current.username
             ) {
               state.current = "surrendered";
             } else {

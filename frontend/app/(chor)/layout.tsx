@@ -49,7 +49,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             backgroundColor: "rgba(0, 0, 0, 0.75)", // Black background with 50% opacity
           }}
         >
-          <div className="flex w-full h-full bg-white dark:bg-black bg-opacity-10 dark:bg-opacity-25">
+          <div className="flex w-full h-full bg-white bg-opacity-15 dark:bg-black dark:bg-opacity-70">
             {showNav === 1 && <Nav />}
             <div
               className={cn(

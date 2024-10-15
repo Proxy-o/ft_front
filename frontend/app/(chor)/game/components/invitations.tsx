@@ -9,7 +9,7 @@ import { Invitation } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import useAcceptInvitationTournament from "../hooks/useAccepteInvitationTournament";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { usePathname, useRouter } from "next/navigation";
 import useInvitationSocket from "@/app/(chor)/game/hooks/sockets/useInvitationSocket";
 import { toast } from "sonner";
@@ -90,7 +90,7 @@ const Invitations = ({ mode }: { mode: string }) => {
       }`}
     >
       <div className="w-full h-fit flex flex-col justify-start items-center mx-auto gap-2 overflow-hidden">
-        <CardTitle>Invitations</CardTitle>
+        Invitations
         <div className="w-full h-fit max-h-[50vw] flex flex-col items-center justify-start gap-2 overflow-auto">
           {((mode === "all" && invitations.length === 0) ||
             (mode === "tournament" && tournamentInvitations.length === 0) ||
