@@ -16,13 +16,17 @@ const PreGame = ({
 }) => {
   return (
     <div
-      className="w-full h-full flex justify-center items-center"
-      style={{
-        backgroundImage: "url('/game.jpeg')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
+      className="w-full h-full relative flex justify-center items-center"
     >
+      <div
+        className="absolute inset-0 rounded-lg"
+        style={{
+          backgroundImage: "url('/bg.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          opacity: 0.75,
+        }}
+      />
       <div className="flex flex-col w-full h-full px-4 md:px-14 py-8 lg:py-1 gap-2">
         <div className="flex flex-row lg:justify-center justify-between w-full h-full items-center">
           <div className="w-24 h-24 lg:w-32 lg:h-32 rounded-md justify-center items-center flex flex-col animate-getBigger animate-biggerSmaller bg-blue-500">

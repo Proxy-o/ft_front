@@ -23,7 +23,7 @@ const InviteFriends = ({ gameType }: { gameType: string }) => {
   const router = useRouter();
 
   return (
-    <Card className="w-full md:aspect-[2] flex flex-col min-h-44 max-h-60 bg-background p-2">
+    <Card className="w-full md:aspect-[2] flex flex-col min-h-44 max-h-60 p-2">
       <div className="w-full h-fit text-center text-lg font-bold pb-2">
         Invite
       </div>
@@ -54,14 +54,19 @@ const InviteFriends = ({ gameType }: { gameType: string }) => {
                         className="rounded-md"
                       />
                       <AvatarFallback className="rounded-sm">PF</AvatarFallback>
-                      <div className="absolute bottom-1 right-1 w-2 h-2 rounded-full bg-green-400 border border-white"></div>
+                      <div
+                        className={`absolute bottom-1 right-1 w-2 h-2 rounded-full border border-white 
+                        ${friend.status === "online" && "bg-green-500"}
+                        ${friend.status === "offline" && "bg-red-500"}
+                        ${friend.status === "playing" && "bg-yellow-500"}
+                        `}
+                      ></div>
                     </Avatar>
                     <div className="w-full h-full flex justify-center items-center">
                       {friend.username}
                     </div>
                   </div>
                   <Button
-                    // disabled={friend.status !== "online"} // todo: enable this when game is ready and fix it
                     size={"xs"}
                     onClick={() => {
                       invite({

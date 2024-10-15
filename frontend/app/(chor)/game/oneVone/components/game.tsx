@@ -220,7 +220,7 @@ const Game = ({
 
       if (bgImage.current === null) {
         bgImage.current = new Image();
-        bgImage.current.src = "/game.jpeg";
+        bgImage.current.src = "/bg.jpg";
       }
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -382,14 +382,10 @@ const Game = ({
         setCanvas(null);
         onGoingGame.refetch();
       } else if (message[0] === "/endGame") {
-        if (leftScoreRef.current < 77777 && rightScoreRef.current < 77777) {
-          state.current = "leave";
-        } else if (leftScoreRef.current >= 77777) {
-          state.current = "win";
-        } else if (rightScoreRef.current >= 77777) {
+        if (message[1] !== username) {
           state.current = "lose";
         } else {
-          state.current = "none";
+          state.current = "win";
         }
         gameStartedRef.current = false;
         setCanvas(null);

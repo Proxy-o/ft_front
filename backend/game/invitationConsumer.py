@@ -155,14 +155,6 @@ class InvitationConsumer(WebsocketConsumer):
         tournament = Tournament.objects.get(id=id)
         if not tournament:
             return
-        # check this is working todo
-        # print(id)
-        # if not tournament:
-            # print("Tournament not found")
-        # if tournament.user1:
-            # print("User1")
-            # print(tournament.user1_left)
-            # print(tournament.user1.username)
         if tournament.user1 and tournament.user1_left == False:
             async_to_sync(self.channel_layer.group_send)(
                 f'inbox_{tournament.user1.username}',

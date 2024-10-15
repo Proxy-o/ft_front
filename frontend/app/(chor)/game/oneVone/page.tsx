@@ -14,13 +14,13 @@ export default function Page() {
 
   return (
     <>
-      <div className="w-full h-fit min-w-72 flex flex-col justify-center items-center">
+      <div className="w-full h-fit min-w-72 flex flex-col justify-center items-center text-white">
         <h1 className="text-3xl md:text-7xl mt-5">One V One</h1>
         <div className="text-sm font-light mb-5 mt-3 text-center">
           Invite a friend to play a game of ping pong with you!
         </div>
       </div>
-      <div className="w-full min-w-72 h-full flex flex-row justify-center items-center">
+      <div className="w-full min-w-72 h-fit flex flex-row justify-center items-start">
         <div className="flex flex-col p-4 w-full md:justify-center items-center md:items-start gap-2">
           <Game type={"two"} onGoingGame={onGoingGame} />
           <div className="w-full h-fit flex flex-col md:flex-row justify-start items-start gap-2">

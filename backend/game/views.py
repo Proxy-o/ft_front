@@ -519,6 +519,10 @@ class LeaveGame(APIView):
         if not game:
             return Response({'error': 'No ongoing game found'}, status=status.HTTP_204_NO_CONTENT)
         if game.type == 'two':
+            game.user1.status = "online"
+            game.user1.save()
+            game.user2.status = "online"
+            game.user2.save()
             # remove the game from the database
             game.delete()
         elif game.type == 'four':
@@ -530,7 +534,17 @@ class LeaveGame(APIView):
                 game.user3 = None
             elif game.user4 == user:
                 game.user4 = None
-            if game.user1 == None and game.user2 == None and game.user3 == None and game.user4 == None:
+            users = [game.user1, game.user2, game.user3, game.user4]
+            num_of_players = 0
+            for user in users:
+                if user:
+                    num_of_players += 1
+                    
+            if num_of_players <= 1:
+                for user in users:
+                    if user:
+                        user.status = "online"
+                        user.save()
                 game.delete()
             else:
                 game.save()
@@ -583,6 +597,8 @@ class TournamentView(APIView):
         tournament = Tournament(creator=user, user1=user,
                                 semi1=semi1, semi2=semi2, final=final)
         tournament.save()
+        user.status = "playing"
+        user.save()
         serializer = TournamentSerializer(tournament)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -679,6 +695,8 @@ class AbortTournament(APIView):
         if not tournament:
             return Response({'error': 'No ongoing tournament found'}, status=status.HTTP_204_NO_CONTENT)
         # if user != tournament.creator:
+        user.status = "online"
+        user.save()
         if user == tournament.creator:
             if tournament.user1 and tournament.user1 != tournament.creator:
                 tournament.creator = tournament.user1
@@ -773,7 +791,8 @@ class AcceptInvitationTournament(APIView):
             tournament.user4 = user
             tournament.semi2.user2 = user
             tournament.semi2.save()
-
+        user.status = "playing"
+        user.save()
         tournament.save()
         return Response({'message': 'Invitation accepted', 'tournamentId': tournament.id}, status=status.HTTP_200_OK)
 

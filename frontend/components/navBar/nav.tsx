@@ -255,7 +255,7 @@ export default function Nav() {
   };
 
   return (
-    <div className=" group flex flex-col gap-4 py-2 h-screen shadow-lg md:w-[9rem] overflow-y-auto no-scrollbar">
+    <div className=" group flex flex-col gap-4 py-2 h-screen shadow-lg md:w-[9rem] overflow-y-auto no-scrollbar bg-white bg-opacity-75 dark:bg-black">
       <nav className="flex flex-col gap-1 px-1 h-full ">
         {links.map((link, index) => (
           <Link

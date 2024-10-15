@@ -1,14 +1,15 @@
 "use client";
 
-import { Diamond, User } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { Diamond, User, Wifi } from "lucide-react";
 import { useState } from "react";
 
 const OneVOne = ({ type }: { type: string }) => {
   const [hover, setHover] = useState(false);
   return (
     <>
-      <div
-        className={`w-44 h-44 bg-background flex flex-col justify-center items-center rounded-xl shadow-primary shadow-sm transition duration-300 ease-in-out hover:shadow-lg hover:shadow-primary/20 relative`}
+      <Card
+        className={`w-44 h-44 bg-background flex cursor-pointer flex-col justify-center items-center rounded-xl shadow-primary shadow-sm transition duration-300 ease-in-out relative overflow-hidden`}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
       >
@@ -54,6 +55,29 @@ const OneVOne = ({ type }: { type: string }) => {
             {hover && <div className="text-2xl font-bold">Local</div>}
           </>
         )}
+        {type === "online" && (
+          <>
+            <div
+              className={
+                `absolute w-full h-full flex flex-col justify-center items-center transition duration-300 ease-in-out` +
+                (hover
+                  ? "transform scale-75 blur-sm opacity-25"
+                  : "transform scale-100")
+              }
+            >
+              <div
+                className={
+                  `transition duration-300 ease-in-out` +
+                  (hover ? "transform animate-in" : "transform animate-none")
+
+                }
+              >
+                <Wifi size={150} />
+              </div>
+            </div>
+            {hover && <div className="text-2xl font-bold">Online</div>}
+          </>
+        )}
         <div
           className={`w-full h-full flex flex-row justify-between items-left transition duration-300 ease-in-out ${
             hover ? "opacity-100" : "opacity-0"
@@ -65,7 +89,7 @@ const OneVOne = ({ type }: { type: string }) => {
           </div>
           <div className="bg-primary  h-[68px] w-3 animate-moveUpOne"></div>
         </div>
-      </div>
+      </Card>
     </>
   );
 };

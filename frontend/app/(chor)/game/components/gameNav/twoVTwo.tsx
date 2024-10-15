@@ -1,14 +1,14 @@
 "use client";
 
+import { Card } from "@/components/ui/card";
 import { Users } from "lucide-react";
 import { useState } from "react";
 
 const TwoVTwo = () => {
   const [hover, setHover] = useState(false);
   return (
-    <>
-      <div
-        className={`w-44 h-44 bg-background flex flex-col justify-center items-center rounded-xl shadow-primary shadow-sm transition duration-300 ease-in-out hover:shadow-lg hover:shadow-primary/20 relative`}
+    <><Card
+    className={`w-44 h-44 bg-background flex flex-col justify-center items-center rounded-xl shadow-primary shadow-sm transition duration-300 ease-in-out relative overflow-hidden`}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
       >
@@ -40,7 +40,7 @@ const TwoVTwo = () => {
             <div className="bg-primary h-20 w-3 animate-moveDownRight"></div>
           </div>
         </div>
-      </div>
+      </Card>
     </>
   );
 };

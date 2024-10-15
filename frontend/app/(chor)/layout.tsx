@@ -10,18 +10,14 @@ import UserProviders from "@/lib/providers/UserProvider";
 const Nav = lazy(() => import("@/components/navBar/nav"));
 const MobilNav = lazy(() => import("@/components/navBar/mobilNav"));
 
-export default function AppLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const mb = useMediaQuery("(min-width: 768px)");
   const [showNav, setShowNav] = useState<number>(0);
   const path = usePathname();
   const is_local = path === "/game/local";
-  const logged_in = getCookie("logged_in") ==='yes' ;
-  
+  const logged_in = getCookie("logged_in") === "yes";
+
   useEffect(() => {
     if (!is_local && !logged_in) {
       router.push("/login");
@@ -42,20 +38,32 @@ export default function AppLayout({
   return (
     (logged_in || is_local) && (
       <UserProviders>
-        <div className="md:flex relative">
-          {(showNav === 1) && <Nav />}
-          <div
-            className={cn(
-              "flex w-full border-l-[0.04rem]",
-              !mb && "h-[calc(100vh-3.7rem)]"
-            )}
+        <div
+          className="md:flex relative h-screen bg-black bg-opacity-100"
+          style={{
+            backgroundImage: "url('/fullbg3.jpg')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundAttachment: "fixed",
+            backgroundRepeat: "no-repeat",
+            backgroundColor: "rgba(0, 0, 0, 0.75)", // Black background with 50% opacity
+          }}
+        >
+          <div className="flex w-full h-full bg-white dark:bg-black bg-opacity-10 dark:bg-opacity-25">
+            {showNav === 1 && <Nav />}
+            <div
+              className={cn(
+                "flex w-full border-l-[0.04rem]",
+                !mb && "h-[calc(100vh-3.7rem)]"
+              )}
             >
-            <div className="relative max-w-[60rem] mx-auto w-full h-full py-0.5">
-              {(!is_local || logged_in) && <SearchFriend />}
-              {children}
+              <div className="relative max-w-[60rem] mx-auto w-full h-full py-0.5">
+                {(!is_local || logged_in) && <SearchFriend />}
+                {children}
+              </div>
             </div>
+            {showNav === 2 && <MobilNav />}
           </div>
-          {(showNav === 2) && <MobilNav />}
         </div>
       </UserProviders>
     )

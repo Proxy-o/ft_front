@@ -25,16 +25,16 @@ export default function SearchFriend() {
       onBlur={() => setTimeout(() => setResVisible(false), 200)}
     >
       <div className=" h-12 px-2 w-full relative  ">
-        <Search size={20} className="absolute end-6 top-4 " />
+        <Search size={20} className="absolute text-gray-700 z-50 end-6 top-4 " />
         <Input
           placeholder="Search"
-          className="h-full"
+          className="h-full opacity-75"
           onChange={(e) => setSearchTerm(e.target.value)}
           onFocus={() => setResVisible(true)}
         />
       </div>
       {data && data.length > 0 && (
-        <div className=" absolute z-50 w-full mt-2  dark:bg-black bg-gray-300   rounded-lg max-w-[61rem]">
+        <div className=" absolute z-50 w-full mt-2  dark:bg-black bg-gray-300 bg-opacity-75 rounded-lg max-w-[61rem]">
           {isSuccess && resVisible && (
             <>
               {isPending ? (

@@ -65,7 +65,7 @@ class GameConsumer(WebsocketConsumer):
             self.handle_four_change_ball_direction(split)
         elif command == '/time':
             self.handle_time(split)
-        elif command == '/surrender':  # todo: fix surrender in tournament    done, to be tested
+        elif command == '/surrender':
             self.handle_surrender(split)
         elif command == '/fourTime':
             self.handle_four_time(split)
