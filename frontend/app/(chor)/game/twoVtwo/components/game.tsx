@@ -86,14 +86,6 @@ const Game = () => {
               (onGoingGame.data?.game &&
               onGoingGame.data?.game?.user1_score < 77777 &&
               onGoingGame.data?.game?.user2_score < 77777 ? (
-                <div
-                  className={"w-full h-full flex justify-center items-center"}
-                  style={{
-                    backgroundImage: "url('/game.jpeg')",
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                  }}
-                >
                   <PreGame
                     type="four"
                     leftUserTop={leftUserTop.current}
@@ -101,7 +93,6 @@ const Game = () => {
                     rightUserTop={rightUserTop.current}
                     rightUserBottom={rightUserBottom.current}
                   />
-                </div>
               ) : (
                 <>
                   <NoGameFour state={state} />
