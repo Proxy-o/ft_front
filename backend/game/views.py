@@ -534,7 +534,17 @@ class LeaveGame(APIView):
                 game.user3 = None
             elif game.user4 == user:
                 game.user4 = None
-            if game.user1 == None and game.user2 == None and game.user3 == None and game.user4 == None:
+            users = [game.user1, game.user2, game.user3, game.user4]
+            num_of_players = 0
+            for user in users:
+                if user:
+                    num_of_players += 1
+                    
+            if num_of_players <= 1:
+                for user in users:
+                    if user:
+                        user.status = "online"
+                        user.save()
                 game.delete()
             else:
                 game.save()
