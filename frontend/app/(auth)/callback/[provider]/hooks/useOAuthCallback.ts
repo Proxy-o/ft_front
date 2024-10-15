@@ -44,10 +44,10 @@ const useOAuthCallback = () => {
       }
       setCookie('logged_in', 'yes');
       router.push(ROUTES.game);
+      return;
     },
     onError: (error: Error) => {
       toast.error(error.message);
-      router.push(ROUTES.login);
     },
   });
 };

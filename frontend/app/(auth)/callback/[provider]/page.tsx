@@ -1,32 +1,35 @@
 'use client';
-import { useEffect } from 'react';
-import { useParams, useSearchParams, useRouter } from 'next/navigation';
+
+import { useParams, useSearchParams } from 'next/navigation';
 import useOAuthCallback from './hooks/useOAuthCallback';
 import { type OAuthCallbackParams } from '@/lib/types';
 import HomeSkel from "@/components/skeletons/homeSkel";
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 const OAuthCallbackPage: React.FC = () => {
-  const { mutate: handleCallback, isPending, isError } = useOAuthCallback();
-  const searchParams = useSearchParams();
   const router = useRouter();
-  const { provider } = useParams();
-
-  const params: OAuthCallbackParams = {
-    'provider': provider as string ?? null,
-    'code': searchParams.get('code') ?? null,
-    'state': searchParams.get('state') ?? null,
-  };
+  const { mutate: handleCallback, isError, isPending } = useOAuthCallback();
+  const searchParams = useSearchParams();
+  const { provider } : { provider: string} = useParams();
+  const code = searchParams.get('code')  || null;
+  const state = searchParams.get('state') || null;
 
   useEffect(() => {
-    if (!isPending && !isError) {
-      handleCallback(params);
-    }
-  }, [isPending, isError, params, handleCallback]);
 
-  useEffect(() => {
-    const id = setTimeout(() => router.push('/login'), 15 * 1000); // 15 secs
+    const id = setTimeout(() => {
+      router.push('/login')
+    }, 20 * 1000);
+
     return () => clearTimeout(id);
-  }, [router]);
+  }, [router])
+
+  useEffect(() => {
+    if (!isError && !isPending) {
+      handleCallback({provider, code, state} as OAuthCallbackParams)
+    }
+  }, [handleCallback, provider, code, state, isPending, isError])
+  
 
   return (
     <HomeSkel />

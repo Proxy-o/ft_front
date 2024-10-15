@@ -41,10 +41,10 @@ export type Invitation = {
   is_accepted: boolean;
 };
 
-export type OAuthCallbackParams = {
-  provider: string | null;
-  code: string | null;
-  state: string | null;
+export type  OAuthCallbackParams = {
+  provider: readonly string | null;
+  code: readonly string | null;
+  state: readonly string | null;
 };
 
 export type OAuthCallbackResponse = {

@@ -1,38 +1,38 @@
 "use client";
 import React from "react";
 import { Button, buttonVariants } from "@/components/ui/button";
-import { Moon, Sun } from "lucide-react";
+import { Home, Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
+const STYLES: readonly [ string ] = [
+    "hover:text-secondary-foreground hover:scale-105 transition duration-1000 ease-out"
+]
+
 const PublicNav: React.FC<{path: string}> = ({ path }) => {
     const { theme, setTheme } = useTheme();
-    const links = [
-        { name: "Home", href: "/" },
-        { name: "Game", href: "/game/local" },
-        { name: "Login", href: "/login" },
-        { name: "Register", href: "/register" },
-    ]
+
     return (
     <div className="flex flex-row justify-between w-full">
         <div>
-            { path != "/" && links.filter(l => l.href != path).map((l, k) =>  (
-                <Link key={k} href={l.href} className={cn(buttonVariants({variant: "link"}), "hover:text-secondary-foreground")}>
-                    {l.name}
+            {   
+                path !== "/" &&
+                <Link key={0} href="/" className={cn(buttonVariants({variant: "link"}), STYLES[0])}>
+                    <Home size={24} strokeWidth={1.5} />
                 </Link>
-            ))}
+            }
         </div>
         <Button
-        onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-        variant="ghost"
-        className="text-primary hover:text-secondary-foreground rounded-full mx-4"
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            variant="link"
+            className={STYLES[0]}
         >
-        {theme === "dark" ? (
-            <Sun className="size-6" />
-        ) : (
-            <Moon className="size-6" />
-        )}
+            {theme === "dark" ? (
+                <Sun className="size-6" />
+            ) : (
+                <Moon className="size-6" />
+            )}
         </Button>
     </div>
     );
