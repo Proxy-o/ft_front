@@ -28,7 +28,7 @@ const LocalTournamentBoard = ({
     <>
       {semi1Winner !== -1 && semi2Winner !== -1 && (
         <div className="w-full h-fit py-2 flex flex-row items-center gap-4 bg-yellow-400/20 rounded-lg">
-          <div className="w-full h-24 rounded-md justify-center items-center flex flex-row animate-getBigger animate-biggerSmaller gap-4">
+          <div className="w-full h-16 rounded-md justify-center items-center flex flex-row animate-getBigger animate-biggerSmaller gap-4">
             <div className="h-full w-fit bg-primary flex justify-center items-center bg-gray-700 rounded-md">
               <ScoreProfile avatar="local" side="left" number={semi1Winner} />
             </div>
@@ -38,7 +38,7 @@ const LocalTournamentBoard = ({
             {/* {currentGame === "final" && "Next Game"} */}
             <div>final</div>
           </div>
-          <div className="w-full h-24 rounded-md justify-center items-center flex flex-row animate-getBigger animate-biggerSmaller gap-4">
+          <div className="w-full h-16 rounded-md justify-center items-center flex flex-row animate-getBigger animate-biggerSmaller gap-4">
             <span className="text-white text-4xl font-bold">{finalScore2}</span>
             <div className="h-full w-fit bg-primary flex justify-center items-center bg-gray-700 rounded-md">
               <ScoreProfile avatar="local" side="right" number={semi2Winner} />
@@ -53,7 +53,7 @@ const LocalTournamentBoard = ({
               className={`w-full h-full p-2 flex justify-between  items-center rounded-sm
             ${currentGame === "semi1" ? "bg-yellow-400/20" : ""}`}
             >
-              <div className="w-fit h-24 rounded-md justify-center items-center flex flex-row animate-getBigger animate-biggerSmaller gap-4 ">
+              <div className="w-fit h-16 rounded-md justify-center items-center flex flex-row animate-getBigger animate-biggerSmaller gap-4 ">
                 <div className="h-full w-fit bg-primary flex justify-center items-center bg-gray-700 rounded-md">
                   <ScoreProfile avatar="local" side="left" number={1} />
                 </div>
@@ -62,7 +62,7 @@ const LocalTournamentBoard = ({
               <div className="w-full h-5/6 top-2 left-1/3 flex flex-col justify-between items-center ">
                 <div>semi1</div>
               </div>
-              <div className="w-fit h-24  scale-50 sm:scale-100 rounded-md justify-center items-center flex flex-row animate-getBigger animate-biggerSmaller gap-4">
+              <div className="w-fit h-16  scale-50 sm:scale-100 rounded-md justify-center items-center flex flex-row animate-getBigger animate-biggerSmaller gap-4">
                 <span className="text-white text-4xl font-bold">{score2}</span>
                 <div className="h-full w-fit bg-primary flex justify-center items-center bg-gray-700 rounded-md">
                   <ScoreProfile avatar="local" side="right" number={2} />
@@ -75,7 +75,7 @@ const LocalTournamentBoard = ({
               className={`w-full h-full p-2 flex justify-between  items-center rounded-sm
             ${currentGame === "semi2" ? "bg-yellow-400/20" : ""}`}
             >
-              <div className="w-fit h-24 rounded-md justify-center items-center flex flex-row animate-getBigger animate-biggerSmaller gap-4">
+              <div className="w-fit h-16 rounded-md justify-center items-center flex flex-row animate-getBigger animate-biggerSmaller gap-4">
                 <div className="h-full w-full bg-primary flex justify-center items-center bg-gray-700 rounded-md">
                   <ScoreProfile avatar="local" side="left" number={3} />
                 </div>
@@ -84,7 +84,7 @@ const LocalTournamentBoard = ({
               <div className="w-full h-5/6 top-2 left-1/3 flex flex-col justify-between items-center">
                 <div>semi2</div>
               </div>
-              <div className="w-fit h-24 rounded-md justify-center items-center flex flex-row animate-getBigger animate-biggerSmaller gap-4">
+              <div className="w-fit h-16 rounded-md justify-center items-center flex flex-row animate-getBigger animate-biggerSmaller gap-4">
                 <span className="text-white text-4xl font-bold">{score4}</span>
                 <div className="h-full w-full bg-primary flex justify-center items-center bg-gray-700 rounded-md">
                   <ScoreProfile avatar="local" side="right" number={4} />
