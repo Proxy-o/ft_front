@@ -17,7 +17,7 @@ const Card = React.forwardRef<
     borderTop: "none",
     borderLeft: "none",
     borderRight: "none",
-    borderImage: "linear-gradient(to right, rgba(6,182,212,0.1),rgba(6,182,212),rgba(6,182,212),rgba(168,85,247),rgba(168,85,247) , rgba(168,85,247, 0.1))",
+    borderImage: "linear-gradient(to right, rgba(0,0,0, 0),rgba(0,0,0, 0),rgba(6,182,212),rgba(6,182,212),rgba(6,182,212),rgba(168,85,247),rgba(168,85,247) ,rgba(168,85,247) ,rgba(0,0,0, 0),rgba(0,0,0, 0))",
     borderImageSlice: "1",
     
   }}

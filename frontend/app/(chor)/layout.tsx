@@ -48,10 +48,10 @@ export default function AppLayout({
     backgroundPosition: "center",
     backgroundAttachment: "fixed",
     backgroundRepeat: "no-repeat",
-    backgroundColor: "rgba(0, 0, 0, 0.5)" // Black background with 50% opacity
+    backgroundColor: "rgba(0, 0, 0, 0.75)" // Black background with 50% opacity
   }}
 >
-  <div className="flex w-full h-full bg-white dark:bg-black bg-opacity-25 dark:bg-opacity-25">
+  <div className="flex w-full h-full bg-white dark:bg-black bg-opacity-10 dark:bg-opacity-25">
 
   {(showNav === 1) && <Nav />}
   <div
