@@ -9,7 +9,9 @@ const aborttournament = async (tournamentId: string) => {
     const res = await axiosInstance.post("/game/abortTournament", {
       tournamentId: tournamentId,
     });
-    if (res !== res) throw new Error("Failed to abort tournament");
+    if (res.status === 200) {
+      toast.success(res.data.message);
+    }
   } catch (error: any) {
     toast.error(error?.response?.data.error);
   }

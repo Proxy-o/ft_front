@@ -452,3 +452,23 @@
   opacity: 0;
   animation: fadeLeft 0.5s ease forwards;
 }
+
+
+
+.borderBottom {
+    border-bottom: 2px solid transparent;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-image: linear-gradient(to right, rgba(0,0,0, 0),rgba(0,0,0, 0),rgba(6,182,212),rgba(6,182,212),rgba(6,182,212),rgba(168,85,247),rgba(168,85,247) ,rgba(168,85,247) ,rgba(0,0,0, 0),rgba(0,0,0, 0));
+    border-image-slice: 1;
+}
+
+.focusborderBottom:focus {
+  border-bottom: 2px solid transparent;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-image: linear-gradient(to right, rgba(0,0,0, 0),rgba(0,0,0, 0),rgba(6,182,212),rgba(6,182,212),rgba(6,182,212),rgba(168,85,247),rgba(168,85,247) ,rgba(168,85,247) ,rgba(0,0,0, 0),rgba(0,0,0, 0));
+  border-image-slice: 1;
+}

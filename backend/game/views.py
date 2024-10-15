@@ -588,6 +588,9 @@ class TournamentView(APIView):
         # print("post tournament")
         userid = request.user
         user = User.objects.get(id=userid.id)
+        game = Game.objects.filter(Q(user1=user) | Q(user2=user) | Q(user3=user) | Q(user4=user)).filter(winner=None).last()
+        if game:
+            return Response({'error': 'You are already in a game'}, status=status.HTTP_403_FORBIDDEN)
         semi1 = Game(user1=user, type="tournament")
         semi1.save()
         semi2 = Game(type="tournament")
@@ -600,7 +603,8 @@ class TournamentView(APIView):
         user.status = "playing"
         user.save()
         serializer = TournamentSerializer(tournament)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response({'message': 'Tournament created', 'tournamentId': tournament.id}, status=status.HTTP_201_CREATED)
+        
 
 
 class DeleteTournament(APIView): #todo: remove this
