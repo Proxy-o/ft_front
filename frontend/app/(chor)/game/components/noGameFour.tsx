@@ -13,7 +13,7 @@ const NoGameFour = ({ state }: { state: React.MutableRefObject<string> }) => {
     } else if (state.current === "surrender") {
       atext.current = "Your enemy has surrendered";
     } else if (state.current === "surrendered") {
-      atext.current = "Your team has surrendered";
+      atext.current = "Your teamate has surrendered";
     } else if (state.current === "none") {
       atext.current = "Invite a friend to play";
     } else if (state.current === "left") {

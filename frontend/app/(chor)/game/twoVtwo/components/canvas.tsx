@@ -325,8 +325,6 @@ const Canvas = ({
     if (gameMsg()) {
       const gameMsge = gameMsg()?.data;
       const parsedMessage = JSON.parse(gameMsge);
-      console.log(parsedMessage);
-      // console.log(parsedMessage);
       const message = parsedMessage.message.split(" ");
       if (message[0] === "/showFour") {
         const sender = message[1];
@@ -419,12 +417,12 @@ const Canvas = ({
             username === leftUserBottom.current.username
           ) {
             if (
-              surrenderer === rightUserTop.current.username ||
-              surrenderer === rightUserBottom.current.username
+              surrenderer === leftUserTop.current.username ||
+              surrenderer === leftUserBottom.current.username
             ) {
-              state.current = "surrender";
-            } else {
               state.current = "surrendered";
+            } else {
+              state.current = "surrender";
             }
           } else {
             if (
@@ -476,7 +474,6 @@ const Canvas = ({
                 leftUserBottom.current.username === userWhoDidNotRespond[0]
                   ? leftUserTop.current.id
                   : rightUserTop.current.id;
-              // alert("3");
               endGameFour({
                 winner,
                 winnerScore: 77777,
@@ -492,7 +489,6 @@ const Canvas = ({
         message[0] === "/refetchPlayers"
       ) {
         if (message[0] === "/userLeftGame") {
-
           if (message[1] === username || message[2] === username) {
             state.current = "teamLeft";
           } else {
@@ -531,11 +527,11 @@ const Canvas = ({
       {gameStarted && (
         <>
           <canvas
-                ref={canvasRef}
-                height="400"
-                width="800"
-                className={`w-full h-full`}
-              ></canvas>
+            ref={canvasRef}
+            height="400"
+            width="800"
+            className={`w-full h-full`}
+          ></canvas>
         </>
       )}
     </>
