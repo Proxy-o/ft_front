@@ -1,9 +1,6 @@
 "use client";
 import { Card } from "@/components/ui/card";
-import OneVOne from "./components/gameNav/oneVOne";
-import TwoVTwo from "./components/gameNav/twoVTwo";
 import Invitations from "./components/invitations";
-import Link from "next/link";
 import TabStates from "../profile/components/tabStates";
 import useGetUser from "../profile/hooks/useGetUser";
 import { useState } from "react";
@@ -21,7 +18,7 @@ export default function Page() {
     <div className="w-full h-full flex flex-col justify-start items-center gap-5">
       <h1 className="text-3xl text-white md:text-6xl mt-5 mb-16"><span className="text-cyan-500">Ping</span> <span className="text-purple-500">Pong</span></h1>
       <Card
-        className={`flex flex-col rounded-lg p-4 w-full items-center justify-center md:h-[460px]
+        className={`flex flex-col rounded-lg p-4 w-full items-center justify-center min-h-[280px] md:h-[280px]
       ${
         mode == "main"
           ? "h-[640px] transition-all duration-500 ease-in-out"
