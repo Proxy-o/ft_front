@@ -491,6 +491,14 @@ const Canvas = ({
         message[0] === "/userLeftGame" ||
         message[0] === "/refetchPlayers"
       ) {
+        if (message[0] === "/userLeftGame") {
+
+          if (message[1] === username || message[2] === username) {
+            state.current = "teamLeft";
+          } else {
+            state.current = "teamLeftOpponent";
+          }
+        }
         onGoingGame.refetch();
       } else if (message[0] === "/endGame") {
         const team1 = [

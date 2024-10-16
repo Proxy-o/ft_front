@@ -22,6 +22,10 @@ const NoGameFour = ({ state }: { state: React.MutableRefObject<string> }) => {
       atext.current = "The right player wins the game";
     } else if (state.current === "local") {
       atext.current = "Start a local game";
+    } else if (state.current === "teamLeft") {
+      atext.current = "Your taamate has left the game";
+    } else if (state.current === "teamLeftOpponent") {
+      atext.current = "Your opponent's teammate has left the game\nYou win";
     } else {
       atext.current = "Invite a friend to play";
     }
@@ -47,7 +51,7 @@ const NoGameFour = ({ state }: { state: React.MutableRefObject<string> }) => {
           opacity: 0.75,
         }}
       />
-      <div className="text-white z-10 text-2xl m-auto">{text}</div>
+      <div className="flex text-white z-10 text-sm md:text-2xl m-auto text-center">{text}</div>
     </div>
   );
 };
