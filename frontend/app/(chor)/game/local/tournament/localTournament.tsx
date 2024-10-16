@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { SquarePen } from "lucide-react";
 import AliasDialog from "./aliasDialog";
+import { Button } from "@/components/ui/button";
 
 const LocalTournament = () => {
   const [gameStarted, setGameStarted] = useState(false);
@@ -87,60 +88,77 @@ const LocalTournament = () => {
   return (
     <>
       {finalWinner === 0 ? (
-        
         <AliasDialog
-        setFinalWinner={setFinalWinner}
-        setPlayerAlias={setPlayerAlias} />
+          setFinalWinner={setFinalWinner}
+          setPlayerAlias={setPlayerAlias}
+        />
       ) : (
         <>
-        <LocalTournamentBoard
-          playerAlias={playerAlias}
-          score1={semi1.score1}
-          score2={semi1.score2}
-          score3={semi2.score1}
-          score4={semi2.score2}
-          finalScore1={final.score1}
-          finalScore2={final.score2}
-          semi1Winner={semi1Winner}
-          semi2Winner={semi2Winner}
-          currentGame={currentGame}
-          gameStarted={gameStarted}
-        />
+          <LocalTournamentBoard
+            playerAlias={playerAlias}
+            score1={semi1.score1}
+            score2={semi1.score2}
+            score3={semi2.score1}
+            score4={semi2.score2}
+            finalScore1={final.score1}
+            finalScore2={final.score2}
+            semi1Winner={semi1Winner}
+            semi2Winner={semi2Winner}
+            currentGame={currentGame}
+            gameStarted={gameStarted}
+          />
 
-      {finalWinner === -1 ? (
-        <OneOffline
-          gameStarted={gameStarted}
-          setGameStarted={setGameStarted}
-          leftScore={leftScore}
-          rightScore={rightScore}
-          setLeftScore={setLeftScore}
-          setRightScore={setRightScore}
-          type="tournament"
-        />
-      ) : (
-        <div className="w-full h-full flex flex-col items-center gap-4">
-          <button
-            onClick={() => {
-              setFinalWinner(0);
-              setSemi1Winner(-1);
-              setSemi2Winner(-1);
-              setPlayerAlias([]);
-              setRightScore(0);
-              setLeftScore(0);
-              setCurrentGame("semi1");
-              setSemi1({ score1: 0, score2: 0 });
-              setSemi2({ score1: 0, score2: 0 });
-              setFinal({ score1: 0, score2: 0 });
-            }}
-            className="bg-primary text-white p-2 rounded-md"
-          >
-            New Tournament
-          </button>
-        </div>
+          {finalWinner === -1 ? (
+            <>
+              <OneOffline
+                gameStarted={gameStarted}
+                setGameStarted={setGameStarted}
+                leftScore={leftScore}
+                rightScore={rightScore}
+                setLeftScore={setLeftScore}
+                setRightScore={setRightScore}
+                type="tournament"
+              />
+              <Button
+                onClick={() => {
+                  setFinalWinner(0);
+                  setSemi1Winner(-1);
+                  setSemi2Winner(-1);
+                  setPlayerAlias([]);
+                  setRightScore(0);
+                  setLeftScore(0);
+                  setCurrentGame("semi1");
+                  setSemi1({ score1: 0, score2: 0 });
+                  setSemi2({ score1: 0, score2: 0 });
+                  setFinal({ score1: 0, score2: 0 });
+                }}
+              >
+                End Tournament
+              </Button>
+            </>
+          ) : (
+            <div className="w-full h-full flex flex-col items-center gap-4">
+              <button
+                onClick={() => {
+                  setFinalWinner(0);
+                  setSemi1Winner(-1);
+                  setSemi2Winner(-1);
+                  setPlayerAlias([]);
+                  setRightScore(0);
+                  setLeftScore(0);
+                  setCurrentGame("semi1");
+                  setSemi1({ score1: 0, score2: 0 });
+                  setSemi2({ score1: 0, score2: 0 });
+                  setFinal({ score1: 0, score2: 0 });
+                }}
+                className="bg-primary text-white p-2 rounded-md"
+              >
+                New Tournament
+              </button>
+            </div>
+          )}
+        </>
       )}
-      </>
-    )}
-
     </>
   );
 };

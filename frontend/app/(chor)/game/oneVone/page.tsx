@@ -15,7 +15,8 @@ export default function Page() {
   return (
     <>
       <div className="w-full h-fit min-w-72 flex flex-col justify-center items-center text-white">
-        <h1 className="text-3xl md:text-7xl mt-5">One V One</h1>
+      <h1 className="text-3xl text-white md:text-6xl mt-5"><span className="text-cyan-500">One</span> Vs <span className="text-purple-500">One</span></h1>
+
         <div className="text-sm font-light mb-5 mt-3 text-center">
           Invite a friend to play a game of ping pong with you!
         </div>

@@ -33,7 +33,7 @@ const OneOffline = ({
       )}
       <Card className="w-full relative aspect-[2]">
         {gameStarted ? (
-          <Canvas 
+          <Canvas
             gameStarted={gameStarted}
             setGameStarted={setGameStarted}
             leftScore={leftScore}
@@ -47,7 +47,13 @@ const OneOffline = ({
             <NoGame state={state} />
           </div>
         )}
-      <Actions gameStarted={gameStarted} setGameStarted={setGameStarted} />
+        <Actions
+          gameStarted={gameStarted}
+          setGameStarted={setGameStarted}
+          type={type}
+          setLeftScore={setLeftScore}
+          setRightScore={setRightScore}
+        />
       </Card>
     </>
   );

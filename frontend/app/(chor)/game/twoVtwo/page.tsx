@@ -6,7 +6,8 @@ export default function Page() {
   return (
     <>
       <div className="flex flex-col w-11/12  h-full justify-start items-center max-w-[900px] mx-auto gap-4">
-        <h1 className="text-3xl md:text-7xl mt-5">Two V Two</h1>
+      <h1 className="text-3xl text-white md:text-6xl mt-5"><span className="text-cyan-500">Two</span> Vs <span className="text-purple-500">Two</span></h1>
+
         <div className="text-sm font-light mb-5 text-center">
           Pong can be a team sport too! Invite a friend to play a game of ping
         </div>
