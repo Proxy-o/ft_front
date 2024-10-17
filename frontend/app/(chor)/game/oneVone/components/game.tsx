@@ -84,6 +84,10 @@ const Game = ({
     timeRef.current = Time;
   }
 
+  if (onGoingGame?.data?.game?.user1?.username === undefined) {
+    gameStartedRef.current = false;
+  }
+
   if (onGoingGame?.data?.game?.user1?.username === username) {
     leftUser.current = onGoingGame?.data?.game?.user1;
     rightUser.current = onGoingGame?.data?.game?.user2;
@@ -378,7 +382,6 @@ const Game = ({
         } else {
           state.current = "none";
         }
-        gameStartedRef.current = false;
         setCanvas(null);
         onGoingGame.refetch();
       } else if (message[0] === "/endGame") {
@@ -387,7 +390,6 @@ const Game = ({
         } else {
           state.current = "win";
         }
-        gameStartedRef.current = false;
         setCanvas(null);
         onGoingGame.refetch();
       }
@@ -411,7 +413,6 @@ const Game = ({
         } else {
           state.current = "none";
         }
-        gameStartedRef.current = false;
         setCanvas(null);
         onGoingGame.refetch();
       }

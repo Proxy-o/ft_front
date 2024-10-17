@@ -39,7 +39,7 @@ function enemyLeftGame(
         loserScore: 0,
       });
       enemyLeftGameRef.current = false;
-      gameStartedRef.current = false;
+      // gameStartedRef.current = false;
       time.current = 0;
     }
   }
@@ -75,7 +75,7 @@ function enemyLeftGameFour(
     handleTimeFour(time.current, username);
   } else {
     if (seconds - time.current > 4 && gameStarted) {
-      setGameStarted(false);
+      // setGameStarted(false);
       handleWhoLeftGame();
     }
   }

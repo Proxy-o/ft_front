@@ -33,7 +33,6 @@ export default function useSurrenderGame() {
     onSuccess: (data) => {
       handleRefetchPlayers(data?.gameId);
       handleSurrender(data?.gameId);
-      console.log(data);
 
       handleSurrenderFour(data?.gameId);
       // console.log(data);

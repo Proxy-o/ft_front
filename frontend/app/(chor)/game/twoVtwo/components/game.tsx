@@ -28,6 +28,10 @@ const Game = () => {
     id: "",
   };
 
+  if (onGoingGame.data?.game?.user1?.username === undefined && gameStarted) {
+    setGameStarted(false);
+  }
+
   const leftScoreRef = useRef<number>(0);
   const rightScoreRef = useRef<number>(0);
 

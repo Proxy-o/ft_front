@@ -19,7 +19,7 @@ function checkLoseConditionOnline(
 ) {
   if (canvas === null) return;
   if (rightScoreRef.current >= 77777) {
-    gameStartedRef.current = false;
+    // gameStartedRef.current = false;
     setCanvas(null);
     // alert("1 score is " + rightScoreRef.current);
     endGame({
@@ -55,7 +55,7 @@ function checkLoseConditionFour(
   } = canvasParams;
   if (rightScoreRef.current >= 77777 || leftScoreRef.current >= 77777) {
     // handleRefetchPlayers(canvasParams.gameId);
-    setGameStarted(false);
+    // setGameStarted(false);
     if (rightScoreRef.current >= 77777) {
       if (username === leftUserTop.current?.username) {
         endGameFour({

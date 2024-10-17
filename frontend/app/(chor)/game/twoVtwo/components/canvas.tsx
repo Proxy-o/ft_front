@@ -435,7 +435,7 @@ const Canvas = ({
             }
           }
         }
-        setGameStarted(false);
+        // setGameStarted(false);
         onGoingGame.refetch();
       } else if (message[0] === "/stillPlaying") {
         const user = message[1];
@@ -515,7 +515,7 @@ const Canvas = ({
         console.log("end game");
         leftScoreRef.current = 0;
         rightScoreRef.current = 0;
-        setGameStarted(false);
+        // setGameStarted(false);
         newAngleRef.current = 0;
         onGoingGame.refetch();
       }
