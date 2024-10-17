@@ -24,19 +24,18 @@ const startTournament = async (tournamentId: string) => {
 
 export default function useStartTournament(tournamentId: string) {
   const { handleStartTournament } = useInvitationSocket();
-  const router = useRouter();
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: startTournament,
     onSuccess: (tournamentId) => {
+      if (tournamentId) {
+        
+        handleStartTournament(tournamentId);
+      }
       queryClient.invalidateQueries({ queryKey: ["game"] });
       queryClient.invalidateQueries({ queryKey: ["tournament"] });
       queryClient.invalidateQueries({ queryKey: ["tournamentGame"] });
 
-      if (tournamentId) {
-        handleStartTournament(tournamentId);
-        router.push(`/game/tournament/${tournamentId}`);
-      }
     },
   });
   return mutation;
