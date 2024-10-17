@@ -44,7 +44,7 @@ const LocalTournament = () => {
     }
     if (leftScore !== 0 || rightScore !== 0) {
       if (currentGame == "semi1") {
-        console.log("semi1");
+        // console.log("semi1");
         setSemi1({ score1: leftScore, score2: rightScore });
         if (leftScore === 3 || rightScore === 3) {
           setRightScore(0);

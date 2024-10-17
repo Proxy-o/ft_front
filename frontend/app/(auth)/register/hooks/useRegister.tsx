@@ -20,7 +20,7 @@ export default function useRegister() {
       return;
     },
     onError: (error) => {
-      console.log("hhhelo")
+      // console.log("hhhelo")
       if ((error as any).response.data.username) {
         toast.error((error as any).response.data.username);
       } else if ((error as any).response.data.email) {

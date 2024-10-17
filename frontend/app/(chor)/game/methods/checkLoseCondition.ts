@@ -14,7 +14,6 @@ function checkLoseConditionOnline(
     loser: string;
     loserScore: number;
   }) => void,
-  gameStartedRef: React.MutableRefObject<boolean>,
   setCanvas: React.Dispatch<React.SetStateAction<HTMLCanvasElement | null>>
 ) {
   if (canvas === null) return;

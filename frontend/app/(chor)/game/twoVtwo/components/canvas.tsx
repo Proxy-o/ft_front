@@ -512,7 +512,7 @@ const Canvas = ({
         } else {
           state.current = "lose";
         }
-        console.log("end game");
+        // console.log("end game");
         leftScoreRef.current = 0;
         rightScoreRef.current = 0;
         // setGameStarted(false);

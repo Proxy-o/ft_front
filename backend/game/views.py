@@ -231,11 +231,11 @@ class OnGoingTournamentGame(APIView):
         if not tournament or tournament_id != tournament.id:
             return Response({'error': 'No ongoing tournament found', 'game': 'null'}, status=status.HTTP_204_NO_CONTENT)
         game = None
-        if tournament.semi1 and not tournament.semi1.winner and (tournament.semi1.user1 == user or tournament.semi1.user2 == user):
+        if tournament.semi1 and (not tournament.semi1.winner) and (tournament.semi1.user1 == user or tournament.semi1.user2 == user):
             game = tournament.semi1
-        elif tournament.semi2 and not tournament.semi2.winner and (tournament.semi2.user1 == user or tournament.semi2.user2 == user):
+        elif tournament.semi2 and (not tournament.semi2.winner) and (tournament.semi2.user1 == user or tournament.semi2.user2 == user):
             game = tournament.semi2
-        elif tournament.final and not tournament.final.winner and (tournament.final.user1 == user or tournament.final.user2 == user):
+        elif tournament.final and (not tournament.final.winner) and (tournament.final.user1 == user or tournament.final.user2 == user):
             game = tournament.final
         serializer = GameSerializer(game)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -766,11 +766,11 @@ class AcceptInvitationTournament(APIView):
         for other_invitation in other_invitations:
             other_invitation.delete()
         user_tournament = Tournament.objects.filter(
-            Q(user1=user) | Q(user2=user) | Q(user3=user) | Q(user4=user)).filter(winner=None).last()
+            (Q(user1=user) & Q(user1_left=False)) | (Q(user2=user) & Q(user2_left=False)) | (Q(user3=user) & Q(user3_left=False)) | (Q(user4=user) & Q(user4_left=False))).filter(winner=None).last()
         if user_tournament:
             return Response({'error': 'You are already in a tournament'}, status=status.HTTP_403_FORBIDDEN)
         tournament = Tournament.objects.filter(
-            Q(user1=sender) | Q(user2=sender) | Q(user3=sender) | Q(user4=sender)).filter(winner=None).last()
+            (Q(user1=sender) & Q(user1_left=False)) | (Q(user2=sender) & Q(user2_left=False)) | (Q(user3=sender) & Q(user3_left=False)) | (Q(user4=sender) & Q(user4_left=False))).filter(winner=None).last()
         # if tournament does not exist
         if not tournament:
             return Response({'error': 'No ongoing tournament found'}, status=status.HTTP_204_NO_CONTENT) 

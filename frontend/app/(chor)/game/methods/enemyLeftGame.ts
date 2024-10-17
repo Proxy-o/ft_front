@@ -5,7 +5,6 @@ function enemyLeftGame(
   canvasParams: canvasParams,
   time: React.MutableRefObject<number>,
   enemyLeftGameRef: React.MutableRefObject<boolean>,
-  gameStartedRef: React.MutableRefObject<boolean>,
   handleTime: (time: number, enemy: string) => void,
   endGame: (data: {
     winner: string;

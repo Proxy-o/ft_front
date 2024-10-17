@@ -33,16 +33,23 @@ export default function Page() {
   const { mutate: abortTournament } = useAborttournament();
   const router = useRouter();
 
-  if (tournament?.started) {
-    if (
-      (tournament?.user1.id === user_id && !tournament?.user1_left) ||
-      (tournament?.user2.id === user_id && !tournament?.user2_left) ||
-      (tournament?.user3.id === user_id && !tournament?.user3_left) ||
-      (tournament?.user4.id === user_id && !tournament?.user4_left)
-    ) {
-      router.push(`/game/tournament/${tournament.id}`);
-    }
-  }
+  useEffect(() => {
+
+    
+    if (tournament?.started) {
+      if (
+        (tournament?.user1.id === user_id && !tournament?.user1_left) ||
+        (tournament?.user2.id === user_id && !tournament?.user2_left) ||
+        (tournament?.user3.id === user_id && !tournament?.user3_left) ||
+        (tournament?.user4.id === user_id && !tournament?.user4_left)
+      ) {
+          const id = setTimeout(() => {
+            router.push(`/game/tournament/${tournament.id}`);
+          }, 20 * 1000);
+          return () => clearTimeout(id);
+        }
+      }
+}, [tournament]);
 
   useEffect(() => {
     const notif = newNotif();

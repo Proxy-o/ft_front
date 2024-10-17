@@ -7,19 +7,24 @@ import useLeaveGame from "../../hooks/useLeaveGame";
 import { TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 import { Tooltip } from "@/components/ui/tooltip";
 import { TooltipTrigger } from "@/components/ui/tooltip";
+import { User } from "@/lib/types";
 
 const Actions = ({
-  canvasPrams,
-  gameStartedRef,
+  gameStarted,
   type,
+  rightUserRef,
+  leftUserRef,
+  gameIdRef,
 }: {
-  canvasPrams: canvasParams;
-  gameStartedRef: React.MutableRefObject<boolean>;
+  gameStarted: boolean;
   type: string;
+  rightUserRef: React.MutableRefObject<User | undefined>;
+  leftUserRef: React.MutableRefObject<User | undefined>;
+  gameIdRef: React.MutableRefObject<string>;
+
 }) => {
   const { handleStartGame } = useGameSocket();
   const { mutate: surrenderGame } = useSurrenderGame();
-  const { rightUserRef, leftUserRef, gameIdRef } = canvasPrams;
   const { mutate: leaveGame } = useLeaveGame({
     leftUserRef,
     rightUserRef,
@@ -29,7 +34,7 @@ const Actions = ({
   return (
     <div className="w-full h-fit absolute bottom-4 items-center justify-center flex">
       {rightUserRef.current?.username &&
-        (!gameStartedRef.current ? (
+        (!gameStarted ? (
           <div className="w-1/2 flex flex-row justify-between items-center gap-4">
             <TooltipProvider delayDuration={0}>
               <Tooltip delayDuration={0}>
