@@ -10,13 +10,12 @@ export default function useLogout() {
 
   const mutation = useMutation({
     mutationFn: async () => {
-      const data = {};
-      const response = await axiosInstance.post("/logout", data);
+      const response = await axiosInstance.get("/logout");
       return response.data;
     },
     onSuccess: () => {
-      deleteCookie("logged_in");
       deleteCookie("access");
+      deleteCookie("logged_in");
       queryClient.removeQueries({
         queryKey: ["user"],
       });

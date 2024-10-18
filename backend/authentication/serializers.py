@@ -1,15 +1,17 @@
 from io import BytesIO
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import update_last_login
 import pyotp
 import qrcode
 from django.core.files.base import ContentFile
 from django.utils.crypto import get_random_string
 from django.contrib.auth.hashers import check_password
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.serializers import TokenObtainSerializer
 from django.contrib.auth.hashers import make_password
 from django.conf import settings
 from authentication.models import OAuthCredential
+from authentication.custom_token import AccessToken
 import urllib.parse
 
 User = get_user_model()
@@ -143,11 +145,10 @@ class VerifyOTPSerializer(serializers.Serializer):
 
     def create(self, validated_data):
         user = validated_data.get("user")
-        refresh = RefreshToken.for_user(user)
+        access = AccessToken.for_user(user)
         return {
             "user": user,
-            "refresh": str(refresh),
-            "access": str(refresh.access_token),
+            "access": str(access),
         }
 
 
@@ -174,3 +175,28 @@ class OAuthCredentialSerializer(serializers.ModelSerializer):
         )
         
         return credential
+    
+class TokenSerializer(TokenObtainSerializer):
+    token_class = AccessToken
+
+    def validate(self, attrs):
+        data = super().validate(attrs)
+
+        access = self.get_token(self.user)
+
+        data['access'] = str(access)
+
+        return data
+
+
+class TokenBlacklistSerializer(serializers.Serializer):
+    access = serializers.CharField(write_only=True)
+    token_class = AccessToken
+
+    def validate(self, attrs):
+        access = self.token_class(attrs["access"])
+        try:
+            access.blacklist()
+        except AttributeError:
+            pass
+        return {}
