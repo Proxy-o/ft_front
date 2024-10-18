@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { canvasParams } from "../../types";
 import useGameSocket from "../../hooks/sockets/useGameSocket";
 import { DoorOpen, Flag, Gamepad } from "lucide-react";
 import useSurrenderGame from "../../hooks/useSurrender";
@@ -31,6 +30,7 @@ const Actions = ({
     gameIdRef,
   });
 
+  console.log(rightUserRef.current?.username);
   return (
     <div className="w-full h-fit absolute bottom-4 items-center justify-center flex">
       {rightUserRef.current?.username &&

@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useReducer } from "react";
+import { createContext, useContext, useReducer } from "react";
 // import useGetUser from "@/app/(chor)/profile/hooks/useGetUser";
 
 type Action =

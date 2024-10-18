@@ -1,19 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { canvasParams } from "../../types";
-import { draw } from "../../methods/draw";
-import { movePaddlesOnline } from "../../methods/movePaddles";
-import { changeBallDirectionOnline } from "../../methods/changeBallDirection";
-import { checkLoseConditionOnline } from "../../methods/checkLoseCondition";
-import { changeScoreOnline } from "../../methods/changeScore";
-import checkCollisionWithHorizontalWalls from "../../methods/checkCollisionWithHorizontalWalls";
-import { moveBall } from "../../methods/moveBall";
-import { User } from "@/lib/types";
-import useEndGame from "../../hooks/useEndGame";
-import useGameSocket from "@/app/(chor)/game/hooks/sockets/useGameSocket";
-import useInvitationSocket from "@/app/(chor)/game/hooks/sockets/useInvitationSocket";
-import { enemyLeftGame } from "../../methods/enemyLeftGame";
 import useGetUser from "../../../profile/hooks/useGetUser";
 import { Card } from "@/components/ui/card";
 import NoGame from "../../components/noGame";
@@ -21,6 +8,8 @@ import PreGame from "../../components/preGame";
 import Actions from "./actions";
 import Score from "./score";
 import Canvas from "./canvas";
+import { User } from "@/lib/types";
+import useInvitationSocket from "../../hooks/sockets/useInvitationSocket";
 
 const Game = ({
   type,
@@ -100,6 +89,8 @@ const Game = ({
     }
   }, [newNotif()?.data]);
 
+  console.log("game started", gameStarted);
+
   return (
     <div className="w-full h-fit flex flex-col  justify-center items-center gap-2">
       {gameStarted && (
@@ -111,9 +102,7 @@ const Game = ({
         />
       )}
       <Card className="w-full aspect-[2] relative">
-        {leftUser.current?.username &&
-        leftScoreRef.current < 77777 &&
-        rightScoreRef.current < 77777 ? (
+        {(leftUser.current?.username && rightUser.current?.username) ? (
           <>
             <Canvas
               leftUser={leftUser}

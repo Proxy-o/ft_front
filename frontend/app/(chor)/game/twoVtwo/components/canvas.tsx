@@ -278,8 +278,8 @@ const Canvas = ({
       // Move the ball
       if (
         newAngleRef.current !== 0 &&
-        leftScoreRef.current < 77777 &&
-        rightScoreRef.current < 77777
+        leftScoreRef.current < 3.0000 &&
+        rightScoreRef.current < 3.0000
       ) {
         moveBallFour(canvasParams, newAngleRef);
       }
@@ -476,7 +476,7 @@ const Canvas = ({
                   : rightUserTop.current.id;
               endGameFour({
                 winner,
-                winnerScore: 77777,
+                winnerScore: 3.0000,
                 loser,
                 loserScore: 0,
               });

@@ -9,7 +9,6 @@ import { checkLoseConditionOnline } from "../../methods/checkLoseCondition";
 import { changeScoreOnline } from "../../methods/changeScore";
 import checkCollisionWithHorizontalWalls from "../../methods/checkCollisionWithHorizontalWalls";
 import { moveBall } from "../../methods/moveBall";
-import { enemyLeftGame } from "../../methods/enemyLeftGame";
 import { User } from "@/lib/types";
 
 const Canvas = ({
@@ -49,7 +48,6 @@ const Canvas = ({
     handleMovePaddle,
     handleChangeBallDirection,
     handleEnemyScore,
-    handleTime,
     handleStartGame,
   } = useGameSocket();
 
@@ -264,13 +262,13 @@ const Canvas = ({
       }
 
       // Check if enemy has left the game
-      enemyLeftGame(
-        canvasParams,
-        timeRef,
-        enemyLeftGameRef,
-        handleTime,
-        endGame
-      );
+      // enemyLeftGame(
+      //   canvasParams,
+      //   timeRef,
+      //   enemyLeftGameRef,
+      //   handleTime,
+      //   endGame
+      // );
     };
 
     const animate = () => {
@@ -359,7 +357,6 @@ const Canvas = ({
         } else {
           state.current = "none";
         }
-        setCanvas(null);
         onGoingGame.refetch();
       } else if (message[0] === "/endGame") {
         if (message[1] !== username) {
@@ -367,7 +364,8 @@ const Canvas = ({
         } else {
           state.current = "win";
         }
-        setCanvas(null);
+        leftScoreRef.current = 0;
+        rightScoreRef.current = 0;
         onGoingGame.refetch();
       }
     }

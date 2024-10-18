@@ -15,12 +15,10 @@ const fetchUser = async ({ id }: { id: string }) => {
 };
 
 export default function useGetUser(id: string | null) {
-  if (!id) {
-    return { data: null, isSuccess: false };
-  }
+  
   const info = useQuery({
     queryKey: ["user", id],
-    queryFn: () => fetchUser({ id }),
+    queryFn: () => fetchUser({ id } as { id: string }),
   });
   return info;
 }

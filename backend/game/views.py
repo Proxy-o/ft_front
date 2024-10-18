@@ -337,11 +337,11 @@ class EndGame(APIView):
                 if tournament.user3 == tournament.semi2.winner and tournament.user3_left:
                     tournament.final.winner = tournament.final.user1
                     tournament.winner = tournament.final.winner
-                    tournament.final.user1_score = 77777
+                    tournament.final.user1_score = 3.0000
                 if tournament.user4 == tournament.semi2.winner and tournament.user4_left:
                     tournament.final.winner = tournament.final.user1
                     tournament.winner = tournament.final.winner    
-                    tournament.final.user1_score = 77777
+                    tournament.final.user1_score = 3.0000
                 tournament.final.save()
                 tournament.save()
             elif game == tournament.semi2:
@@ -352,11 +352,11 @@ class EndGame(APIView):
                 if tournament.user1 == tournament.semi1.winner and tournament.user1_left:
                     tournament.final.winner = tournament.final.user2
                     tournament.winner = tournament.final.winner
-                    tournament.final.user2_score = 77777
+                    tournament.final.user2_score = 3.0000
                 if tournament.user2 == tournament.semi1.winner and tournament.user2_left:
                     tournament.final.winner = tournament.final.user2
                     tournament.winner = tournament.final.winner
-                    tournament.final.user2_score = 77777
+                    tournament.final.user2_score = 3.0000
                 tournament.final.save()
                 tournament.save()
             elif game == tournament.final:
@@ -438,12 +438,12 @@ class Surrender(APIView):
         if game.type == 'two' or game.type == 'tournament':
             if game.user1 == user:
                 game.winner = game.user2
-                game.user2_score = 77777
+                game.user2_score = 3.0000
                 game.user1_score = 0
                 game.save()
             else:
                 game.winner = game.user1
-                game.user1_score = 77777
+                game.user1_score = 3.0000
                 game.user2_score = 0
                 game.save()
             game.user1.status = "online"
@@ -453,11 +453,11 @@ class Surrender(APIView):
         if game.type == 'four':
             if game.user1 == user or game.user3 == user:
                 game.winner = game.user2
-                game.user2_score = 77777
+                game.user2_score = 3.0000
                 game.user1_score = 0
             elif game.user2 == user or game.user4 == user:
                 game.winner = game.user1
-                game.user1_score = 77777
+                game.user1_score = 3.0000
                 game.user2_score = 0
             game.save()
             game.user1.status = "online"
@@ -649,11 +649,11 @@ class LeaveTournament(APIView):
             tournament.user4_left = True
         if (tournament.semi1.user1 == user or tournament.semi1.user2 == user) and not tournament.semi1.winner:
             if tournament.semi1.user1 == user:
-                tournament.user2_score = 77777
+                tournament.user2_score = 3.0000
                 tournament.semi1.winner = tournament.semi1.user2
                 tournament.final.user1 = tournament.semi1.user2
             elif tournament.semi1.user2 == user:
-                tournament.user1_score = 77777
+                tournament.user1_score = 3.0000
                 tournament.semi1.winner = tournament.semi1.user1
                 tournament.final.user1 = tournament.semi1.user1
             if tournament.final.user2 and ((tournament.final.user2 == tournament.user3 and tournament.user3_left) or (tournament.final.user2 == tournament.user4 and tournament.user4_left)):
@@ -661,11 +661,11 @@ class LeaveTournament(APIView):
                 tournament.winner = tournament.final.winner
         elif (tournament.semi2.user1 == user or tournament.semi2.user2 == user) and not tournament.semi2.winner:
             if tournament.semi2.user1 == user:
-                tournament.user4_score = 77777
+                tournament.user4_score = 3.0000
                 tournament.semi2.winner = tournament.semi2.user2
                 tournament.final.user2 = tournament.semi2.user2
             elif tournament.semi2.user2 == user:
-                tournament.user3_score = 77777
+                tournament.user3_score = 3.0000
                 tournament.semi2.winner = tournament.semi2.user1
                 tournament.final.user2 = tournament.semi2.user1
             if tournament.final.user1 and ((tournament.final.user1 == tournament.user1 and tournament.user1_left) or (tournament.final.user1 == tournament.user2 and tournament.user2_left)):

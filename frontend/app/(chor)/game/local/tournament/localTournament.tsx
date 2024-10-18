@@ -2,13 +2,6 @@
 import { useEffect, useState } from "react";
 import LocalTournamentBoard from "./localTournamentBoard";
 import OneOffline from "../oneOffline";
-import { Dialog } from "@radix-ui/react-dialog";
-import {
-  DialogClose,
-  DialogContent,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { SquarePen } from "lucide-react";
 import AliasDialog from "./aliasDialog";
 import { Button } from "@/components/ui/button";
 

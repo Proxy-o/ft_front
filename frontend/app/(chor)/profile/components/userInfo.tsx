@@ -249,7 +249,6 @@ export default function UserInfo({
                       invite({
                         userid: id,
                         gameType: "two",
-                        user_id: current_user_id,
                       });
                       handelSendInvitation(id, "two");
                       router.push("/game/oneVone");
