@@ -2,7 +2,6 @@ import axiosInstance from "@/lib/functions/axiosInstance";
 import useInvitationSocket from "@/app/(chor)/game/hooks/sockets/useInvitationSocket";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 
 const startTournament = async (tournamentId: string) => {
     let res;
@@ -24,19 +23,17 @@ const startTournament = async (tournamentId: string) => {
 
 export default function useStartTournament(tournamentId: string) {
   const { handleStartTournament } = useInvitationSocket();
-  const router = useRouter();
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: startTournament,
     onSuccess: (tournamentId) => {
+      if (tournamentId) {
+        handleStartTournament(tournamentId);
+      }
       queryClient.invalidateQueries({ queryKey: ["game"] });
       queryClient.invalidateQueries({ queryKey: ["tournament"] });
       queryClient.invalidateQueries({ queryKey: ["tournamentGame"] });
 
-      if (tournamentId) {
-        handleStartTournament(tournamentId);
-        router.push(`/game/tournament/${tournamentId}`);
-      }
     },
   });
   return mutation;

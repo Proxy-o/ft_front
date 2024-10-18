@@ -282,12 +282,12 @@ const Canvas = ({
     }
     function checkLoseConditionOffline() {
       if (canvas === null) return;
-      if (leftScore === 77777) {
+      if (leftScore === 3) {
         state.current = "left";
-      } else if (rightScore === 77777) {
+      } else if (rightScore === 3) {
         state.current = "right";
       }
-      if (leftScore === 77777 || rightScore === 77777) {
+      if (leftScore === 3 || rightScore === 3) {
         setRightScore(0);
         setLeftScore(0);
         setGameStarted(false);

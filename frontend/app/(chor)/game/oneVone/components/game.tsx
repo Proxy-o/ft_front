@@ -275,8 +275,8 @@ const Game = ({
       // Move the ball
       if (
         newAngleRef.current !== 0 &&
-        leftScoreRef.current < 77777 &&
-        rightScoreRef.current < 77777
+        leftScoreRef.current < 3 &&
+        rightScoreRef.current < 3
       ) {
         moveBall(canvasParams, user, leftUser.current, newAngleRef);
       }
@@ -383,9 +383,9 @@ const Game = ({
         onGoingGame.refetch();
       } else if (message[0] === "/endGame") {
         if (message[1] !== username) {
-          state.current = "lose";
-        } else {
           state.current = "win";
+        } else {
+          state.current = "lose";
         }
         gameStartedRef.current = false;
         setCanvas(null);
@@ -430,8 +430,8 @@ const Game = ({
       )}
       <Card className="w-full aspect-[2] relative">
         {leftUser.current?.username &&
-        leftScoreRef.current < 77777 &&
-        rightScoreRef.current < 77777 ? (
+        leftScoreRef.current < 3 &&
+        rightScoreRef.current < 3 ? (
           <>
             {gameStartedRef.current ? (
               <canvas
@@ -441,13 +441,17 @@ const Game = ({
                 className={`w-full h-full`}
               ></canvas>
             ) : (
-              <PreGame
+              
+                leftScoreRef.current === 0 && rightScoreRef.current === 0 && (
+                <PreGame
                 type={type}
                 leftUserTop={leftUser.current}
                 rightUserTop={rightUser.current}
                 leftUserBottom={null}
                 rightUserBottom={null}
-              />
+                />
+                )
+              
             )}
           </>
         ) : (
