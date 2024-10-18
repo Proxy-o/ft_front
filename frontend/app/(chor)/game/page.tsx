@@ -15,17 +15,17 @@ export default function Page() {
 
   const [mode, setMode] = useState<"local" | "online" | "main">("main");
   return (
-    <div className="w-full h-full flex flex-col justify-start items-center gap-5">
+    <div className="w-full h-full flex flex-col justify-start items-center gap-4">
       <h1 className="text-3xl text-white md:text-6xl mt-5 mb-16"><span className="text-cyan-500">Ping</span> <span className="text-purple-500">Pong</span></h1>
       <Card
         className={`flex flex-col rounded-lg p-4 w-full items-center justify-center min-h-[280px] md:h-[280px]
       ${
-        mode == "main"
-          ? "h-[640px] transition-all duration-500 ease-in-out"
-          : "h-[500px] transition-all duration-500 ease-in-out overflow-hidden"
+        mode == "online"
+          ? "h-[550px] transition-all duration-500 ease-in-out"
+          : "h-[370px] transition-all duration-500 ease-in-out overflow-hidden"
       }`}
       >
-        <div className="relative w-full h-full flex flex-col justify-center items-center text-white">
+        <div className="relative w-full h-full flex flex-col justify-center items-center -top-14 text-white scale-75 md:scale-100">
           <ReturnArrow setMode={setMode} mode={mode} />
           <LocalNav setMode={setMode} mode={mode} />
           <OnlineNav setMode={setMode} mode={mode} />
