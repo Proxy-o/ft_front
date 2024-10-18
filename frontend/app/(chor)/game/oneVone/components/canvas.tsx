@@ -172,6 +172,7 @@ const Canvas = ({
 
     const theGameStarted = () => {
       // console.log("the game started");
+      if (canvas === null) return;
       setTimeout(() => {
         if (
           username === controllerUser.current?.username &&
@@ -257,8 +258,8 @@ const Canvas = ({
       // Move the ball
       if (
         newAngleRef.current !== 0 &&
-        leftScoreRef.current < 77777 &&
-        rightScoreRef.current < 77777
+        leftScoreRef.current < 3 &&
+        rightScoreRef.current < 3
       ) {
         moveBall(canvasParams, user, leftUser.current, newAngleRef);
       }
@@ -291,7 +292,7 @@ const Canvas = ({
       animate();
       return returnFunction;
     }
-  }, [gameStarted, canvasRef.current]);
+  }, [gameStarted, canvasRef.current, canvas]);
 
   useEffect(() => {
     const gameMsge = gameMsg();
@@ -374,6 +375,7 @@ const Canvas = ({
   }, [gameMsg()?.data]);
 
   return (
+    leftUser.current !== undefined && rightUser.current !== undefined &&
     gameStarted && (
       <canvas
         ref={canvasRef}

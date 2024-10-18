@@ -39,15 +39,14 @@ export default function useEndGame() {
       loserScore: number;
     }) => endGame(data),
     onSuccess: (tournamentId) => {
-      queryClient.invalidateQueries({ queryKey: ["game"] });
-      queryClient.invalidateQueries({ queryKey: ["tournament"] });
-      queryClient.invalidateQueries({ queryKey: ["tournamentGame"] });
       handleEndGame();
-
       if (tournamentId) {
         // console.log("tournamentId", tournamentId);
         handleRefetchTournament(tournamentId);
       }
+      queryClient.invalidateQueries({ queryKey: ["game"] });
+      queryClient.invalidateQueries({ queryKey: ["tournament"] });
+      queryClient.invalidateQueries({ queryKey: ["tournamentGame"] });
     },
   });
   return mutation;

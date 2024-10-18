@@ -42,9 +42,7 @@ const Game = ({
   const state = useRef<string>("none");
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-
   const [gameStarted, setGameStarted] = useState<boolean>(false);
-
 
   const { newNotif } = useInvitationSocket();
 
@@ -82,6 +80,7 @@ const Game = ({
     const notif = newNotif();
     if (notif) {
       const parsedMessage = JSON.parse(notif.data);
+      console.log(parsedMessage);
       const message = parsedMessage?.message.split(" ");
       if (
         message[0] === "/start" ||
@@ -111,39 +110,37 @@ const Game = ({
         />
       )}
       <Card className="w-full aspect-[2] relative">
-        {leftUser.current?.username &&
-        leftScoreRef.current < 77777 &&
-        rightScoreRef.current < 77777 ? (
-          <>
-            <Canvas
-              leftUser={leftUser}
-              rightUser={rightUser}
-              controllerUser={controllerUser}
-              state={state}
-              gameIdRef={gameIdRef}
-              gameStarted={gameStarted}
-              setGameStarted={setGameStarted}
-              leftScoreRef={leftScoreRef}
-              rightScoreRef={rightScoreRef}
-              onGoingGame={onGoingGame}
-              user={user}
-              username={username}
-              canvasRef={canvasRef}
-            />
+        <Canvas
+          leftUser={leftUser}
+          rightUser={rightUser}
+          controllerUser={controllerUser}
+          state={state}
+          gameIdRef={gameIdRef}
+          gameStarted={gameStarted}
+          setGameStarted={setGameStarted}
+          leftScoreRef={leftScoreRef}
+          rightScoreRef={rightScoreRef}
+          onGoingGame={onGoingGame}
+          user={user}
+          username={username}
+          canvasRef={canvasRef}
+        />
 
-            {!gameStarted && (
-              <PreGame
-                type={type}
-                leftUserTop={leftUser.current}
-                rightUserTop={rightUser.current}
-                leftUserBottom={null}
-                rightUserBottom={null}
-              />
-            )}
-          </>
-        ) : (
-          !gameStarted && <NoGame state={state} />
+        {leftUser.current?.username &&
+          !gameStarted && (
+            <PreGame
+              type={type}
+              leftUserTop={leftUser.current}
+              rightUserTop={rightUser.current}
+              leftUserBottom={null}
+              rightUserBottom={null}
+            />
+          )}
+
+        {leftUser.current?.username === undefined && !gameStarted && (
+          <NoGame state={state} />
         )}
+
         <Actions
           gameStarted={gameStarted}
           type={type}
