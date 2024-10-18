@@ -1,6 +1,5 @@
 import OneVOne from "./oneVOne";
 import TournamentNav from "./tournament";
-import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import TwoVTwo from "./twoVTwo";
 

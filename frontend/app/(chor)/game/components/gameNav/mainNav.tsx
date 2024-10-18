@@ -1,6 +1,4 @@
-import Link from "next/link";
 import OneVOne from "./oneVOne";
-import TwoVTwo from "./twoVTwo";
 
 const MainNav = ({
   mode,
