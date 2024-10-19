@@ -11,6 +11,7 @@ const Nav = lazy(() => import("@/components/navBar/nav"));
 const MobilNav = lazy(() => import("@/components/navBar/mobilNav"));
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
+  console.log("AppLayout", usePathname());
   const router = useRouter();
   const mb = useMediaQuery("(min-width: 768px)");
   const [showNav, setShowNav] = useState<number>(0);

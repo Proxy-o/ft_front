@@ -1,6 +1,7 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
 import { useQuery } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useCallback } from "react";
 import { toast } from "sonner";
 
 const fetchUser = async ({ id }: { id: string }, router: ReturnType<typeof useRouter>) => {
@@ -8,20 +9,28 @@ const fetchUser = async ({ id }: { id: string }, router: ReturnType<typeof useRo
     const response = await axiosInstance.get(`/user/${id}`);
     return response.data;
   } catch (error: any) {
-    console.dir(error)
-    toast.error(`Error: ${error.response.data.message}`)
     if (id === '0' && error.response.status === 401) {
-      router.push("/login")
+      toast.info("Logged out! see you soon!")
+      router.push("/login");
+      return;
     }
     throw new Error(error.response.data.message);
   }
 };
 
 export default function useGetUser(id: string | null) {
+  const path = usePathname();
   const router = useRouter();
+
+  const memoizedFetchUser = useCallback(() => fetchUser({ id } as { id: string }, router), [id, router]);
+
+
+  console.log(path, id);
   const info = useQuery({
     queryKey: ["user", id],
-    queryFn: () => fetchUser({ id } as { id: string }, router),
+    queryFn: memoizedFetchUser,
+    enabled: !!id,
+    retry: false,
   });
   return info;
 }

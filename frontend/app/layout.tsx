@@ -24,6 +24,7 @@ export default function RootLayout({
   const router = useRouter();
   const logged_in = getCookie("logged_in");
   const current_path = usePathname();
+  console.log("RootLayout", current_path);
   const is_public_route = ["/", "/login", "/register"].includes(current_path);
   useEffect(() => {
     if (logged_in === "yes" && is_public_route) {

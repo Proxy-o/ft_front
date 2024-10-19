@@ -31,15 +31,16 @@ test_waf:
 
 clean:
 	docker-compose -f ./docker-compose.yml down --rmi all --volumes
-	rm -rf log_nginx postgres_data vault_data/data ./vault_data/cre
+	rm -rf $(RUNDIR)
 
-obuild:
+oup:
 	docker-compose build $(s)
+	docker-compose up $(s) -d
 
 oclean:
 	docker-compose stop $(s)
 	docker-compose rm -f $(s)
-	docker-compose images -q $(s) | xargs $(if $(filter $(shell uname),Linux),-r,) docker rmi
+	docker images -q $(s):local | xargs $(if $(filter $(shell uname),Linux),-r,) docker rmi
 	docker volume ls -qf dangling=true | xargs $(if $(filter $(shell uname),Linux),-r,) docker volume rm
 
 fclean:
