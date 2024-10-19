@@ -3,7 +3,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 
 const fetchGames = async ({ id, pageParam }: { id: string, pageParam: string }) => {
   try {
-    if (id === "0" || !pageParam || id == undefined) return null;
+    if (id === "0" || !pageParam) return null;
     const response = await axiosInstance.get(`/game/user/${id}?page=${pageParam}`);
     return response.data;
   } catch (error: any) {

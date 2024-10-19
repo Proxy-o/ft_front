@@ -66,8 +66,7 @@ done
 # Write secrets to Vault
 echo "Writing secrets to Vault..."
 vault_client kv put secret/backend SERVER_HOST=$SERVER_HOST SECRET_KEY="$SECRET_KEY"
-vault_client kv put secret/db POSTGRES_PASSWORD="$POSTGRES_PASSWORD" POSTGRES_USER=postgres POSTGRES_DB=transcendence POSTGRES_HOST=postgres_container POSTGRES_PORT=5432 POSTGRES_NAME=postgres
-vault_client kv put secret/front NEXT_PUBLIC_BACKEND_URL=https://${SERVER_HOST}:443 NEXT_PUBLIC_CHAT_URL=wss://${SERVER_HOST}:443/ws/chat/ NEXT_PUBLIC_INVITATION_URL=wss://${SERVER_HOST}:443/ws/game/invitation NEXT_PUBLIC_GAME_URL=wss://${SERVER_HOST}:443/ws/game/game
+vault_client kv put secret/db POSTGRES_PASSWORD="$POSTGRES_PASSWORD" POSTGRES_USER=postgres POSTGRES_DB=transcendence POSTGRES_HOST=postgres POSTGRES_PORT=5432 POSTGRES_NAME=postgres
 vault_client kv put secret/oauth $OAUTH_SECRETS
 
 # Mark initialization as done

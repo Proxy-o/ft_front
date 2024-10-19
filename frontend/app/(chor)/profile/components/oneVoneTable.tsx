@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
 export default function OneVoneTable({ id }: { id: string }) {
-  const { data, isSuccess, fetchNextPage } = useGetGames(id);
+  const { data, isSuccess, fetchNextPage } = useGetGames(id || "0");
   const games = data?.pages.map((page) => page.results).flat();
   const [haseMore, setHasMore] = React.useState(true);
   React.useEffect(() => {
