@@ -13,7 +13,7 @@ NEXTENV=$WORKDIR/frontend/.env
 # vault vars
 VAULT_ENV=$WORKDIR/.env
 VAULTDIR=$WORKDIR/vault_data
-VAULT_CLIENTS=("vault" "backend" "database" "frontend")
+VAULT_CLIENTS=("vault" "backend" "database")
 OAUTH_PROVIDERS=("42" "GITHUB")
 
 if grep -qs "OAUTH" $VAULT_ENV; then

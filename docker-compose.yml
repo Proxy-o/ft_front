@@ -1,10 +1,11 @@
 version: "3"
 services:
   nginx:
-    container_name: nginx_container
+    container_name: nginx
     build:
       context: nginx
       dockerfile: Dockerfile
+    image: nginx:local
     ports:
       - "443:443"
     networks:
@@ -17,10 +18,11 @@ services:
       - VAULT_API_ADDR=http://vault:8200
 
   backend:
-    container_name: backend_container
+    container_name: backend
     build:
       context: ./backend
       dockerfile: Dockerfile
+    image: backend:local
     networks:
       - mynetwork
       - vault_nework
@@ -35,10 +37,11 @@ services:
       - VAULT_API_ADDR=http://vault:8200
 
   db:
-    container_name: postgres_container
+    container_name: postgres
     build:
       context: ./postgres
       dockerfile: Dockerfile
+    image: db:local
     volumes:
       - ./vault_data/cre/database:/.vault
       - ./postgres_data:/data/postgres
@@ -59,25 +62,19 @@ services:
       - VAULT_API_ADDR=http://vault:8200
 
   frontend:
-    container_name: frontend_container
+    container_name: frontend
     build:
       context: ./frontend
       dockerfile: ./Dockerfile
+    image: frontend:local
     volumes:
-      - ./vault_data/cre/frontend:/.vault
       - ./frontend:/app:cached  # Mount the code directory
       - /app/node_modules        # Ensure node_modules is not overwritten by host
     networks:
       - mynetwork
-      - vault_nework
-    depends_on:
-      vault:
-        condition: service_healthy
-    environment:
-      - VAULT_API_ADDR=http://vault:8200
 
   vault:
-    container_name: vault_container
+    container_name: vault
     image: hashicorp/vault:1.7
     networks:
       - vault_nework

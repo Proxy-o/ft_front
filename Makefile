@@ -33,11 +33,14 @@ clean:
 	docker-compose -f ./docker-compose.yml down --rmi all --volumes
 	rm -rf log_nginx postgres_data vault_data/data ./vault_data/cre
 
+obuild:
+	docker-compose build $(s)
+
 oclean:
 	docker-compose stop $(s)
 	docker-compose rm -f $(s)
-	docker-compose images -q $(s) | xargs -r docker rmi
-	docker volume ls -qf dangling=true | xargs -r docker volume rm
+	docker-compose images -q $(s) | xargs $(if $(filter $(shell uname),Linux),-r,) docker rmi
+	docker volume ls -qf dangling=true | xargs $(if $(filter $(shell uname),Linux),-r,) docker volume rm
 
 fclean:
 	docker stop $$(docker ps -qa) 2>/dev/null || true
@@ -55,4 +58,4 @@ deldir:
 
 re:	clean deldir all
 
-.PHONY	: all build down re clean fclean logs test_waf oclean start stop up delenv deldir
+.PHONY	: all build down re clean fclean logs test_waf oclean start stop up delenv deldir obuild

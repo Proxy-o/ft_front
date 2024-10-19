@@ -17,5 +17,4 @@ COPY . .
 # EXPOSE 3000
 
 # Run the web service on container startup.
-RUN npm run build
-CMD ["npm", "start"]
+CMD ["npm", "run", "dev"]

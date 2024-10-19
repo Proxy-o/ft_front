@@ -4,7 +4,7 @@
 
 # vars
 IPADDR=$(grep "SERVER_HOST" .env | cut -d '=' -f 2)
-NGINX_CONTAINER="nginx_container"
+NGINX_CONTAINER="nginx"
 AUDIT_LOG="/var/log/nginx/modsec_audit.log"
 DEBUG_LOG="/var/log/nginx/modsec_debug.log"
 TEST_NAMES=("SQL Injection" "XSS" "Web Scanner")
