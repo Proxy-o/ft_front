@@ -14,7 +14,7 @@ const LocalNav = ({
   return (
     <>
       <div
-        className={` absolute flex flex-col items-center justify-center h-fit w-full rounded-md top-0 gap-2
+        className={`absolute flex flex-col items-center justify-center h-fit w-full rounded-md top-0 gap-2
        ${
          mode === "local"
            ? "left-0 transition-all duration-500 ease-in-out"

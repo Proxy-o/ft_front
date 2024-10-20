@@ -4,10 +4,10 @@ import useWebSocket from "react-use-websocket";
 
 export default function useInvitationSocket() {
   const [socketUrl, setSocketUrl] = useState<string | null>(null);
-  const { data: user } = useGetUser("0");
+  const { data: user, isLoading } = useGetUser("0");
 
   useEffect(() => {
-    if ( user?.s_token) {
+    if (!isLoading && user?.s_token) {
       // console.log("user?.s_token", user?.s_token);
       setSocketUrl(
         process.env.NEXT_PUBLIC_INVITATION_URL +
@@ -17,7 +17,7 @@ export default function useInvitationSocket() {
           user?.s_token
       );
     }
-  }, [ user]);
+  }, [isLoading, user]);
   const { sendJsonMessage, lastMessage, lastJsonMessage } = useWebSocket(
     socketUrl,
     {

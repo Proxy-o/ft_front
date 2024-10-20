@@ -49,6 +49,7 @@ fclean:
 	docker rmi -f $$(docker images -qa) 2>/dev/null || true
 	docker volume rm $$(docker volume ls -q) 2>/dev/null || true
 	docker network rm $$(docker network ls -q) 2>/dev/null || true
+	rm -rf $(RUNDIR)
 
 delenv:
 	@rm -f .env frontend/.env

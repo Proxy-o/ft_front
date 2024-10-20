@@ -1,6 +1,6 @@
-Unseal Key 1: okLUgrEwQ+tleJiNHw6F3dgZIosTOnv/eoLg0KLve4Q=
+Unseal Key 1: /ywEeFzRAglFlXQhZSShkABbvWan68BJIVy0/VzW3k8=
 
-Initial Root Token: s.B9OazbmNsffEvqXGNBkK2NSF
+Initial Root Token: s.7E0O7ef4UNL19sWvRBmBJdDa
 
 Vault initialized with 1 key shares and a key threshold of 1. Please securely
 distribute the key shares printed above. When the Vault is re-sealed,

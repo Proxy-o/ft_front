@@ -5,11 +5,11 @@ import useWebSocket from "react-use-websocket";
 
 export default function useChatSocket() {
   const [socketUrl, setSocketUrl] = useState<string | null>(null);
-  const { data: user } = useGetUser("0");
+  const { data: user, isLoading } = useGetUser("0");
 
   useEffect(() => {
 
-    if ( user?.s_token) {
+    if (!isLoading && user?.s_token) {
       setSocketUrl(
         process.env.NEXT_PUBLIC_CHAT_URL +
           "2/?user_id=" +
@@ -18,7 +18,7 @@ export default function useChatSocket() {
           user?.s_token
       );
     }
-  }, [ user]);
+  }, [isLoading, user]);
 
   const {
     lastJsonMessage,
