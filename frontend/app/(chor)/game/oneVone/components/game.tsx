@@ -31,9 +31,7 @@ const Game = ({
   const state = useRef<string>("none");
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-
   const [gameStarted, setGameStarted] = useState<boolean>(false);
-
 
   const { newNotif } = useInvitationSocket();
 
@@ -102,7 +100,7 @@ const Game = ({
         />
       )}
       <Card className="w-full aspect-[2] relative">
-        {(leftUser.current?.username && rightUser.current?.username) ? (
+        {leftUser.current?.username && rightUser.current?.username ? (
           <>
             <Canvas
               leftUser={leftUser}

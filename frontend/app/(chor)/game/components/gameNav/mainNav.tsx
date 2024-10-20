@@ -1,6 +1,4 @@
-import Link from "next/link";
 import OneVOne from "./oneVOne";
-import TwoVTwo from "./twoVTwo";
 
 const MainNav = ({
   mode,
@@ -20,18 +18,18 @@ const MainNav = ({
       <div className="flex flex-col items-center justify-center gap-2">
         <div className="text-4xl">Modes</div>
         <div className="flex flex-col md:flex-row w-full h-fit top-0 z-30 flex-wrap items-center md:items-start justify-center gap-4">
-          <div onClick={() => setMode("local")} className="cursor-pointer">
+          <div onClick={() => setMode("local")} className="cursor-pointer flex flex-col items-center justify-center">
             <OneVOne type="local" />
+            <div className="text-2xl">Local</div>
+
           </div>
-          <div onClick={() => setMode("online")} className="cursor-pointer">
+          <div onClick={() => setMode("online")} className="cursor-pointer flex flex-col items-center justify-center">
             <OneVOne type="online" />
+            <div className="text-2xl">Online</div>
+
           </div>
 
-          <Link href="/game/twoVtwo">
-            <div>
-              <TwoVTwo />
-            </div>
-          </Link>
+          
         </div>
       </div>
     </div>

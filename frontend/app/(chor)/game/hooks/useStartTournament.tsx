@@ -28,7 +28,6 @@ export default function useStartTournament(tournamentId: string) {
     mutationFn: startTournament,
     onSuccess: (tournamentId) => {
       if (tournamentId) {
-        
         handleStartTournament(tournamentId);
       }
       queryClient.invalidateQueries({ queryKey: ["game"] });

@@ -87,8 +87,8 @@ const Game = () => {
           <>
             {!gameStarted &&
               (onGoingGame.data?.game &&
-              onGoingGame.data?.game?.user1_score < 3.0000 &&
-              onGoingGame.data?.game?.user2_score < 3.0000 ? (
+              onGoingGame.data?.game?.user1_score < 3 &&
+              onGoingGame.data?.game?.user2_score < 3 ? (
                   <PreGame
                     type="four"
                     leftUserTop={leftUserTop.current}
@@ -119,8 +119,8 @@ const Game = () => {
         {/* {!gameChange && <NoGame state={state} />} */}
         {/* </Game> */}
         {onGoingGame.data?.game &&
-          onGoingGame.data?.game?.user1_score < 3.0000 &&
-          onGoingGame.data?.game?.user2_score < 3.0000 && (
+          onGoingGame.data?.game?.user1_score < 3 &&
+          onGoingGame.data?.game?.user2_score < 3 && (
             <FourActions
               playerReadyRef={playerReadyRef}
               gameStarted={gameStarted}
