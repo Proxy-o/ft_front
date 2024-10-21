@@ -16,7 +16,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const mb = useMediaQuery("(min-width: 768px)");
   const [showNav, setShowNav] = useState<number>(0);
   const path = usePathname();
-  const is_local = path === "/game/local";
+  const is_local = path.startsWith("/game/local");
   const logged_in = getCookie("logged_in") === "yes";
 
   useEffect(() => {

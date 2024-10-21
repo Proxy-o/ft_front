@@ -305,8 +305,12 @@ class EndGame(APIView):
         winner_score = request.data.get('winnerScore')
         loser_score = request.data.get('loserScore')
         game = Game.objects.filter(
-            Q(user1=winner_id) | Q(user2=winner_id) &
-            Q(user1=loser_id) | Q(user2=loser_id)).filter(winner=None).last()
+            (
+                Q(user1=winner_id) | Q(user2=winner_id)
+            ) & (
+                Q(user1=loser_id) | Q(user2=loser_id)
+            ) & Q(user2__isnull=False)
+        ).filter(winner=None).last()
         if not game:
             return Response({'error': 'No ongoing game found'}, status=status.HTTP_204_NO_CONTENT)
         user1 = game.user1

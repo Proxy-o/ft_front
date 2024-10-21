@@ -57,7 +57,7 @@ const AliasDialog = ({
             setPlayerAlias([alias1, alias2, alias3, alias4]);
             setFinalWinner(-1);
           }}
-          className="w-48 h-10 bg-black text-white rounded-md mt-2"
+          className="w-48 h-10 bg-secondary mt-2 border-b-2 border-transparent focusborderButton rounded-md bg-opacity-75"
         >
           Add Alias
         </button>
