@@ -19,13 +19,10 @@ const fetchUser = async ({ id }: { id: string }, router: ReturnType<typeof useRo
 };
 
 export default function useGetUser(id: string | null) {
-  const path = usePathname();
   const router = useRouter();
 
   const memoizedFetchUser = useCallback(() => fetchUser({ id } as { id: string }, router), [id, router]);
 
-
-  console.log(path, id);
   const info = useQuery({
     queryKey: ["user", id],
     queryFn: memoizedFetchUser,

@@ -87,8 +87,6 @@ const Game = ({
     }
   }, [newNotif()?.data]);
 
-  console.log("game started", gameStarted);
-
   return (
     <div className="w-full h-fit flex flex-col  justify-center items-center gap-2">
       {gameStarted && (
@@ -100,44 +98,48 @@ const Game = ({
         />
       )}
       <Card className="w-full aspect-[2] relative">
-        {leftUser.current?.username && rightUser.current?.username ? (
-          <>
-            <Canvas
-              leftUser={leftUser}
-              rightUser={rightUser}
-              controllerUser={controllerUser}
-              state={state}
-              gameIdRef={gameIdRef}
-              gameStarted={gameStarted}
-              setGameStarted={setGameStarted}
-              leftScoreRef={leftScoreRef}
-              rightScoreRef={rightScoreRef}
-              onGoingGame={onGoingGame}
-              user={user}
-              username={username}
-              canvasRef={canvasRef}
-            />
-
-            {!gameStarted && (
-              <PreGame
-                type={type}
-                leftUserTop={leftUser.current}
-                rightUserTop={rightUser.current}
-                leftUserBottom={null}
-                rightUserBottom={null}
-              />
-            )}
-          </>
-        ) : (
-          !gameStarted && <NoGame state={state} />
+        {leftUser.current?.username && rightUser.current?.username && (
+          <Canvas
+            leftUser={leftUser}
+            rightUser={rightUser}
+            controllerUser={controllerUser}
+            state={state}
+            gameIdRef={gameIdRef}
+            gameStarted={gameStarted}
+            setGameStarted={setGameStarted}
+            leftScoreRef={leftScoreRef}
+            rightScoreRef={rightScoreRef}
+            onGoingGame={onGoingGame}
+            user={user}
+            username={username}
+            canvasRef={canvasRef}
+          />
         )}
-        <Actions
-          gameStarted={gameStarted}
-          type={type}
-          rightUserRef={rightUser}
-          leftUserRef={leftUser}
-          gameIdRef={gameIdRef}
-        />
+
+        {!gameStarted &&
+          leftScoreRef.current === 0 &&
+          rightScoreRef.current === 0 && (
+            <PreGame
+              type={type}
+              leftUserTop={leftUser.current}
+              rightUserTop={rightUser.current}
+              leftUserBottom={null}
+              rightUserBottom={null}
+            />
+          )}
+
+        {(!gameStarted ||
+          leftScoreRef.current === 3 ||
+          rightScoreRef.current === 3) && <NoGame state={state} />}
+        {leftUser.current?.username && rightUser.current?.username && leftScoreRef.current < 3 && rightScoreRef.current < 3 && (
+          <Actions
+            gameStarted={gameStarted}
+            type={type}
+            rightUserRef={rightUser}
+            leftUserRef={leftUser}
+            gameIdRef={gameIdRef}
+          />
+        )}
       </Card>
     </div>
   );

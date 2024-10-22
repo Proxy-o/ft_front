@@ -10,7 +10,6 @@ import ReturnArrow from "./components/gameNav/returnArrow";
 import MainNav from "./components/gameNav/mainNav";
 
 export default function Page() {
-  console.log("<Game />")
   const { data: user } = useGetUser("0");
   const user_id = user?.id;
 

@@ -170,11 +170,13 @@ const Canvas = ({
 
     const theGameStarted = () => {
       // console.log("the game started");
-      setTimeout(() => {
-        if (
-          username === controllerUser.current?.username &&
-          newAngleRef.current === 0
-        ) {
+      if (!gameStarted || canvas === null) return;
+      if (
+        username === controllerUser.current?.username &&
+        newAngleRef.current === 0
+      ) {
+        newAngleRef.current = 10;
+        setTimeout(() => {
           newBallPositionRef.current = { x, y }; // Initialize the ref
           newAngleRef.current = Math.random() * Math.PI;
           while (
@@ -195,8 +197,8 @@ const Canvas = ({
             enemyAngle,
             rightUser.current?.username || ""
           );
-        }
-      }, 1000);
+        }, 1000);
+      }
 
       if (bgImage.current === null) {
         bgImage.current = new Image();
@@ -209,7 +211,7 @@ const Canvas = ({
       ctx.globalAlpha = 1;
       // draw paddles and ball
       draw(canvasParams, ctx);
-    //   console.log("drawing");
+      console.log("drawing");
 
       // move paddles
       movePaddlesOnline(canvasParams);
@@ -254,9 +256,9 @@ const Canvas = ({
 
       // Move the ball
       if (
-        newAngleRef.current !== 0 &&
-        leftScoreRef.current < 77777 &&
-        rightScoreRef.current < 77777
+        newAngleRef.current !== 0 && newAngleRef.current !== 10 &&
+        leftScoreRef.current < 3 &&
+        rightScoreRef.current < 3
       ) {
         moveBall(canvasParams, user, leftUser.current, newAngleRef);
       }
@@ -272,7 +274,7 @@ const Canvas = ({
     };
 
     const animate = () => {
-      if (canvas === null) return;
+      if (canvas === null || !gameStarted) return;
 
       if (
         gameStarted &&
@@ -295,7 +297,7 @@ const Canvas = ({
     const gameMsge = gameMsg();
     if (gameMsge) {
       const parsedMessage = JSON.parse(gameMsge.data);
-      console.log(parsedMessage.message);
+      // console.log(parsedMessage.message);
       const message = parsedMessage?.message.split(" ");
 
       if (message[0] === "/move") {
@@ -321,7 +323,7 @@ const Canvas = ({
           newAngleRef.current = parseFloat(message[3]);
         }
       } else if (message[0] === "/show") {
-        // console.log("showing");
+        console.log("showing");
         if (!gameStarted) {
           handleStartGame(
             leftUser.current?.username || "",
@@ -357,6 +359,7 @@ const Canvas = ({
         } else {
           state.current = "none";
         }
+        setGameStarted(false);
         onGoingGame.refetch();
       } else if (message[0] === "/endGame") {
         if (message[1] !== username) {
@@ -367,10 +370,12 @@ const Canvas = ({
         leftScoreRef.current = 0;
         rightScoreRef.current = 0;
         onGoingGame.refetch();
+        setGameStarted(false);
       }
     }
   }, [gameMsg()?.data]);
 
+  console.log("canvas rendered", gameStarted);
   return (
     gameStarted && (
       <canvas

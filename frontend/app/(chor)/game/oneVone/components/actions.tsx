@@ -30,7 +30,6 @@ const Actions = ({
     gameIdRef,
   });
 
-  console.log(rightUserRef.current?.username);
   return (
     <div className="w-full h-fit absolute bottom-4 items-center justify-center flex">
       {rightUserRef.current?.username &&

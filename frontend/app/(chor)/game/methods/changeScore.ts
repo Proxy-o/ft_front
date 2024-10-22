@@ -19,20 +19,11 @@ function changeScoreOnline(
   if (newBallPositionRef.current.x < -50) {
     newBallPositionRef.current.x = canvas.width / 2;
     newBallPositionRef.current.y = canvas.height / 2;
-    newAngleRef.current = Math.random() * 2 * Math.PI;
-    while (
-      (newAngleRef.current > Math.PI / 6 &&
-        newAngleRef.current < (Math.PI * 5) / 6) ||
-      (newAngleRef.current > (Math.PI * 7) / 6 &&
-        newAngleRef.current < (Math.PI * 11) / 6)
-    ) {
-      newAngleRef.current = Math.random() * 2 * Math.PI;
-    }
-    let enemyAngle = Math.PI - newAngleRef.current;
+    newAngleRef.current = 0;
     handleChangeBallDirection(
       newBallPositionRef.current.x,
       newBallPositionRef.current.y,
-      enemyAngle,
+      0,
       rightUser?.username || ""
     );
     handleEnemyScore(gameIdRef.current);

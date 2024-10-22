@@ -3,8 +3,6 @@ import { useEffect, useRef, useState } from "react";
 const NoGame = ({ state }: { state: React.MutableRefObject<string> }) => {
   const atext = useRef<string>("Invite a friend to play");
 
-  const letterIndex = useRef(0);
-  const [text, setText] = useState("");
   useEffect(() => {
     if (state.current === "win") {
       atext.current = "You won";
@@ -27,13 +25,7 @@ const NoGame = ({ state }: { state: React.MutableRefObject<string> }) => {
     } else if (state.current === "leave") {
       atext.current = "Your enemy has left the game";
     }
-    setTimeout(() => {
-      if (letterIndex.current < atext.current.length) {
-        letterIndex.current++;
-        setText(atext.current.slice(0, letterIndex.current));
-      }
-    }, 30);
-  }, [text]);
+  }, [state.current]);
 
   return (
     <div className="w-full h-full flex flex-col relative rounded-lg">
@@ -47,7 +39,7 @@ const NoGame = ({ state }: { state: React.MutableRefObject<string> }) => {
         }}
       />
       <div className="text-white text-xl z-20 md:text-3xl m-auto text-container">
-        {text}
+        {atext.current}
       </div>
     </div>
   );
