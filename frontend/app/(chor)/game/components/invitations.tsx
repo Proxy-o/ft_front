@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Check, Inbox, X } from "lucide-react";
 import useGetInvitations from "../hooks/useGetInvitations";
 import useDeclineInvitation from "../hooks/useDeclineMutation";
@@ -26,6 +26,9 @@ const Invitations = ({ mode }: { mode: string }) => {
   const { mutate: acceptInvitationTournamentMutation } =
     useAcceptInvitationTournament();
   const path = usePathname();
+
+  const [disabled, setDisabled] = useState(false);
+
   const invitations: Invitation[] = invitationsData.data
     ? invitationsData.data
     : [];
@@ -45,6 +48,13 @@ const Invitations = ({ mode }: { mode: string }) => {
       // console.log(error);
     }
   };
+
+  function disableButton() {
+    setDisabled(true);
+    setTimeout(() => {
+      setDisabled(false);
+    }, 2000);
+  }
 
   useEffect(() => {
     const notif = newNotif();
@@ -190,14 +200,20 @@ const Invitations = ({ mode }: { mode: string }) => {
                               size={"sm"}
                               onClick={() => {
                                 acceptInvitation(invitation.id);
+                                disableButton();
                               }}
+                              disabled={disabled}
                             >
                               <Check size={20} />
                             </Button>
                             <Button
                               variant={"secondary"}
                               size={"sm"}
-                              onClick={() => declineMutation(invitation.id)}
+                              onClick={() => {
+                                declineMutation(invitation.id);
+                                disableButton();
+                              }}
+                              disabled={disabled}
                             >
                               <X size={20} />
                             </Button>
@@ -250,15 +266,21 @@ const Invitations = ({ mode }: { mode: string }) => {
                               size={"sm"}
                               onClick={() => {
                                 acceptInvitationTournament(invitation.id);
-                                router.push("/game/tournament");
+                                disableButton();
+                                // router.push("/game/tournament");
                               }}
+                              disabled={disabled}
                             >
                               <Check size={20} />
                             </Button>
                             <Button
                               variant={"secondary"}
                               size={"sm"}
-                              onClick={() => declineMutation(invitation.id)}
+                              onClick={() => {
+                                declineMutation(invitation.id);
+                                disableButton();
+                              }}
+                              disabled={disabled}
                             >
                               <X size={20} />
                             </Button>
