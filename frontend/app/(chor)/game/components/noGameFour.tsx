@@ -1,10 +1,8 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 const NoGameFour = ({ state }: { state: React.MutableRefObject<string> }) => {
   const atext = useRef<string>("Invite a friend to play");
 
-  const letterIndex = useRef(0);
-  const [text, setText] = useState("");
   useEffect(() => {
     if (state.current === "win") {
       atext.current = "You won";
@@ -29,13 +27,7 @@ const NoGameFour = ({ state }: { state: React.MutableRefObject<string> }) => {
     } else {
       atext.current = "Invite a friend to play";
     }
-    setTimeout(() => {
-      if (letterIndex.current < atext.current.length) {
-        letterIndex.current++;
-        setText(atext.current.slice(0, letterIndex.current));
-      }
-    }, 30);
-  }, [text]);
+  }, [state, state.current]);
 
   return (
     <div
@@ -51,7 +43,7 @@ const NoGameFour = ({ state }: { state: React.MutableRefObject<string> }) => {
           opacity: 0.75,
         }}
       />
-      <div className="flex text-white z-10 text-sm md:text-2xl m-auto text-center">{text}</div>
+      <div className="flex text-white z-10 text-sm md:text-2xl m-auto text-center">{atext.current}</div>
     </div>
   );
 };

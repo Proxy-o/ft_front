@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 const NoGame = ({ state }: { state: React.MutableRefObject<string> }) => {
   const atext = useRef<string>("Invite a friend to play");
@@ -25,7 +25,7 @@ const NoGame = ({ state }: { state: React.MutableRefObject<string> }) => {
     } else if (state.current === "leave") {
       atext.current = "Your enemy has left the game";
     }
-  }, [state.current]);
+  }, [state.current, state]);
 
   return (
     <div className="w-full h-full flex flex-col relative rounded-lg">

@@ -178,8 +178,8 @@ const Canvas = ({
         username === controllerUser.current?.username &&
         newAngleRef.current === 0
       ) {
-        newAngleRef.current = 10;
         setTimeout(() => {
+        newAngleRef.current = 10;
           newBallPositionRef.current = { x, y }; // Initialize the ref
           newAngleRef.current = Math.random() * Math.PI;
           while (
@@ -214,7 +214,7 @@ const Canvas = ({
       ctx.globalAlpha = 1;
       // draw paddles and ball
       draw(canvasParams, ctx);
-      console.log("drawing");
+      // console.log("drawing");
 
       // move paddles
       movePaddlesOnline(canvasParams);
@@ -378,7 +378,7 @@ const Canvas = ({
     }
   }, [gameMsg()?.data]);
 
-  console.log("canvas rendered", gameStarted);
+  // console.log("canvas rendered", gameStarted);
   return (
     gameStarted && (
       <canvas
