@@ -104,8 +104,11 @@ const Canvas = ({
     gameIdRef,
   };
   useEffect(() => {
-    if (canvas === null && canvasRef.current) {
+    if (canvas === null && canvasRef.current && gameStarted) {
       setCanvas(canvasRef.current);
+    }
+    if (!gameStarted && canvas !== null) {
+      setCanvas(null);
     }
     if (canvas === null) return;
     const ctx = canvas?.getContext("2d");

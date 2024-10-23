@@ -97,7 +97,7 @@ const Game = ({
           rightUserRef={rightUser}
         />
       )}
-      <Card className="w-full aspect-[2] relative">
+      <Card className="w-full aspect-[2] relative overflow-hidden">
         {leftUser.current?.username && rightUser.current?.username && (
           <Canvas
             leftUser={leftUser}
