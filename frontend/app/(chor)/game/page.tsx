@@ -25,7 +25,7 @@ export default function Page() {
           : "h-[370px] transition-all duration-500 ease-in-out overflow-hidden"
       }`}
       >
-        <div className="relative w-full h-full flex flex-col justify-center items-center -top-14 text-white scale-75 md:scale-100">
+        <div className="relative w-full h-full flex flex-col justify-center items-center -top-14 md:top-0 text-white scale-75 md:scale-100">
           <ReturnArrow setMode={setMode} mode={mode} />
           <LocalNav setMode={setMode} mode={mode} />
           <OnlineNav setMode={setMode} mode={mode} />
