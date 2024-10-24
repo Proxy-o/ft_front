@@ -1,11 +1,16 @@
-
 import Image from "next/image";
 import Link from "next/link";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import LocalNav from "@/app/(chor)/game/components/gameNav/localNav"
 
 export default function Home() {
   return (
     <div className="flex flex-col h-[calc(100vh-40px)] overflow-auto">
-
       <main className="flex-1 pt-32 md:px-12 lg:px-24">
         <section className="mb-12">
           <div className="container mx-auto">
@@ -50,7 +55,7 @@ export default function Home() {
           <div className="container mx-auto pt-12">
             <h2 className="text-2xl font-bold mb-4">Modes</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-              <div className="bg-muted rounded-lg p-4 hover:scale-105 transition duration-1000 ease-out"> 
+              <div className="bg-muted rounded-lg p-4 hover:scale-105 transition duration-1000 ease-out">
                 <h3 className="text-lg font-bold mb-2">1 VS 1</h3>
                 <p className="text-muted-foreground">
                   Play against your friend in a classic match.
@@ -72,34 +77,18 @@ export default function Home() {
           </div>
         </section>
 
-<div className="w-full   mt-36 flex items-center justify-center">
-<Link
-                    href="/game/local"
-                    className="inline-flex items-center justify-center rounded-md bg-primary/30 px-6 py-3 text-primary-foreground font-medium transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-                  >
-                    Play Local
-                  </Link>
-</div>
-      </main>
-      {/* <footer className="bg-muted text-muted-foreground py-6 px-6">
-        <div className="container mx-auto flex justify-between items-center">
-          <p>&copy; 2023 Ping Pong. All rights reserved.</p>
-          <nav>
-            <ul className="flex space-x-4">
-              <li>
-                <a href="#" className="hover:underline">
-                  Privacy Policy
-                </a>
-              </li>
-              <li>
-                <a href="#" className="hover:underline">
-                  Terms of Service
-                </a>
-              </li>
-            </ul>
-          </nav>
+        <div className="w-full   mt-36 flex items-center justify-center">
+        <Dialog defaultOpen={false}>
+          <DialogTrigger className="inline-flex items-center justify-center rounded-md bg-primary/30 px-6 py-3 text-primary-foreground font-medium transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+            Play Local
+          </DialogTrigger>
+        <DialogContent className="flex flex-col rounded-lg p-4 w-full items-center justify-center min-h-[500px] md:min-h-[290px] ">
+          <LocalNav mode="local" />
+        </DialogContent>
+      </Dialog>
         </div>
-      </footer> */}
+      </main>
     </div>
   );
 }
+

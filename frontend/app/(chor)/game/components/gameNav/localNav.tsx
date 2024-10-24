@@ -8,7 +8,7 @@ const LocalNav = ({
   setMode,
 }: {
   mode: string;
-  setMode: React.Dispatch<React.SetStateAction<"local" | "online" | "main">>;
+  setMode?: React.Dispatch<React.SetStateAction<"local" | "online" | "main">>;
 }) => {
   const router = useRouter();
   return (
@@ -21,7 +21,7 @@ const LocalNav = ({
            : "-left-[1000px] transition-all duration-500 ease-in-out"
        }`}
       >
-        <div className="text-4xl">Local Games</div>
+        <div className="text-4xl pt-2">Local Games</div>
         <div className={` flex flex-col md:flex-row w-full h-fit top-0 z-30 flex-wrap items-center md:items-start justify-center gap-4`}>
           <div
             className="rounded-md flex flex-col items-center justify-center"
