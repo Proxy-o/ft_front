@@ -178,8 +178,8 @@ const Canvas = ({
         username === controllerUser.current?.username &&
         newAngleRef.current === 0
       ) {
-        setTimeout(() => {
         newAngleRef.current = 10;
+        setTimeout(() => {
           newBallPositionRef.current = { x, y }; // Initialize the ref
           newAngleRef.current = Math.random() * Math.PI;
           while (
