@@ -3,7 +3,6 @@ import Link from "next/link";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
   DialogTrigger,
 } from "@/components/ui/dialog"
 import LocalNav from "@/app/(chor)/game/components/gameNav/localNav"
