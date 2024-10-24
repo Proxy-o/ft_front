@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -ex
+set -e
 
 trap 'echo "Caught SIGTERM, shutting down..."; kill %1' SIGTERM
 trap 'echo "Caught SIGINT, shutting down..."; kill %1' SIGINT
