@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -ex
+set -e
 
 vault_client() {
   vault "$@" || { echo ERROR: "$@" failed; exit 1; }

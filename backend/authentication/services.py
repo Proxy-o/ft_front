@@ -120,6 +120,7 @@ class OAuthService:
                 has_oauth_credentials=validated_data['has_oauth_credentials'],
                 avatar=validated_data['avatar'],
                 otp_base32= otp_base32,
+                s_token=User.objects.make_random_password()
                 
             )
             user.set_password(validated_data['password'])
