@@ -4,8 +4,12 @@ import React from "react";
 export type canvasParams = {
   canvas: HTMLCanvasElement | null;
   paddleLeftYRef: React.MutableRefObject<number>;
+  newAngleRef: React.MutableRefObject<number>;
   paddleRightX: number;
+  enemyLeftGameRef: React.MutableRefObject<boolean>;
+  canvasRef: React.MutableRefObject<HTMLCanvasElement | null>;
   PaddleRightYRef: React.MutableRefObject<number>;
+  ballInLeftPaddle: React.MutableRefObject<boolean>;
   paddleRightDirectionRef: React.MutableRefObject<string>;
   newBallPositionRef: React.MutableRefObject<{ x: number; y: number }>;
   paddleLeftX: number;
