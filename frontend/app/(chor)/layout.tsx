@@ -47,10 +47,10 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
             backgroundPosition: "center",
             backgroundAttachment: "fixed",
             backgroundRepeat: "no-repeat",
-            backgroundColor: "rgba(0, 0, 0, 0.75)", // Black background with 50% opacity
+            backgroundColor: "rgba(0, 0, 0, 0.60)", // Black background with 50% opacity
           }}
         >
-          <div className="flex w-full h-full bg-white bg-opacity-15 dark:bg-black dark:bg-opacity-70">
+          <div className="flex w-full h-full bg-white bg-opacity-15 dark:bg-black dark:bg-opacity-60">
             {showNav === 1 && <Nav />}
             <div
               className={cn(

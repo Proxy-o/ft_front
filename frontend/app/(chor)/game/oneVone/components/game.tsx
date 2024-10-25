@@ -97,22 +97,31 @@ const Game = ({
           rightUserRef={rightUser}
         />
       )}
-      <Card className="w-full aspect-[2] relative overflow-hidden">
+      <Card
+        className="relative w-full aspect-[2] overflow-hidden z-20"
+        style={{
+          backgroundImage: "url('/fullbg3.jpg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundAttachment: "fixed",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
         {leftUser.current?.username && rightUser.current?.username && (
           <Canvas
-            leftUser={leftUser}
-            rightUser={rightUser}
-            controllerUser={controllerUser}
-            state={state}
-            gameIdRef={gameIdRef}
-            gameStarted={gameStarted}
-            setGameStarted={setGameStarted}
-            leftScoreRef={leftScoreRef}
-            rightScoreRef={rightScoreRef}
-            onGoingGame={onGoingGame}
-            user={user}
-            username={username}
-            canvasRef={canvasRef}
+          leftUser={leftUser}
+          rightUser={rightUser}
+          controllerUser={controllerUser}
+          state={state}
+          gameIdRef={gameIdRef}
+          gameStarted={gameStarted}
+          setGameStarted={setGameStarted}
+          leftScoreRef={leftScoreRef}
+          rightScoreRef={rightScoreRef}
+          onGoingGame={onGoingGame}
+          user={user}
+          username={username}
+          canvasRef={canvasRef}
           />
         )}
 
@@ -131,15 +140,18 @@ const Game = ({
         {(!gameStarted ||
           leftScoreRef.current === 3 ||
           rightScoreRef.current === 3) && <NoGame state={state} />}
-        {leftUser.current?.username && rightUser.current?.username && leftScoreRef.current < 3 && rightScoreRef.current < 3 && (
-          <Actions
-            gameStarted={gameStarted}
-            type={type}
-            rightUserRef={rightUser}
-            leftUserRef={leftUser}
-            gameIdRef={gameIdRef}
-          />
-        )}
+        {leftUser.current?.username &&
+          rightUser.current?.username &&
+          leftScoreRef.current < 3 &&
+          rightScoreRef.current < 3 && (
+            <Actions
+              gameStarted={gameStarted}
+              type={type}
+              rightUserRef={rightUser}
+              leftUserRef={leftUser}
+              gameIdRef={gameIdRef}
+            />
+          )}
       </Card>
     </div>
   );

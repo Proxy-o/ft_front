@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import useGameSocket from "../../hooks/sockets/useGameSocket";
 import { canvasParams } from "../../types";
 import useEndGame from "../../hooks/useEndGame";
@@ -11,6 +11,7 @@ import checkCollisionWithHorizontalWalls from "../../methods/checkCollisionWithH
 import { moveBall } from "../../methods/moveBall";
 import { User } from "@/lib/types";
 import Sockets from "./sockets";
+import { enemyLeftGame } from "../../methods/enemyLeftGame";
 
 const Canvas = ({
   onGoingGame,
@@ -51,14 +52,15 @@ const Canvas = ({
     handleStartGame,
   } = useGameSocket();
   const ballInLeftPaddle = useRef<boolean>(false);
+  const ballInRightPaddle = useRef<boolean>(false);
   const enemyLeftGameRef = useRef<boolean>(false);
-  const bgImage = useRef<HTMLImageElement | null>(null);
   const animationFrameId = useRef<number>(0);
   const isAnimating = useRef<boolean>(false);
   const isFirstTime = useRef<boolean>(true);
   const paddleLeftYRef = useRef<number>(0);
   const PaddleRightYRef = useRef<number>(0);
   const paddleRightDirectionRef = useRef<string>("stop");
+  const nextAngleRef = useRef<number>(0);
   const newBallPositionRef = useRef({
     x: (canvasRef.current?.width || 0) / 2,
     y: (canvasRef.current?.height || 0) / 2,
@@ -73,9 +75,9 @@ const Canvas = ({
     timeRef.current = Time;
   }, []);
 
-  const paddleHeight = 60;
+  const paddleHeight = 120;
   const paddleWidth = 15;
-  let ballRadius = 10;
+  let ballRadius = 20;
   if (!gameStarted) canvasRef.current = null;
 
   let canvasParams: canvasParams = {
@@ -84,6 +86,7 @@ const Canvas = ({
     newAngleRef,
     canvasRef,
     paddleLeftX: 0,
+    nextAngleRef,
     paddleLeftYRef,
     PaddleRightYRef,
     enemyLeftGameRef,
@@ -102,35 +105,8 @@ const Canvas = ({
     rightUserRef: rightUser,
     gameIdRef,
   };
-  useEffect(() => {
-    if (canvas === null && canvasRef.current && gameStarted) {
-      setCanvas(canvasRef.current);
-    }
-    if (!gameStarted && canvas !== null) {
-      setCanvas(null);
-    }
-    if (canvas === null) return;
-    const ctx = canvas?.getContext("2d");
-    if (!ctx) return;
-
-    let x = canvas.width / 2;
-    let y = canvas.height / 2;
-
-    const paddleLeftX = 0;
-    const paddleRightX = canvas.width - paddleWidth;
-    paddleLeftYRef.current = (canvas.height - paddleHeight) / 2;
-    PaddleRightYRef.current = (canvas.height - paddleHeight) / 2;
-
-    isFirstTime.current = true;
-
-    rightScoreRef.current = 0;
-    leftScoreRef.current = 0;
-
-    canvasParams.paddleRightX = paddleRightX;
-    canvasParams.paddleLeftX = paddleLeftX;
-
-    const handleKeyEvent = (e: KeyboardEvent) => {
-      // preventDefault to prevent the page from scrolling
+  const handleKeyEvent = useCallback(
+    (e: KeyboardEvent) => {
       if (e.key === "ArrowUp" || e.key === "ArrowDown") e.preventDefault();
       if (e.type === "keydown") {
         if (e.key === "ArrowUp" && !upPressedRef.current) {
@@ -154,24 +130,50 @@ const Canvas = ({
             handleMovePaddle("stop", paddleLeftYRef.current);
         }
       }
-    };
+    },
+    [handleMovePaddle]
+  );
+
+  useEffect(() => {
+    if (canvas === null && canvasRef.current && gameStarted) {
+      setCanvas(canvasRef.current);
+    }
+    if (!gameStarted && canvas !== null) {
+      setCanvas(null);
+    }
+    if (canvas === null) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let x = canvas.width / 2;
+    let y = canvas.height / 2;
+
+    const paddleLeftX = 100;
+    const paddleRightX = canvas.width - paddleWidth - 100;
+    paddleLeftYRef.current = (canvas.height - paddleHeight) / 2;
+    PaddleRightYRef.current = (canvas.height - paddleHeight) / 2;
+
+    isFirstTime.current = true;
+    rightScoreRef.current = 0;
+    leftScoreRef.current = 0;
+
+    canvasParams.paddleRightX = paddleRightX;
+    canvasParams.paddleLeftX = paddleLeftX;
 
     document.addEventListener("keydown", handleKeyEvent, false);
     document.addEventListener("keyup", handleKeyEvent, false);
 
-    // Cleanup function to remove the event listeners and stop the animation loop
-    function returnFunction() {
+    const returnFunction = () => {
       document.removeEventListener("keydown", handleKeyEvent, false);
       document.removeEventListener("keyup", handleKeyEvent, false);
-
       if (animationFrameId.current) {
         cancelAnimationFrame(animationFrameId.current);
       }
       isAnimating.current = false;
-    }
+    };
 
     const theGameStarted = () => {
-      // console.log("the game started");
       if (!gameStarted || canvas === null) return;
       if (
         username === controllerUser.current?.username &&
@@ -179,20 +181,19 @@ const Canvas = ({
       ) {
         newAngleRef.current = 10;
         setTimeout(() => {
-          newBallPositionRef.current = { x, y }; // Initialize the ref
+          newBallPositionRef.current = { x, y };
           newAngleRef.current = Math.random() * Math.PI;
           while (
             (newAngleRef.current > Math.PI / 6 &&
-            newAngleRef.current < (Math.PI * 5) / 6) ||
+              newAngleRef.current < (Math.PI * 5) / 6) ||
             (newAngleRef.current > (Math.PI * 7) / 6 &&
-            newAngleRef.current < (Math.PI * 11) / 6)
+              newAngleRef.current < (Math.PI * 11) / 6)
           ) {
             newAngleRef.current = Math.random() * 2 * Math.PI;
           }
           let enemyX = canvas.width - newBallPositionRef.current.x;
           let enemyY = newBallPositionRef.current.y;
           let enemyAngle = Math.PI - newAngleRef.current;
-          
           handleChangeBallDirection(
             enemyX,
             enemyY,
@@ -201,28 +202,27 @@ const Canvas = ({
           );
         }, 1000);
       }
-      
+
       changeBallDirectionOnline(
         canvasParams,
         newAngleRef,
         ballInLeftPaddle,
+        ballInRightPaddle,
         handleChangeBallDirection,
         rightUser.current
       );
 
-      if (bgImage.current === null) {
-        bgImage.current = new Image();
-        bgImage.current.src = "/bg.jpg";
-      }
+      ctx.clearRect(0, 0, canvas.width, canvas.height); // todo: remove this
+      ctx.clearRect(0, 0, paddleWidth, canvas.height);
+      ctx.clearRect(canvas.width - paddleWidth, 0, paddleWidth, canvas.height);
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.globalAlpha = 0.5;
-      ctx.drawImage(bgImage.current, 0, 0, canvas.width, canvas.height);
-      ctx.globalAlpha = 1;
-      // draw paddles and ball
+      ctx.clearRect(
+        newBallPositionRef.current.x - 40,
+        newBallPositionRef.current.y - 40,
+        80,
+        80
+      );
       draw(canvasParams, ctx);
-      // console.log("drawing");
-
 
       checkCollisionWithHorizontalWalls(
         canvas,
@@ -230,9 +230,7 @@ const Canvas = ({
         newBallPositionRef,
         newAngleRef
       );
-      
-      
-      // Move the ball
+
       if (
         newAngleRef.current !== 0 &&
         newAngleRef.current !== 10 &&
@@ -241,12 +239,9 @@ const Canvas = ({
       ) {
         moveBall(canvasParams, user, leftUser.current, newAngleRef);
       }
-      // move paddles
+
       movePaddlesOnline(canvasParams);
 
-      // // Check for collision with left paddle
-
-      // Check for score
       checkLoseConditionOnline(
         canvas,
         leftScoreRef,
@@ -257,7 +252,6 @@ const Canvas = ({
         setCanvas
       );
 
-      // Change score
       changeScoreOnline(
         canvasParams,
         newAngleRef,
@@ -266,11 +260,6 @@ const Canvas = ({
         rightUser.current,
         leftUser.current
       );
-
-      // Check for collision with the horizontal walls
-
-
-      // Check if enemy has left the game
       // enemyLeftGame(
       //   canvasParams,
       //   timeRef,
@@ -282,7 +271,6 @@ const Canvas = ({
 
     const animate = () => {
       if (canvas === null || !gameStarted) return;
-
       if (
         gameStarted &&
         leftUser.current !== undefined &&
@@ -296,20 +284,20 @@ const Canvas = ({
     if (!isAnimating.current) {
       isAnimating.current = true;
       animate();
-      return returnFunction;
     }
+
+    return returnFunction;
   }, [gameStarted, canvasRef.current]);
 
-  // console.log("canvas rendered", gameStarted);
   return (
     <>
       {gameStarted && (
-        <canvas
-          ref={canvasRef}
-          height="400"
-          width="800"
-          className={`w-full h-full`}
-        ></canvas>
+          <canvas
+            ref={canvasRef}
+            height="800"
+            width="1600"
+            className="w-full h-full z-40"
+          />
       )}
       <Sockets
         canvasParams={canvasParams}

@@ -5,6 +5,7 @@ function changeBallDirectionOnline(
   canvasParams: canvasParams,
   newAngleRef: React.MutableRefObject<number>,
   ballInLeftPaddle: React.MutableRefObject<boolean>,
+  ballInRightPaddle: React.MutableRefObject<boolean>,
   handleChangeBallDirection: (
     x: number,
     y: number,
@@ -16,7 +17,9 @@ function changeBallDirectionOnline(
   const {
     canvas,
     paddleLeftYRef,
+    PaddleRightYRef,
     newBallPositionRef,
+    nextAngleRef,
     paddleLeftX,
     paddleWidth,
     paddleHeight,
@@ -59,6 +62,23 @@ function changeBallDirectionOnline(
     }
   } else {
     ballInLeftPaddle.current = false;
+  }
+  if (!isFirstTime.current) {
+    // console.log("newBallPositionRef.current.x", newBallPositionRef.current.x);
+    if (
+      newBallPositionRef.current.x >
+        canvas.width - ballRadius - paddleWidth - 100 &&
+      newBallPositionRef.current.x < canvas.width - ballRadius - 100 &&
+      newBallPositionRef.current.y + ballRadius / 2 > PaddleRightYRef.current &&
+      newBallPositionRef.current.y - ballRadius / 2 <
+      PaddleRightYRef.current + paddleHeight &&
+      !ballInRightPaddle.current
+    ) {
+      newAngleRef.current = nextAngleRef.current;
+      ballInRightPaddle.current = true;
+    } else {
+      ballInRightPaddle.current = false;
+    }
   }
 }
 

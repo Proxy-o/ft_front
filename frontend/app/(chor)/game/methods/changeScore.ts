@@ -16,7 +16,7 @@ function changeScoreOnline(
 ) {
   const { canvas, newBallPositionRef, gameIdRef } = canvasParams;
   if (canvas === null) return;
-  if (newBallPositionRef.current.x < -50) {
+  if (newBallPositionRef.current.x < -100) {
     newBallPositionRef.current.x = canvas.width / 2;
     newBallPositionRef.current.y = canvas.height / 2;
     newAngleRef.current = 0;
