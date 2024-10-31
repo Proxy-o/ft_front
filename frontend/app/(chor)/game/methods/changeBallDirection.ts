@@ -29,7 +29,7 @@ function changeBallDirectionOnline(
   if (canvas === null) return;
   let newAngle = 0;
   if (
-    newBallPositionRef.current.x < paddleLeftX + paddleWidth &&
+    newBallPositionRef.current.x < paddleLeftX + paddleWidth + ballRadius / 2 &&
     newBallPositionRef.current.x > paddleLeftX &&
     newBallPositionRef.current.y + ballRadius / 2 > paddleLeftYRef.current &&
     newBallPositionRef.current.y - ballRadius / 2 <

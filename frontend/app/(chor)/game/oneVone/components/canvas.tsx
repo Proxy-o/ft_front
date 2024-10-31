@@ -76,7 +76,7 @@ const Canvas = ({
 
   const paddleHeight = 120;
   const paddleWidth = 21;
-  let ballRadius = 20;
+  let ballRadius = 40;
   if (!gameStarted) canvasRef.current = null;
 
   let canvasParams: canvasParams = {
