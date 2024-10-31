@@ -8,7 +8,8 @@ function changeScoreOnline(
     x: number,
     y: number,
     angle: number,
-    user: string
+    rightUser: string,
+    leftUser: string
   ) => void,
   handleEnemyScore: (gameId: string) => void,
   rightUser: User | undefined,
@@ -24,7 +25,8 @@ function changeScoreOnline(
       newBallPositionRef.current.x,
       newBallPositionRef.current.y,
       0,
-      rightUser?.username || ""
+      rightUser?.username || "",
+      leftUser?.username || ""
     );
     handleEnemyScore(gameIdRef.current);
   }

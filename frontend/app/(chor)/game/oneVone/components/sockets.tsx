@@ -57,24 +57,27 @@ const Sockets = ({
           PaddleRightYRef.current = parseInt(message[2]);
         }
       } else if (message[0] === "/ballDirection") {
-        const sender = message[4];
-        if (sender !== leftUser.current?.username) {
+        const right = message[4];
+        const left = message[5];
+        if (
+          canvasRef.current &&
+          (newBallPositionRef.current.x < canvasRef.current.width / 6 ||
+            newBallPositionRef.current.x > (canvasRef.current.width * 5) / 6)
+        ) {
+          isFirstTime.current = false;
+        }
+        if (right === leftUser.current?.username) {
           newBallPositionRef.current = {
             x: parseInt(message[1]),
             y: parseInt(message[2]),
           };
-          if (
-            canvasRef.current &&
-            (newBallPositionRef.current.x < canvasRef.current.width / 6 ||
-              newBallPositionRef.current.x > (canvasRef.current.width * 5) / 6)
-          ) {
-            isFirstTime.current = false;
-          }
-          if (isFirstTime.current) {
-            newAngleRef.current = parseFloat(message[3]);
-          } else {
-            nextAngleRef.current = parseFloat(message[3]);
-          }
+          newAngleRef.current = parseFloat(message[3]);
+        } else {
+          newBallPositionRef.current = {
+            x: 1600 - parseInt(message[1]),
+            y: parseInt(message[2]),
+          };
+          newAngleRef.current = Math.PI - parseFloat(message[3]);
         }
       } else if (message[0] === "/show") {
         // console.log("showing");

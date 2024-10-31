@@ -6,8 +6,8 @@ function checkCollisionWithHorizontalWalls(
 ) {
   if (canvas === null) return;
   if (
-    newBallPositionRef.current.y > canvas.height - ballRadius ||
-    newBallPositionRef.current.y < ballRadius
+    newBallPositionRef.current.y > canvas.height - ballRadius / 2 ||
+    newBallPositionRef.current.y < ballRadius / 2
   ) {
     newAngleRef.current = -newAngleRef.current;
   }

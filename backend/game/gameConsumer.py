@@ -188,8 +188,11 @@ class GameConsumer(WebsocketConsumer):
         ball_x = split[1]
         ball_y = split[2]
         ball_angle = split[3]
-        user = split[4]
-        self.send_ball_direction_message(ball_x, ball_y, ball_angle)
+        user1 = split[4]
+        user2 = split[5]
+        user3 = split[6] if len(split) > 6 else None
+        user4 = split[7] if len(split) > 7 else None
+        self.send_ball_direction_message(ball_x, ball_y, ball_angle, user1, user2, user3, user4)
 
     def handle_four_change_ball_direction(self, split):
         # print("Handling four change ball direction")
@@ -734,14 +737,10 @@ class GameConsumer(WebsocketConsumer):
             }
         )
 
-    def send_ball_direction_message(self, ball_x, ball_y, ball_angle):
+    def send_ball_direction_message(self, ball_x, ball_y, ball_angle, user1, user2, user3=None, user4=None):
         # print("Sending ball direction message")
-        game = Game.objects.filter(Q(user1=self.user) | Q(user2=self.user) | Q(
-            user3=self.user) | Q(user4=self.user)).filter(winner=None).last()
-        if not game:
-            return
         async_to_sync(self.channel_layer.group_send)(
-            f'game_{game.user1.username}',
+            f'game_{user1}',
             {
                 'type': 'send_message',
                 'user': self.user.username,
@@ -749,25 +748,25 @@ class GameConsumer(WebsocketConsumer):
             }
         )
         async_to_sync(self.channel_layer.group_send)(
-            f'game_{game.user2.username}',
+            f'game_{user2}',
             {
                 'type': 'send_message',
                 'user': self.user.username,
                 'message': f'/ballDirection {ball_x} {ball_y} {ball_angle} {self.user.username}'
             }
         )
-        if game.user3:
+        if user3:
             async_to_sync(self.channel_layer.group_send)(
-                f'game_{game.user3.username}',
+                f'game_{user3}',
                 {
                     'type': 'send_message',
                     'user': self.user.username,
                     'message': f'/ballDirection {ball_x} {ball_y} {ball_angle} {self.user.username}'
                 }
             )
-        if game.user4:
+        if user4:
             async_to_sync(self.channel_layer.group_send)(
-                f'game_{game.user4.username}',
+                f'game_{user4}',
                 {
                     'type': 'send_message',
                     'user': self.user.username,

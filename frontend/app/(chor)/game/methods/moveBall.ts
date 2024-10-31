@@ -11,26 +11,18 @@ function moveBall(
   let speed: number;
   if (isFirstTime.current == true) {
     if (user?.username === leftUser?.username) {
-      newBallPositionRef.current.x += Math.cos(newAngleRef.current) * 3;
+      newBallPositionRef.current.x += Math.cos(newAngleRef.current) * 6;
     } else {
-      newBallPositionRef.current.x -= Math.cos(newAngleRef.current) * 3;
+      newBallPositionRef.current.x -= Math.cos(newAngleRef.current) * 6;
     }
-    newBallPositionRef.current.y += Math.sin(newAngleRef.current) * 3;
+    newBallPositionRef.current.y += Math.sin(newAngleRef.current) * 6;
   } else {
-    if (
-      newAngleRef.current > Math.PI / 4 &&
-      newAngleRef.current < Math.PI * 3 / 4
-    ) {
-      speed = 10;
-    } else {
-      speed = 7;
-    }
     if (user?.username === leftUser?.username) {
-      newBallPositionRef.current.x += Math.cos(newAngleRef.current) * speed;
+      newBallPositionRef.current.x += Math.cos(newAngleRef.current) * 12;
     } else {
-      newBallPositionRef.current.x -= Math.cos(newAngleRef.current) * speed;
+      newBallPositionRef.current.x -= Math.cos(newAngleRef.current) * 12;
     }
-    newBallPositionRef.current.y += Math.sin(newAngleRef.current) * speed;
+    newBallPositionRef.current.y += Math.sin(newAngleRef.current) * 12;
   }
 }
 

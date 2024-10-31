@@ -10,13 +10,14 @@ function draw(canvasParams: canvasParams, ctx: CanvasRenderingContext2D) {
     paddleWidth,
     paddleHeight,
     ballRadius,
+    canvasRef,
   } = canvasParams;
   const drawBall = () => {
     ctx.beginPath();
     ctx.arc(
       newBallPositionRef.current.x,
       newBallPositionRef.current.y,
-      ballRadius,
+      ballRadius / 2,
       0,
       Math.PI * 2
     );
@@ -27,6 +28,7 @@ function draw(canvasParams: canvasParams, ctx: CanvasRenderingContext2D) {
 
   const drawRightPaddle = () => {
     ctx.beginPath();
+    ctx.clearRect(paddleRightX, 0, paddleWidth, canvasRef.current?.height || 0);
     ctx.rect(paddleRightX, PaddleRightYRef.current, paddleWidth, paddleHeight);
     ctx.fillStyle = "#0095DD";
     ctx.fill();
@@ -35,6 +37,7 @@ function draw(canvasParams: canvasParams, ctx: CanvasRenderingContext2D) {
 
   const drawLeftPaddle = () => {
     ctx.beginPath();
+    ctx.clearRect(paddleLeftX, 0, paddleWidth, canvasRef.current?.height || 0);
     ctx.rect(paddleLeftX, paddleLeftYRef.current, paddleWidth, paddleHeight);
     ctx.fillStyle = "#ee95DD";
     ctx.fill();
@@ -92,16 +95,14 @@ function drawFour(canvasParams: canvasParamsFour) {
     paddleHeight,
     ballRadius,
     paddleRightX,
-
   } = canvasParams;
   const drawBall = () => {
     ctx.beginPath();
-    ctx.arc(
+    ctx.rect(
       newBallPositionRef.current.x,
       newBallPositionRef.current.y,
       ballRadius,
-      0,
-      Math.PI * 2
+      ballRadius
     );
     ctx.fillStyle = "#0095DD";
     ctx.fill();

@@ -53,10 +53,24 @@ export default function useGameSocket() {
     ballX: number,
     ballY: number,
     angle: number,
-    user: string
+    user1: string,
+    user2: string,
+    user3?: string,
+    user4?: string
   ) => {
     const toSend =
-      "/changeBallDirection " + ballX + " " + ballY + " " + angle + " " + user;
+      "/changeBallDirection " +
+      ballX +
+      " " +
+      ballY +
+      " " +
+      angle +
+      " " +
+      user1 +
+      " " +
+      user2;
+    if (user3) toSend.concat(" " + user3);
+    if (user4) toSend.concat(" " + user4);
     sendJsonMessage({ message: toSend });
   };
 

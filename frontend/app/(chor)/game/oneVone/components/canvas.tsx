@@ -76,7 +76,7 @@ const Canvas = ({
   }, []);
 
   const paddleHeight = 120;
-  const paddleWidth = 15;
+  const paddleWidth = 21;
   let ballRadius = 20;
   if (!gameStarted) canvasRef.current = null;
 
@@ -149,8 +149,8 @@ const Canvas = ({
     let x = canvas.width / 2;
     let y = canvas.height / 2;
 
-    const paddleLeftX = 100;
-    const paddleRightX = canvas.width - paddleWidth - 100;
+    const paddleLeftX = 0;
+    const paddleRightX = canvas.width - paddleWidth;
     paddleLeftYRef.current = (canvas.height - paddleHeight) / 2;
     PaddleRightYRef.current = (canvas.height - paddleHeight) / 2;
 
@@ -198,7 +198,8 @@ const Canvas = ({
             enemyX,
             enemyY,
             enemyAngle,
-            rightUser.current?.username || ""
+            rightUser.current?.username || "",
+            leftUser.current?.username || ""
           );
         }, 1000);
       }
@@ -209,7 +210,8 @@ const Canvas = ({
         ballInLeftPaddle,
         ballInRightPaddle,
         handleChangeBallDirection,
-        rightUser.current
+        rightUser.current,
+        leftUser.current
       );
 
       ctx.clearRect(0, 0, canvas.width, canvas.height); // todo: remove this
@@ -292,12 +294,12 @@ const Canvas = ({
   return (
     <>
       {gameStarted && (
-          <canvas
-            ref={canvasRef}
-            height="800"
-            width="1600"
-            className="w-full h-full z-40"
-          />
+        <canvas
+          ref={canvasRef}
+          height="800"
+          width="1600"
+          className="w-full h-full z-40"
+        />
       )}
       <Sockets
         canvasParams={canvasParams}

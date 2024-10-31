@@ -12,10 +12,10 @@ function movePaddlesOnline(canvasParams: canvasParams) {
   } = canvasParams;
   if (canvas === null) return;
   if (upPressedRef.current && paddleLeftYRef.current > 0) {
-    if (paddleLeftYRef.current - 6 < 0) {
+    if (paddleLeftYRef.current - 16 < 0) {
       paddleLeftYRef.current = 0;
     } else {
-      paddleLeftYRef.current -= 6;
+      paddleLeftYRef.current -= 16;
     }
     // handleMovePaddle(paddleLeftYRef.current);
     // upPressedRef.current = false;
@@ -23,26 +23,26 @@ function movePaddlesOnline(canvasParams: canvasParams) {
     downPressedRef.current &&
     paddleLeftYRef.current < canvas.height - paddleHeight
   ) {
-    if (paddleLeftYRef.current + 6 > canvas.height - paddleHeight) {
+    if (paddleLeftYRef.current + 16 > canvas.height - paddleHeight) {
       paddleLeftYRef.current = canvas.height - paddleHeight;
     } else {
-      paddleLeftYRef.current += 6;
+      paddleLeftYRef.current += 16;
     }
     // handleMovePaddle(paddleLeftYRef.current);
     // downPressedRef.current = false;
   }
   if (paddleRightDirectionRef.current === "up") {
-    if (PaddleRightYRef.current - 6 < 0) {
+    if (PaddleRightYRef.current - 16 < 0) {
       PaddleRightYRef.current = 0;
     } else {
-      PaddleRightYRef.current -= 6;
+      PaddleRightYRef.current -= 16;
     }
     // handleMovePaddle(PaddleRightYRef.current);
   } else if (paddleRightDirectionRef.current === "down") {
-    if (PaddleRightYRef.current + 6 > canvas.height - paddleHeight) {
+    if (PaddleRightYRef.current + 16 > canvas.height - paddleHeight) {
       PaddleRightYRef.current = canvas.height - paddleHeight;
     } else {
-      PaddleRightYRef.current += 6;
+      PaddleRightYRef.current += 16;
     }
     // handleMovePaddle(PaddleRightYRef.current);
   }

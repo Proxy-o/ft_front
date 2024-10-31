@@ -10,9 +10,11 @@ function changeBallDirectionOnline(
     x: number,
     y: number,
     angle: number,
-    user: string
+    user1: string,
+    user2: string
   ) => void,
-  rightUser: User | undefined
+  rightUser: User | undefined,
+  leftUser: User | undefined
 ) {
   const {
     canvas,
@@ -27,9 +29,10 @@ function changeBallDirectionOnline(
     isFirstTime,
   } = canvasParams;
   if (canvas === null) return;
+  let newAngle = 0;
   if (
-    newBallPositionRef.current.x < paddleLeftX + paddleWidth + ballRadius &&
-    newBallPositionRef.current.x > paddleLeftX + ballRadius &&
+    newBallPositionRef.current.x < paddleLeftX + paddleWidth &&
+    newBallPositionRef.current.x > paddleLeftX &&
     newBallPositionRef.current.y + ballRadius / 2 > paddleLeftYRef.current &&
     newBallPositionRef.current.y - ballRadius / 2 <
       paddleLeftYRef.current + paddleHeight
@@ -43,20 +46,16 @@ function changeBallDirectionOnline(
         newBallPositionRef.current.y <
         paddleLeftYRef.current + paddleHeight / 2
       ) {
-        newAngleRef.current =
-          ((-Math.PI * 2) / 6) * (0.5 - ballPercentageOnPaddle);
+        newAngle = ((-Math.PI * 2) / 6) * (0.5 - ballPercentageOnPaddle);
       } else {
-        newAngleRef.current =
-          ((Math.PI * 2) / 6) * (ballPercentageOnPaddle - 0.5);
+        newAngle = ((Math.PI * 2) / 6) * (ballPercentageOnPaddle - 0.5);
       }
-      let enemyX = canvas.width - newBallPositionRef.current.x;
-      let enemyY = newBallPositionRef.current.y;
-      let enemyAngle = Math.PI - newAngleRef.current;
       handleChangeBallDirection(
-        enemyX,
-        enemyY,
-        enemyAngle,
-        rightUser?.username || ""
+        newBallPositionRef.current.x,
+        newBallPositionRef.current.y,
+        newAngle,
+        rightUser?.username || "",
+        leftUser?.username || ""
       );
       ballInLeftPaddle.current = true;
     }
@@ -65,20 +64,20 @@ function changeBallDirectionOnline(
   }
   if (!isFirstTime.current) {
     // console.log("newBallPositionRef.current.x", newBallPositionRef.current.x);
-    if (
-      newBallPositionRef.current.x >
-        canvas.width - ballRadius - paddleWidth - 100 &&
-      newBallPositionRef.current.x < canvas.width - ballRadius - 100 &&
-      newBallPositionRef.current.y + ballRadius / 2 > PaddleRightYRef.current &&
-      newBallPositionRef.current.y - ballRadius / 2 <
-      PaddleRightYRef.current + paddleHeight &&
-      !ballInRightPaddle.current
-    ) {
-      newAngleRef.current = nextAngleRef.current;
-      ballInRightPaddle.current = true;
-    } else {
-      ballInRightPaddle.current = false;
-    }
+    // if (
+    //   newBallPositionRef.current.x >
+    //     canvas.width - ballRadius - paddleWidth - 100 &&
+    //   newBallPositionRef.current.x < canvas.width - ballRadius - 100 &&
+    //   newBallPositionRef.current.y + ballRadius / 2 > PaddleRightYRef.current &&
+    //   newBallPositionRef.current.y - ballRadius / 2 <
+    //   PaddleRightYRef.current + paddleHeight &&
+    //   !ballInRightPaddle.current
+    // ) {
+    //   newAngleRef.current = nextAngleRef.current;
+    //   ballInRightPaddle.current = true;
+    // } else {
+    //   ballInRightPaddle.current = false;
+    // }
   }
 }
 
