@@ -18,11 +18,11 @@ function moveBall(
     newBallPositionRef.current.y += Math.sin(newAngleRef.current) * 6;
   } else {
     if (user?.username === leftUser?.username) {
-      newBallPositionRef.current.x += Math.cos(newAngleRef.current) * 12;
+      newBallPositionRef.current.x += Math.cos(newAngleRef.current) * 18;
     } else {
-      newBallPositionRef.current.x -= Math.cos(newAngleRef.current) * 12;
+      newBallPositionRef.current.x -= Math.cos(newAngleRef.current) * 18;
     }
-    newBallPositionRef.current.y += Math.sin(newAngleRef.current) * 12;
+    newBallPositionRef.current.y += Math.sin(newAngleRef.current) * 18;
   }
 }
 

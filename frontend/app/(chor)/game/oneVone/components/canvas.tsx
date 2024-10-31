@@ -213,10 +213,6 @@ const Canvas = ({
         leftUser.current
       );
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height); // todo: remove this
-      ctx.clearRect(0, 0, paddleWidth, canvas.height);
-      ctx.clearRect(canvas.width - paddleWidth, 0, paddleWidth, canvas.height);
-
       ctx.clearRect(
         newBallPositionRef.current.x - 40,
         newBallPositionRef.current.y - 40,
