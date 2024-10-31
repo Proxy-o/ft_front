@@ -8,7 +8,7 @@ function moveBall(
   newAngleRef: React.MutableRefObject<number>
 ) {
   const { newBallPositionRef, isFirstTime } = canvasParams;
-  let speed: number;
+  // let speed: number;
   if (isFirstTime.current == true) {
     if (user?.username === leftUser?.username) {
       newBallPositionRef.current.x += Math.cos(newAngleRef.current) * 6;

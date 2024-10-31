@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback, useMemo } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import useGameSocket from "../../hooks/sockets/useGameSocket";
 import { canvasParams } from "../../types";
 import useEndGame from "../../hooks/useEndGame";
@@ -11,7 +11,6 @@ import checkCollisionWithHorizontalWalls from "../../methods/checkCollisionWithH
 import { moveBall } from "../../methods/moveBall";
 import { User } from "@/lib/types";
 import Sockets from "./sockets";
-import { enemyLeftGame } from "../../methods/enemyLeftGame";
 
 const Canvas = ({
   onGoingGame,

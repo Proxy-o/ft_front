@@ -19,9 +19,7 @@ function changeBallDirectionOnline(
   const {
     canvas,
     paddleLeftYRef,
-    PaddleRightYRef,
     newBallPositionRef,
-    nextAngleRef,
     paddleLeftX,
     paddleWidth,
     paddleHeight,

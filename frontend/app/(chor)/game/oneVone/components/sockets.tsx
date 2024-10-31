@@ -33,7 +33,6 @@ const Sockets = ({
     enemyLeftGameRef,
     newAngleRef,
     isFirstTime,
-    nextAngleRef,
     canvasRef,
     leftScoreRef,
     rightScoreRef,
@@ -58,7 +57,6 @@ const Sockets = ({
         }
       } else if (message[0] === "/ballDirection") {
         const right = message[4];
-        const left = message[5];
         if (
           canvasRef.current &&
           (newBallPositionRef.current.x < canvasRef.current.width / 6 ||
@@ -77,7 +75,9 @@ const Sockets = ({
             x: 1600 - parseInt(message[1]),
             y: parseInt(message[2]),
           };
-          newAngleRef.current = Math.PI - parseFloat(message[3]);
+          if (parseFloat(message[3]))
+            newAngleRef.current = Math.PI - parseFloat(message[3]);
+          else newAngleRef.current = parseFloat(message[3]);
         }
       } else if (message[0] === "/show") {
         // console.log("showing");
