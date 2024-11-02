@@ -11,6 +11,7 @@ import checkCollisionWithHorizontalWalls from "../../methods/checkCollisionWithH
 import { moveBall } from "../../methods/moveBall";
 import { User } from "@/lib/types";
 import Sockets from "./sockets";
+import { enemyLeftGame } from "../../methods/enemyLeftGame";
 
 const Canvas = ({
   onGoingGame,
@@ -49,6 +50,7 @@ const Canvas = ({
     handleChangeBallDirection,
     handleEnemyScore,
     handleStartGame,
+    handleTime,
   } = useGameSocket();
   const canvasWidth = useRef<number>(1200);
   const canvasHeight = useRef<number>(800);
@@ -261,13 +263,13 @@ const Canvas = ({
         rightUser.current,
         leftUser.current
       );
-      // enemyLeftGame(
-      //   canvasParams,
-      //   timeRef,
-      //   enemyLeftGameRef,
-      //   handleTime,
-      //   endGame
-      // );
+      enemyLeftGame(
+        canvasParams,
+        timeRef,
+        enemyLeftGameRef,
+        handleTime,
+        endGame
+      );
     };
 
     const animate = () => {
