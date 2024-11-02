@@ -50,6 +50,8 @@ const Canvas = ({
     handleEnemyScore,
     handleStartGame,
   } = useGameSocket();
+  const canvasWidth = useRef<number>(1200);
+  const canvasHeight = useRef<number>(800);
   const ballInLeftPaddle = useRef<boolean>(false);
   const ballInRightPaddle = useRef<boolean>(false);
   const enemyLeftGameRef = useRef<boolean>(false);
@@ -61,8 +63,8 @@ const Canvas = ({
   const paddleRightDirectionRef = useRef<string>("stop");
   const nextAngleRef = useRef<number>(0);
   const newBallPositionRef = useRef({
-    x: (canvasRef.current?.width || 0) / 2,
-    y: (canvasRef.current?.height || 0) / 2,
+    x: canvasWidth.current / 2,
+    y: canvasHeight.current / 2,
   });
   const newAngleRef = useRef<number>(0);
   const upPressedRef = useRef<boolean>(false);
@@ -79,8 +81,10 @@ const Canvas = ({
   let ballRadius = 40;
   if (!gameStarted) canvasRef.current = null;
 
-  let canvasParams: canvasParams = {
+  const canvasParams: canvasParams = {
     canvas,
+    canvasWidth,
+    canvasHeight,
     paddleRightX: 0,
     newAngleRef,
     canvasRef,
@@ -145,9 +149,6 @@ const Canvas = ({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    let x = canvas.width / 2;
-    let y = canvas.height / 2;
-
     const paddleLeftX = 0;
     const paddleRightX = canvas.width - paddleWidth;
     paddleLeftYRef.current = (canvas.height - paddleHeight) / 2;
@@ -179,8 +180,11 @@ const Canvas = ({
         newAngleRef.current === 0
       ) {
         newAngleRef.current = 10;
+        newBallPositionRef.current = {
+          x: canvasWidth.current / 2,
+          y: canvasHeight.current / 2,
+        };
         setTimeout(() => {
-          newBallPositionRef.current = { x, y };
           newAngleRef.current = Math.random() * Math.PI;
           while (
             (newAngleRef.current > Math.PI / 6 &&
@@ -291,8 +295,8 @@ const Canvas = ({
       {gameStarted && (
         <canvas
           ref={canvasRef}
-          height="800"
-          width="1600"
+          height={canvasHeight.current}
+          width={canvasWidth.current}
           className="w-full h-full z-40"
         />
       )}

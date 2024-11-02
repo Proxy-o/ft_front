@@ -3,6 +3,8 @@ import React from "react";
 
 export type canvasParams = {
   canvas: HTMLCanvasElement | null;
+  canvasWidth: React.MutableRefObject<number>;
+  canvasHeight: React.MutableRefObject<number>;
   paddleLeftYRef: React.MutableRefObject<number>;
   newAngleRef: React.MutableRefObject<number>;
   paddleRightX: number;

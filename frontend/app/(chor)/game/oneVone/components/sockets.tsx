@@ -24,6 +24,8 @@ const Sockets = ({
   gameStarted: boolean;
 }) => {
   const {
+    canvasWidth,
+    canvasHeight,
     PaddleRightYRef,
     paddleRightDirectionRef,
     newBallPositionRef,
@@ -72,7 +74,7 @@ const Sockets = ({
           newAngleRef.current = parseFloat(message[3]);
         } else {
           newBallPositionRef.current = {
-            x: 1600 - parseInt(message[1]),
+            x: canvasWidth.current - parseInt(message[1]),
             y: parseInt(message[2]),
           };
           if (parseFloat(message[3]))
@@ -89,7 +91,10 @@ const Sockets = ({
           );
           changeTime(0);
           setGameStarted(true);
-          newBallPositionRef.current = { x: 400, y: 200 };
+          newBallPositionRef.current = {
+            x: canvasWidth.current / 2,
+            y: canvasHeight.current / 2,
+          };
           newAngleRef.current = 0;
           paddleRightDirectionRef.current = "stop";
           isFirstTime.current = true;
