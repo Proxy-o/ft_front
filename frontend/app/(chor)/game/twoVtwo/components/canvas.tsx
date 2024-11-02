@@ -11,7 +11,7 @@ import useInvitationSocket from "../../hooks/sockets/useInvitationSocket";
 import { User } from "@/lib/types";
 import { canvasParamsFour } from "../../types";
 import { moveBallFour } from "../../methods/moveBall";
-import useEndGameFour from "../../hooks/useEndGameFour";
+import useEndGameFour from "../../hooks/game/useEndGameFour";
 
 const Canvas = ({
   leftUserTop,

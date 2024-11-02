@@ -2,15 +2,15 @@
 
 import TournamentTable from "../../profile/components/tournamentTable";
 import { useRouter } from "next/navigation";
-import useCreateTournament from "../hooks/useCreateTournament";
-import Invitations from "../components/invitations";
-import InviteFriends from "../components/inviteFriend";
+import useCreateTournament from "../hooks/tournament/useCreateTournament";
+import Invitations from "../components/invitations/invitations";
+import InviteFriends from "../components/invitations/inviteFriend";
 import { Button } from "@/components/ui/button";
 import useInvitationSocket from "../hooks/sockets/useInvitationSocket";
 import { useEffect } from "react";
-import useStartTournament from "../hooks/useStartTournament";
-import useGetOnGoingTournament from "../hooks/useGetOnGoingTournament";
-import useAborttournament from "../hooks/useAbortTournament";
+import useStartTournament from "../hooks/tournament/useStartTournament";
+import useGetOnGoingTournament from "../hooks/tournament/useGetOnGoingTournament";
+import useAborttournament from "../hooks/tournament/useAbortTournament";
 import { Participants } from "./components/participants";
 import { Card } from "@/components/ui/card";
 import {
@@ -34,8 +34,6 @@ export default function Page() {
   const router = useRouter();
 
   useEffect(() => {
-
-    
     if (tournament?.started) {
       if (
         (tournament?.user1.id === user_id && !tournament?.user1_left) ||
@@ -43,13 +41,13 @@ export default function Page() {
         (tournament?.user3.id === user_id && !tournament?.user3_left) ||
         (tournament?.user4.id === user_id && !tournament?.user4_left)
       ) {
-          const id = setTimeout(() => {
-            router.push(`/game/tournament/${tournament.id}`);
-          }, 20 * 1000);
-          return () => clearTimeout(id);
-        }
+        const id = setTimeout(() => {
+          router.push(`/game/tournament/${tournament.id}`);
+        }, 20 * 1000);
+        return () => clearTimeout(id);
       }
-}, [tournament]);
+    }
+  }, [tournament]);
 
   useEffect(() => {
     const notif = newNotif();

@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import useGameSocket from "../../hooks/sockets/useGameSocket";
 import { DoorOpen, Flag, Gamepad } from "lucide-react";
-import useSurrenderGame from "../../hooks/useSurrender";
-import useLeaveGame from "../../hooks/useLeaveGame";
+import useSurrenderGame from "../../hooks/game/useSurrender";
+import useLeaveGame from "../../hooks/game/useLeaveGame";
 import { TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 import { Tooltip } from "@/components/ui/tooltip";
 import { TooltipTrigger } from "@/components/ui/tooltip";
@@ -20,7 +20,6 @@ const Actions = ({
   rightUserRef: React.MutableRefObject<User | undefined>;
   leftUserRef: React.MutableRefObject<User | undefined>;
   gameIdRef: React.MutableRefObject<string>;
-
 }) => {
   const { handleStartGame } = useGameSocket();
   const { mutate: surrenderGame } = useSurrenderGame();

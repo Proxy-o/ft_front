@@ -2,12 +2,12 @@
 
 import React, { useEffect } from "react";
 import { Inbox } from "lucide-react";
-import useGetInvitations from "../hooks/useGetInvitations";
+import useGetInvitations from "../../hooks/invitations/useGetInvitations";
 import { Card } from "@/components/ui/card";
 import { usePathname } from "next/navigation";
 import useInvitationSocket from "@/app/(chor)/game/hooks/sockets/useInvitationSocket";
 import { toast } from "sonner";
-import useGetUser from "../../profile/hooks/useGetUser";
+import useGetUser from "../../../profile/hooks/useGetUser";
 import { t_Invitation } from "@/lib/types";
 import Invitation from "./invitation";
 

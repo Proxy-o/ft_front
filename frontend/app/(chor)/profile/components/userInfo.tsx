@@ -21,7 +21,7 @@ import useUnBlock from "@/app/(chor)/friends/hooks/useUnBlockUser";
 import useAcceptFriend from "@/app/(chor)/friends/hooks/useAcceptFriend";
 import useLogout from "@/app/(auth)/login/hooks/useLogout";
 import useReject from "../../friends/hooks/useDeclineReq";
-import useSendInvitation from "../../game/hooks/useSendInvitation";
+import useSendInvitation from "../../game/hooks/invitations/useSendInvitation";
 import useInvitationSocket from "@/app/(chor)/game/hooks/sockets/useInvitationSocket";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";

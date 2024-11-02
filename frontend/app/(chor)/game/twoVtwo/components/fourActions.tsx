@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { DoorOpen, Flag, Gamepad } from "lucide-react";
-import useLeaveGame from "../../hooks/useLeaveGame";
-import useSurrenderGame from "../../hooks/useSurrender";
+import useLeaveGame from "../../hooks/game/useLeaveGame";
+import useSurrenderGame from "../../hooks/game/useSurrender";
 import useGameSocket from "../../hooks/sockets/useGameSocket";
 import {
   Tooltip,

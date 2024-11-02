@@ -1,7 +1,7 @@
 import axiosInstance from "@/lib/functions/axiosInstance";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import useGameSocket from "./sockets/useGameSocket";
+import useGameSocket from "../sockets/useGameSocket";
 
 const endGameFour = async (data: {
   winner: string;

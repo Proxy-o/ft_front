@@ -3,11 +3,11 @@
 import { Sword, UserRoundSearch } from "lucide-react";
 import useGetFriends from "@/app/(chor)/chat/hooks/useGetFriends";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import useSendInvitation from "../hooks/useSendInvitation";
+import useSendInvitation from "../../hooks/invitations/useSendInvitation";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import useGetUser from "../../profile/hooks/useGetUser";
+import useGetUser from "../../../profile/hooks/useGetUser";
 
 const InviteFriends = ({ gameType }: { gameType: string }) => {
   const { data: user } = useGetUser("0");

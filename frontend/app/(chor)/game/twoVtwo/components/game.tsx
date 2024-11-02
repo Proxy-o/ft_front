@@ -5,7 +5,7 @@ import { User } from "@/lib/types";
 import useGetUser from "../../../profile/hooks/useGetUser";
 import NoGameFour from "../../components/noGameFour";
 import PreGame from "../../components/preGame";
-import useGetFourGame from "../../hooks/useGetFourGame";
+import useGetFourGame from "../../hooks/game/useGetFourGame";
 import Canvas from "./canvas";
 import useInvitationSocket from "../../hooks/sockets/useInvitationSocket";
 import FourActions from "./fourActions";
@@ -89,13 +89,13 @@ const Game = () => {
               (onGoingGame.data?.game &&
               onGoingGame.data?.game?.user1_score < 3 &&
               onGoingGame.data?.game?.user2_score < 3 ? (
-                  <PreGame
-                    type="four"
-                    leftUserTop={leftUserTop.current}
-                    leftUserBottom={leftUserBottom.current}
-                    rightUserTop={rightUserTop.current}
-                    rightUserBottom={rightUserBottom.current}
-                  />
+                <PreGame
+                  type="four"
+                  leftUserTop={leftUserTop.current}
+                  leftUserBottom={leftUserBottom.current}
+                  rightUserTop={rightUserTop.current}
+                  rightUserBottom={rightUserBottom.current}
+                />
               ) : (
                 <>
                   <NoGameFour state={state} />

@@ -1,11 +1,11 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Check, X } from "lucide-react";
-import useAcceptInvitation from "../hooks/useAccepteInvitation";
-import useDeclineInvitation from "../hooks/useDeclineMutation";
+import useAcceptInvitation from "../../hooks/invitations/useAccepteInvitation";
+import useDeclineInvitation from "../../hooks/invitations/useDeclineMutation";
 import { usePathname, useRouter } from "next/navigation";
 import { t_Invitation } from "@/lib/types";
-import useAcceptInvitationTournament from "../hooks/useAccepteInvitationTournament";
+import useAcceptInvitationTournament from "../../hooks/invitations/useAccepteInvitationTournament";
 import { useState } from "react";
 
 const Invitation = ({ invitation }: { invitation: t_Invitation }) => {

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import useGameSocket from "../../hooks/sockets/useGameSocket";
 import { canvasParams } from "../../types";
-import useEndGame from "../../hooks/useEndGame";
+import useEndGame from "../../hooks/game/useEndGame";
 import { draw } from "../../methods/draw";
 import { movePaddlesOnline } from "../../methods/movePaddles";
 import { changeBallDirectionOnline } from "../../methods/changeBallDirection";

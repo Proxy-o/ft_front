@@ -31,7 +31,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import useGetInvitations from "@/app/(chor)/game/hooks/useGetInvitations";
+import useGetInvitations from "@/app/(chor)/game/hooks/invitations/useGetInvitations";
 import useGetUser from "@/app/(chor)/profile/hooks/useGetUser";
 import useChatSocket from "@/app/(chor)/game/hooks/sockets/useChatSocket";
 import useInvitationSocket from "@/app/(chor)/game/hooks/sockets/useInvitationSocket";

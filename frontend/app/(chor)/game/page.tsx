@@ -1,6 +1,6 @@
 "use client";
 import { Card } from "@/components/ui/card";
-import Invitations from "./components/invitations";
+import Invitations from "./components/invitations/invitations";
 import TabStates from "../profile/components/tabStates";
 import useGetUser from "../profile/hooks/useGetUser";
 import { useState } from "react";
@@ -16,7 +16,10 @@ export default function Page() {
   const [mode, setMode] = useState<"local" | "online" | "main">("main");
   return (
     <div className="w-full h-full flex flex-col justify-start items-center gap-4">
-      <h1 className="text-3xl text-white md:text-6xl mt-5 mb-16"><span className="text-cyan-500">Ping</span> <span className="text-purple-500">Pong</span></h1>
+      <h1 className="text-3xl text-white md:text-6xl mt-5 mb-16">
+        <span className="text-cyan-500">Ping</span>{" "}
+        <span className="text-purple-500">Pong</span>
+      </h1>
       <Card
         className={`flex flex-col rounded-lg p-4 w-full items-center justify-center min-h-[280px] md:h-[280px]
       ${

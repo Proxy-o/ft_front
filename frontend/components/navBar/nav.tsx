@@ -26,7 +26,7 @@ import useGetFriends from "@/app/(chor)/chat/hooks/useGetFriends";
 import { LastMessage } from "@/app/(chor)/chat/types";
 import useGetFrdReq from "@/app/(chor)/friends/hooks/useGetFrReq";
 import { toast } from "sonner";
-import useGetInvitations from "@/app/(chor)/game/hooks/useGetInvitations";
+import useGetInvitations from "@/app/(chor)/game/hooks/invitations/useGetInvitations";
 import useGetUser from "@/app/(chor)/profile/hooks/useGetUser";
 import useChatSocket from "@/app/(chor)/game/hooks/sockets/useChatSocket";
 import useInvitationSocket from "@/app/(chor)/game/hooks/sockets/useInvitationSocket";

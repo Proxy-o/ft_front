@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
 import { Dispatch, SetStateAction, useState } from "react";
-import Invitations from "../invitations";
+import Invitations from "../invitations/invitations";
 import { User, Users } from "lucide-react";
 
 const GameNav = ({

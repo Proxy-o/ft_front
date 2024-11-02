@@ -2,7 +2,7 @@ import axiosInstance from "@/lib/functions/axiosInstance";
 import useInvitationSocket from "@/app/(chor)/game/hooks/sockets/useInvitationSocket";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import useGameSocket from "./sockets/useGameSocket";
+import useGameSocket from "../sockets/useGameSocket";
 
 const endGame = async (data: {
   winner: string;

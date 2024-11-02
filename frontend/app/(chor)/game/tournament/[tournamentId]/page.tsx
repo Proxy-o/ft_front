@@ -1,11 +1,11 @@
 "use client";
 import Game from "../../oneVone/components/game";
-import useLeavetournament from "../../hooks/useLeaveTournament";
+import useLeavetournament from "../../hooks/tournament/useLeaveTournament";
 import useInvitationSocket from "../../hooks/sockets/useInvitationSocket";
-import useDeletetournament from "../../hooks/useDeleteTournament";
-import useGetGame from "../../hooks/useGetGames";
+import useDeletetournament from "../../hooks/tournament/useDeleteTournament";
+import useGetGame from "../../hooks/game/useGetGames";
 import { useEffect } from "react";
-import useGetTournament from "../../hooks/useGetTournament";
+import useGetTournament from "../../hooks/tournament/useGetTournament";
 import { Button } from "@/components/ui/button";
 import TournamentBoard from "../components/tournamentBoard";
 import useGameSocket from "../../hooks/sockets/useGameSocket";
