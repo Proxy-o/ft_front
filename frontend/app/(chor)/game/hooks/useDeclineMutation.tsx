@@ -24,8 +24,8 @@ export default function useDeclineInvitation() {
   const declineMutation = useMutation({
     mutationFn: decline,
     onSuccess: (invitationId) => {
-      queryClient.invalidateQueries({ queryKey: ["invitations"] });
       handleInvitationDecline(invitationId);
+      queryClient.invalidateQueries({ queryKey: ["invitations"] });
     },
   });
   return declineMutation;

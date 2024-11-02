@@ -244,7 +244,6 @@ class InvitationConsumer(WebsocketConsumer):
     def handle_decline(self, split):
         # print("Declining invitation")
         invitation = Invitation.objects.get(id=split[1])
-        return
         invitation.delete()
         async_to_sync(self.channel_layer.group_send)(
             f'inbox_{invitation.sender.username}',

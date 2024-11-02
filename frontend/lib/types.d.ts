@@ -24,7 +24,7 @@ export type t_Game = {
   timestamp: string;
 };
 
-export type Invitation = {
+export type t_Invitation = {
   id: string;
   sender: {
     id: string;
@@ -41,7 +41,7 @@ export type Invitation = {
   is_accepted: boolean;
 };
 
-export type  OAuthCallbackParams = {
+export type OAuthCallbackParams = {
   provider: readonly string | null;
   code: readonly string | null;
   state: readonly string | null;
