@@ -14,6 +14,12 @@ function draw(canvasParams: canvasParams, ctx: CanvasRenderingContext2D) {
   } = canvasParams;
   const drawBall = () => {
     ctx.beginPath();
+    ctx.clearRect(
+      newBallPositionRef.current.x - 40,
+      newBallPositionRef.current.y - 40,
+      80,
+      80
+    );
     ctx.arc(
       newBallPositionRef.current.x,
       newBallPositionRef.current.y,
@@ -85,6 +91,7 @@ function draw(canvasParams: canvasParams, ctx: CanvasRenderingContext2D) {
 function drawFour(canvasParams: canvasParamsFour) {
   const {
     ctx,
+    canvasRef,
     paddleLeftTopYRef,
     paddleLeftBottomYRef,
     paddleRightTopYRef,
@@ -98,11 +105,18 @@ function drawFour(canvasParams: canvasParamsFour) {
   } = canvasParams;
   const drawBall = () => {
     ctx.beginPath();
-    ctx.rect(
+    ctx.clearRect(
+      newBallPositionRef.current.x - 40,
+      newBallPositionRef.current.y - 40,
+      80,
+      80
+    );
+    ctx.arc(
       newBallPositionRef.current.x,
       newBallPositionRef.current.y,
-      ballRadius,
-      ballRadius
+      ballRadius / 2,
+      0,
+      Math.PI * 2
     );
     ctx.fillStyle = "#0095DD";
     ctx.fill();
@@ -111,6 +125,7 @@ function drawFour(canvasParams: canvasParamsFour) {
 
   const drawRightPaddle = () => {
     ctx.beginPath();
+    ctx.clearRect(paddleRightX, 0, paddleWidth, canvasRef.current?.height || 0);
     ctx.rect(
       paddleRightX,
       paddleRightTopYRef.current,
@@ -124,6 +139,7 @@ function drawFour(canvasParams: canvasParamsFour) {
 
   const drawLeftPaddle = () => {
     ctx.beginPath();
+    ctx.clearRect(paddleLeftX, 0, paddleWidth, canvasRef.current?.height || 0);
     ctx.rect(paddleLeftX, paddleLeftTopYRef.current, paddleWidth, paddleHeight);
     ctx.fillStyle = "#ee95DD";
     ctx.fill();
@@ -232,13 +248,13 @@ const drawPlayers = (
   ctx.clip();
 
   // Draw the image inside the clipped path
-  ctx.drawImage(
-    leftImageRef.current,
-    leftPositionRef.current,
-    canvas.height / 2 - 100,
-    200,
-    200
-  );
+  // ctx.drawImage(
+  //   leftImageRef.current,
+  //   leftPositionRef.current,
+  //   canvas.height / 2 - 100,
+  //   200,
+  //   200
+  // );
 
   // Restore the context state after clipping
   ctx.restore();

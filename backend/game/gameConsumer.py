@@ -181,7 +181,10 @@ class GameConsumer(WebsocketConsumer):
         paddle_y = split[1]
         direction = split[2]
         user = split[3]
-        self.send_four_move_message(paddle_y, direction, user)
+        player1 = split[4]
+        player2 = split[5]
+        player3 = split[6]
+        self.send_four_move_message(paddle_y, direction, user, player1, player2, player3)
 
     def handle_change_ball_direction(self, split):
         # print("Handling change ball direction")
@@ -201,12 +204,11 @@ class GameConsumer(WebsocketConsumer):
         ball_y = split[2]
         ball_angle = split[3]
         user = split[4]
-        game = Game.objects.filter(Q(user1=self.user) | Q(user2=self.user) | Q(
-            user3=self.user) | Q(user4=self.user)).filter(winner=None).last()
-        if not game:
-            return
+        enemy1 = split[5]
+        enemy2 = split[6]
+        enemy3 = split[7]
         async_to_sync(self.channel_layer.group_send)(
-            f'game_{game.user1.username}',
+            f'game_{enemy1}',
             {
                 'type': 'send_message',
                 'user': sender,
@@ -214,7 +216,7 @@ class GameConsumer(WebsocketConsumer):
             }
         )
         async_to_sync(self.channel_layer.group_send)(
-            f'game_{game.user2.username}',
+            f'game_{enemy2}',
             {
                 'type': 'send_message',
                 'user': sender,
@@ -222,15 +224,7 @@ class GameConsumer(WebsocketConsumer):
             }
         )
         async_to_sync(self.channel_layer.group_send)(
-            f'game_{game.user3.username}',
-            {
-                'type': 'send_message',
-                'user': sender,
-                'message': f'/fourBallDirection {ball_x} {ball_y} {ball_angle} {user}'
-            }
-        )
-        async_to_sync(self.channel_layer.group_send)(
-            f'game_{game.user4.username}',
+            f'game_{enemy3}',
             {
                 'type': 'send_message',
                 'user': sender,
@@ -690,13 +684,13 @@ class GameConsumer(WebsocketConsumer):
                 }
             )
 
-    def send_four_move_message(self, paddle_y, direction, user):
+    def send_four_move_message(self, paddle_y, direction, user, player1, player2, player3):
         # print("Sending four move message")
         time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        game = Game.objects.filter(Q(user1=self.user) | Q(user2=self.user) | Q(
-            user3=self.user) | Q(user4=self.user)).filter(winner=None).last()
-        if not game:
-            return
+        # game = Game.objects.filter(Q(user1=self.user) | Q(user2=self.user) | Q(
+        #     user3=self.user) | Q(user4=self.user)).filter(winner=None).last()
+        # if not game:
+        #     return
         # async_to_sync(self.channel_layer.group_send)(
         #     self.game_group,
         #     {
@@ -705,7 +699,7 @@ class GameConsumer(WebsocketConsumer):
         #     }
         # )
         async_to_sync(self.channel_layer.group_send)(
-            f'game_{game.user1.username}',
+            f'game_{player1}',
             {
                 'type': 'send_message',
                 'user': self.user.username,
@@ -713,7 +707,7 @@ class GameConsumer(WebsocketConsumer):
             }
         )
         async_to_sync(self.channel_layer.group_send)(
-            f'game_{game.user2.username}',
+            f'game_{player2}',
             {
                 'type': 'send_message',
                 'user': self.user.username,
@@ -721,15 +715,7 @@ class GameConsumer(WebsocketConsumer):
             }
         )
         async_to_sync(self.channel_layer.group_send)(
-            f'game_{game.user3.username}',
-            {
-                'type': 'send_message',
-                'user': self.user.username,
-                'message': f'/fourMove {paddle_y} {direction} {user} {time}'
-            }
-        )
-        async_to_sync(self.channel_layer.group_send)(
-            f'game_{game.user4.username}',
+            f'game_{player3}',
             {
                 'type': 'send_message',
                 'user': self.user.username,

@@ -60,6 +60,8 @@ const Canvas = ({
   const paddleLeftTopDirectionRef = useRef("stop");
   const paddleLeftBottomDirectionRef = useRef("stop");
 
+  const enemiesRef = useRef<string[]>([]);
+
   const enemyLeftGameRef = useRef(false);
   const timeRef = useRef(0);
   const numberOfTimeResponseRef = useRef(0);
@@ -111,12 +113,20 @@ const Canvas = ({
 
     if (username === rightUserTop.current?.username)
       myPaddleRef.current = paddleRightTopYRef.current;
+    else if (rightUserTop.current?.username)
+      enemiesRef.current.push(rightUserTop.current?.username);
     if (username === rightUserBottom.current?.username)
       myPaddleRef.current = paddleRightBottomYRef.current;
+    else if (rightUserBottom.current?.username)
+      enemiesRef.current.push(rightUserBottom.current?.username);
     if (username === leftUserTop.current?.username)
       myPaddleRef.current = paddleLeftTopYRef.current;
+    else if (leftUserTop.current?.username)
+      enemiesRef.current.push(leftUserTop.current?.username);
     if (username === leftUserBottom.current?.username)
       myPaddleRef.current = paddleLeftBottomYRef.current;
+    else if (leftUserBottom.current?.username)
+      enemiesRef.current.push(leftUserBottom.current?.username);
 
     const paddleLeftX = 0;
     const paddleRightX = canvas.width - paddleWidth;
@@ -129,19 +139,47 @@ const Canvas = ({
         if (e.key === "ArrowUp" && !upPressedRef.current) {
           upPressedRef.current = true;
           downPressedRef.current = false;
-          handleMovePaddleFour(myPaddleRef.current, "up", username);
+          handleMovePaddleFour(
+            myPaddleRef.current,
+            "up",
+            username,
+            enemiesRef.current[0],
+            enemiesRef.current[1],
+            enemiesRef.current[2]
+          );
         } else if (e.key === "ArrowDown" && !downPressedRef.current) {
           downPressedRef.current = true;
           upPressedRef.current = false;
-          handleMovePaddleFour(myPaddleRef.current, "down", username);
+          handleMovePaddleFour(
+            myPaddleRef.current,
+            "down",
+            username,
+            enemiesRef.current[0],
+            enemiesRef.current[1],
+            enemiesRef.current[2]
+          );
         }
       } else if (e.type === "keyup") {
         if (e.key === "ArrowUp") {
           upPressedRef.current = false;
-          handleMovePaddleFour(myPaddleRef.current, "stop", username);
+          handleMovePaddleFour(
+            myPaddleRef.current,
+            "stop",
+            username,
+            enemiesRef.current[0],
+            enemiesRef.current[1],
+            enemiesRef.current[2]
+          );
         } else if (e.key === "ArrowDown") {
           downPressedRef.current = false;
-          handleMovePaddleFour(myPaddleRef.current, "stop", username);
+          handleMovePaddleFour(
+            myPaddleRef.current,
+            "stop",
+            username,
+            enemiesRef.current[0],
+            enemiesRef.current[1],
+            enemiesRef.current[2]
+          );
         }
       }
     };
@@ -161,7 +199,9 @@ const Canvas = ({
 
     const canvasParams: canvasParamsFour = {
       canvas,
+      canvasRef,
       ctx,
+      enemiesRef,
       paddleRightTopYRef,
       paddleRightBottomYRef,
       paddleLeftTopYRef,
@@ -206,7 +246,8 @@ const Canvas = ({
           newBallPositionRef.current.x,
           newBallPositionRef.current.y,
           newAngleRef.current,
-          username
+          username,
+          enemiesRef
         );
       }
     }, 1000);
@@ -217,10 +258,10 @@ const Canvas = ({
         bgImage.current.src = "/bg.jpg";
       }
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.globalAlpha = 0.5;
-      ctx.drawImage(bgImage.current, 0, 0, canvas.width, canvas.height);
-      ctx.globalAlpha = 1;
+      // ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // ctx.globalAlpha = 0.5;
+      // ctx.drawImage(bgImage.current, 0, 0, canvas.width, canvas.height);
+      // ctx.globalAlpha = 1;
 
       // Draw the paddles
       drawFour(canvasParams);

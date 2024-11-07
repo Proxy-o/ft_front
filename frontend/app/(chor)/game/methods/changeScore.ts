@@ -39,7 +39,8 @@ function changeScoreFour(
     x: number,
     y: number,
     angle: number,
-    user: string
+    user: string,
+    enemiesRef: React.MutableRefObject<string[]>
   ) => void,
   handleEnemyScoreFour: (gameId: string) => void,
   username: string
@@ -47,6 +48,7 @@ function changeScoreFour(
   const {
     canvas,
     newBallPositionRef,
+    enemiesRef,
     isFirstTime,
     userLeftTop: leftUserTop,
     userLeftBottom: leftUserBottom,
@@ -82,7 +84,8 @@ function changeScoreFour(
       newBallPositionRef.current.x,
       newBallPositionRef.current.y,
       newAngleRef.current,
-      username
+      username,
+      enemiesRef
     );
     handleEnemyScoreFour(gameId);
   }

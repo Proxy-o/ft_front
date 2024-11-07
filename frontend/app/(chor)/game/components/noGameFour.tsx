@@ -30,12 +30,9 @@ const NoGameFour = ({ state }: { state: React.MutableRefObject<string> }) => {
   }, [state, state.current]);
 
   return (
-    <div
-      className="w-full h-full relative flex flex-col rounded-lg justify-between p-4"
-      
-    >
+    <div className="w-full h-full relative flex flex-col rounded-lg justify-between p-4">
       <div
-        className="absolute inset-0 rounded-lg"
+        className="absolute inset-0 rounded-lg w-full h-full"
         style={{
           backgroundImage: "url('/bg.jpg')",
           backgroundSize: "cover",
@@ -43,7 +40,9 @@ const NoGameFour = ({ state }: { state: React.MutableRefObject<string> }) => {
           opacity: 0.75,
         }}
       />
-      <div className="flex text-white z-10 text-sm md:text-2xl m-auto text-center">{atext.current}</div>
+      <div className="flex text-white z-10 text-sm md:text-2xl m-auto text-center">
+        {atext.current}
+      </div>
     </div>
   );
 };

@@ -43,9 +43,24 @@ export default function useGameSocket() {
   const handleMovePaddleFour = (
     paddleY: number,
     direction: string,
-    user: string
+    user: string,
+    player1: string,
+    player2: string,
+    player3: string
   ) => {
-    const toSend = "/fourMove " + paddleY + " " + direction + " " + user;
+    const toSend =
+      "/fourMove " +
+      paddleY +
+      " " +
+      direction +
+      " " +
+      user +
+      " " +
+      player1 +
+      " " +
+      player2 +
+      " " +
+      player3;
     sendJsonMessage({ message: toSend });
   };
 
@@ -90,7 +105,8 @@ export default function useGameSocket() {
     ballX: number,
     ballY: number,
     angle: number,
-    user: string
+    user: string,
+    enemiesRef: React.MutableRefObject<string[]>
   ) => {
     const toSend =
       "/fourChangeBallDirection " +
@@ -100,7 +116,9 @@ export default function useGameSocket() {
       " " +
       angle +
       " " +
-      user;
+      user +
+      " " +
+      enemiesRef.current.join(" ");
     sendJsonMessage({ message: toSend });
   };
 

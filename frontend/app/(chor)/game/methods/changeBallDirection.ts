@@ -90,13 +90,15 @@ function changeBallDirectionFour(
     x: number,
     y: number,
     angle: number,
-    user: string
+    user: string,
+    enemiesRef: React.MutableRefObject<string[]>
   ) => void,
   username: string
 ) {
   const {
     canvas,
     newBallPositionRef,
+    enemiesRef,
     paddleLeftX,
     paddleWidth,
     paddleHeight,
@@ -136,7 +138,8 @@ function changeBallDirectionFour(
         newBallPositionRef.current.x,
         newBallPositionRef.current.y,
         newAngleRef.current,
-        username
+        username,
+        enemiesRef
       );
       ballInLeftPaddle = true;
     }
@@ -172,7 +175,8 @@ function changeBallDirectionFour(
         newBallPositionRef.current.x,
         newBallPositionRef.current.y,
         newAngleRef.current,
-        username
+        username,
+        enemiesRef
       );
       ballInRightPaddle = true;
     }

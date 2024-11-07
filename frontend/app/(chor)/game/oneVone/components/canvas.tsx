@@ -219,12 +219,6 @@ const Canvas = ({
         leftUser.current
       );
 
-      ctx.clearRect(
-        newBallPositionRef.current.x - 40,
-        newBallPositionRef.current.y - 40,
-        80,
-        80
-      );
       draw(canvasParams, ctx);
 
       checkCollisionWithHorizontalWalls(

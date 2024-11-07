@@ -31,7 +31,9 @@ export type canvasParams = {
 
 export type canvasParamsFour = {
   canvas: HTMLCanvasElement | null;
+  canvasRef: React.MutableRefObject<HTMLCanvasElement | null>;
   ctx: CanvasRenderingContext2D;
+  enemiesRef: React.MutableRefObject<string[]>;
   paddleLeftTopYRef: React.MutableRefObject<number>;
   paddleLeftBottomYRef: React.MutableRefObject<number>;
   paddleRightTopYRef: React.MutableRefObject<number>;

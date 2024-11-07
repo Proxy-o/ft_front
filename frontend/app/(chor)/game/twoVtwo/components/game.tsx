@@ -82,7 +82,7 @@ const Game = () => {
           rightUserBottom={rightUserBottom}
         />
       )}
-      <Card className="flex flex-col mx-auto justify-center w-full aspect-[2] relative">
+      <Card className="flex flex-col justify-center w-full aspect-[2] relative">
         {onGoingGame.isSuccess && (
           <>
             {!gameStarted &&
