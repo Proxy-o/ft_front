@@ -826,7 +826,7 @@ class StartTournament(APIView):
 
 
 class UserGamesPagination(PageNumberPagination):
-    page_size = 1
+    page_size = 5
 
 
 class UserGames(APIView):
