@@ -20,14 +20,14 @@ export default function Page() {
   return (
     user && (
       <ResCard>
-        <div className="     flex flex-col     p-1 mx-2 h-full overflow-y-auto  no-scrollbar">
+        <div className="flex flex-col h-full">
           <div className="flex w-full justify-center items-center border-b-2  py-4">
             Friends
-            <p className="border  mx-2 rounded-lg  text-center p-1">
+            <p className="border  mx-2 rounded-lg  text-center">
               {friendCount}
             </p>
           </div>
-          <div className="w-full flex justify-end">
+          {/* <div className="w-full flex justify-end">
             <Link
               href="/friend_requests"
               className={cn(
@@ -37,25 +37,27 @@ export default function Page() {
             >
               Friend Requests
             </Link>
+          </div> */}
+          <div className="p-1 mx-2 h-full overflow-y-auto  no-scrollbar">
+            {friendsIsSuccess && friends.length > 0 ? (
+              friends.map((friend: User) => {
+                return (
+                  <Link
+                    key={friend.id}
+                    className="cursor-pointer"
+                    href={`/profile/${friend.id.toString()}`}
+                  >
+                    <ChatFriendCard friend={friend} setReceiverId={() => {}} />
+                  </Link>
+                );
+              })
+            ) : (
+              <div className="w-full text-center h-16 flex justify-center items-center bg-primary/5">
+                sorry you don&apos;t have any friends
+              </div>
+            )}
           </div>
-
-          {friendsIsSuccess && friends.length > 0 ? (
-            friends.map((friend: User) => {
-              return (
-                <Link
-                  key={friend.id}
-                  className="cursor-pointer"
-                  href={`/profile/${friend.id.toString()}`}
-                >
-                  <ChatFriendCard friend={friend} setReceiverId={() => {}} />
-                </Link>
-              );
-            })
-          ) : (
-            <div className="w-full text-center h-16 flex justify-center items-center bg-primary/5">
-              sorry you don&apos;t have any friends
-            </div>
-          )}
+          
         </div>
       </ResCard>
     )
