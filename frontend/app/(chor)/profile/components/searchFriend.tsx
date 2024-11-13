@@ -6,6 +6,7 @@ import useSearchFriend from "../hooks/useSearchFriend";
 import { User } from "@/lib/types";
 import Link from "next/link";
 import ChatFriendCard from "@/app/(chor)/chat/components/chatFriendCard";
+import { cn } from "@/lib/utils";
 
 export default function SearchFriend() {
   const { mutate: search, isPending, isSuccess, data } = useSearchFriend();
@@ -45,9 +46,19 @@ export default function SearchFriend() {
                     {data.map((friend: User) => (
                       <Link
                         key={friend.id}
-                        className="cursor-pointer"
+                        className="relative cursor-pointer"
                         href={`/profile/${friend.id.toString()}`}
                       >
+                        <div
+                          className={cn(
+                            " size-2 rounded-full absolute bottom-2 left-10 z-50 border border-white",
+                            friend.status === "online"
+                              ? "bg-green-500"
+                              : friend.status === "playing"
+                              ? "bg-yellow-500"
+                              : "bg-red-500"
+                          )}
+                        />
                         <ChatFriendCard
                           friend={friend}
                           setReceiverId={() => {}}
