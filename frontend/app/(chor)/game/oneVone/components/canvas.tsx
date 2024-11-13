@@ -53,7 +53,7 @@ const Canvas = ({
     handleTime,
   } = useGameSocket();
   const canvasWidth = useRef<number>(1200);
-  const canvasHeight = useRef<number>(800);
+  const canvasHeight = useRef<number>(canvasWidth.current / 2);
   const ballInLeftPaddle = useRef<boolean>(false);
   const ballInRightPaddle = useRef<boolean>(false);
   const enemyLeftGameRef = useRef<boolean>(false);
@@ -80,7 +80,7 @@ const Canvas = ({
 
   const paddleHeight = 120;
   const paddleWidth = 21;
-  let ballRadius = 40;
+  let ballRadius = 30;
   if (!gameStarted) canvasRef.current = null;
 
   const canvasParams: canvasParams = {
