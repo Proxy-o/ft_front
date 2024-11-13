@@ -81,7 +81,7 @@ export default function ChatList() {
         <>
           <Drawer>
             <DrawerContent className=" max-h-96 h-full ">
-              <div className="h-full overflow-auto scrollbar scrollbar-thumb-primary/10 scrollbar-w-1">
+              <div className="h-full overflow-auto scrollbar scrollbar-thumb-primary/10 scrollbar-w-1 ml-1 mt-1">
                 {isSuccess &&
                   friends.map((friend: User) => {
                     return (
@@ -101,7 +101,7 @@ export default function ChatList() {
                   })}
               </div>
             </DrawerContent>
-            <div className="flex   justify-center   absolute  right-2 top-4 z-50">
+            <div className="flex   justify-center   absolute  right-2 top-3.5 z-50">
               <DrawerTrigger className="    w-14 h-9 items-center rounded-full  transition-transform flex justify-center  ">
                 <Users className="w-full h-30 hover:scale-90 transition-all" />
               </DrawerTrigger>

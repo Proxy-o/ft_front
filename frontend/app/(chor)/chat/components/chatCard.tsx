@@ -6,7 +6,7 @@ import ChatBubble from "./chatBubble";
 import { Input } from "@/components/ui/input";
 import { useQueryClient } from "@tanstack/react-query";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { SendHorizonal } from "lucide-react";
+import { SendHorizonal, Swords } from "lucide-react";
 import { User } from "@/lib/types";
 import { Avatar } from "@radix-ui/react-avatar";
 import { AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -15,6 +15,9 @@ import { Message } from "../types";
 import Link from "next/link";
 import useChatSocket from "../../game/hooks/sockets/useChatSocket";
 import { cn } from "@/lib/utils";
+import useSendInvitation from "../../game/hooks/invitations/useSendInvitation";
+import useInvitationSocket from "../../game/hooks/sockets/useInvitationSocket";
+import { useRouter } from "next/navigation";
 
 export default function ChatCard({
   receiver,
@@ -27,7 +30,9 @@ export default function ChatCard({
   const receiverId = receiver.id;
 
   const { lastJsonMessage, sendJsonMessage, lastMessage } = useChatSocket();
-
+  const { mutate: invite } = useSendInvitation();
+  const { handelSendInvitation } = useInvitationSocket();
+  const router = useRouter();
   const [isBlocked, setIsBlocked] = useState(false);
 
   const [hasMore, setHasMore] = useState(true);
@@ -102,32 +107,48 @@ export default function ChatCard({
       ref={chatRef}
     >
       <Link
-        className="  flex justify-start ml-2 p-2 shadow-2xl rounded-md bg-secondary/50 mr-2 mt-1 "
+        className="  flex justify-between items-center ml-2 p-2 shadow-2xl rounded-md bg-secondary/50 mr-2 mt-1 "
         href={`/profile/${receiver.id}`}
       >
-        <Avatar className=" mr-2 relative">
-          <div
-            className={cn(
-              " size-2 rounded-full absolute bottom-[0px] right-0 z-50 border border-white",
-              receiver.status === "online"
-                ? "bg-green-500"
-                : receiver.status === "playing"
-                ? "bg-yellow-500"
-                : "bg-red-500"
-            )}
+        <div className="flex">
+          <Avatar className=" mr-2 relative">
+            <div
+              className={cn(
+                " size-2 rounded-full absolute bottom-[0px] right-0 z-50 border border-white",
+                receiver.status === "online"
+                  ? "bg-green-500"
+                  : receiver.status === "playing"
+                  ? "bg-yellow-500"
+                  : "bg-red-500"
+              )}
+            />
+            <AvatarImage
+              src={receiver.avatar}
+              alt={receiver.username}
+              className="rounded-full h-8 w-8"
+            />
+            <AvatarFallback className="rounded-full h-8 w-8">
+              {receiver.username?.slice(0, 2)}
+            </AvatarFallback>
+          </Avatar>
+          <div className="flex flex-col  mr-2 w-fit overflow-clip ">
+            {receiver.username}
+            <p className="text-xs text-gray-600">{receiver.status}</p>
+          </div>
+        </div>
+        <div className="mr-10 md:mr-0">
+          <Swords
+            className="h-30 hover:scale-90 transition-all"
+            onClick={(e) => {
+              e.preventDefault();
+              invite({
+                userid: receiverId,
+                gameType: "two",
+              });
+              handelSendInvitation(receiverId, "two");
+              router.push("/game/oneVone");
+            }}
           />
-          <AvatarImage
-            src={receiver.avatar}
-            alt={receiver.username}
-            className="rounded-full h-8 w-8"
-          />
-          <AvatarFallback className="rounded-full h-8 w-8">
-            {receiver.username?.slice(0, 2)}
-          </AvatarFallback>
-        </Avatar>
-        <div className="flex flex-col   mr-2 w-fit overflow-clip ">
-          {receiver.username}
-          <p className="text-xs text-gray-600">{receiver.status}</p>
         </div>
       </Link>
       <div
