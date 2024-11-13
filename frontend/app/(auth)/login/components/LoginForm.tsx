@@ -37,9 +37,13 @@ export default function LoginForm() {
       className="flex flex-col items-center justify-center h-screen"
       action={onSubmit}
     >
-      <Card className="w-full max-w-md overflow-auto m-2">
+      <Card className="relative w-full max-w-md overflow-auto m-2">
+      {(isPending || isLoading) && (
+        <div className="absolute backdrop-blur-sm w-full max-w-md h-full z-10 p-[calc(50%-2.5rem/2)]">
+          <Loader className="h-10 w-10 animate-spin animation" />
+        </div>)}
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Login</CardTitle>
+          <CardTitle className="flex justify-center text-2xl">Login</CardTitle>
           <CardDescription>Enter your username and password</CardDescription>
           {isError && (
             <Card className="text-primary text-sm mt-2 p-2 bg-primary/10">
@@ -87,37 +91,24 @@ export default function LoginForm() {
         <CardFooter className="flex flex-col">
           <div className="flex w-full">
             <Button className="w-full" type="submit">
-              {isPending ? (
-                <Loader className="h-5 w-5 animate-spin animation" />
-              ) : (
-                "Login"
-              )}
+              Login
             </Button>
           </div>
           <div className="flex w-32 justify-center my-4 text-xs items-center">
             <Separator className="my-4 mr-2 " />
             OR
             <Separator className="my-4 ml-2" />
-          </div>
+          </div> 
           <div className="flex w-full my-1">
             <Button type="button" className="w-full" onClick={() => onOauthSubmit("42")}>
-            {isLoading ? (
-                <Loader className="h-5 w-5 animate-spin animation" />
-              ) : (
-                "Login with 42"
-              )}
+                Login with 42
             </Button>
           </div>
           <div className="flex w-full my-1">
             <Button type="button" className="w-full" onClick={() => onOauthSubmit("github")}>
-            {isLoading ? (
-                <Loader className="h-5 w-5 animate-spin animation" />
-              ) : (
-                "Login with Github"
-              )}
+                Login with Github
             </Button>
           </div>
-
           <div className="flex w-32 justify-center my-4 text-xs items-center">
             <Separator className="my-4 mr-2 " />
             OR
