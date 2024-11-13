@@ -114,7 +114,7 @@ export default function ChatCard({
           <Avatar className=" mr-2 relative">
             <div
               className={cn(
-                " size-2 rounded-full absolute bottom-[0px] right-0 z-50 border border-white",
+                " size-2 rounded-full absolute bottom-1 -right-1 z-50 border border-white",
                 receiver.status === "online"
                   ? "bg-green-500"
                   : receiver.status === "playing"
