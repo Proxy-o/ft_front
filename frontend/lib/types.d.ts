@@ -10,6 +10,7 @@ export type User = {
   date_joined?: string;
   has_unread_messages?: boolean;
   otp_active?: boolean;
+  qr_code?: string;
 };
 
 export type t_Game = {
