@@ -44,6 +44,9 @@ const Canvas = ({
   const upPressedRef = useRef(false);
   const downPressedRef = useRef(false);
 
+  const canvasHeight = useRef(800);
+  const canvasWidth = useRef(1200);
+
   const newBallPositionRef = useRef({ x: 400, y: 200 });
   const newAngleRef = useRef(0);
   const isFirstTime = useRef(true);
@@ -104,8 +107,8 @@ const Canvas = ({
 
     let ballRadius = 10;
 
-    const paddleHeight = 50;
-    const paddleWidth = 10;
+    const paddleHeight = 60;
+    const paddleWidth = 21;
     paddleRightTopYRef.current = (canvas.height - paddleHeight) / 4;
     paddleLeftTopYRef.current = (canvas.height - paddleHeight) / 4;
     paddleLeftBottomYRef.current = ((canvas.height - paddleHeight) * 3) / 4;
@@ -373,8 +376,8 @@ const Canvas = ({
         timeRef.current = 0;
         newAngleRef.current = 0;
         newBallPositionRef.current = {
-          x: (canvasRef.current?.width || 800) / 2,
-          y: (canvasRef.current?.height || 400) / 2,
+          x: canvasWidth.current / 2,
+          y: canvasHeight.current / 2,
         };
         enemyLeftGameRef.current = false;
         isFirstTime.current = true;
@@ -569,8 +572,8 @@ const Canvas = ({
         <>
           <canvas
             ref={canvasRef}
-            height="400"
-            width="800"
+            height={canvasHeight.current}
+            width={canvasWidth.current}
             className={`w-full h-full`}
           ></canvas>
         </>
