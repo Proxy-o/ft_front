@@ -58,11 +58,13 @@ export default function Page({ params }: { params: { tournamentId: string } }) {
         Create and invite three friends to play and determine who is the best!
       </div>
       <div className="flex flex-col p-4 w-full h-full lg:justify-center items-center lg:items-start gap-2">
+      {onGoingGame.isSuccess && onGoingGame.data?.game &&
         <Game
-          type="tournament"
-          onGoingGame={onGoingGame}
-          tournamentId={tournamentId}
+        type="tournament"
+        onGoingGame={onGoingGame}
+        tournamentId={tournamentId}
         />
+      }
         <div className="flex flex-col gap-4 w-full min-w-80 lg:mr-auto items-center">
           {isSuccess && data.tournament && (
             <>

@@ -70,7 +70,7 @@ const Canvas = ({
     x: canvasWidth.current / 2,
     y: canvasHeight.current / 2,
   });
-  const newAngleRef = useRef<number>(0);
+  const newAngleRef = useRef<number>(100);
   const upPressedRef = useRef<boolean>(false);
   const downPressedRef = useRef<boolean>(false);
   const timeRef = useRef<number>(0);
@@ -181,7 +181,7 @@ const Canvas = ({
       if (!gameStarted || canvas === null) return;
       if (
         username === controllerUser.current?.username &&
-        newAngleRef.current === 0
+        newAngleRef.current === 100
       ) {
         newAngleRef.current = 10;
         newBallPositionRef.current = {
@@ -231,7 +231,7 @@ const Canvas = ({
       );
 
       if (
-        newAngleRef.current !== 0 &&
+        newAngleRef.current !== 100 &&
         newAngleRef.current !== 10 &&
         leftScoreRef.current < 3 &&
         rightScoreRef.current < 3
@@ -292,7 +292,7 @@ const Canvas = ({
     const gameMsge = gameMsg();
     if (gameMsge) {
       const parsedMessage = JSON.parse(gameMsge.data);
-      //   console.log(parsedMessage.message);
+      // console.log(parsedMessage.message);
       const message = parsedMessage?.message.split(" ");
 
       if (message[0] === "/move") {
@@ -303,6 +303,7 @@ const Canvas = ({
         }
       } else if (message[0] === "/ballDirection") {
         const right = message[4];
+        const angle = parseFloat(message[3]);
         if (
           canvasRef.current &&
           (newBallPositionRef.current.x < canvasRef.current.width / 6 ||
@@ -315,15 +316,18 @@ const Canvas = ({
             x: parseInt(message[1]),
             y: parseInt(message[2]),
           };
-          newAngleRef.current = parseFloat(message[3]);
+          newAngleRef.current = angle;
         } else {
           newBallPositionRef.current = {
             x: canvasWidth.current - parseInt(message[1]),
             y: parseInt(message[2]),
           };
-          if (parseFloat(message[3]))
-            newAngleRef.current = Math.PI - parseFloat(message[3]);
-          else newAngleRef.current = parseFloat(message[3]);
+          if (angle)
+            newAngleRef.current = Math.PI - angle;
+          else newAngleRef.current = angle;
+        }
+        if (angle == 100) {
+          newAngleRef.current = 100;
         }
       } else if (message[0] === "/show") {
         // console.log("showing");
@@ -339,7 +343,7 @@ const Canvas = ({
             x: canvasWidth.current / 2,
             y: canvasHeight.current / 2,
           };
-          newAngleRef.current = 0;
+          newAngleRef.current = 100;
           paddleRightDirectionRef.current = "stop";
           isFirstTime.current = true;
           ballInLeftPaddle.current = false;
@@ -370,8 +374,10 @@ const Canvas = ({
         } else {
           state.current = "win";
         }
+        // alert("Game Ended");
         leftScoreRef.current = 0;
         rightScoreRef.current = 0;
+        setGameStarted(false);
         onGoingGame.refetch();
       }
     }

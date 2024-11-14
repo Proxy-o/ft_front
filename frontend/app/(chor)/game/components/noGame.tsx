@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 const NoGame = ({ state }: { state: React.MutableRefObject<string> }) => {
   const [atext, setAtext] = useState<string>("Invite a friend to play");
-  console.log(state.current);
+  // console.log(state.current);
 
   useEffect(() => {
     if (state.current === "win") {
