@@ -24,7 +24,7 @@ import { QrCode } from 'lucide-react';
 import useToggleOTP from "../settings/hooks/useToggleOTP";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-export default function EditProfileForm({ user }: { user: User }) {
+export default function EditProfileForm({ user, path }: { user: User, path:string }) {
   const [userInfo, setUserInfo] = useState<User>(user);
   const { mutate: editUser } = useEditUser();
   const { mutate: toggleOTP, isSuccess: switched } = useToggleOTP("0");
@@ -35,7 +35,7 @@ export default function EditProfileForm({ user }: { user: User }) {
         <CardHeader className="text-center">Edit profile</CardHeader>
         <br />
         <CardContent className="flex flex-col  justify-center gap-3  w-full">
-          <div className="flex flex-wrap md:flex-nowrap gap-3">
+          <div className={cn("flex gap-3", path === "/profile/settings" ? "flex-wrap md:flex-nowrap" : "flex-col")}>
             <div className="space-y-2 w-full">
               <Label htmlFor="first-name">First name</Label>
               <Input
@@ -65,7 +65,7 @@ export default function EditProfileForm({ user }: { user: User }) {
               />
             </div>
           </div>
-          <div className="flex flex-wrap md:flex-nowrap gap-3">
+          <div className={cn("flex gap-3", path === "/profile/settings" ? "flex-wrap md:flex-nowrap" : "flex-col")}>
             <div className="space-y-2 w-full">
                 <Label htmlFor="username">Username</Label>
                 <Input
@@ -96,7 +96,7 @@ export default function EditProfileForm({ user }: { user: User }) {
               />
             </div>
           </div>
-          <div className="flex flex-wrap md:flex-nowrap gap-3">
+          <div className={cn("flex gap-3", path === "/profile/settings" ? "flex-wrap md:flex-nowrap" : "flex-col")}>
             <div className="space-y-2 w-full">
               <Label htmlFor="email">password</Label>
               <Input
@@ -112,7 +112,7 @@ export default function EditProfileForm({ user }: { user: User }) {
                 }
               />
             </div>
-            <div className="space-y-2 w-full">
+            {path === "/profile/settings" && <div className="space-y-2 w-full">
               <Label htmlFor="email">One Time Passsword</Label>
               <div className="flex justify-between items-center w-full h-10 px-2 rounded-lg border">
                 <div className="flex space-x-2">
@@ -143,7 +143,7 @@ export default function EditProfileForm({ user }: { user: User }) {
                   onCheckedChange={(checked: boolean) => toggleOTP(checked ? "enable" : "disable")}
                 />
               </div>
-            </div>
+            </div>}
           </div>
         </CardContent>
         <CardFooter>
@@ -161,3 +161,4 @@ export default function EditProfileForm({ user }: { user: User }) {
     </Dialog>
   );
 }
+// path === "/profile/settings"
