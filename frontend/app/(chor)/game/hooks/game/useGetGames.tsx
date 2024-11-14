@@ -11,7 +11,7 @@ const getOnGoingGame = async (type: string, tournamentId?: string) => {
       );
     else if (type === "two")
       response = await axiosInstance.get("/game/onGoingGame");
-    if (response?.data.status === 204) {
+    if (response?.status === 204) {
       return { game: null };
     }
 

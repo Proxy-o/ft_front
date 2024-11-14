@@ -18,17 +18,18 @@ export default function Page({ params }: { params: { tournamentId: string } }) {
   const { mutate: leavetournament } = useLeavetournament();
   const { newNotif } = useInvitationSocket();
   const { handleSurrender } = useGameSocket();
-  const { onGoingGame } = useGetGame(
-    user_id || "0",
-    "tournament",
-    tournamentId
-  );
-  const { mutate: deleteTournament } = useDeletetournament();
   const {
     data,
     isSuccess,
     refetch: refetchTournament,
   } = useGetTournament(tournamentId);
+  const { onGoingGame } = useGetGame(
+    user_id || "0",
+    "tournament",
+    tournamentId
+  );
+  // console.log(onGoingGame.data);
+  const { mutate: deleteTournament } = useDeletetournament();
 
   // useEffect(() => {
   //   if (!data?.tournament?.started && isSuccess) {
@@ -58,13 +59,15 @@ export default function Page({ params }: { params: { tournamentId: string } }) {
         Create and invite three friends to play and determine who is the best!
       </div>
       <div className="flex flex-col p-4 w-full h-full lg:justify-center items-center lg:items-start gap-2">
-      {onGoingGame.isSuccess && onGoingGame.data?.game &&
-        <Game
-        type="tournament"
-        onGoingGame={onGoingGame}
-        tournamentId={tournamentId}
+        {onGoingGame.data && (
+
+          <Game
+          type="tournament"
+          onGoingGame={onGoingGame}
+          tournamentId={tournamentId}
         />
-      }
+        )
+        }
         <div className="flex flex-col gap-4 w-full min-w-80 lg:mr-auto items-center">
           {isSuccess && data.tournament && (
             <>

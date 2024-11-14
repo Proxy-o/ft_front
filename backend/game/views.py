@@ -226,7 +226,8 @@ class OnGoingTournamentGame(APIView):
             (Q(user1=user) & Q(user1_left=False)) |
             (Q(user2=user) & Q(user2_left=False)) |
             (Q(user3=user) & Q(user3_left=False)) |
-            (Q(user4=user) & Q(user4_left=False))
+            (Q(user4=user) & Q(user4_left=False)
+                )
         ).filter(winner=None).last()
         if not tournament or tournament_id != tournament.id:
             return Response({'error': 'No ongoing tournament found', 'game': 'null'}, status=status.HTTP_204_NO_CONTENT)
@@ -237,6 +238,8 @@ class OnGoingTournamentGame(APIView):
             game = tournament.semi2
         elif tournament.final and (not tournament.final.winner) and (tournament.final.user1 == user or tournament.final.user2 == user):
             game = tournament.final
+        if game == None:
+            return Response({'error': 'No ongoing game found', 'game': 'null'}, status=status.HTTP_204_NO_CONTENT)
         serializer = GameSerializer(game)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

@@ -259,13 +259,15 @@ const Canvas = ({
         rightUser.current,
         leftUser.current
       );
-      enemyLeftGame(
-        canvasParams,
-        timeRef,
-        enemyLeftGameRef,
-        handleTime,
-        endGame
-      );
+      // if (leftScoreRef.current < 3 && rightScoreRef.current < 3) {
+      //   enemyLeftGame(
+      //     canvasParams,
+      //     timeRef,
+      //     enemyLeftGameRef,
+      //     handleTime,
+      //     endGame
+      //   );
+      // }
     };
 
     const animate = () => {
@@ -322,8 +324,7 @@ const Canvas = ({
             x: canvasWidth.current - parseInt(message[1]),
             y: parseInt(message[2]),
           };
-          if (angle)
-            newAngleRef.current = Math.PI - angle;
+          if (angle) newAngleRef.current = Math.PI - angle;
           else newAngleRef.current = angle;
         }
         if (angle == 100) {
@@ -385,14 +386,16 @@ const Canvas = ({
 
   return (
     <>
-        {leftUser.current?.username && rightUser.current?.username && gameStarted && (
-        <canvas
-          ref={canvasRef}
-          height={canvasHeight.current}
-          width={canvasWidth.current}
-          className="w-full h-full z-40"
-        />
-      )}
+      {leftUser.current?.username &&
+        rightUser.current?.username &&
+        gameStarted && (
+          <canvas
+            ref={canvasRef}
+            height={canvasHeight.current}
+            width={canvasWidth.current}
+            className="w-full h-full z-40"
+          />
+        )}
     </>
   );
 };
