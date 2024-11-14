@@ -1,4 +1,5 @@
 import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -19,33 +20,29 @@ const AliasDialog = ({
         Insert Players Nicknames
       </div>
       <div className="flex flex-col w-full p-4 items-center justify-center gap-4">
-        <input
+        <Input
           type="text"
           placeholder="Nickname 1"
           value={alias1}
           onChange={(e) => setAlias1(e.target.value)}
-          className="w-full h-10 focus:outline-none px-2 rounded-md focusborderBottom"
         />
-        <input
+        <Input
           type="text"
           placeholder="Nickname 2"
           value={alias2}
           onChange={(e) => setAlias2(e.target.value)}
-          className="w-full h-10 focus:outline-none px-2 rounded-md focusborderBottom"
         />
-        <input
+        <Input
           type="text"
           placeholder="Nickname 3"
           value={alias3}
           onChange={(e) => setAlias3(e.target.value)}
-          className="w-full h-10 focus:outline-none px-2 rounded-md focusborderBottom"
         />
-        <input
+        <Input
           type="text"
           placeholder="Nickname 4"
           value={alias4}
           onChange={(e) => setAlias4(e.target.value)}
-          className="w-full h-10 focus:outline-none px-2 rounded-md focusborderBottom"
         />
 
         <button
