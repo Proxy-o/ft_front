@@ -496,7 +496,6 @@ const Canvas = ({
           // handleWhoLeftGame();
           if (stillPlayingUsersRef.current.length === 3) {
             // find the user who did not respond
-            console.log("stillPlayingUsersRef", stillPlayingUsersRef.current);
             if (
               leftUserTop.current.username &&
               leftUserBottom.current.username &&
@@ -515,7 +514,6 @@ const Canvas = ({
                   userWhoDidNotRespond.splice(index, 1);
                 }
               });
-              console.log("userWhoDidNotRespond", userWhoDidNotRespond[0]);
               handleUserLeftGame(
                 userWhoDidNotRespond[0],
                 stillPlayingUsersRef.current
@@ -541,16 +539,16 @@ const Canvas = ({
           }
         }
       } else if (message[0] === "/userLeftGame") {
-        console.log("userLeftGame", message);
+        console.log("user left game");
         if (message[1] === username || message[2] === username) {
           state.current = "teamLeft";
         } else {
           state.current = "teamLeftOpponent";
         }
+        onGoingGame.refetch();
       } else if (message[0] === "/refetchPlayers") {
         onGoingGame.refetch();
       } else if (message[0] === "/endGame") {
-        console.log("leftUserTop", leftUserTop.current.username);
         const team1 = [
           leftUserTop.current.username,
           leftUserBottom.current.username,
@@ -561,7 +559,6 @@ const Canvas = ({
         ];
         const loser = message[1];
         const winner = loser === team1[0] || loser === team1[1] ? team2 : team1;
-        console.log(winner);
         if (username === winner[0] || username === winner[1]) {
           state.current = "win";
         } else {

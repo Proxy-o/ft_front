@@ -511,7 +511,7 @@ class GameConsumer(WebsocketConsumer):
         )
 
     def handle_user_left_game(self, split):
-        # print("Handling user left game")
+        print("Handling user left game")
         print(split)
         user1 = split[1]
         user2 = split[2]
