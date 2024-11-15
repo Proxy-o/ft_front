@@ -13,15 +13,9 @@ export default function TabStates({ id }: { id: string }) {
         <TabsTrigger value="2v2" className="w-full">
           2v2
         </TabsTrigger>
-        <TabsTrigger value="Tournament" className="w-full">
-          Tournament
-        </TabsTrigger>
       </TabsList>
       <TabsContent value="Classic">
         <OneVoneTable id={id} />
-      </TabsContent>
-      <TabsContent value="Tournament">
-        <TournamentTable userid={id} />
       </TabsContent>
       <TabsContent value="2v2">
         <TwoVtwoTable id={id} />

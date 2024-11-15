@@ -21,9 +21,6 @@ const {data: states , isSuccess} = useGetStates(id);
           <TabsTrigger value="2 Vs 2" className="w-full">
             2 VS 2
           </TabsTrigger>
-          <TabsTrigger value="Tournament" className="w-full">
-            Tournament
-          </TabsTrigger>
         </TabsList>
         <TabsContent value="Classic">
           <div className="flex w-full items-center justify-center mt-5 ">
@@ -54,39 +51,6 @@ const {data: states , isSuccess} = useGetStates(id);
             Total
             <div className="flex justify-end  w-full ">
               {states.oneVoneLoses + states.oneVoneWins}
-            </div>
-          </div>
-        </TabsContent>
-        <TabsContent value="Tournament">
-          <div className="flex w-full items-center justify-center mt-5 ">
-            <div className=" w-full">Global Stats</div>
-
-            <div className="flex justify-end  w-full ">
-              <LineChart size={24} />
-            </div>
-          </div>
-          <Separator className="my-6" />
-          <div className="flex w-full ">
-            <SwordsIcon className="text-green-500 mr-2" size={24} />
-            Wins
-            <div className="flex justify-end  w-full ">
-              {states.tournamentWins}
-            </div>
-          </div>
-          <Separator className="my-6" />
-          <div className="flex w-full ">
-            <FrownIcon className="text-red-600 mr-2" size={24} />
-            Defeats
-            <div className="flex justify-end  w-full ">
-              {states.tournamentLoses}
-            </div>
-          </div>
-          <Separator className="my-6" />
-          <div className="flex w-full ">
-            <PlusSquare className="text-yellow-400 mr-2" size={24} />
-            Total
-            <div className="flex justify-end  w-full ">
-              {states.tournamentLoses + states.tournamentWins}
             </div>
           </div>
         </TabsContent>
