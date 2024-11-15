@@ -20,11 +20,11 @@ function changeScoreOnline(
   if (newBallPositionRef.current.x < -100) {
     newBallPositionRef.current.x = canvas.width / 2;
     newBallPositionRef.current.y = canvas.height / 2;
-    newAngleRef.current = 0;
+    newAngleRef.current = 100;
     handleChangeBallDirection(
       newBallPositionRef.current.x,
       newBallPositionRef.current.y,
-      0,
+      100,
       rightUser?.username || "",
       leftUser?.username || ""
     );

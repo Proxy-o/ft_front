@@ -2,11 +2,11 @@ from rest_framework.decorators import api_view
 from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Game, Tournament, Invitation
+from .models import Game, Invitation
 from django.db.models import Q
 from rest_framework.views import APIView
 from django.contrib.auth import get_user_model
-from .serializers import GameSerializer, TournamentSerializer, InvitationSerializer
+from .serializers import GameSerializer, InvitationSerializer
 from rest_framework import permissions
 from authentication.customJWTAuthentication import CustomJWTAuthentication
 from .gameConsumer import WebsocketConsumer
@@ -133,8 +133,6 @@ class AcceptInvitationView(APIView):
                 game_type = "1 VS 1"
             elif game.type == "four":
                 game_type = "2 VS 2"
-            elif game.type == "tournament":
-                game_type = "Tournament"
                 
             invitation.delete()
             return Response({'error': f'You are already in a {game_type} game'}, status=status.HTTP_403_FORBIDDEN)
@@ -215,31 +213,6 @@ class OnGoingGame(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class OnGoingTournamentGame(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [CustomJWTAuthentication]
-
-    def get(self, request, tournament_id):
-        # print("get ongoing tournament game")
-        user = request.user
-        tournament = Tournament.objects.filter(
-            (Q(user1=user) & Q(user1_left=False)) |
-            (Q(user2=user) & Q(user2_left=False)) |
-            (Q(user3=user) & Q(user3_left=False)) |
-            (Q(user4=user) & Q(user4_left=False))
-        ).filter(winner=None).last()
-        if not tournament or tournament_id != tournament.id:
-            return Response({'error': 'No ongoing tournament found', 'game': 'null'}, status=status.HTTP_204_NO_CONTENT)
-        game = None
-        if tournament.semi1 and (not tournament.semi1.winner) and (tournament.semi1.user1 == user or tournament.semi1.user2 == user):
-            game = tournament.semi1
-        elif tournament.semi2 and (not tournament.semi2.winner) and (tournament.semi2.user1 == user or tournament.semi2.user2 == user):
-            game = tournament.semi2
-        elif tournament.final and (not tournament.final.winner) and (tournament.final.user1 == user or tournament.final.user2 == user):
-            game = tournament.final
-        serializer = GameSerializer(game)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
 
 class OnGoingFourGame(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -315,7 +288,15 @@ class EndGame(APIView):
             return Response({'error': 'No ongoing game found'}, status=status.HTTP_204_NO_CONTENT)
         user1 = game.user1
         user2 = game.user2
-        game.winner = user1 if user1.id == winner_id else user2
+        if user1.id == winner_id:
+            game.winner = user1
+            user1.score += 1
+            user2.score -= 1
+        else:
+            game.winner = user2
+            user2.score += 1
+            user1.score -= 1
+        
         game.user1_score = winner_score if user1.id == winner_id else loser_score
         game.user2_score = winner_score if user2.id == winner_id else loser_score
         game.save()
@@ -328,58 +309,6 @@ class EndGame(APIView):
         #     }
         # )
         
-        if game.type == "tournament":
-            # print("tournament")
-            tournament = Tournament.objects.get(
-                Q(semi1=game) | Q(semi2=game) | Q(final=game))
-            if game == tournament.semi1:
-                if not tournament.final.user1:
-                    tournament.final.user1 = game.winner
-                    tournament.final.save()
-                
-                # if final enemy left before finishing the semi1
-                if tournament.user3 == tournament.semi2.winner and tournament.user3_left:
-                    tournament.final.winner = tournament.final.user1
-                    tournament.winner = tournament.final.winner
-                    tournament.final.user1_score = 3.0000
-                if tournament.user4 == tournament.semi2.winner and tournament.user4_left:
-                    tournament.final.winner = tournament.final.user1
-                    tournament.winner = tournament.final.winner    
-                    tournament.final.user1_score = 3.0000
-                tournament.final.save()
-                tournament.save()
-            elif game == tournament.semi2:
-                if not tournament.final.user2:
-                    tournament.final.user2 = game.winner
-                    tournament.final.save()
-                # if final enemy left before finishing the semi2
-                if tournament.user1 == tournament.semi1.winner and tournament.user1_left:
-                    tournament.final.winner = tournament.final.user2
-                    tournament.winner = tournament.final.winner
-                    tournament.final.user2_score = 3.0000
-                if tournament.user2 == tournament.semi1.winner and tournament.user2_left:
-                    tournament.final.winner = tournament.final.user2
-                    tournament.winner = tournament.final.winner
-                    tournament.final.user2_score = 3.0000
-                tournament.final.save()
-                tournament.save()
-            elif game == tournament.final:
-                tournament.winner = tournament.final.winner
-                tournament.save()
-                if not tournament.user1_left:
-                    tournament.user1.status = "online"
-                    tournament.user1.save()
-                if not tournament.user2_left:
-                    tournament.user2.status = "online"
-                    tournament.user2.save()
-                if not tournament.user3_left:
-                    tournament.user3.status = "online"
-                    tournament.user3.save()
-                if not tournament.user4_left:
-                    tournament.user4.status = "online"
-                    tournament.user4.save()
-                return Response({'message': 'Tournament ended', 'tournamentId': tournament.id}, status=status.HTTP_200_OK)
-            return Response({'message': 'Game ended', 'tournamentId': tournament.id}, status=status.HTTP_200_OK)
         game.user1.status = "online"
         game.user1.save()
         game.user2.status = "online"
@@ -409,6 +338,16 @@ class EndGameFour(APIView):
         if not game:
             return Response({'error': 'No ongoing game found'}, status=status.HTTP_204_NO_CONTENT)
         game.winner = User.objects.get(id=winner_id)
+        if game.user1.id == winner_id:
+            game.user1.score += 1
+            game.user2.score -= 1
+            game.user3.score += 1
+            game.user4.score -= 1
+        elif game.user2.id == winner_id:
+            game.user2.score += 1
+            game.user1.score -= 1
+            game.user3.score += 1
+            game.user4.score -= 1
         game.user1_score = winner_score
         game.user2_score = loser_score
         game.save()
@@ -439,13 +378,17 @@ class Surrender(APIView):
         game = Game.objects.get(id=game_id)
         if not game:
             return Response({'error': 'No ongoing game found'}, status=status.HTTP_204_NO_CONTENT)
-        if game.type == 'two' or game.type == 'tournament':
+        if game.type == 'two':
             if game.user1 == user:
+                game.user1.score -= 1
+                game.user2.score += 1
                 game.winner = game.user2
                 game.user2_score = 3.0000
                 game.user1_score = 0
                 game.save()
             else:
+                game.user2.score -= 1
+                game.user1.score += 1
                 game.winner = game.user1
                 game.user1_score = 3.0000
                 game.user2_score = 0
@@ -456,10 +399,18 @@ class Surrender(APIView):
             game.user2.save()
         if game.type == 'four':
             if game.user1 == user or game.user3 == user:
+                game.user1.score -= 1
+                game.user2.score += 1
+                game.user3.score -= 1
+                game.user4.score += 1
                 game.winner = game.user2
                 game.user2_score = 3.0000
                 game.user1_score = 0
             elif game.user2 == user or game.user4 == user:
+                game.user2.score -= 1
+                game.user1.score += 1
+                game.user4.score -= 1
+                game.user3.score += 1
                 game.winner = game.user1
                 game.user1_score = 3.0000
                 game.user2_score = 0
@@ -473,34 +424,6 @@ class Surrender(APIView):
             game.user4.status = "online"
             game.user4.save()
             return Response({'message': 'Game ended', 'gameId': game.id}, status=status.HTTP_200_OK)
-        if game.type == "tournament":
-            tournament = Tournament.objects.get(
-                Q(semi1=game) | Q(semi2=game) | Q(final=game))
-            if game == tournament.semi1:
-                tournament.final.user1 = game.winner
-                tournament.final.save()
-                if (tournament.semi2.winner == tournament.user3 and tournament.user3_left) or (tournament.semi2.winner == tournament.user4 and tournament.user4_left):
-                    tournament.final.winner = tournament.final.user1
-                    tournament.winner = tournament.final.winner
-            elif game == tournament.semi2:
-                tournament.final.user2 = game.winner
-                tournament.final.save()
-                if (tournament.semi1.winner == tournament.user1 and tournament.user1_left) or (tournament.semi1.winner == tournament.user2 and tournament.user2_left):
-                    tournament.final.winner = tournament.final.user2
-                    tournament.winner = tournament.final.winner
-            elif game == tournament.final:
-                tournament.winner = tournament.final.winner
-            tournament.semi1.save()
-            tournament.semi2.save()
-            tournament.final.save()
-            tournament.save()
-            game.user1.status = "online"
-            game.user1.save()
-            game.user2.status = "online"
-            game.user2.save()
-                # return Response({'message': 'Tournament ended', 'tournamentId': tournament.id}, status=status.HTTP_200_OK)
-            return Response({'message': 'Game ended', 'gameId': game.id, 'tournamentId': tournament.id}, status=status.HTTP_200_OK)
-
         game.user1.status = "online"
         game.user1.save()
         game.user2.status = "online"
@@ -556,275 +479,6 @@ class LeaveGame(APIView):
             user.save()
         return Response({'message': 'Game left', 'gameId': game_id}, status=status.HTTP_200_OK)
 
-
-class OnGoingTournamentView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [CustomJWTAuthentication]
-
-    def get(self, request):
-        # print("get ongoing tournament")
-        user = request.user
-        tournament = Tournament.objects.filter(
-            (Q(user1=user) & Q(user1_left=False)) |
-            (Q(user2=user) & Q(user2_left=False)) |
-            (Q(user3=user) & Q(user3_left=False)) |
-            (Q(user4=user) & Q(user4_left=False))
-        ).filter(winner=None).last()
-        if not tournament or (tournament.user1 and tournament.user1.username == user.username and tournament.user1_left) or (tournament.user2 and tournament.user2.username == user.username and tournament.user2_left) or (tournament.user3 and tournament.user3.username == user.username and tournament.user3_left) or (tournament.user4 and tournament.user4.username == user.username and tournament.user4_left):
-            # print("no ongoing tournament")
-            return Response({'error': 'No ongoing tournament found'}, status=status.HTTP_204_NO_CONTENT)
-        serializer = TournamentSerializer(tournament)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-class TournamentView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [CustomJWTAuthentication]
-
-    def get(self, request, tournament_id):
-        user = request.user
-        tournaments = Tournament.objects.filter(id=tournament_id).last()
-        if not tournaments:
-            return Response({'error': 'No ongoing tournament found'}, status=status.HTTP_204_NO_CONTENT)
-        serializer = TournamentSerializer(tournaments)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    def post(self, request):
-        # print("post tournament")
-        userid = request.user
-        user = User.objects.get(id=userid.id)
-        game = Game.objects.filter(Q(user1=user) | Q(user2=user) | Q(user3=user) | Q(user4=user)).filter(winner=None).last()
-        if game:
-            return Response({'error': 'You are already in a game'}, status=status.HTTP_403_FORBIDDEN)
-        semi1 = Game(user1=user, type="tournament")
-        semi1.save()
-        semi2 = Game(type="tournament")
-        semi2.save()
-        final = Game(type="tournament")
-        final.save()
-        tournament = Tournament(creator=user, user1=user,
-                                semi1=semi1, semi2=semi2, final=final)
-        tournament.save()
-        user.status = "playing"
-        user.save()
-        serializer = TournamentSerializer(tournament)
-        return Response({'message': 'Tournament created', 'tournamentId': tournament.id}, status=status.HTTP_201_CREATED)
-        
-
-
-class DeleteTournament(APIView): #todo: remove this
-    permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [CustomJWTAuthentication]
-
-    def post(self, request):
-        # print("delete tournament")
-        tournament_id = request.data.get('tournamentId')
-        try:
-            tournament = Tournament.objects.get(id=tournament_id)
-        except Tournament.DoesNotExist:
-            return Response({'error': 'Tournament not found'}, status=status.HTTP_404_NOT_FOUND)
-        if tournament.semi1:
-            tournament.semi1.delete()
-        if tournament.semi2:
-            tournament.semi2.delete()
-        if tournament.final:
-            tournament.final.delete()
-        tournament.delete()
-        return Response({'message': 'Tournament deleted'}, status=status.HTTP_200_OK)
-
-
-class LeaveTournament(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [CustomJWTAuthentication]
-
-    def post(self, request):
-        # print("leave tournament")
-        user = request.user
-        tournamentId = request.data.get('tournamentId')
-        tournament = Tournament.objects.get(id=tournamentId)
-        if not tournament:
-            return Response({'error': 'No ongoing tournament found'}, status=status.HTTP_204_NO_CONTENT)
-        if user == tournament.user1:
-            tournament.user1_left = True
-        elif user == tournament.user2:
-            tournament.user2_left = True
-        elif user == tournament.user3:
-            tournament.user3_left = True
-        elif user == tournament.user4:
-            tournament.user4_left = True
-        if (tournament.semi1.user1 == user or tournament.semi1.user2 == user) and not tournament.semi1.winner:
-            if tournament.semi1.user1 == user:
-                tournament.user2_score = 3.0000
-                tournament.semi1.winner = tournament.semi1.user2
-                tournament.final.user1 = tournament.semi1.user2
-            elif tournament.semi1.user2 == user:
-                tournament.user1_score = 3.0000
-                tournament.semi1.winner = tournament.semi1.user1
-                tournament.final.user1 = tournament.semi1.user1
-            if tournament.final.user2 and ((tournament.final.user2 == tournament.user3 and tournament.user3_left) or (tournament.final.user2 == tournament.user4 and tournament.user4_left)):
-                tournament.final.winner = tournament.final.user1
-                tournament.winner = tournament.final.winner
-        elif (tournament.semi2.user1 == user or tournament.semi2.user2 == user) and not tournament.semi2.winner:
-            if tournament.semi2.user1 == user:
-                tournament.user4_score = 3.0000
-                tournament.semi2.winner = tournament.semi2.user2
-                tournament.final.user2 = tournament.semi2.user2
-            elif tournament.semi2.user2 == user:
-                tournament.user3_score = 3.0000
-                tournament.semi2.winner = tournament.semi2.user1
-                tournament.final.user2 = tournament.semi2.user1
-            if tournament.final.user1 and ((tournament.final.user1 == tournament.user1 and tournament.user1_left) or (tournament.final.user1 == tournament.user2 and tournament.user2_left)):
-                tournament.final.winner = tournament.final.user2
-                tournament.winner = tournament.final.winner
-        elif (tournament.final.user1 == user or tournament.final.user2 == user) and not tournament.final.winner:
-            if tournament.final.user1 == user:
-                tournament.final.winner = tournament.final.user2
-                tournament.winner = tournament.final.winner
-            elif tournament.final.user2 == user:
-                tournament.final.winner = tournament.final.user1
-                tournament.winner = tournament.final.winner
-        tournament.semi1.save()
-        tournament.semi2.save()
-        tournament.final.save()
-        tournament.save()
-        user.status = "online"
-        user.save()
-        return Response({'message': 'Tournament left'}, status=status.HTTP_200_OK)
-
-
-class AbortTournament(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [CustomJWTAuthentication]
-
-    def post(self, request):
-        # print("abort tournament")
-        user = request.user
-        tournament_id = request.data.get('tournamentId')
-        tournament = Tournament.objects.get(id=tournament_id)
-        if not tournament:
-            return Response({'error': 'No ongoing tournament found'}, status=status.HTTP_204_NO_CONTENT)
-        # if user != tournament.creator:
-        user.status = "online"
-        user.save()
-        if user == tournament.creator:
-            if tournament.user1 and tournament.user1 != tournament.creator:
-                tournament.creator = tournament.user1
-            elif tournament.user2 and tournament.user2 != tournament.creator:
-                tournament.creator = tournament.user2
-            elif tournament.user3 and tournament.user3 != tournament.creator:
-                tournament.creator = tournament.user3
-            elif tournament.user4 and tournament.user4 != tournament.creator:
-                tournament.creator = tournament.user4
-            else:
-                if tournament.semi1:
-                    tournament.semi1.delete()
-                if tournament.semi2:
-                    tournament.semi2.delete()
-                if tournament.final:
-                    tournament.final.delete()
-                tournament.delete()
-                return Response({'message': 'Tournament aborted'}, status=status.HTTP_200_OK)
-        if user == tournament.user1:
-            tournament.user1 = None
-            tournament.semi1.user1 = None
-        elif user == tournament.user2:
-            tournament.user2 = None
-            tournament.semi1.user2 = None
-        elif user == tournament.user3:
-            tournament.user3 = None
-            tournament.semi2.user1 = None
-        elif user == tournament.user4:
-            tournament.user4 = None
-            tournament.semi2.user2 = None
-        tournament.semi1.save()
-        tournament.semi2.save()
-        tournament.save()
-        return Response({'message': 'Tournament aborted'}, status=status.HTTP_200_OK)
-
-
-class AcceptInvitationTournament(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [CustomJWTAuthentication]
-
-    def post(self, request):
-        # print("accept invitation tournament")
-        user = request.user
-        invitation_id = request.data.get('invitationId')
-        if not invitation_id:
-            return Response({'error': 'Invitation not found'}, status=status.HTTP_404_NOT_FOUND)
-        invitation = Invitation.objects.get(id=invitation_id)
-        # if invitation does not exist
-        if not invitation:
-            return Response({'error': 'Invitation not found'}, status=status.HTTP_404_NOT_FOUND)
-        games = Game.objects.filter(Q(user1=user) | Q(user2=user) | Q(user3=user) | Q(
-            user4=user)).filter(winner=None).last()
-        if games:
-            invitation.delete()
-            return Response({'error': 'You are already in a game'}, status=status.HTTP_403_FORBIDDEN)
-        sender = invitation.sender
-        # if the sender is not a friend
-        if sender not in user.friends.all():
-            return Response({'error': 'This user is not your friend'}, status=status.HTTP_403_FORBIDDEN)
-        invitation.is_accepted = True
-        invitation.save()
-        other_invitations = Invitation.objects.filter(Q(sender=user) | Q(receiver=user) & Q(is_accepted=None))
-        for other_invitation in other_invitations:
-            other_invitation.delete()
-        user_tournament = Tournament.objects.filter(
-            (Q(user1=user) & Q(user1_left=False)) | (Q(user2=user) & Q(user2_left=False)) | (Q(user3=user) & Q(user3_left=False)) | (Q(user4=user) & Q(user4_left=False))).filter(winner=None).last()
-        if user_tournament:
-            return Response({'error': 'You are already in a tournament'}, status=status.HTTP_403_FORBIDDEN)
-        tournament = Tournament.objects.filter(
-            (Q(user1=sender) & Q(user1_left=False)) | (Q(user2=sender) & Q(user2_left=False)) | (Q(user3=sender) & Q(user3_left=False)) | (Q(user4=sender) & Q(user4_left=False))).filter(winner=None).last()
-        # if tournament does not exist
-        if not tournament:
-            return Response({'error': 'No ongoing tournament found'}, status=status.HTTP_204_NO_CONTENT) 
-        if user == tournament.user1 or user == tournament.user2 or user == tournament.user3 or user == tournament.user4:
-            return Response({'error': 'User already in the tournament'}, status=status.HTTP_403_FORBIDDEN)
-        # if there is already 4 players
-        if tournament.user1 and tournament.user2 and tournament.user3 and tournament.user4:
-            return Response({'error': 'Tournament is full'}, status=status.HTTP_403_FORBIDDEN)
-        if not tournament.user1 and not tournament.semi1.user1:
-            tournament.user1 = user
-            tournament.semi1.user1 = user
-            tournament.semi1.save()
-        elif not tournament.user2 and not tournament.semi1.user2:
-            tournament.user2 = user
-            tournament.semi1.user2 = user
-            tournament.semi1.save()
-        elif not tournament.user3 and not tournament.semi2.user1:
-            tournament.user3 = user
-            tournament.semi2.user1 = user
-            tournament.semi2.save()
-        elif not tournament.user4 and not tournament.semi2.user2:
-            tournament.user4 = user
-            tournament.semi2.user2 = user
-            tournament.semi2.save()
-        user.status = "playing"
-        user.save()
-        tournament.save()
-        return Response({'message': 'Invitation accepted', 'tournamentId': tournament.id}, status=status.HTTP_200_OK)
-
-
-class StartTournament(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [CustomJWTAuthentication]
-
-    def post(self, request): 
-        # print("start tournament")
-        user = request.user
-        tournament_id = request.data.get('tournamentId')
-        tournament = Tournament.objects.get(id=tournament_id)
-        if not tournament:
-            return Response({'error': 'No ongoing tournament found'}, status=status.HTTP_204_NO_CONTENT)
-        if user.id != tournament.creator.id:
-            return Response({'error': 'You are not the creator of this tournament'}, status=status.HTTP_403_FORBIDDEN)
-        if not tournament.user1 or not tournament.user2 or not tournament.user3 or not tournament.user4:
-            return Response({'error': 'Not enough players'}, status=status.HTTP_400_BAD_REQUEST)
-        tournament.started = True
-        tournament.save()
-        return Response({'message': 'Tournament started', 'tournamentId': tournament.id}, status=status.HTTP_200_OK)
-
-
 class UserGamesPagination(PageNumberPagination):
     page_size = 5
 
@@ -869,31 +523,6 @@ class TwoVTwoGameView(APIView):
         return paginator.get_paginated_response(serializer.data)
 
 
-class TournamentsView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
-    authentication_classes = [CustomJWTAuthentication]
-    pagination_class = UserGamesPagination
-
-    def get(self, request, user_id):
-        user = get_object_or_404(User, id=user_id)
-        if request.user in user.blocked.all():
-            return Response({'detail': 'You are blocked by this user'}, status=status.HTTP_400_BAD_REQUEST)
-
-        tournaments = Tournament.objects.filter(
-            (Q(user1=user)) |
-            (Q(user2=user)) |
-            (Q(user3=user)) |
-            (Q(user4=user))
-        ).exclude(final=None).order_by('timestamp').reverse()
-        paginator = self.pagination_class()
-        paginated_tournaments = paginator.paginate_queryset(
-            tournaments, request)
-        serializer = TournamentSerializer(
-            paginated_tournaments, many=True, context={'request': request})
-
-        return paginator.get_paginated_response(serializer.data)
-
-
 class GamesStates(APIView):
     permission_classes = [permissions.IsAuthenticated]
     authentication_classes = [CustomJWTAuthentication]
@@ -925,32 +554,32 @@ class GamesStates(APIView):
                 loses += 1
         return wins, loses
 
-    def tournamentState(user_id):
-        user = get_object_or_404(User, id=user_id)
-        tournaments = Tournament.objects.filter(
-            (Q(user1=user)) |
-            (Q(user2=user)) |
-            (Q(user3=user)) |
-            (Q(user4=user))
-        ).exclude(final=None)
-        wins = 0
-        loses = 0
-        for tournament in tournaments:
-            if tournament.winner == user:
-                wins += 1
-            else:
-                loses += 1
-        return wins, loses
+    # def tournamentState(user_id):
+    #     user = get_object_or_404(User, id=user_id)
+    #     tournaments = Tournament.objects.filter(
+    #         (Q(user1=user)) |
+    #         (Q(user2=user)) |
+    #         (Q(user3=user)) |
+    #         (Q(user4=user))
+    #     ).exclude(final=None)
+    #     wins = 0
+    #     loses = 0
+    #     for tournament in tournaments:
+    #         if tournament.winner == user:
+    #             wins += 1
+    #         else:
+    #             loses += 1
+    #     return wins, loses
 
     def get(self, request, user_id):
         oneVoneWins, oneVoneLoses = GamesStates.oneVoneState(user_id)
         twoVtwoWins, twoVtwoLoses = GamesStates.twoVtwoState(user_id)
-        tournamentWins, tournamentLoses = GamesStates.tournamentState(user_id)
+        # tournamentWins, tournamentLoses = GamesStates.tournamentState(user_id)
         return Response({
             'oneVoneWins': oneVoneWins,
             'oneVoneLoses': oneVoneLoses,
             'twoVtwoWins': twoVtwoWins,
             'twoVtwoLoses': twoVtwoLoses,
-            'tournamentWins': tournamentWins,
-            'tournamentLoses': tournamentLoses
+            # 'tournamentWins': tournamentWins,
+            # 'tournamentLoses': tournamentLoses
         }, status=status.HTTP_200_OK)

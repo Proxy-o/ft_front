@@ -1,5 +1,4 @@
 import OneVOne from "./oneVOne";
-import TournamentNav from "./tournament";
 import Link from "next/link";
 import TwoVTwo from "./twoVTwo";
 
@@ -31,14 +30,6 @@ const OnlineNav = ({
               </div>
             </Link>
             <div className="text-2xl">One V One</div>
-          </div>
-          <div className=" rounded-md flex flex-col items-center justify-center">
-            <Link href="/game/tournament">
-              <div>
-                <TournamentNav />
-              </div>
-            </Link>
-            <div className="text-2xl">Tournament</div>
           </div>
           <div className=" rounded-md flex flex-col items-center justify-center">
             <Link href="/game/twoVtwo">

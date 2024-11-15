@@ -3,7 +3,7 @@ from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 from django.db.models import Q
 from django.contrib.auth import get_user_model
-from .models import Invitation, Game, Tournament
+from .models import Invitation, Game
 import datetime
 
 User = get_user_model()
@@ -49,14 +49,8 @@ class InvitationConsumer(WebsocketConsumer):
             self.handle_accept(split)
         elif command == '/refetchPlayers':
             self.handle_refetch_players(split)
-        elif command == '/acceptTournament':
-            self.handle_accept_tournament(split)
         elif command == '/leaveGame':
             self.handle_leave_game(split)
-        elif command == '/startTournament':
-            self.handle_start_tournament(split)
-        elif command == '/refetchTournament':
-            self.handle_refetch_tournament(split)
         elif command == '/decline':
             self.handle_decline(split)
 
@@ -130,13 +124,6 @@ class InvitationConsumer(WebsocketConsumer):
             participants = [game.user1, game.user2]
         elif game.type == 'four':
             participants = [game.user1, game.user2, game.user3, game.user4]
-        elif game.type == 'tournament':
-            tournament = Tournament.objects.filter(Q(semi1=game) | Q(semi2=game) | Q(final=game)).filter(
-                Q(user1=self.user) | Q(user2=self.user) | Q(user3=self.user) | Q(user4=self.user)).last()
-            if not tournament:
-                return
-            participants = [tournament.user1, tournament.user2,
-                            tournament.user3, tournament.user4]
         for participant in participants:
             if participant:
                 async_to_sync(self.channel_layer.group_send)(
@@ -147,99 +134,6 @@ class InvitationConsumer(WebsocketConsumer):
                         'message': f'/refetchPlayers {game.id} {time}'
                     }
                 )
-
-    def handle_accept_tournament(self, split):
-        # print("Accepting tournament")
-        id = split[1]
-        # print('toooornament ', id)
-        tournament = Tournament.objects.get(id=id)
-        if not tournament:
-            return
-        if tournament.user1 and tournament.user1_left == False:
-            async_to_sync(self.channel_layer.group_send)(
-                f'inbox_{tournament.user1.username}',
-                {'type': 'send_message', 'user': self.user.username,
-                    'message': f'/acceptTournament {tournament.id}'}
-            )
-        if tournament.user2 and tournament.user2_left == False:
-            async_to_sync(self.channel_layer.group_send)(
-                f'inbox_{tournament.user2.username}',
-                {'type': 'send_message', 'user': self.user.username,
-                    'message': f'/acceptTournament {tournament.id}'}
-            )
-        if tournament.user3 and tournament.user3_left == False:
-            async_to_sync(self.channel_layer.group_send)(
-                f'inbox_{tournament.user3.username}',
-                {'type': 'send_message', 'user': self.user.username,
-                    'message': f'/acceptTournament {tournament.id}'}
-            )
-        if tournament.user4 and tournament.user4_left == False:
-            async_to_sync(self.channel_layer.group_send)(
-                f'inbox_{tournament.user4.username}',
-                {'type': 'send_message', 'user': self.user.username,
-                    'message': f'/acceptTournament {tournament.id}'}
-            )
-
-    def handle_start_tournament(self, split):
-        # print("Starting tournament")
-        id = split[1]
-        tournament = Tournament.objects.get(id=id)
-        # if not tournament:
-        # print("Tournament not found")
-        if tournament.user1 and tournament.user1_left == False:
-            async_to_sync(self.channel_layer.group_send)(
-                f'inbox_{tournament.user1.username}',
-                {'type': 'send_message', 'user': self.user.username,
-                    'message': f'/startTournament {tournament.id}'}
-            )
-        if tournament.user2 and tournament.user2_left == False:
-            async_to_sync(self.channel_layer.group_send)(
-                f'inbox_{tournament.user2.username}',
-                {'type': 'send_message', 'user': self.user.username,
-                    'message': f'/startTournament {tournament.id}'}
-            )
-        if tournament.user3 and tournament.user3_left == False:
-            async_to_sync(self.channel_layer.group_send)(
-                f'inbox_{tournament.user3.username}',
-                {'type': 'send_message', 'user': self.user.username,
-                    'message': f'/startTournament {tournament.id}'}
-            )
-        if tournament.user4 and tournament.user4_left == False:
-            async_to_sync(self.channel_layer.group_send)(
-                f'inbox_{tournament.user4.username}',
-                {'type': 'send_message', 'user': self.user.username,
-                    'message': f'/startTournament {tournament.id}'}
-            )
-
-    def handle_refetch_tournament(self, split):
-        id = split[1]
-        tournament = Tournament.objects.get(id=id)
-        if not tournament:
-            return
-        if tournament.user1 and tournament.user1_left == False:
-            async_to_sync(self.channel_layer.group_send)(
-                f'inbox_{tournament.user1.username}',
-                {'type': 'send_message', 'user': self.user.username,
-                    'message': f'/refetchTournament {tournament.id}'}
-            )
-        if tournament.user2 and tournament.user2_left == False:
-            async_to_sync(self.channel_layer.group_send)(
-                f'inbox_{tournament.user2.username}',
-                {'type': 'send_message', 'user': self.user.username,
-                    'message': f'/refetchTournament {tournament.id}'}
-            )
-        if tournament.user3 and tournament.user3_left == False:
-            async_to_sync(self.channel_layer.group_send)(
-                f'inbox_{tournament.user3.username}',
-                {'type': 'send_message', 'user': self.user.username,
-                    'message': f'/refetchTournament {tournament.id}'}
-            )
-        if tournament.user4 and tournament.user4_left == False:
-            async_to_sync(self.channel_layer.group_send)(
-                f'inbox_{tournament.user4.username}',
-                {'type': 'send_message', 'user': self.user.username,
-                    'message': f'/refetchTournament {tournament.id}'}
-            )
 
     def handle_decline(self, split):
         # print("Declining invitation")

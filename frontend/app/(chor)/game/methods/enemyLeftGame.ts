@@ -28,7 +28,7 @@ function enemyLeftGame(
     // // console.log("current time: " + time.current + "seconds: " + seconds);
     handleTime(time.current, rightUserRef.current?.id || "");
   } else {
-    if (seconds - time.current > 2) {
+    if (seconds - time.current > 3) {
       toast.error("Enemy left the game");
     // alert("2 time is " + time.current);
       endGame({

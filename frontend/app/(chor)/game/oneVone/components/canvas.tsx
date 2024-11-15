@@ -10,7 +10,6 @@ import { changeScoreOnline } from "../../methods/changeScore";
 import checkCollisionWithHorizontalWalls from "../../methods/checkCollisionWithHorizontalWalls";
 import { moveBall } from "../../methods/moveBall";
 import { User } from "@/lib/types";
-import Sockets from "./sockets";
 import { enemyLeftGame } from "../../methods/enemyLeftGame";
 
 const Canvas = ({
@@ -52,6 +51,9 @@ const Canvas = ({
     handleStartGame,
     handleTime,
   } = useGameSocket();
+
+  const { gameMsg } = useGameSocket();
+
   const canvasWidth = useRef<number>(1200);
   const canvasHeight = useRef<number>(canvasWidth.current / 2);
   const ballInLeftPaddle = useRef<boolean>(false);
@@ -68,7 +70,7 @@ const Canvas = ({
     x: canvasWidth.current / 2,
     y: canvasHeight.current / 2,
   });
-  const newAngleRef = useRef<number>(0);
+  const newAngleRef = useRef<number>(100);
   const upPressedRef = useRef<boolean>(false);
   const downPressedRef = useRef<boolean>(false);
   const timeRef = useRef<number>(0);
@@ -179,7 +181,7 @@ const Canvas = ({
       if (!gameStarted || canvas === null) return;
       if (
         username === controllerUser.current?.username &&
-        newAngleRef.current === 0
+        newAngleRef.current === 100
       ) {
         newAngleRef.current = 10;
         newBallPositionRef.current = {
@@ -229,7 +231,7 @@ const Canvas = ({
       );
 
       if (
-        newAngleRef.current !== 0 &&
+        newAngleRef.current !== 100 &&
         newAngleRef.current !== 10 &&
         leftScoreRef.current < 3 &&
         rightScoreRef.current < 3
@@ -257,13 +259,15 @@ const Canvas = ({
         rightUser.current,
         leftUser.current
       );
-      enemyLeftGame(
-        canvasParams,
-        timeRef,
-        enemyLeftGameRef,
-        handleTime,
-        endGame
-      );
+      // if (leftScoreRef.current < 3 && rightScoreRef.current < 3) {
+      //   enemyLeftGame(
+      //     canvasParams,
+      //     timeRef,
+      //     enemyLeftGameRef,
+      //     handleTime,
+      //     endGame
+      //   );
+      // }
     };
 
     const animate = () => {
@@ -286,25 +290,112 @@ const Canvas = ({
     return returnFunction;
   }, [gameStarted, canvasRef.current]);
 
+  useEffect(() => {
+    const gameMsge = gameMsg();
+    if (gameMsge) {
+      const parsedMessage = JSON.parse(gameMsge.data);
+      // console.log(parsedMessage.message);
+      const message = parsedMessage?.message.split(" ");
+
+      if (message[0] === "/move") {
+        const sender = message[3];
+        if (sender !== leftUser.current?.username) {
+          paddleRightDirectionRef.current = message[1];
+          PaddleRightYRef.current = parseInt(message[2]);
+        }
+      } else if (message[0] === "/ballDirection") {
+        const right = message[4];
+        const angle = parseFloat(message[3]);
+        if (
+          canvasRef.current &&
+          (newBallPositionRef.current.x < canvasRef.current.width / 6 ||
+            newBallPositionRef.current.x > (canvasRef.current.width * 5) / 6)
+        ) {
+          isFirstTime.current = false;
+        }
+        if (right === leftUser.current?.username) {
+          newBallPositionRef.current = {
+            x: parseInt(message[1]),
+            y: parseInt(message[2]),
+          };
+          newAngleRef.current = angle;
+        } else {
+          newBallPositionRef.current = {
+            x: canvasWidth.current - parseInt(message[1]),
+            y: parseInt(message[2]),
+          };
+          if (angle) newAngleRef.current = Math.PI - angle;
+          else newAngleRef.current = angle;
+        }
+        if (angle == 100) {
+          newAngleRef.current = 100;
+        }
+      } else if (message[0] === "/show") {
+        // console.log("showing");
+        if (!gameStarted) {
+          handleStartGame(
+            leftUser.current?.username || "",
+            rightUser.current?.username || "",
+            gameIdRef.current
+          );
+          changeTime(0);
+          setGameStarted(true);
+          newBallPositionRef.current = {
+            x: canvasWidth.current / 2,
+            y: canvasHeight.current / 2,
+          };
+          newAngleRef.current = 100;
+          paddleRightDirectionRef.current = "stop";
+          isFirstTime.current = true;
+          ballInLeftPaddle.current = false;
+          upPressedRef.current = false;
+          downPressedRef.current = false;
+          leftScoreRef.current = 0;
+          rightScoreRef.current = 0;
+          enemyLeftGameRef.current = false;
+          onGoingGame.refetch();
+        }
+      } else if (message[0] === "/score") {
+        // console.log("refetching");
+        isFirstTime.current = true;
+        onGoingGame.refetch();
+      } else if (message[0] === "/time") {
+        if (message[2] !== leftUser.current?.username) {
+          changeTime(parseInt(message[1]));
+          enemyLeftGameRef.current = false; // todo: tournament forfeit status
+        }
+      } else if (message[0] === "/surrender") {
+        if (message[1] !== leftUser.current?.username) {
+          state.current = "surrendered";
+        }
+        onGoingGame.refetch();
+      } else if (message[0] === "/endGame") {
+        if (message[1] !== leftUser.current?.username) {
+          state.current = "lose";
+        } else {
+          state.current = "win";
+        }
+        // alert("Game Ended");
+        leftScoreRef.current = 0;
+        rightScoreRef.current = 0;
+        setGameStarted(false);
+        onGoingGame.refetch();
+      }
+    }
+  }, [gameMsg()?.data]);
+
   return (
     <>
-      {gameStarted && (
-        <canvas
-          ref={canvasRef}
-          height={canvasHeight.current}
-          width={canvasWidth.current}
-          className="w-full h-full z-40"
-        />
-      )}
-      <Sockets
-        canvasParams={canvasParams}
-        changeTime={changeTime}
-        gameStarted={gameStarted}
-        handleStartGame={handleStartGame}
-        setGameStarted={setGameStarted}
-        onGoingGame={onGoingGame}
-        state={state}
-      />
+      {leftUser.current?.username &&
+        rightUser.current?.username &&
+        gameStarted && (
+          <canvas
+            ref={canvasRef}
+            height={canvasHeight.current}
+            width={canvasWidth.current}
+            className="w-full h-full z-40"
+          />
+        )}
     </>
   );
 };
