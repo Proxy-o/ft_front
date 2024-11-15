@@ -1,6 +1,6 @@
 "use client";
 
-import { Sword, UserRoundSearch } from "lucide-react";
+import { RefreshCcw, Sword, UserRoundSearch } from "lucide-react";
 import useGetFriends from "@/app/(chor)/chat/hooks/useGetFriends";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import useSendInvitation from "../../hooks/invitations/useSendInvitation";
@@ -8,6 +8,13 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import useGetUser from "../../../profile/hooks/useGetUser";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { useState } from "react";
 
 const InviteFriends = ({ gameType }: { gameType: string }) => {
   const { data: user } = useGetUser("0");
@@ -18,18 +25,46 @@ const InviteFriends = ({ gameType }: { gameType: string }) => {
     { id: string; username: string; avatar: string; status: string }
   ] = friends.data || [];
 
+  const onlineFriends = data.filter(
+    (friend: { status: string }) =>
+      friend.status === "online" || friend.status === "playing"
+  );
+
+  const [refreshing, setRefreshing] = useState(false);
+  const refreshFriends = () => {
+    setRefreshing(true);
+    friends.refetch();
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+
+  }
+
   const { mutate: invite } = useSendInvitation();
 
   const router = useRouter();
 
   return (
-    <Card className="w-full md:aspect-[2] flex flex-col min-h-44 max-h-60 p-2">
-      <div className="w-full h-fit text-center text-lg font-bold pb-2">
-        Invite
+    <Card className={`w-full md:aspect-[2] flex flex-col max-h-60 p-2 ${refreshing && "animate-pulse cursor-progress"}`}>
+      <div className="w-full h-fit text-center text-lg flex flex-row font-bold pb-2">
+        <div className="flex flex-row justify-center items-center w-full">
+          Invite
+        </div>
+        <TooltipProvider delayDuration={0}>
+          <Tooltip delayDuration={0}>
+            <TooltipTrigger asChild>
+              <Button size={"xs"} onClick={() => {refreshFriends();}}>
+                
+                <RefreshCcw size={20} />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Refresh</TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
       <div className="flex flex-col w-full h-full items-center justify-start pt-2 border-t gap-2 overflow-auto">
-        {data.length ? (
-          data.map(
+        {onlineFriends.length ? (
+          onlineFriends.map(
             (friend: {
               id: string;
               username: string;
@@ -57,7 +92,6 @@ const InviteFriends = ({ gameType }: { gameType: string }) => {
                       <div
                         className={`absolute bottom-1 right-1 w-2 h-2 rounded-full border border-white 
                         ${friend.status === "online" && "bg-green-500"}
-                        ${friend.status === "offline" && "bg-red-500"}
                         ${friend.status === "playing" && "bg-yellow-500"}
                         `}
                       ></div>
@@ -69,6 +103,7 @@ const InviteFriends = ({ gameType }: { gameType: string }) => {
                   <Button
                     size={"xs"}
                     onClick={() => {
+                      friends.refetch();
                       invite({
                         userid: friend.id,
                         gameType: gameType,
@@ -82,9 +117,13 @@ const InviteFriends = ({ gameType }: { gameType: string }) => {
             }
           )
         ) : (
-          <div className="flex flex-row justify-center items-center gap-2 text-primary border-t p-2 w-full">
+          <div className="flex flex-row justify-center items-center gap-2 text-primary p-2 w-full">
             <UserRoundSearch />
-            You have no friends
+            {data.length ? (
+              <div>No friends online Go touch some grass</div>
+            ) : (
+              <div>You have no friends</div>
+            )}
           </div>
         )}
       </div>

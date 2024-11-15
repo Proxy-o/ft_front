@@ -14,7 +14,6 @@ class InvitationConsumer(WebsocketConsumer):
         super().__init__(*args, **kwargs)
         self.user = None
         self.user_inbox = None
-        self.tournement_inbox = None
 
     def connect(self):
         self.user = self.scope['user']
