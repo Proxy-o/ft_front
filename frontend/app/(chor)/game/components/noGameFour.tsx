@@ -1,34 +1,34 @@
 import { useEffect, useState,  } from "react";
 
-const NoGameFour = ({ state }: { state: React.MutableRefObject<string> }) => {
+const NoGameFour = ({ state }: { state: string }) => {
   const [atext, setAtext] = useState<string>("Invite a friend to play");
 
   useEffect(() => {
 
-    if (state.current === "win") {
+    if (state === "win") {
       setAtext("You won");
-    } else if (state.current === "lose") {
+    } else if (state === "lose") {
       setAtext("You lose");
-    } else if (state.current === "surrender") {
+    } else if (state === "surrender") {
       setAtext("Your enemy has surrendered");
-    } else if (state.current === "surrendered") {
+    } else if (state === "surrendered") {
       setAtext("Your teamate has surrendered");
-    } else if (state.current === "none") {
+    } else if (state === "none") {
       setAtext("Invite a friend to play");
-    } else if (state.current === "left") {
+    } else if (state === "left") {
       setAtext("The left player wins the game");
-    } else if (state.current === "right") {
+    } else if (state === "right") {
       setAtext("The right player wins the game");
-    } else if (state.current === "local") {
+    } else if (state === "local") {
       setAtext("Start a local game");
-    } else if (state.current === "teamLeft") {
-      setAtext("Your taamate has left the game");
-    } else if (state.current === "teamLeftOpponent") {
+    } else if (state === "teamLeft") {
+      setAtext("Your teamate has left the game");
+    } else if (state === "teamLeftOpponent") {
       setAtext("Your opponent has left the game You win");
     } else {
       setAtext("Invite a friend to play");
     }
-  }, [state, state.current]);
+  }, [state]);
 
   return (
     <div className="w-full h-full relative flex flex-col rounded-lg justify-between p-4">

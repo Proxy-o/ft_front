@@ -108,7 +108,7 @@ const Canvas = ({
 
     let ballRadius = 30;
 
-    const paddleHeight = 80;
+    const paddleHeight = 300;
     const paddleWidth = 21;
     paddleRightTopYRef.current = 0; //(canvas.height - paddleHeight) / 4;
     paddleLeftTopYRef.current = 0; //(canvas.height - paddleHeight) / 4;
@@ -537,13 +537,13 @@ const Canvas = ({
           }
         }
       } else if (message[0] === "/userLeftGame") {
-        console.log("user left game");
         if (message[1] === username || message[2] === username) {
           state.current = "teamLeft";
         } else {
           state.current = "teamLeftOpponent";
         }
         onGoingGame.refetch();
+        console.log("user left game", state.current);
       } else if (message[0] === "/refetchPlayers") {
         onGoingGame.refetch();
       } else if (message[0] === "/endGame") {
