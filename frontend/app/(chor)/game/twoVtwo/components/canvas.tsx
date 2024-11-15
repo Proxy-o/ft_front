@@ -11,6 +11,7 @@ import { User } from "@/lib/types";
 import { canvasParamsFour } from "../../types";
 import { moveBallFour } from "../../methods/moveBall";
 import useEndGameFour from "../../hooks/game/useEndGameFour";
+import useInvitationSocket from "../../hooks/sockets/useInvitationSocket";
 
 const Canvas = ({
   leftUserTop,
@@ -46,7 +47,10 @@ const Canvas = ({
   const canvasWidth = useRef(1200);
   const canvasHeight = useRef(canvasWidth.current / 2);
 
-  const newBallPositionRef = useRef({ x: canvasWidth.current / 2, y: canvasHeight.current / 2 });
+  const newBallPositionRef = useRef({
+    x: canvasWidth.current / 2,
+    y: canvasHeight.current / 2,
+  });
   const newAngleRef = useRef(0);
   const isFirstTime = useRef(true);
 
@@ -86,12 +90,11 @@ const Canvas = ({
     handleStillPlaying,
     handleReadyToStartFour,
     handleReadyFour,
+    handleEndGame,
   } = useGameSocket();
 
+  const { handleRefetchPlayers } = useInvitationSocket();
   const { mutate: endGameFour } = useEndGameFour();
-  const { handleEndGame } = useGameSocket();
-
-
 
   leftScoreRef.current = onGoingGame.data?.game.user1_score || 0;
   rightScoreRef.current = onGoingGame.data?.game.user2_score || 0;
@@ -109,10 +112,10 @@ const Canvas = ({
 
     const paddleHeight = 80;
     const paddleWidth = 21;
-    paddleRightTopYRef.current = 0//(canvas.height - paddleHeight) / 4;
-    paddleLeftTopYRef.current = 0//(canvas.height - paddleHeight) / 4;
-    paddleLeftBottomYRef.current = canvasHeight.current / 2//((canvas.height - paddleHeight) * 3) / 4;
-    paddleRightBottomYRef.current = canvasHeight.current / 2//((canvas.height - paddleHeight) * 3) / 4;
+    paddleRightTopYRef.current = 0; //(canvas.height - paddleHeight) / 4;
+    paddleLeftTopYRef.current = 0; //(canvas.height - paddleHeight) / 4;
+    paddleLeftBottomYRef.current = canvasHeight.current / 2; //((canvas.height - paddleHeight) * 3) / 4;
+    paddleRightBottomYRef.current = canvasHeight.current / 2; //((canvas.height - paddleHeight) * 3) / 4;
 
     if (username === rightUserTop.current?.username)
       myPaddleRef.current = paddleRightTopYRef.current;
@@ -308,7 +311,7 @@ const Canvas = ({
         setGameStarted,
         endGameFour,
         handleEndGame,
-        username,
+        username
       );
 
       // Check for collision with the horizontal walls
@@ -485,11 +488,15 @@ const Canvas = ({
       } else if (message[0] === "/stillPlaying") {
         const user = message[1];
         const whoAsked = message[2];
-        if (whoAsked === username) {
-          stillPlayingUsersRef.current.push(user);
+        if (whoAsked === username && stillPlayingUsersRef.current.length < 3) {
+          // push to array if not already there
+          if (!stillPlayingUsersRef.current.includes(user)) {
+            stillPlayingUsersRef.current.push(user);
+          }
           // handleWhoLeftGame();
           if (stillPlayingUsersRef.current.length === 3) {
             // find the user who did not respond
+            console.log("stillPlayingUsersRef", stillPlayingUsersRef.current);
             if (
               leftUserTop.current.username &&
               leftUserBottom.current.username &&
@@ -508,7 +515,11 @@ const Canvas = ({
                   userWhoDidNotRespond.splice(index, 1);
                 }
               });
-              handleUserLeftGame(userWhoDidNotRespond[0] || "");
+              console.log("userWhoDidNotRespond", userWhoDidNotRespond[0]);
+              handleUserLeftGame(
+                userWhoDidNotRespond[0],
+                stillPlayingUsersRef.current
+              );
               const winner =
                 leftUserTop.current.username === userWhoDidNotRespond[0] ||
                 leftUserBottom.current.username === userWhoDidNotRespond[0]
@@ -529,17 +540,14 @@ const Canvas = ({
             }
           }
         }
-      } else if (
-        message[0] === "/userLeftGame" ||
-        message[0] === "/refetchPlayers"
-      ) {
-        if (message[0] === "/userLeftGame") {
-          if (message[1] === username || message[2] === username) {
-            state.current = "teamLeft";
-          } else {
-            state.current = "teamLeftOpponent";
-          }
+      } else if (message[0] === "/userLeftGame") {
+        console.log("userLeftGame", message);
+        if (message[1] === username || message[2] === username) {
+          state.current = "teamLeft";
+        } else {
+          state.current = "teamLeftOpponent";
         }
+      } else if (message[0] === "/refetchPlayers") {
         onGoingGame.refetch();
       } else if (message[0] === "/endGame") {
         console.log("leftUserTop", leftUserTop.current.username);

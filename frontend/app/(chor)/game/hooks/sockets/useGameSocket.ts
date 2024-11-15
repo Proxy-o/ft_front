@@ -151,8 +151,8 @@ export default function useGameSocket() {
     sendJsonMessage({ message: "/whoLeftGame" });
   };
 
-  const handleUserLeftGame = (user: string) => {
-    sendJsonMessage({ message: "/userLeftGame " + user });
+  const handleUserLeftGame = (user: string, stillPlaying: string[]) => {
+    sendJsonMessage({ message: "/userLeftGame " + user + " " + stillPlaying.join(" ") });
   };
 
   const handleSurrenderFour = (gameid: string) => {

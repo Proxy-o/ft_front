@@ -512,11 +512,13 @@ class GameConsumer(WebsocketConsumer):
 
     def handle_user_left_game(self, split):
         # print("Handling user left game")
-        user = split[1]
-        game = Game.objects.filter(Q(user1=self.user) | Q(user2=self.user) | Q(
-            user3=self.user) | Q(user4=self.user)).filter(winner=None).last()
-        if not game:
-            return
+        print(split)
+        user1 = split[1]
+        user2 = split[2]
+        user3 = split[3]
+        user4 = split[4]
+        
+        print(user1, user2, user3, user4)
         # async_to_sync(self.channel_layer.group_send)(
         #     self.game_group,
         #     {
@@ -526,35 +528,27 @@ class GameConsumer(WebsocketConsumer):
         #     }
         # )
         async_to_sync(self.channel_layer.group_send)(
-            f'game_{game.user1.username}',
+            f'game_{user2}',
             {
                 'type': 'send_message',
                 'user': self.user.username,
-                'message': f'/userLeftGame {user} {self.user.username}'
+                'message': f'/userLeftGame {user1} {self.user.username}'
             }
         )
         async_to_sync(self.channel_layer.group_send)(
-            f'game_{game.user2.username}',
+            f'game_{user3}',
             {
                 'type': 'send_message',
                 'user': self.user.username,
-                'message': f'/userLeftGame {user} {self.user.username}'
+                'message': f'/userLeftGame {user1} {self.user.username}'
             }
         )
         async_to_sync(self.channel_layer.group_send)(
-            f'game_{game.user3.username}',
+            f'game_{user4}',
             {
                 'type': 'send_message',
                 'user': self.user.username,
-                'message': f'/userLeftGame {user} {self.user.username}'
-            }
-        )
-        async_to_sync(self.channel_layer.group_send)(
-            f'game_{game.user4.username}',
-            {
-                'type': 'send_message',
-                'user': self.user.username,
-                'message': f'/userLeftGame {user} {self.user.username}'
+                'message': f'/userLeftGame {user1} {self.user.username}'
             }
         )
 
