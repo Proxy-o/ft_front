@@ -3,7 +3,7 @@ from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
 from django.db.models import Q
 from django.contrib.auth import get_user_model
-from .models import Game, Tournament
+from .models import Game
 import datetime
 
 User = get_user_model()
@@ -474,14 +474,6 @@ class GameConsumer(WebsocketConsumer):
                 'message': f'/readyFour {user} {split[2]}'}
         )
 
-    def handle_refetch_tournament(self, split):
-        # print("Refetching tournament")
-        time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        tournamentId = split[1]
-        tournament = Tournament.objects.get(id=tournamentId)
-        if not tournament:
-            return
-        self.refresh_tournament(tournament)
 
     def handle_still_playing(self, split):
         who_asked = split[2]

@@ -1,6 +1,6 @@
 import React from "react";
 import useGetTournaments from "../hooks/useGetTournaments";
-import TournamentBoard from "../../game/tournament/components/tournamentBoard";
+// import TournamentBoard from "../../game/tournament/components/tournamentBoard";
 import {
   Accordion,
   AccordionContent,
@@ -71,7 +71,7 @@ export default function TournamentTable({ userid }: { userid: string }) {
                   </div>
                 </AccordionTrigger>
                 <AccordionContent className=" flex justify-center items-center pr-4">
-                  <TournamentBoard tournament={tournament} />
+                  {/* <TournamentBoard tournament={tournament} /> */}
                 </AccordionContent>
               </AccordionItem>
             ))

@@ -14,11 +14,9 @@ import useInvitationSocket from "../../hooks/sockets/useInvitationSocket";
 const Game = ({
   type,
   onGoingGame,
-  tournamentId,
 }: {
   type: string;
   onGoingGame: any;
-  tournamentId?: string;
 }) => {
   const leftScoreRef = useRef<number>(0);
   const rightScoreRef = useRef<number>(0);
@@ -72,7 +70,6 @@ const Game = ({
       const message = parsedMessage?.message.split(" ");
       if (
         message[0] === "/start" ||
-        message[0] === "/refetchTournament" ||
         message[0] === "/refetchPlayers"
       ) {
         onGoingGame.refetch();

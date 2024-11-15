@@ -21,8 +21,6 @@ const NoGame = ({ state }: { state: React.MutableRefObject<string> }) => {
       setAtext("The right player wins the game");
     } else if (state.current === "local") {
       setAtext("Start a local game");
-    } else if (state.current === "tournament") {
-      setAtext("Join a tournament");
     } else if (state.current === "leave") {
       setAtext("Your enemy has left the game");
     }
