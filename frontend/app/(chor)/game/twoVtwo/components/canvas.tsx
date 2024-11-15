@@ -7,7 +7,6 @@ import { changeBallDirectionFour } from "../../methods/changeBallDirection";
 import { movePaddlesFour } from "../../methods/movePaddles";
 import { drawFour } from "../../methods/draw";
 import useGameSocket from "../../hooks/sockets/useGameSocket";
-import useInvitationSocket from "../../hooks/sockets/useInvitationSocket";
 import { User } from "@/lib/types";
 import { canvasParamsFour } from "../../types";
 import { moveBallFour } from "../../methods/moveBall";
@@ -44,10 +43,10 @@ const Canvas = ({
   const upPressedRef = useRef(false);
   const downPressedRef = useRef(false);
 
-  const canvasHeight = useRef(800);
   const canvasWidth = useRef(1200);
+  const canvasHeight = useRef(canvasWidth.current / 2);
 
-  const newBallPositionRef = useRef({ x: 400, y: 200 });
+  const newBallPositionRef = useRef({ x: canvasWidth.current / 2, y: canvasHeight.current / 2 });
   const newAngleRef = useRef(0);
   const isFirstTime = useRef(true);
 
@@ -89,9 +88,10 @@ const Canvas = ({
     handleReadyFour,
   } = useGameSocket();
 
-  const { handleRefetchPlayers } = useInvitationSocket();
-
   const { mutate: endGameFour } = useEndGameFour();
+  const { handleEndGame } = useGameSocket();
+
+
 
   leftScoreRef.current = onGoingGame.data?.game.user1_score || 0;
   rightScoreRef.current = onGoingGame.data?.game.user2_score || 0;
@@ -105,14 +105,14 @@ const Canvas = ({
     let ballInLeftPaddle = false;
     let ballInRightPaddle = false;
 
-    let ballRadius = 10;
+    let ballRadius = 30;
 
-    const paddleHeight = 60;
+    const paddleHeight = 80;
     const paddleWidth = 21;
-    paddleRightTopYRef.current = (canvas.height - paddleHeight) / 4;
-    paddleLeftTopYRef.current = (canvas.height - paddleHeight) / 4;
-    paddleLeftBottomYRef.current = ((canvas.height - paddleHeight) * 3) / 4;
-    paddleRightBottomYRef.current = ((canvas.height - paddleHeight) * 3) / 4;
+    paddleRightTopYRef.current = 0//(canvas.height - paddleHeight) / 4;
+    paddleLeftTopYRef.current = 0//(canvas.height - paddleHeight) / 4;
+    paddleLeftBottomYRef.current = canvasHeight.current / 2//((canvas.height - paddleHeight) * 3) / 4;
+    paddleRightBottomYRef.current = canvasHeight.current / 2//((canvas.height - paddleHeight) * 3) / 4;
 
     if (username === rightUserTop.current?.username)
       myPaddleRef.current = paddleRightTopYRef.current;
@@ -307,8 +307,8 @@ const Canvas = ({
         rightScoreRef,
         setGameStarted,
         endGameFour,
+        handleEndGame,
         username,
-        handleRefetchPlayers
       );
 
       // Check for collision with the horizontal walls
@@ -369,6 +369,7 @@ const Canvas = ({
     if (gameMsg()) {
       const gameMsge = gameMsg()?.data;
       const parsedMessage = JSON.parse(gameMsge);
+      // console.log(parsedMessage);
       const message = parsedMessage.message.split(" ");
       if (message[0] === "/showFour") {
         const sender = message[1];
@@ -541,6 +542,7 @@ const Canvas = ({
         }
         onGoingGame.refetch();
       } else if (message[0] === "/endGame") {
+        console.log("leftUserTop", leftUserTop.current.username);
         const team1 = [
           leftUserTop.current.username,
           leftUserBottom.current.username,
@@ -551,6 +553,7 @@ const Canvas = ({
         ];
         const loser = message[1];
         const winner = loser === team1[0] || loser === team1[1] ? team2 : team1;
+        console.log(winner);
         if (username === winner[0] || username === winner[1]) {
           state.current = "win";
         } else {

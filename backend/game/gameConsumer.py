@@ -133,7 +133,7 @@ class GameConsumer(WebsocketConsumer):
         surrenderer = self.user.username
         gameId = split[1]
         game = Game.objects.get(id=gameId)
-        if not game:
+        if not game or game.type == "two":
             return
         async_to_sync(self.channel_layer.group_send)(
             f'game_{game.user1.username}',
@@ -278,7 +278,7 @@ class GameConsumer(WebsocketConsumer):
         time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         game_id = split[1]
         game = Game.objects.get(id=game_id)
-        if not game:
+        if not game or game.type == "four":
             return
         surrenderer = self.user.username
         winner_username = game.user1.username if game.user1 != self.user else game.user2.username
@@ -294,8 +294,8 @@ class GameConsumer(WebsocketConsumer):
             f'game_{winner_username}',
             {
                 'type': 'send_message',
-                'user': winner_username, 'message':
-                f'/surrender {surrenderer} {winner_username} {time}'
+                'user': winner_username,
+                'message': f'/surrender {surrenderer} {winner_username} {time}'
             }
         )
 

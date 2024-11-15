@@ -29,7 +29,6 @@ const endGame = async (data: {
 
 export default function useEndGame() {
   const { handleRefetchTournament } = useInvitationSocket();
-  const { handleEndGame } = useGameSocket();
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: (data: {
@@ -42,7 +41,6 @@ export default function useEndGame() {
       queryClient.invalidateQueries({ queryKey: ["game"] });
       queryClient.invalidateQueries({ queryKey: ["tournament"] });
       queryClient.invalidateQueries({ queryKey: ["tournamentGame"] });
-      handleEndGame();
 
       if (tournamentId) {
         // console.log("tournamentId", tournamentId);

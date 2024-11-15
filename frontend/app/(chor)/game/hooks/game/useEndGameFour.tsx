@@ -25,7 +25,6 @@ const endGameFour = async (data: {
 
 export default function useEndGameFour() {
   const queryClient = useQueryClient();
-  const { handleEndGame } = useGameSocket();
   const mutation = useMutation({
     mutationFn: (data: {
       winner: string;
@@ -35,7 +34,6 @@ export default function useEndGameFour() {
     }) => endGameFour(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["gameFour"] });
-      handleEndGame();
     },
   });
   return mutation;

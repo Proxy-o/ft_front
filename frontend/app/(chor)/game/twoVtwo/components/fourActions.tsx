@@ -19,6 +19,7 @@ const FourActions = ({
   rightUserBottom,
   rightUserTop,
   onGoingGame,
+  status,
   handleRefetchPlayers,
 }: {
   playerReadyRef: any;
@@ -29,6 +30,7 @@ const FourActions = ({
   rightUserBottom: any;
   rightUserTop: any;
   onGoingGame: any;
+  status: React.MutableRefObject<string>;
   handleRefetchPlayers: any;
 }) => {
   const { mutate: surrenderGame } = useSurrenderGame();
@@ -87,6 +89,7 @@ const FourActions = ({
               <Button
                 onClick={() => {
                   surrenderGame(onGoingGame.data?.game.id || "");
+                  status.current = "none";
                 }}
                 className="h-fit w-fit bg-red-600/40"
               >

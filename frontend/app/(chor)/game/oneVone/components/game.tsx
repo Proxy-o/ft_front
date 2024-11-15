@@ -85,7 +85,7 @@ const Game = ({
   }, [newNotif()?.data]);
 
   return (
-    <div className="w-full h-fit flex flex-col  justify-center items-center gap-2">
+    <div className="w-full h-fit flex flex-col justify-center items-center gap-2">
       {gameStarted && (
         <Score
           leftScore={leftScoreRef.current}
@@ -134,9 +134,9 @@ const Game = ({
             />
           )}
 
-        {(!gameStarted ||
-          leftScoreRef.current === 3 ||
-          rightScoreRef.current === 3) && <NoGame state={state} />}
+        <NoGame state={state} />
+
+        
         {leftUser.current?.username &&
           rightUser.current?.username &&
           leftScoreRef.current < 3 &&

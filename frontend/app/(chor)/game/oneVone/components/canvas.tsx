@@ -50,6 +50,7 @@ const Canvas = ({
     handleEnemyScore,
     handleStartGame,
     handleTime,
+    handleEndGame,
   } = useGameSocket();
 
   const { gameMsg } = useGameSocket();
@@ -248,6 +249,7 @@ const Canvas = ({
         leftUser.current,
         rightUser.current,
         endGame,
+        handleEndGame,
         setCanvas
       );
 
@@ -259,15 +261,16 @@ const Canvas = ({
         rightUser.current,
         leftUser.current
       );
-      // if (leftScoreRef.current < 3 && rightScoreRef.current < 3) {
-      //   enemyLeftGame(
-      //     canvasParams,
-      //     timeRef,
-      //     enemyLeftGameRef,
-      //     handleTime,
-      //     endGame
-      //   );
-      // }
+      if (leftScoreRef.current < 3 && rightScoreRef.current < 3) {
+        enemyLeftGame(
+          canvasParams,
+          timeRef,
+          enemyLeftGameRef,
+          handleTime,
+          endGame,
+          state
+        );
+      }
     };
 
     const animate = () => {
@@ -294,7 +297,7 @@ const Canvas = ({
     const gameMsge = gameMsg();
     if (gameMsge) {
       const parsedMessage = JSON.parse(gameMsge.data);
-      // console.log(parsedMessage.message);
+      console.log(parsedMessage.message);
       const message = parsedMessage?.message.split(" ");
 
       if (message[0] === "/move") {
@@ -371,9 +374,9 @@ const Canvas = ({
         onGoingGame.refetch();
       } else if (message[0] === "/endGame") {
         if (message[1] !== leftUser.current?.username) {
-          state.current = "lose";
-        } else {
           state.current = "win";
+        } else {
+          state.current = "lose";
         }
         // alert("Game Ended");
         leftScoreRef.current = 0;

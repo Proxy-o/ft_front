@@ -463,15 +463,15 @@ class LeaveGame(APIView):
                 game.user4 = None
             users = [game.user1, game.user2, game.user3, game.user4]
             num_of_players = 0
-            for user in users:
-                if user:
+            for auser in users:
+                if auser:
                     num_of_players += 1
                     
             if num_of_players <= 1:
-                for user in users:
-                    if user:
-                        user.status = "online"
-                        user.save()
+                for auser in users:
+                    if auser:
+                        auser.status = "online"
+                        auser.save()
                 game.delete()
             else:
                 game.save()

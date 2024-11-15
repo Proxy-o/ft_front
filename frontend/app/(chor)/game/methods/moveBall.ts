@@ -32,11 +32,11 @@ function moveBallFour(
 ) {
   const { newBallPositionRef, isFirstTime } = canvasParams;
   if (isFirstTime.current == true) {
-    newBallPositionRef.current.x += Math.cos(newAngleRef.current) * 3;
-    newBallPositionRef.current.y += Math.sin(newAngleRef.current) * 3;
+    newBallPositionRef.current.x += Math.cos(newAngleRef.current) * 6;
+    newBallPositionRef.current.y += Math.sin(newAngleRef.current) * 6;
   } else {
-    newBallPositionRef.current.x += Math.cos(newAngleRef.current) * 8;
-    newBallPositionRef.current.y += Math.sin(newAngleRef.current) * 8;
+    newBallPositionRef.current.x += Math.cos(newAngleRef.current) * 18;
+    newBallPositionRef.current.y += Math.sin(newAngleRef.current) * 18;
   }
 }
 
