@@ -110,7 +110,7 @@ const Game = () => {
           )}
 
         <div className={`w-full h-full ${gameStarted ? "hidden" : ""}`}>
-          <NoGameFour state={state.current} />
+          <NoGameFour state={state} />
         </div>
 
         <Canvas

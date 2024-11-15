@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 const NoGame = ({ state }: { state: React.MutableRefObject<string> }) => {
   const [atext, setAtext] = useState<string>("Invite a friend to play");

@@ -53,6 +53,21 @@ const Actions = ({
                 <TooltipContent>Start</TooltipContent>
               </Tooltip>
             </TooltipProvider>
+            <TooltipProvider delayDuration={0}>
+              <Tooltip delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <Button
+                    onClick={() => {
+                      leaveGame();
+                    }}
+                    className="h-fit w-fit bg-yellow-600/40"
+                  >
+                    <DoorOpen size={25} />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Leave</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
         ) : (
           <TooltipProvider delayDuration={0}>

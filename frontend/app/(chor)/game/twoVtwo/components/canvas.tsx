@@ -11,7 +11,6 @@ import { User } from "@/lib/types";
 import { canvasParamsFour } from "../../types";
 import { moveBallFour } from "../../methods/moveBall";
 import useEndGameFour from "../../hooks/game/useEndGameFour";
-import useInvitationSocket from "../../hooks/sockets/useInvitationSocket";
 
 const Canvas = ({
   leftUserTop,
@@ -93,7 +92,6 @@ const Canvas = ({
     handleEndGame,
   } = useGameSocket();
 
-  const { handleRefetchPlayers } = useInvitationSocket();
   const { mutate: endGameFour } = useEndGameFour();
 
   leftScoreRef.current = onGoingGame.data?.game.user1_score || 0;
