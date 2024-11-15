@@ -288,7 +288,15 @@ class EndGame(APIView):
             return Response({'error': 'No ongoing game found'}, status=status.HTTP_204_NO_CONTENT)
         user1 = game.user1
         user2 = game.user2
-        game.winner = user1 if user1.id == winner_id else user2
+        if user1.id == winner_id:
+            game.winner = user1
+            user1.score += 1
+            user2.score -= 1
+        else:
+            game.winner = user2
+            user2.score += 1
+            user1.score -= 1
+        
         game.user1_score = winner_score if user1.id == winner_id else loser_score
         game.user2_score = winner_score if user2.id == winner_id else loser_score
         game.save()
@@ -330,6 +338,16 @@ class EndGameFour(APIView):
         if not game:
             return Response({'error': 'No ongoing game found'}, status=status.HTTP_204_NO_CONTENT)
         game.winner = User.objects.get(id=winner_id)
+        if game.user1.id == winner_id:
+            game.user1.score += 1
+            game.user2.score -= 1
+            game.user3.score += 1
+            game.user4.score -= 1
+        elif game.user2.id == winner_id:
+            game.user2.score += 1
+            game.user1.score -= 1
+            game.user3.score += 1
+            game.user4.score -= 1
         game.user1_score = winner_score
         game.user2_score = loser_score
         game.save()
@@ -362,11 +380,15 @@ class Surrender(APIView):
             return Response({'error': 'No ongoing game found'}, status=status.HTTP_204_NO_CONTENT)
         if game.type == 'two':
             if game.user1 == user:
+                game.user1.score -= 1
+                game.user2.score += 1
                 game.winner = game.user2
                 game.user2_score = 3.0000
                 game.user1_score = 0
                 game.save()
             else:
+                game.user2.score -= 1
+                game.user1.score += 1
                 game.winner = game.user1
                 game.user1_score = 3.0000
                 game.user2_score = 0
@@ -377,10 +399,18 @@ class Surrender(APIView):
             game.user2.save()
         if game.type == 'four':
             if game.user1 == user or game.user3 == user:
+                game.user1.score -= 1
+                game.user2.score += 1
+                game.user3.score -= 1
+                game.user4.score += 1
                 game.winner = game.user2
                 game.user2_score = 3.0000
                 game.user1_score = 0
             elif game.user2 == user or game.user4 == user:
+                game.user2.score -= 1
+                game.user1.score += 1
+                game.user4.score -= 1
+                game.user3.score += 1
                 game.winner = game.user1
                 game.user1_score = 3.0000
                 game.user2_score = 0

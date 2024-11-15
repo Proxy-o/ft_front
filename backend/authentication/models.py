@@ -21,6 +21,7 @@ class User(AbstractUser):
     friends = models.ManyToManyField("self", blank=True)
     blocked = models.ManyToManyField("self", blank=True, symmetrical=False)
     status = models.CharField(max_length=100, default='offline')
+    score = models.IntegerField(default=400)
     # 2FA
     otp_active = models.BooleanField(default=False)
     otpauth_url = models.CharField(max_length=225, blank=True, null=True)
