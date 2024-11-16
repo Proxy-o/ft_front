@@ -25,6 +25,7 @@ export default function useGetGames(id: string) {
       return false;
       
     },
+    retry: 3,
   });
   return info;
 }

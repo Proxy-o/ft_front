@@ -32,6 +32,7 @@ export default function useGetTwoGames(id: string) {
       }
       return false;
     },
+    retry: 3,
   });
   return info;
 }
