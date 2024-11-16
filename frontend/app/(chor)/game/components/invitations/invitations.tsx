@@ -51,7 +51,13 @@ const Invitations = ({ mode }: { mode: string }) => {
         )) || (
           <div className="w-full h-fit max-h-[50vw] flex flex-col items-center justify-start gap-2 overflow-auto">
             {invitations.map((invitation: t_Invitation) => {
-              return <Invitation key={invitation.id} invitation={invitation} />;
+              return (
+                ((path === "/game/oneVone" && invitation.type === "two") ||
+                  (path === "/game/twoVtwo" && invitation.type === "four") ||
+                  path === "/game") && (
+                  <Invitation key={invitation.id} invitation={invitation} />
+                )
+              );
             })}
           </div>
         )}

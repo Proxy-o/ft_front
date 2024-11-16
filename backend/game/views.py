@@ -295,13 +295,13 @@ class EndGame(APIView):
             user1.score += 1
             user1.wins += 1
             user2.score -= 1
-            user2.loses += 1
+            user2.losses += 1
         else:
             game.winner = user2
             user2.score += 1
             user2.wins += 1
             user1.score -= 1
-            user1.loses += 1
+            user1.losses += 1
         
         game.user1_score = winner_score if user1.id == winner_id else loser_score
         game.user2_score = winner_score if user2.id == winner_id else loser_score
@@ -348,20 +348,20 @@ class EndGameFour(APIView):
             game.user1.score += 1
             game.user1.wins += 1
             game.user2.score -= 1
-            game.user2.loses += 1
+            game.user2.losses += 1
             game.user3.score += 1
             game.user3.wins += 1
             game.user4.score -= 1
-            game.user4.loses += 1
+            game.user4.losses += 1
         elif game.user2.id == winner_id:
             game.user2.score += 1
             game.user2.wins += 1
             game.user1.score -= 1
-            game.user1.loses += 1
+            game.user1.losses += 1
             game.user3.score += 1
             game.user3.wins += 1
             game.user4.score -= 1
-            game.user4.loses += 1
+            game.user4.losses += 1
         game.user1_score = winner_score
         game.user2_score = loser_score
         game.save()
@@ -395,7 +395,7 @@ class Surrender(APIView):
         if game.type == 'two':
             if game.user1 == user:
                 game.user1.score -= 1
-                game.user1.loses += 1
+                game.user1.losses += 1
                 game.user2.score += 1
                 game.user2.wins += 1
                 game.winner = game.user2
@@ -404,7 +404,7 @@ class Surrender(APIView):
                 game.save()
             else:
                 game.user2.score -= 1
-                game.user2.loses += 1
+                game.user2.losses += 1
                 game.user1.score += 1
                 game.user1.wins += 1
                 game.winner = game.user1
