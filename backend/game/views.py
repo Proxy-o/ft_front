@@ -16,6 +16,8 @@ from channels.layers import get_channel_layer
 import datetime
 from rest_framework.pagination import PageNumberPagination
 import json
+from django.conf import settings
+import urllib.parse
 
 User = get_user_model()
 
@@ -291,11 +293,15 @@ class EndGame(APIView):
         if user1.id == winner_id:
             game.winner = user1
             user1.score += 1
+            user1.wins += 1
             user2.score -= 1
+            user2.loses += 1
         else:
             game.winner = user2
             user2.score += 1
+            user2.wins += 1
             user1.score -= 1
+            user1.loses += 1
         
         game.user1_score = winner_score if user1.id == winner_id else loser_score
         game.user2_score = winner_score if user2.id == winner_id else loser_score
@@ -340,14 +346,22 @@ class EndGameFour(APIView):
         game.winner = User.objects.get(id=winner_id)
         if game.user1.id == winner_id:
             game.user1.score += 1
+            game.user1.wins += 1
             game.user2.score -= 1
+            game.user2.loses += 1
             game.user3.score += 1
+            game.user3.wins += 1
             game.user4.score -= 1
+            game.user4.loses += 1
         elif game.user2.id == winner_id:
             game.user2.score += 1
+            game.user2.wins += 1
             game.user1.score -= 1
+            game.user1.loses += 1
             game.user3.score += 1
+            game.user3.wins += 1
             game.user4.score -= 1
+            game.user4.loses += 1
         game.user1_score = winner_score
         game.user2_score = loser_score
         game.save()
@@ -381,14 +395,18 @@ class Surrender(APIView):
         if game.type == 'two':
             if game.user1 == user:
                 game.user1.score -= 1
+                game.user1.loses += 1
                 game.user2.score += 1
+                game.user2.wins += 1
                 game.winner = game.user2
                 game.user2_score = 3.0000
                 game.user1_score = 0
                 game.save()
             else:
                 game.user2.score -= 1
+                game.user2.loses += 1
                 game.user1.score += 1
+                game.user1.wins += 1
                 game.winner = game.user1
                 game.user1_score = 3.0000
                 game.user2_score = 0
@@ -583,3 +601,37 @@ class GamesStates(APIView):
             # 'tournamentWins': tournamentWins,
             # 'tournamentLoses': tournamentLoses
         }, status=status.HTTP_200_OK)
+
+
+class GlobalGamesStates(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [CustomJWTAuthentication]
+
+    @staticmethod
+    def get_avatar(obj):
+        if obj.avatar :
+            avatar_url : str = urllib.parse.unquote(obj.avatar.url)
+            if avatar_url.startswith('/https'):
+                avatar_url = avatar_url.replace('/https:/', 'https://', 1)
+                return avatar_url
+            else :
+                server_url = settings.SERVER_URL
+                return f"{server_url}{obj.avatar.url}"
+        return None
+
+    def get(self, request):
+        globalRanking = User.objects.all().order_by('-score')
+        res = []
+        for i, user in enumerate(globalRanking):
+            res.append({
+                "id": user.id,
+                "rank": i + 1,
+                "username": user.username,
+                "avatar": GlobalGamesStates.get_avatar(user),
+                "score": user.score,
+                "wins": user.wins,
+                "losses": user.losses,
+            })
+    
+
+        return Response(res, status=status.HTTP_200_OK)

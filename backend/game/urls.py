@@ -18,4 +18,5 @@ urlpatterns = [
     path('user/<int:user_id>', views.UserGames.as_view()),
     path('twovtwo/user/<int:user_id>', views.TwoVTwoGameView.as_view()),
     path('states/<int:user_id>', views.GamesStates.as_view()),
+    path('globalstates', views.GlobalGamesStates.as_view()),
 ]
