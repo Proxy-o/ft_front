@@ -12,6 +12,7 @@ import {
   UserPlus2,
   MessageCircle,
   AlignRight,
+  Medal,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "../ui/button";
@@ -48,6 +49,12 @@ export default function MobilNav() {
       title: "Play",
       link: "/game",
       icon: GamepadIcon,
+      variant: "ghost",
+    },
+    {
+      title: "Rank",
+      link: "/ranking",
+      icon: Medal,
       variant: "ghost",
     },
     {
