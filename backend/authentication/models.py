@@ -17,10 +17,11 @@ class User(AbstractUser):
     username = models.CharField(max_length=15, unique=True)
     email = models.EmailField(unique=True, blank=True, null=True)
     avatar = models.ImageField(upload_to=upload_to, default=get_default_avatar)
-    status = models.CharField(max_length=100, blank=True)
     friends = models.ManyToManyField("self", blank=True)
     blocked = models.ManyToManyField("self", blank=True, symmetrical=False)
     status = models.CharField(max_length=100, default='offline')
+    wins = models.IntegerField(default=0)
+    losses = models.IntegerField(default=0)
     score = models.IntegerField(default=400)
     # 2FA
     otp_active = models.BooleanField(default=False)
