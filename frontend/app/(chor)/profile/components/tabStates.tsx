@@ -1,6 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import OneVoneTable from "./oneVoneTable";
-import TournamentTable from "./tournamentTable";
 import TwoVtwoTable from "./twoVtwoTable";
 
 export default function TabStates({ id }: { id: string }) {

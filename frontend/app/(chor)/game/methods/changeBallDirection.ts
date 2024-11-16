@@ -114,7 +114,7 @@ function changeBallDirectionFour(
     (username === leftUserTop.current?.username ||
       username === leftUserBottom.current?.username) &&
     newBallPositionRef.current.x < paddleLeftX + paddleWidth + ballRadius &&
-    newBallPositionRef.current.x > paddleLeftX + ballRadius &&
+    newBallPositionRef.current.x > paddleLeftX &&
     newBallPositionRef.current.y + ballRadius / 2 > myPaddleRef.current &&
     newBallPositionRef.current.y - ballRadius / 2 <
       myPaddleRef.current + paddleHeight

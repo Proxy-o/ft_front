@@ -14,12 +14,14 @@ const Actions = ({
   rightUserRef,
   leftUserRef,
   gameIdRef,
+  state,
 }: {
   gameStarted: boolean;
   type: string;
   rightUserRef: React.MutableRefObject<User | undefined>;
   leftUserRef: React.MutableRefObject<User | undefined>;
   gameIdRef: React.MutableRefObject<string>;
+  state: React.MutableRefObject<string>;
 }) => {
   const { handleStartGame } = useGameSocket();
   const { mutate: surrenderGame } = useSurrenderGame();
@@ -53,6 +55,21 @@ const Actions = ({
                 <TooltipContent>Start</TooltipContent>
               </Tooltip>
             </TooltipProvider>
+            <TooltipProvider delayDuration={0}>
+              <Tooltip delayDuration={0}>
+                <TooltipTrigger asChild>
+                  <Button
+                    onClick={() => {
+                      leaveGame();
+                    }}
+                    className="h-fit w-fit bg-yellow-600/40"
+                  >
+                    <DoorOpen size={25} />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Leave</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
         ) : (
           <TooltipProvider delayDuration={0}>
@@ -61,6 +78,7 @@ const Actions = ({
                 <Button
                   onClick={() => {
                     surrenderGame(gameIdRef.current);
+                    state.current = "surrender";
                   }}
                   className="h-fit w-fit bg-red-600/40"
                 >

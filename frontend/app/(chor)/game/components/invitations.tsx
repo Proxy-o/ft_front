@@ -2,10 +2,7 @@
 
 import React, { useEffect } from "react";
 import { Check, Inbox, X } from "lucide-react";
-import useGetInvitations from "../hooks/useGetInvitations";
-import useDeclineInvitation from "../hooks/useDeclineMutation";
-import useAcceptInvitation from "../hooks/useAccepteInvitation";
-import { Invitation } from "@/lib/types";
+import { t_Invitation } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
@@ -13,6 +10,9 @@ import { usePathname, useRouter } from "next/navigation";
 import useInvitationSocket from "@/app/(chor)/game/hooks/sockets/useInvitationSocket";
 import { toast } from "sonner";
 import useGetUser from "../../profile/hooks/useGetUser";
+import useGetInvitations from "../hooks/invitations/useGetInvitations";
+import useDeclineInvitation from "../hooks/invitations/useDeclineMutation";
+import useAcceptInvitation from "../hooks/invitations/useAccepteInvitation";
 
 const Invitations = ({ mode }: { mode: string }) => {
   const { newNotif } = useInvitationSocket();
@@ -24,7 +24,7 @@ const Invitations = ({ mode }: { mode: string }) => {
   const { mutate: acceptInvitationMutation } = useAcceptInvitation();
 
   const path = usePathname();
-  const invitations: Invitation[] = invitationsData.data
+  const invitations: t_Invitation[] = invitationsData.data
     ? invitationsData.data
     : [];
 

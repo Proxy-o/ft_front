@@ -14,6 +14,7 @@ function checkLoseConditionOnline(
     loser: string;
     loserScore: number;
   }) => void,
+  handleEndGame: () => void,
   setCanvas: React.Dispatch<React.SetStateAction<HTMLCanvasElement | null>>
 ) {
   if (canvas === null) return;
@@ -27,6 +28,7 @@ function checkLoseConditionOnline(
       loser: leftUser?.id || "",
       loserScore: leftScoreRef.current,
     });
+    handleEndGame();
   }
 }
 
@@ -42,8 +44,8 @@ function checkLoseConditionFour(
     loser: string;
     loserScore: number;
   }) => void,
+  handleEndGame: () => void,
   username: string,
-  handleRefetchPlayers: (gameId: string) => void
 ) {
   if (canvas === null) return;
   const {
@@ -63,6 +65,7 @@ function checkLoseConditionFour(
           loser: leftUserTop.current?.id || "",
           loserScore: leftScoreRef.current,
         });
+        handleEndGame();
       }
       if (
         username === rightUserTop.current?.username ||
@@ -79,6 +82,7 @@ function checkLoseConditionFour(
           loser: rightUserTop.current?.id || "",
           loserScore: rightScoreRef.current,
         });
+        handleEndGame();
       }
       if (
         username === leftUserTop.current?.username ||

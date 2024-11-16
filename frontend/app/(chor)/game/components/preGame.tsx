@@ -27,12 +27,12 @@ const PreGame = ({
           opacity: 0.75,
         }}
       />
-      <div className="flex flex-col w-full h-full px-4 md:px-14 py-8 lg:py-1 gap-2">
-        <div className="flex flex-row lg:justify-center justify-between w-full h-full items-center">
-          <div className="w-24 h-24 lg:w-32 lg:h-32 rounded-md justify-center items-center flex flex-col animate-getBigger animate-biggerSmaller bg-blue-500">
+      <div className="flex flex-col w-full h-full py-3 md:py-1 gap-2">
+        <div className="flex flex-row justify-center w-full h-full items-center">
+          <div className="w-12 h-12 md:w-22 md:h-22 md:w-32 md:h-32 rounded-md justify-center items-center flex flex-col mx-auto animate-getBigger animate-biggerSmaller bg-blue-500">
             <PreGameProfile avatar={leftUserTop?.avatar || ""} side="left" />
           </div>
-          <div className="flex flex-row w-fit h-full m-auto">
+          <div className="flex flex-row w-fit h-full">
             {type !== "four" && (
               <div className="text-2xl md:text-5xl lg:text-7xl text-white font-bold h-fit my-auto">
                 VS
@@ -44,19 +44,19 @@ const PreGame = ({
               </div>
             )}
           </div>
-          <div className="w-24 h-24 lg:w-32 lg:h-32 rounded-md justify-center items-center flex flex-col animate-getBigger animate-biggerSmaller bg-red-500">
+          <div className="w-12 h-12 md:w-22 md:h-22 md:w-32 md:h-32 rounded-md justify-center items-center flex flex-col mx-auto animate-getBigger animate-biggerSmaller bg-red-500">
             <PreGameProfile avatar={rightUserTop?.avatar || ""} side="right" />
           </div>
         </div>
         {(leftUserBottom || rightUserBottom) && (
-          <div className="flex flex-row lg:justify-center justify-between w-full h-full items-center gap-10 md:gap-44 lg:gap-60">
-            <div className="w-24 h-24 lg:w-32 lg:h-32 rounded-md justify-center items-center flex flex-col animate-getBigger animate-biggerSmaller ml-auto bg-blue-500">
+          <div className="flex flex-row md:justify-center justify-between w-4/6 mx-auto h-full items-center">
+            <div className="w-12 h-12 md:w-22 md:h-22 md:w-32 md:h-32 rounded-md justify-center items-center flex flex-col mx-auto animate-getBigger animate-biggerSmaller ml-auto bg-blue-500">
               <PreGameProfile
                 avatar={leftUserBottom?.avatar || ""}
                 side="left"
               />
             </div>
-            <div className="w-24 h-24 lg:w-32 lg:h-32 rounded-md justify-center items-center flex flex-col animate-getBigger animate-biggerSmaller mr-auto bg-red-500">
+            <div className="w-12 h-12 md:w-22 md:h-22 md:w-32 md:h-32 rounded-md justify-center items-center flex flex-col mx-auto animate-getBigger animate-biggerSmaller mr-auto bg-red-500">
               <PreGameProfile
                 avatar={rightUserBottom?.avatar || ""}
                 side="right"

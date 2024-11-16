@@ -133,7 +133,7 @@ class GameConsumer(WebsocketConsumer):
         surrenderer = self.user.username
         gameId = split[1]
         game = Game.objects.get(id=gameId)
-        if not game:
+        if not game or game.type == "two":
             return
         async_to_sync(self.channel_layer.group_send)(
             f'game_{game.user1.username}',
@@ -278,7 +278,7 @@ class GameConsumer(WebsocketConsumer):
         time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         game_id = split[1]
         game = Game.objects.get(id=game_id)
-        if not game:
+        if not game or game.type == "four":
             return
         surrenderer = self.user.username
         winner_username = game.user1.username if game.user1 != self.user else game.user2.username
@@ -294,8 +294,8 @@ class GameConsumer(WebsocketConsumer):
             f'game_{winner_username}',
             {
                 'type': 'send_message',
-                'user': winner_username, 'message':
-                f'/surrender {surrenderer} {winner_username} {time}'
+                'user': winner_username,
+                'message': f'/surrender {surrenderer} {winner_username} {time}'
             }
         )
 
@@ -511,12 +511,14 @@ class GameConsumer(WebsocketConsumer):
         )
 
     def handle_user_left_game(self, split):
-        # print("Handling user left game")
-        user = split[1]
-        game = Game.objects.filter(Q(user1=self.user) | Q(user2=self.user) | Q(
-            user3=self.user) | Q(user4=self.user)).filter(winner=None).last()
-        if not game:
-            return
+        print("Handling user left game")
+        print(split)
+        user1 = split[1]
+        user2 = split[2]
+        user3 = split[3]
+        user4 = split[4]
+        
+        print(user1, user2, user3, user4)
         # async_to_sync(self.channel_layer.group_send)(
         #     self.game_group,
         #     {
@@ -526,35 +528,27 @@ class GameConsumer(WebsocketConsumer):
         #     }
         # )
         async_to_sync(self.channel_layer.group_send)(
-            f'game_{game.user1.username}',
+            f'game_{user2}',
             {
                 'type': 'send_message',
                 'user': self.user.username,
-                'message': f'/userLeftGame {user} {self.user.username}'
+                'message': f'/userLeftGame {user1} {self.user.username}'
             }
         )
         async_to_sync(self.channel_layer.group_send)(
-            f'game_{game.user2.username}',
+            f'game_{user3}',
             {
                 'type': 'send_message',
                 'user': self.user.username,
-                'message': f'/userLeftGame {user} {self.user.username}'
+                'message': f'/userLeftGame {user1} {self.user.username}'
             }
         )
         async_to_sync(self.channel_layer.group_send)(
-            f'game_{game.user3.username}',
+            f'game_{user4}',
             {
                 'type': 'send_message',
                 'user': self.user.username,
-                'message': f'/userLeftGame {user} {self.user.username}'
-            }
-        )
-        async_to_sync(self.channel_layer.group_send)(
-            f'game_{game.user4.username}',
-            {
-                'type': 'send_message',
-                'user': self.user.username,
-                'message': f'/userLeftGame {user} {self.user.username}'
+                'message': f'/userLeftGame {user1} {self.user.username}'
             }
         )
 
@@ -589,6 +583,8 @@ class GameConsumer(WebsocketConsumer):
         # print("Sending four score message")
         game = Game.objects.filter(Q(user1=self.user) | Q(user2=self.user) | Q(
             user3=self.user) | Q(user4=self.user)).filter(winner=None).last()
+        if not game:
+            return
         if game.user1 == self.user or game.user3 == self.user:
             game.user2_score += 1
         else:

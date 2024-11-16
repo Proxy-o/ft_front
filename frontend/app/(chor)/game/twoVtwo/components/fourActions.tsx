@@ -9,6 +9,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import React from "react";
 
 const FourActions = ({
   playerReadyRef,
@@ -19,6 +20,8 @@ const FourActions = ({
   rightUserBottom,
   rightUserTop,
   onGoingGame,
+  status,
+  setState,
   handleRefetchPlayers,
 }: {
   playerReadyRef: any;
@@ -29,6 +32,8 @@ const FourActions = ({
   rightUserBottom: any;
   rightUserTop: any;
   onGoingGame: any;
+  status: string;
+  setState: React.Dispatch<React.SetStateAction<string>>;
   handleRefetchPlayers: any;
 }) => {
   const { mutate: surrenderGame } = useSurrenderGame();
@@ -87,6 +92,7 @@ const FourActions = ({
               <Button
                 onClick={() => {
                   surrenderGame(onGoingGame.data?.game.id || "");
+                  setState("none");
                 }}
                 className="h-fit w-fit bg-red-600/40"
               >

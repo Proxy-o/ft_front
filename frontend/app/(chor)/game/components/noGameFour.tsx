@@ -1,49 +1,48 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 
-const NoGameFour = ({ state }: { state: React.MutableRefObject<string> }) => {
-  const atext = useRef<string>("Invite a friend to play");
+const NoGameFour = ({
+  state,
+  gameStarted,
+}: {
+  state: string;
+  gameStarted: boolean;
+}) => {
+  const [atext, setAtext] = useState<string>("Invite a friend to play");
 
   useEffect(() => {
-    if (state.current === "win") {
-      atext.current = "You won";
-    } else if (state.current === "lose") {
-      atext.current = "You lose";
-    } else if (state.current === "surrender") {
-      atext.current = "Your enemy has surrendered";
-    } else if (state.current === "surrendered") {
-      atext.current = "Your teamate has surrendered";
-    } else if (state.current === "none") {
-      atext.current = "Invite a friend to play";
-    } else if (state.current === "left") {
-      atext.current = "The left player wins the game";
-    } else if (state.current === "right") {
-      atext.current = "The right player wins the game";
-    } else if (state.current === "local") {
-      atext.current = "Start a local game";
-    } else if (state.current === "teamLeft") {
-      atext.current = "Your taamate has left the game";
-    } else if (state.current === "teamLeftOpponent") {
-      atext.current = "Your opponent's teammate has left the game\nYou win";
+    if (state === "win") {
+      setAtext("You won");
+    } else if (state === "lose") {
+      setAtext("You lose");
+    } else if (state === "surrender") {
+      setAtext("Your enemy has surrendered");
+    } else if (state === "surrendered") {
+      setAtext("Your teamate has surrendered");
+    } else if (state === "none") {
+      setAtext("Invite a friend to play");
+    } else if (state === "left") {
+      setAtext("The left player wins the game");
+    } else if (state === "right") {
+      setAtext("The right player wins the game");
+    } else if (state === "local") {
+      setAtext("Start a local game");
+    } else if (state === "teamLeft") {
+      setAtext("Your teamate has left the game");
+    } else if (state === "teamLeftOpponent") {
+      setAtext("Your opponent has left the game You win");
     } else {
-      atext.current = "Invite a friend to play";
+      setAtext("Invite a friend to play");
     }
-  }, [state, state.current]);
+  }, [state, gameStarted]);
 
+  // console.log("state", state);
   return (
-    <div className="w-full h-full relative flex flex-col rounded-lg justify-between p-4">
-      <div
-        className="absolute inset-0 rounded-lg w-full h-full"
-        style={{
-          backgroundImage: "url('/bg.jpg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          opacity: 0.75,
-        }}
-      />
-      <div className="flex text-white z-10 text-sm md:text-2xl m-auto text-center">
-        {atext.current}
+      <div className={`w-full h-full relative flex flex-col rounded-lg justify-between p-4 ${gameStarted ? "hidden" : ""}`}>
+        <div className="absolute inset-0 rounded-lg w-full h-full" />
+        <div className="flex text-white z-10 text-sm md:text-2xl m-auto text-center">
+          {atext}
+        </div>
       </div>
-    </div>
   );
 };
 

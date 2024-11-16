@@ -182,6 +182,9 @@ class CustomLogoutView(APIView):
         try:
             access_token = request.COOKIES.get('access')
             if access_token:
+                user = User.objects.get(id=request.user.id)
+                user.status = 'offline'
+                user.save()
                 token = AccessToken(access_token)
                 token.blacklist()
         except Exception:

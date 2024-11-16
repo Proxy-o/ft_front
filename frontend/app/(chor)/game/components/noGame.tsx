@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 const NoGame = ({ state }: { state: React.MutableRefObject<string> }) => {
   const [atext, setAtext] = useState<string>("Invite a friend to play");
@@ -10,7 +10,7 @@ const NoGame = ({ state }: { state: React.MutableRefObject<string> }) => {
     } else if (state.current === "lose") {
       setAtext("You lose");
     } else if (state.current === "surrender") {
-      setAtext("Your teammate has surrendered");
+      setAtext("You have surrendered");
     } else if (state.current === "surrendered") {
       setAtext("Your enemy has surrendered");
     } else if (state.current === "none") {

@@ -7,7 +7,6 @@ import { changeBallDirectionFour } from "../../methods/changeBallDirection";
 import { movePaddlesFour } from "../../methods/movePaddles";
 import { drawFour } from "../../methods/draw";
 import useGameSocket from "../../hooks/sockets/useGameSocket";
-import useInvitationSocket from "../../hooks/sockets/useInvitationSocket";
 import { User } from "@/lib/types";
 import { canvasParamsFour } from "../../types";
 import { moveBallFour } from "../../methods/moveBall";
@@ -24,6 +23,7 @@ const Canvas = ({
   onGoingGame,
   username,
   state,
+  setState,
   playerReadyRef,
 }: {
   leftUserTop: React.MutableRefObject<User>;
@@ -35,7 +35,8 @@ const Canvas = ({
   setGameStarted: React.Dispatch<React.SetStateAction<boolean>>;
   onGoingGame: any;
   username: string;
-  state: React.MutableRefObject<string>;
+  state: string;
+  setState: React.Dispatch<React.SetStateAction<string>>;
   playerReadyRef: React.MutableRefObject<number>;
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -44,10 +45,13 @@ const Canvas = ({
   const upPressedRef = useRef(false);
   const downPressedRef = useRef(false);
 
-  const canvasHeight = useRef(800);
   const canvasWidth = useRef(1200);
+  const canvasHeight = useRef(canvasWidth.current / 2);
 
-  const newBallPositionRef = useRef({ x: 400, y: 200 });
+  const newBallPositionRef = useRef({
+    x: canvasWidth.current / 2,
+    y: canvasHeight.current / 2,
+  });
   const newAngleRef = useRef(0);
   const isFirstTime = useRef(true);
 
@@ -87,9 +91,8 @@ const Canvas = ({
     handleStillPlaying,
     handleReadyToStartFour,
     handleReadyFour,
+    handleEndGame,
   } = useGameSocket();
-
-  const { handleRefetchPlayers } = useInvitationSocket();
 
   const { mutate: endGameFour } = useEndGameFour();
 
@@ -105,14 +108,14 @@ const Canvas = ({
     let ballInLeftPaddle = false;
     let ballInRightPaddle = false;
 
-    let ballRadius = 10;
+    let ballRadius = 30;
 
-    const paddleHeight = 60;
+    const paddleHeight = 80;
     const paddleWidth = 21;
-    paddleRightTopYRef.current = (canvas.height - paddleHeight) / 4;
-    paddleLeftTopYRef.current = (canvas.height - paddleHeight) / 4;
-    paddleLeftBottomYRef.current = ((canvas.height - paddleHeight) * 3) / 4;
-    paddleRightBottomYRef.current = ((canvas.height - paddleHeight) * 3) / 4;
+    paddleRightTopYRef.current = 0; //(canvas.height - paddleHeight) / 4;
+    paddleLeftTopYRef.current = 0; //(canvas.height - paddleHeight) / 4;
+    paddleLeftBottomYRef.current = canvasHeight.current / 2; //((canvas.height - paddleHeight) * 3) / 4;
+    paddleRightBottomYRef.current = canvasHeight.current / 2; //((canvas.height - paddleHeight) * 3) / 4;
 
     if (username === rightUserTop.current?.username)
       myPaddleRef.current = paddleRightTopYRef.current;
@@ -307,8 +310,8 @@ const Canvas = ({
         rightScoreRef,
         setGameStarted,
         endGameFour,
-        username,
-        handleRefetchPlayers
+        handleEndGame,
+        username
       );
 
       // Check for collision with the horizontal walls
@@ -369,6 +372,7 @@ const Canvas = ({
     if (gameMsg()) {
       const gameMsge = gameMsg()?.data;
       const parsedMessage = JSON.parse(gameMsge);
+      // console.log(parsedMessage);
       const message = parsedMessage.message.split(" ");
       if (message[0] === "/showFour") {
         const sender = message[1];
@@ -464,18 +468,18 @@ const Canvas = ({
               surrenderer === leftUserTop.current.username ||
               surrenderer === leftUserBottom.current.username
             ) {
-              state.current = "surrendered";
+              setState("surrendered");
             } else {
-              state.current = "surrender";
+              setState("surrender");
             }
           } else {
             if (
               surrenderer === rightUserTop.current.username ||
               surrenderer === rightUserBottom.current.username
             ) {
-              state.current = "surrendered";
+              setState("surrendered");
             } else {
-              state.current = "surrender";
+              setState("surrender");
             }
           }
         }
@@ -484,8 +488,11 @@ const Canvas = ({
       } else if (message[0] === "/stillPlaying") {
         const user = message[1];
         const whoAsked = message[2];
-        if (whoAsked === username) {
-          stillPlayingUsersRef.current.push(user);
+        if (whoAsked === username && stillPlayingUsersRef.current.length < 3) {
+          // push to array if not already there
+          if (!stillPlayingUsersRef.current.includes(user)) {
+            stillPlayingUsersRef.current.push(user);
+          }
           // handleWhoLeftGame();
           if (stillPlayingUsersRef.current.length === 3) {
             // find the user who did not respond
@@ -507,38 +514,39 @@ const Canvas = ({
                   userWhoDidNotRespond.splice(index, 1);
                 }
               });
-              handleUserLeftGame(userWhoDidNotRespond[0] || "");
               const winner =
-                leftUserTop.current.username === userWhoDidNotRespond[0] ||
-                leftUserBottom.current.username === userWhoDidNotRespond[0]
-                  ? rightUserTop.current.id
-                  : leftUserTop.current.id;
+              leftUserTop.current.username === userWhoDidNotRespond[0] ||
+              leftUserBottom.current.username === userWhoDidNotRespond[0]
+              ? rightUserTop.current.id
+              : leftUserTop.current.id;
               const loser =
-                leftUserTop.current.username === userWhoDidNotRespond[0] ||
-                leftUserBottom.current.username === userWhoDidNotRespond[0]
-                  ? leftUserTop.current.id
-                  : rightUserTop.current.id;
+              leftUserTop.current.username === userWhoDidNotRespond[0] ||
+              leftUserBottom.current.username === userWhoDidNotRespond[0]
+              ? leftUserTop.current.id
+              : rightUserTop.current.id;
               endGameFour({
                 winner,
                 winnerScore: 3,
                 loser,
                 loserScore: 0,
               });
+              handleUserLeftGame(
+                userWhoDidNotRespond[0],
+                stillPlayingUsersRef.current
+              );
               // handleRefetchPlayers(gameId);
             }
           }
         }
-      } else if (
-        message[0] === "/userLeftGame" ||
-        message[0] === "/refetchPlayers"
-      ) {
-        if (message[0] === "/userLeftGame") {
-          if (message[1] === username || message[2] === username) {
-            state.current = "teamLeft";
-          } else {
-            state.current = "teamLeftOpponent";
-          }
+      } else if (message[0] === "/userLeftGame") {
+        if (message[1] === username || message[2] === username) {
+          setState("teamLeft");
+        } else {
+          setState("teamLeftOpponent");
         }
+        onGoingGame.refetch();
+        // console.log("user left game", state);
+      } else if (message[0] === "/refetchPlayers") {
         onGoingGame.refetch();
       } else if (message[0] === "/endGame") {
         const team1 = [
@@ -550,11 +558,17 @@ const Canvas = ({
           rightUserBottom.current.username,
         ];
         const loser = message[1];
-        const winner = loser === team1[0] || loser === team1[1] ? team2 : team1;
-        if (username === winner[0] || username === winner[1]) {
-          state.current = "win";
+        let winner;
+        if (team1.includes(loser)) {
+          winner = team2;
         } else {
-          state.current = "lose";
+          winner = team1;
+        }
+        console.log("winner", winner);
+        if (username === winner[0] || username === winner[1]) {
+          setState("win");
+        } else {
+          setState("lose");
         }
         // console.log("end game");
         leftScoreRef.current = 0;

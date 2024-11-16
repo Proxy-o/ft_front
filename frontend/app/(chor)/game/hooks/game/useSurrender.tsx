@@ -12,6 +12,7 @@ const surrenderGame = async (gameId: string) => {
       const returnData = {
         gameId: res.data.gameId,
         tournamentId: res.data.tournamentId,
+        type: res.data.type,
       };
       // console.log("tournament surrender",res.data);
       toast.success(res.data.message);
@@ -31,10 +32,13 @@ export default function useSurrenderGame() {
   const mutation = useMutation({
     mutationFn: surrenderGame,
     onSuccess: (data) => {
-      handleRefetchPlayers(data?.gameId);
-      handleSurrender(data?.gameId);
-
-      handleSurrenderFour(data?.gameId);
+      // alert("surrendered " + data?.type);
+      // handleRefetchPlayers(data?.gameId);
+      if (data?.type === "four") {
+        handleSurrenderFour(data?.gameId);
+      } else if (data?.type === "two") {
+        handleSurrender(data?.gameId);
+      }
       // console.log(data);
       if (data?.tournamentId) {
         handleRefetchTournament(data?.tournamentId);

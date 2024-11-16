@@ -11,7 +11,8 @@ function enemyLeftGame(
     winnerScore: number;
     loser: string;
     loserScore: number;
-  }) => void
+  }) => void,
+  state: React.MutableRefObject<string>
 ) {
   const { canvas, leftUserRef, rightUserRef } = canvasParams;
   if (canvas === null) return;
@@ -40,6 +41,7 @@ function enemyLeftGame(
       enemyLeftGameRef.current = false;
       // gameStartedRef.current = false;
       time.current = 0;
+      state.current = "leave";
     }
   }
 }
