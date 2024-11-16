@@ -147,6 +147,7 @@ const Game = ({
               rightUserRef={rightUser}
               leftUserRef={leftUser}
               gameIdRef={gameIdRef}
+              state={state}
             />
           )}
       </Card>

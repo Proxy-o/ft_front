@@ -23,6 +23,7 @@ const Canvas = ({
   onGoingGame,
   username,
   state,
+  setState,
   playerReadyRef,
 }: {
   leftUserTop: React.MutableRefObject<User>;
@@ -34,7 +35,8 @@ const Canvas = ({
   setGameStarted: React.Dispatch<React.SetStateAction<boolean>>;
   onGoingGame: any;
   username: string;
-  state: React.MutableRefObject<string>;
+  state: string;
+  setState: React.Dispatch<React.SetStateAction<string>>;
   playerReadyRef: React.MutableRefObject<number>;
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -108,7 +110,7 @@ const Canvas = ({
 
     let ballRadius = 30;
 
-    const paddleHeight = 300;
+    const paddleHeight = 80;
     const paddleWidth = 21;
     paddleRightTopYRef.current = 0; //(canvas.height - paddleHeight) / 4;
     paddleLeftTopYRef.current = 0; //(canvas.height - paddleHeight) / 4;
@@ -466,18 +468,18 @@ const Canvas = ({
               surrenderer === leftUserTop.current.username ||
               surrenderer === leftUserBottom.current.username
             ) {
-              state.current = "surrendered";
+              setState("surrendered");
             } else {
-              state.current = "surrender";
+              setState("surrender");
             }
           } else {
             if (
               surrenderer === rightUserTop.current.username ||
               surrenderer === rightUserBottom.current.username
             ) {
-              state.current = "surrendered";
+              setState("surrendered");
             } else {
-              state.current = "surrender";
+              setState("surrender");
             }
           }
         }
@@ -512,38 +514,38 @@ const Canvas = ({
                   userWhoDidNotRespond.splice(index, 1);
                 }
               });
-              handleUserLeftGame(
-                userWhoDidNotRespond[0],
-                stillPlayingUsersRef.current
-              );
               const winner =
-                leftUserTop.current.username === userWhoDidNotRespond[0] ||
-                leftUserBottom.current.username === userWhoDidNotRespond[0]
-                  ? rightUserTop.current.id
-                  : leftUserTop.current.id;
+              leftUserTop.current.username === userWhoDidNotRespond[0] ||
+              leftUserBottom.current.username === userWhoDidNotRespond[0]
+              ? rightUserTop.current.id
+              : leftUserTop.current.id;
               const loser =
-                leftUserTop.current.username === userWhoDidNotRespond[0] ||
-                leftUserBottom.current.username === userWhoDidNotRespond[0]
-                  ? leftUserTop.current.id
-                  : rightUserTop.current.id;
+              leftUserTop.current.username === userWhoDidNotRespond[0] ||
+              leftUserBottom.current.username === userWhoDidNotRespond[0]
+              ? leftUserTop.current.id
+              : rightUserTop.current.id;
               endGameFour({
                 winner,
                 winnerScore: 3,
                 loser,
                 loserScore: 0,
               });
+              handleUserLeftGame(
+                userWhoDidNotRespond[0],
+                stillPlayingUsersRef.current
+              );
               // handleRefetchPlayers(gameId);
             }
           }
         }
       } else if (message[0] === "/userLeftGame") {
         if (message[1] === username || message[2] === username) {
-          state.current = "teamLeft";
+          setState("teamLeft");
         } else {
-          state.current = "teamLeftOpponent";
+          setState("teamLeftOpponent");
         }
         onGoingGame.refetch();
-        console.log("user left game", state.current);
+        // console.log("user left game", state);
       } else if (message[0] === "/refetchPlayers") {
         onGoingGame.refetch();
       } else if (message[0] === "/endGame") {
@@ -556,11 +558,17 @@ const Canvas = ({
           rightUserBottom.current.username,
         ];
         const loser = message[1];
-        const winner = loser === team1[0] || loser === team1[1] ? team2 : team1;
-        if (username === winner[0] || username === winner[1]) {
-          state.current = "win";
+        let winner;
+        if (team1.includes(loser)) {
+          winner = team2;
         } else {
-          state.current = "lose";
+          winner = team1;
+        }
+        console.log("winner", winner);
+        if (username === winner[0] || username === winner[1]) {
+          setState("win");
+        } else {
+          setState("lose");
         }
         // console.log("end game");
         leftScoreRef.current = 0;

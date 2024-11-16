@@ -17,7 +17,7 @@ const Game = () => {
   const { data: user } = useGetUser("0");
   const user_id = user?.id;
   const [gameStarted, setGameStarted] = useState(false);
-  const state = useRef<string>("none");
+  const [state, setState] = useState("none");
   const dummyPlayer: User = {
     username: "player",
     avatar: "none",
@@ -109,9 +109,8 @@ const Game = () => {
             />
           )}
 
-        <div className={`w-full h-full ${gameStarted ? "hidden" : ""}`}>
-          <NoGameFour state={state.current} />
-        </div>
+          <NoGameFour state={state} gameStarted={gameStarted} />
+        
 
         <Canvas
           leftUserTop={leftUserTop}
@@ -124,6 +123,7 @@ const Game = () => {
           onGoingGame={onGoingGame}
           username={username}
           state={state}
+          setState={setState}
           playerReadyRef={playerReadyRef}
         />
         {onGoingGame.data?.game &&
@@ -139,6 +139,7 @@ const Game = () => {
               rightUserTop={rightUserTop}
               onGoingGame={onGoingGame}
               status={state}
+              setState={setState}
               handleRefetchPlayers={handleRefetchPlayers}
             />
           )}

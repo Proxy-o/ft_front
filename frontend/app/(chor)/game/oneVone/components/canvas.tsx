@@ -297,7 +297,6 @@ const Canvas = ({
     const gameMsge = gameMsg();
     if (gameMsge) {
       const parsedMessage = JSON.parse(gameMsge.data);
-      console.log(parsedMessage.message);
       const message = parsedMessage?.message.split(" ");
 
       if (message[0] === "/move") {

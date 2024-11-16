@@ -583,6 +583,8 @@ class GameConsumer(WebsocketConsumer):
         # print("Sending four score message")
         game = Game.objects.filter(Q(user1=self.user) | Q(user2=self.user) | Q(
             user3=self.user) | Q(user4=self.user)).filter(winner=None).last()
+        if not game:
+            return
         if game.user1 == self.user or game.user3 == self.user:
             game.user2_score += 1
         else:

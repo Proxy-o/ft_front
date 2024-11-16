@@ -423,12 +423,12 @@ class Surrender(APIView):
             game.user3.save()
             game.user4.status = "online"
             game.user4.save()
-            return Response({'message': 'Game ended', 'gameId': game.id}, status=status.HTTP_200_OK)
+            return Response({'message': 'Game ended', 'gameId': game.id, 'type': game.type}, status=status.HTTP_200_OK)
         game.user1.status = "online"
         game.user1.save()
         game.user2.status = "online"
         game.user2.save()
-        return Response({'message': 'Game ended', 'gameId': game.id}, status=status.HTTP_200_OK)
+        return Response({'message': 'Game ended', 'gameId': game.id, 'type': game.type}, status=status.HTTP_200_OK)
 
 
 

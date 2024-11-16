@@ -1,10 +1,15 @@
-import { useEffect, useState,  } from "react";
+import { useEffect, useState } from "react";
 
-const NoGameFour = ({ state }: { state: string }) => {
+const NoGameFour = ({
+  state,
+  gameStarted,
+}: {
+  state: string;
+  gameStarted: boolean;
+}) => {
   const [atext, setAtext] = useState<string>("Invite a friend to play");
 
   useEffect(() => {
-
     if (state === "win") {
       setAtext("You won");
     } else if (state === "lose") {
@@ -28,15 +33,16 @@ const NoGameFour = ({ state }: { state: string }) => {
     } else {
       setAtext("Invite a friend to play");
     }
-  }, [state]);
+  }, [state, gameStarted]);
 
+  // console.log("state", state);
   return (
-    <div className="w-full h-full relative flex flex-col rounded-lg justify-between p-4">
-      <div className="absolute inset-0 rounded-lg w-full h-full" />
-      <div className="flex text-white z-10 text-sm md:text-2xl m-auto text-center">
-        {atext}
+      <div className={`w-full h-full relative flex flex-col rounded-lg justify-between p-4 ${gameStarted ? "hidden" : ""}`}>
+        <div className="absolute inset-0 rounded-lg w-full h-full" />
+        <div className="flex text-white z-10 text-sm md:text-2xl m-auto text-center">
+          {atext}
+        </div>
       </div>
-    </div>
   );
 };
 

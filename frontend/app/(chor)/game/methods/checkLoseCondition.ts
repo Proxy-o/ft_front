@@ -65,6 +65,7 @@ function checkLoseConditionFour(
           loser: leftUserTop.current?.id || "",
           loserScore: leftScoreRef.current,
         });
+        handleEndGame();
       }
       if (
         username === rightUserTop.current?.username ||

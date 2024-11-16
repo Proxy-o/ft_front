@@ -14,12 +14,14 @@ const Actions = ({
   rightUserRef,
   leftUserRef,
   gameIdRef,
+  state,
 }: {
   gameStarted: boolean;
   type: string;
   rightUserRef: React.MutableRefObject<User | undefined>;
   leftUserRef: React.MutableRefObject<User | undefined>;
   gameIdRef: React.MutableRefObject<string>;
+  state: React.MutableRefObject<string>;
 }) => {
   const { handleStartGame } = useGameSocket();
   const { mutate: surrenderGame } = useSurrenderGame();
@@ -76,6 +78,7 @@ const Actions = ({
                 <Button
                   onClick={() => {
                     surrenderGame(gameIdRef.current);
+                    state.current = "surrender";
                   }}
                   className="h-fit w-fit bg-red-600/40"
                 >
