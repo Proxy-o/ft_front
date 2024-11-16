@@ -5,8 +5,6 @@ import useGetFriends from "../chat/hooks/useGetFriends";
 import ChatFriendCard from "../chat/components/chatFriendCard";
 import { User } from "@/lib/types";
 import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
 import ResCard from "@/components/ui/resCard";
 
 export default function Page() {

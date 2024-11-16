@@ -24,7 +24,7 @@ import { QrCode } from 'lucide-react';
 import useToggleOTP from "../settings/hooks/useToggleOTP";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-export default function EditProfileForm({ user, path }: { user: User, path:string }) {
+export default function EditProfileForm({ user, path }: { user: User, path?:string }) {
   const [userInfo, setUserInfo] = useState<User>(user);
   const { mutate: editUser } = useEditUser();
   const { mutate: toggleOTP, isSuccess: switched } = useToggleOTP("0");

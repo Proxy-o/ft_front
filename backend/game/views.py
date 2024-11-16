@@ -292,15 +292,15 @@ class EndGame(APIView):
         user2 = game.user2
         if user1.id == winner_id:
             game.winner = user1
-            user1.score += 1
+            user1.score += 3
             user1.wins += 1
-            user2.score -= 1
+            user2.score -= 3
             user2.losses += 1
         else:
             game.winner = user2
-            user2.score += 1
+            user2.score += 3
             user2.wins += 1
-            user1.score -= 1
+            user1.score -= 3
             user1.losses += 1
         
         game.user1_score = winner_score if user1.id == winner_id else loser_score
@@ -345,22 +345,22 @@ class EndGameFour(APIView):
             return Response({'error': 'No ongoing game found'}, status=status.HTTP_204_NO_CONTENT)
         game.winner = User.objects.get(id=winner_id)
         if game.user1.id == winner_id:
-            game.user1.score += 1
+            game.user1.score += 2
             game.user1.wins += 1
-            game.user2.score -= 1
+            game.user2.score -= 2
             game.user2.losses += 1
-            game.user3.score += 1
+            game.user3.score += 2
             game.user3.wins += 1
-            game.user4.score -= 1
+            game.user4.score -= 2
             game.user4.losses += 1
         elif game.user2.id == winner_id:
-            game.user2.score += 1
+            game.user2.score += 2
             game.user2.wins += 1
-            game.user1.score -= 1
+            game.user1.score -= 2
             game.user1.losses += 1
-            game.user3.score += 1
+            game.user3.score += 2
             game.user3.wins += 1
-            game.user4.score -= 1
+            game.user4.score -= 2
             game.user4.losses += 1
         game.user1_score = winner_score
         game.user2_score = loser_score
@@ -394,7 +394,7 @@ class Surrender(APIView):
             return Response({'error': 'No ongoing game found'}, status=status.HTTP_204_NO_CONTENT)
         if game.type == 'two':
             if game.user1 == user:
-                game.user1.score -= 1
+                game.user1.score -= 4
                 game.user1.losses += 1
                 game.user2.score += 1
                 game.user2.wins += 1
@@ -403,7 +403,7 @@ class Surrender(APIView):
                 game.user1_score = 0
                 game.save()
             else:
-                game.user2.score -= 1
+                game.user2.score -= 4
                 game.user2.losses += 1
                 game.user1.score += 1
                 game.user1.wins += 1
@@ -417,17 +417,17 @@ class Surrender(APIView):
             game.user2.save()
         if game.type == 'four':
             if game.user1 == user or game.user3 == user:
-                game.user1.score -= 1
+                game.user1.score -= 4
                 game.user2.score += 1
-                game.user3.score -= 1
+                game.user3.score -= 4
                 game.user4.score += 1
                 game.winner = game.user2
                 game.user2_score = 3.0000
                 game.user1_score = 0
             elif game.user2 == user or game.user4 == user:
-                game.user2.score -= 1
+                game.user2.score -= 4
                 game.user1.score += 1
-                game.user4.score -= 1
+                game.user4.score -= 4
                 game.user3.score += 1
                 game.winner = game.user1
                 game.user1_score = 3.0000
@@ -623,15 +623,16 @@ class GlobalGamesStates(APIView):
         globalRanking = User.objects.all().order_by('-score')
         res = []
         for i, user in enumerate(globalRanking):
-            res.append({
-                "id": user.id,
-                "rank": i + 1,
-                "username": user.username,
-                "avatar": GlobalGamesStates.get_avatar(user),
-                "score": user.score,
-                "wins": user.wins,
-                "losses": user.losses,
-            })
+            if user.wins or user.losses:
+                res.append({
+                    "id": user.id,
+                    "rank": i + 1,
+                    "username": user.username,
+                    "avatar": GlobalGamesStates.get_avatar(user),
+                    "score": user.score,
+                    "wins": user.wins,
+                    "losses": user.losses,
+                })
     
 
         return Response(res, status=status.HTTP_200_OK)

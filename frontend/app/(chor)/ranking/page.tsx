@@ -13,7 +13,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import useGetGlobalState from "./hooks/useGetGlobalState";
 
@@ -47,23 +46,21 @@ export default function Page() {
             {globalStateIsSuccess &&
               globalState?.map((u: GllobalState, i: number) => (
                 <TableRow
-                  className={`${i % 2 === 0 && "bg-secondary/50"} `}
+                  className={`${i % 2 === 0 && "bg-secondary/50"}`}
                   key={i}
                 >
                   <TableCell
-                    className={cn(
-                      "flex items-center justify-center gap-1",
+                    className={`flex items-center justify-center gap-1 h-16 ${
                       i === 0
-                        ? "bg-yellow-500/50 text-4xl"
-                        : i === 1
-                        ? "bg-slate-400/50 text-3xl"
-                        : i === 2
-                        ? "bg-amber-600/50 text-2xl"
-                        : ""
-                    )}
+                      ? "bg-yellow-500/50 text-4xl"
+                      : i === 1
+                      ? "bg-slate-400/50 text-3xl"
+                      : i === 2
+                      ? "bg-amber-600/50 text-2xl" : ""
+                    }`}
                   >
                     {i + 1}
-                    {i < 3 && <Medal />}
+                    {i < 3 ? <Medal /> : " #"}
                   </TableCell>
                   <TableCell
                     className={`${u.id === user.id && "bg-primary/40"}`}

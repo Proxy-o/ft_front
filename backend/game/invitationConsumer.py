@@ -130,7 +130,7 @@ class InvitationConsumer(WebsocketConsumer):
                     {
                         'type': 'send_message',
                         'user': self.user.username,
-                        'message': f'/refetchPlayers {game.id} {time}'
+                        'message': f'/refetchPlayers {game.id} {game.type} {time}'
                     }
                 )
 

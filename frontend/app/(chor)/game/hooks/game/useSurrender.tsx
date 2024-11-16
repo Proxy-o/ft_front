@@ -26,7 +26,7 @@ const surrenderGame = async (gameId: string) => {
 
 export default function useSurrenderGame() {
   const { handleSurrenderFour, handleSurrender } = useGameSocket();
-  const { handleRefetchTournament, handleRefetchPlayers } =
+  const { handleRefetchTournament } =
     useInvitationSocket();
   const queryClient = useQueryClient();
   const mutation = useMutation({

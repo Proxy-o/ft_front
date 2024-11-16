@@ -132,14 +132,25 @@ export default function Nav() {
     const sender = invitationLastMessage?.user;
 
     if (parsedMessage) {
+      console.log(parsedMessage);
       const message = parsedMessage.split(" ");
       if (message[0] === "/notif") {
         if (!path.startsWith("/game")) {
-          toast(`${sender} Has invite you to play`, {
+          toast(`${sender} is challenging you`, {
             icon: <GamepadIcon className="mr-2" />,
             action: {
               label: `Play`,
               onClick: () => router.push(`/game`),
+            },
+          });
+        }
+      } else if (message[0] === "/refetchPlayers") {
+        if (!path.startsWith("/game")) {
+          toast(`${sender} accepted your invitation`, {
+            icon: <GamepadIcon className="mr-2" />,
+            action: {
+              label: `Play`,
+              onClick: () => router.push(`/game/${message[2] === "two" ? "oneVone" : "twoVtwo"}`),
             },
           });
         }

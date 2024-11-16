@@ -7,8 +7,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { CheckCircle, XCircle } from "lucide-react";
 import useAcceptFriend from "../hooks/useAcceptFriend";
 import useReject from "../hooks/useDeclineReq";
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import useGetUser from "../../profile/hooks/useGetUser";
 
 export default function FriendRequests() {
