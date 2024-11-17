@@ -88,7 +88,7 @@ export default function UserInfo({
         isBlocked && " cursor-not-allowed"
       )}
     >
-      <div className="absolute top-0 right-0 p-2">
+      <div className="absolute z-50  top-0 right-0 p-2">
         {isBlocked && blocked_by_current_user ? (
           <Button
             className="bg-green-800/25"
@@ -101,7 +101,7 @@ export default function UserInfo({
           !isBlocked &&
           current_user_id != id && (
             <Button
-              className="bg-red-800/85 relative z-50"
+              className="bg-red-800/85  z-50 left-0"
               variant={"default"}
               onClick={() =>
                 block({ to_block: user, user_id: current_user_id })

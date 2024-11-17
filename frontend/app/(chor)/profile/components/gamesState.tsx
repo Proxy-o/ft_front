@@ -24,7 +24,7 @@ export default function GamesState({
   const isWinner = useIsWinner();
 
   return (
-    <div className="w-full">
+    <div className="w-full feedRight">
         <Table>
           <TableHeader className="bg-secondary ">
             <TableRow>

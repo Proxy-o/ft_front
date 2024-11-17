@@ -416,7 +416,7 @@
   }
 }
 
-.feedBot div {
+.feedBot  {
   opacity: 0;
   animation: fadeIn 0.5s ease forwards;
 }
@@ -432,7 +432,7 @@
   }
 }
 
-.feedRight div {
+.feedRight  {
   opacity: 0;
   animation: fadeRight 0.5s ease forwards;
 }
@@ -448,7 +448,7 @@
   }
 }
 
-.feedLeft div {
+.feedLeft  {
   opacity: 0;
   animation: fadeLeft 0.5s ease forwards;
 }

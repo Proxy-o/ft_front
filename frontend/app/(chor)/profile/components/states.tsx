@@ -12,7 +12,7 @@ const {data: states , isSuccess} = useGetStates(id);
 
 
   return (
-   isSuccess &&  <Card className="p-4   h-[22rem]  flex justify-center lg:w-74">
+   isSuccess &&  <Card className="p-4   h-[22rem]  flex justify-center lg:w-74 feedLeft">
       <Tabs defaultValue="Classic" className="w-full">
         <TabsList className="flex justify-around overflow-x-auto no-scrollbar px-1">
           <TabsTrigger value="Classic" className="w-full">
@@ -22,7 +22,7 @@ const {data: states , isSuccess} = useGetStates(id);
             2 VS 2
           </TabsTrigger>
         </TabsList>
-        <TabsContent value="Classic">
+        <TabsContent value="Classic" className="feedRight">
           <div className="flex w-full items-center justify-center mt-5 ">
             <div className=" w-full">Global Stats</div>
             <div className="flex justify-end  w-full ">
@@ -54,7 +54,7 @@ const {data: states , isSuccess} = useGetStates(id);
             </div>
           </div>
         </TabsContent>
-        <TabsContent value="2 Vs 2">
+        <TabsContent value="2 Vs 2" className="feedLeft">
           <div className="flex w-full items-center justify-center mt-5 ">
             <div className=" w-full">Global Stats</div>
 
