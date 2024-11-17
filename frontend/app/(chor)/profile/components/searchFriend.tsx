@@ -35,7 +35,7 @@ export default function SearchFriend() {
         />
       </div>
       {data && data.length > 0 && (
-        <div className=" absolute z-50 w-full mt-2  dark:bg-black bg-gray-300 bg-opacity-75 rounded-lg max-w-[61rem]">
+        <div className="pb-2 absolute z-50 w-full mt-2  dark:bg-accent bg-gray-300 bg-opacity-75 rounded-lg max-w-[61rem]">
           {isSuccess && resVisible && (
             <>
               {isPending ? (

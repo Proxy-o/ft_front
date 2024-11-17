@@ -20,7 +20,7 @@ export default function ChatFriendCard({
     router.push(`/profile/${friend.id}`);
   };
   return (
-    <div className="flex p-2  rounded-sm  bg-secondary/80 hover:bg-secondary my-1 w-full ">
+    <div className="flex p-2  rounded-sm  bg-black/80 hover:bg-black/30 my-1 w-full ">
       <div className="flex flex-1 ">
         <Avatar className="rounded-full mr-2 relative">
           <div
