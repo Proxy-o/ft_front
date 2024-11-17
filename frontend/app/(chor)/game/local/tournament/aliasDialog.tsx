@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { toast } from "sonner";
 
 const AliasDialog = ({

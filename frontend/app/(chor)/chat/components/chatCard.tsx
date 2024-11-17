@@ -15,7 +15,6 @@ import { Message } from "../types";
 import Link from "next/link";
 import useChatSocket from "../../game/hooks/sockets/useChatSocket";
 import { cn } from "@/lib/utils";
-import useSendInvitation from "../../game/hooks/invitations/useSendInvitation";
 import useInvitationSocket from "../../game/hooks/sockets/useInvitationSocket";
 import { useRouter } from "next/navigation";
 
@@ -30,7 +29,6 @@ export default function ChatCard({
   const receiverId = receiver.id;
 
   const { lastJsonMessage, sendJsonMessage, lastMessage } = useChatSocket();
-  const { mutate: invite } = useSendInvitation();
   const { handelSendInvitation } = useInvitationSocket();
   const router = useRouter();
   const [isBlocked, setIsBlocked] = useState(false);
