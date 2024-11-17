@@ -129,7 +129,7 @@ class ChatConsumer(WebsocketConsumer):
                 }))
                 return
 
-            if len(target_msg) > 1000 or len(target_msg) < 1:
+            if len(target_msg) > 1000 or len(target_msg) < 1 :
                 self.send(json.dumps({
                     'type': 'blocked',
                     'target': target_id,
@@ -137,6 +137,8 @@ class ChatConsumer(WebsocketConsumer):
                 }))
                 return
 
+            if target_msg.isspace():
+                return
             # send private message to the target
             async_to_sync(self.channel_layer.group_send)(
                 f'inbox_{target_id}',
