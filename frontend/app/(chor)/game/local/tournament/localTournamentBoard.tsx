@@ -1,3 +1,4 @@
+import { Trophy } from "lucide-react";
 import { ScoreProfile } from "../../components/preGameProfile";
 
 const LocalTournamentBoard = ({
@@ -38,7 +39,8 @@ const LocalTournamentBoard = ({
           </div>
           <div className="w-full h-5/6 top-2 left-1/3 flex flex-col justify-between items-center">
             {/* {currentGame === "final" && "Next Game"} */}
-            <div>final</div>
+            <Trophy />
+            <div >Final</div>
           </div>
           <div className="w-full h-16 rounded-md justify-center items-center flex flex-row animate-getBigger animate-biggerSmaller gap-4">
             <span className="text-white text-4xl font-bold">{finalScore2}</span>

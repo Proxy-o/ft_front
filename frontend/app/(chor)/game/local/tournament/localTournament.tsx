@@ -72,7 +72,7 @@ const LocalTournament = () => {
           }
           setRightScore(0);
           setLeftScore(0);
-          setGameStarted(false);
+          // setGameStarted(false);
           setCurrentGame("semi1");
         }
       }
@@ -131,7 +131,11 @@ const LocalTournament = () => {
             </>
           ) : (
             <div className="w-full h-full flex flex-col items-center gap-4">
-              <button
+              <div className="bg-yellow-400/20 rounded-sm p-4 text-xl">
+                The winnner is
+                <p className="text-center text-3xl pt-2">{playerAlias[finalWinner - 1]}</p>
+              </div>
+              <Button
                 onClick={() => {
                   setFinalWinner(0);
                   setSemi1Winner(-1);
@@ -144,10 +148,9 @@ const LocalTournament = () => {
                   setSemi2({ score1: 0, score2: 0 });
                   setFinal({ score1: 0, score2: 0 });
                 }}
-                className="bg-primary text-white p-2 rounded-md"
               >
                 New Tournament
-              </button>
+              </Button>
             </div>
           )}
         </>
