@@ -1,4 +1,10 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const PreGameProfile = ({ avatar, side }: { avatar: string; side: string }) => {
   if (side === "left") {
@@ -48,21 +54,30 @@ const ScoreProfile = ({
   if (side === "left") {
     return (
       <div className="w-12 h-16 rounded-md scale-75 sm:scale-100 justify-center items-center flex flex-row animate-getBigger animate-biggerSmaller gap-4 bg-blue-500">
-        <div className="h-full w-full flex justify-center items-center bg-purple-600 rounded-md">
-          <Avatar className="w-10 h-10 rounded-md bg-primary/35">
-            {avatar !== "none" && (
-              <AvatarImage src={avatar} alt="profile image" />
-            )}
-            {avatar === "local" ? (
-              <AvatarFallback className="rounded-sm w-10 h-10 text-sm font-bold ">
-                {alias || ("Player " + "1")}
-              </AvatarFallback>
-            ) : (
-              <AvatarFallback className="rounded-sm w-10 h-10 text-3xl font-bold bg-primary/35 text-secondary">
-                ?
-              </AvatarFallback>
-            )}
-          </Avatar>
+        <div className="h-full w-full flex justify-center items-center bg-purple-600 rounded-md ">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Avatar className="w-10 h-10 rounded-md bg-primary/35">
+                  {avatar !== "none" && (
+                    <AvatarImage src={avatar} alt="profile image" />
+                  )}
+                  {avatar === "local" ? (
+                    <AvatarFallback className=" hover:cursor-default rounded-sm w-10 h-10 text-sm font-bold ">
+                      {alias?.slice(0, 2) || "Player " + "1"}
+                    </AvatarFallback>
+                  ) : (
+                    <AvatarFallback className=" hover:cursor-default rounded-sm w-10 h-10 text-3xl font-bold bg-primary/35 text-secondary">
+                      ?
+                    </AvatarFallback>
+                  )}
+                </Avatar>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{alias || "Player " + number}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </div>
     );
@@ -70,20 +85,29 @@ const ScoreProfile = ({
     return (
       <div className="w-12 h-16 rounded-md scale-75 sm:scale-100 justify-center items-center flex flex-row animate-getBigger animate-biggerSmaller gap-4">
         <div className="h-full w-full bg-cyan-700 flex justify-center items-center rounded-md">
-          <Avatar className="w-10 h-10 rounded-md bg-primary/35">
-            {avatar !== "none" && (
-              <AvatarImage src={avatar} alt="profile image" />
-            )}
-            {avatar === "local" ? (
-              <AvatarFallback className="rounded-sm w-10 h-10 text-sm font-bold ">
-                {alias || ("Player " + "2")}
-              </AvatarFallback>
-            ) : (
-              <AvatarFallback className="rounded-sm w-10 h-10 text-3xl font-bold bg-primary/35 text-secondary">
-                ?
-              </AvatarFallback>
-            )}
-          </Avatar>
+        <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Avatar className="w-10 h-10 rounded-md bg-primary/35">
+                  {avatar !== "none" && (
+                    <AvatarImage src={avatar} alt="profile image" />
+                  )}
+                  {avatar === "local" ? (
+                    <AvatarFallback className="hover:cursor-default rounded-sm  text-sm font-bold ">
+                      {alias?.slice(0, 2) || "Player " + "2"}
+                    </AvatarFallback>
+                  ) : (
+                    <AvatarFallback className="hover:cursor-default rounded-sm w-10 h-10 text-3xl font-bold bg-primary/35 text-secondary">
+                      ?
+                    </AvatarFallback>
+                  )}
+                </Avatar>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{alias || "Player " + number}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </div>
     );
