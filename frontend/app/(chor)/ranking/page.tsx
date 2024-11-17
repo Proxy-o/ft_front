@@ -12,6 +12,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
+  TableCaption,
 } from "@/components/ui/table";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 import useGetGlobalState from "./hooks/useGetGlobalState";
@@ -27,8 +28,7 @@ type GllobalState = {
 
 export default function Page() {
   const { data: user } = useGetUser("0");
-  const { data: globalState, isSuccess: globalStateIsSuccess } =
-    useGetGlobalState();
+  const { data: globalState, isSuccess: globalStateIsSuccess } = useGetGlobalState();
   return (
     user && (
       <ResCard>
@@ -43,7 +43,7 @@ export default function Page() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {globalStateIsSuccess &&
+            {globalStateIsSuccess && 
               globalState?.map((u: GllobalState, i: number) => (
                 <TableRow
                   className={`${i % 2 === 0 && "bg-secondary/50"}`}
@@ -96,6 +96,7 @@ export default function Page() {
                 </TableRow>
               ))}
           </TableBody>
+          {!globalState?.length && <TableCaption className="text-center mx-auto">No Records yet!</TableCaption>}
         </Table>
       </ResCard>
     )

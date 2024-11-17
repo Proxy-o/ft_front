@@ -7,6 +7,8 @@ import { TooltipContent, TooltipProvider } from "@/components/ui/tooltip";
 import { Tooltip } from "@/components/ui/tooltip";
 import { TooltipTrigger } from "@/components/ui/tooltip";
 import { User } from "@/lib/types";
+import { toast } from 'sonner';
+
 
 const Actions = ({
   gameStarted,
@@ -41,6 +43,10 @@ const Actions = ({
                 <TooltipTrigger asChild>
                   <Button
                     onClick={() => {
+                      setTimeout(() => {
+                        toast.error("Your opponent has left the game");
+                        leaveGame();
+                      }, 3000);
                       handleStartGame(
                         leftUserRef.current?.username || "",
                         rightUserRef.current?.username || "",

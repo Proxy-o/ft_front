@@ -17,7 +17,7 @@ export default function EditProfile({ user }: { user: User }) {
           Edit
           <SquarePen className="ml-2" size={15} />
         </DialogTrigger>
-        <DialogContent className="p-0 max-h-[calc(100vh-2rem)] sm:max-h-[calc(100vh-7.8rem)] overflow-auto md:scrollbar scrollbar-thumb-primary/10 scrollbar-w-2 no-scrollbar rounded-md">
+        <DialogContent className="p-0 max-h-[calc(100vh-2rem)] sm:max-h-[calc(100vh-7.8rem)] overflow-auto md:scrollbar scrollbar-thumb-primary/20 scrollbar-w-2 no-scrollbar rounded-md">
           <EditProfileForm user={user} />
         </DialogContent>
       </Dialog>

@@ -37,7 +37,7 @@ export default function LoginForm() {
       className="flex flex-col items-center justify-center h-screen"
       action={onSubmit}
     >
-      <Card className="relative w-full max-w-md overflow-auto m-2">
+      <Card className="relative w-full max-w-md overflow-auto m-2 scrollbar scrollbar-thumb-primary/20 scrollbar-w-2">
       {(isPending || isLoading) && (
         <div className="absolute backdrop-blur-sm w-full max-w-md h-full z-10 p-[calc(50%-2.5rem/2)]">
           <Loader className="h-10 w-10 animate-spin animation" />

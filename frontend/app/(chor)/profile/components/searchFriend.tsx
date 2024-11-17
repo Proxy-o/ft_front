@@ -26,10 +26,10 @@ export default function SearchFriend() {
       onBlur={() => setTimeout(() => setResVisible(false), 200)}
     >
       <div className=" h-12 px-2 w-full relative  ">
-        <Search size={20} className="absolute text-gray-700 z-50 end-6 top-4 " />
+        <Search size={20} className="absolute text-gray-700 z-50 end-6 top-4" />
         <Input
-          placeholder="Search"
-          className="h-full opacity-75"
+          placeholder="Search for friends"
+          className="h-full opacity-75 placeholder-opacity-100"
           onChange={(e) => setSearchTerm(e.target.value)}
           onFocus={() => setResVisible(true)}
         />

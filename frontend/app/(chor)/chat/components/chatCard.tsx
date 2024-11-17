@@ -152,7 +152,7 @@ export default function ChatCard({
         </div>
       </Link>
       <div
-        className="  overflow-auto flex flex-col-reverse   scrollbar scrollbar-thumb-primary/10 scrollbar-w-2 p-2 pt-4 mb-[72px]"
+        className="  overflow-auto flex flex-col-reverse   scrollbar scrollbar-thumb-primary/20 scrollbar-w-2 p-2 pt-4 mb-[72px]"
         id="scrollableDiv"
       >
         <InfiniteScroll

@@ -51,7 +51,7 @@ export default function ChatList() {
       {mb || !receiverId ? (
         <div
           className={cn(
-            "flex flex-col    overflow-y-auto md:scrollbar scrollbar-thumb-primary/10 scrollbar-w-2 no-scrollbar p-2",
+            "flex flex-col    overflow-y-auto md:scrollbar scrollbar-thumb-primary/20 scrollbar-w-2 no-scrollbar p-2",
             !isChatOpen ? "w-full" : "w-1/3"
           )}
         >
@@ -81,7 +81,7 @@ export default function ChatList() {
         <>
           <Drawer>
             <DrawerContent className=" max-h-96 h-full ">
-              <div className="h-full overflow-auto scrollbar scrollbar-thumb-primary/10 scrollbar-w-1 ml-1 mt-1">
+              <div className="h-full overflow-auto scrollbar scrollbar-thumb-primary/20 scrollbar-w-1 ml-1 mt-1">
                 {isSuccess &&
                   friends.map((friend: User) => {
                     return (
