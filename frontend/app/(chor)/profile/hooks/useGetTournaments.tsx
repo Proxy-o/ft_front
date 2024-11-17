@@ -9,7 +9,6 @@ const fetchTournaments = async ({
   pageParam: string;
 }) => {
   try {
-    if (id === "0") return null;
     const response = await axiosInstance.get(
       `/game/tournaments/user/${id}?page=${pageParam}`
     );

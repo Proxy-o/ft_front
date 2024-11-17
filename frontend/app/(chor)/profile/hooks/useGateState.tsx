@@ -3,7 +3,6 @@ import { useQuery } from "@tanstack/react-query";
 
 const fetchStates = async ({ id }: { id: string }) => {
   try {
-    if (id === "0") return null;
     const response = await axiosInstance.get(`/game/states/${id}`);
     return response.data;
   } catch (error: any) {

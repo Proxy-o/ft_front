@@ -510,6 +510,10 @@ class UserGames(APIView):
     pagination_class = UserGamesPagination
 
     def get(self, request, user_id, format=None):
+        
+        
+        if user_id == 0:
+            user_id = request.user.id
         user = get_object_or_404(User, pk=user_id)
         games = Game.objects.filter(Q(user1=user) | Q(user2=user)).filter(
             type='two').exclude(winner=None).order_by('timestamp').reverse()
