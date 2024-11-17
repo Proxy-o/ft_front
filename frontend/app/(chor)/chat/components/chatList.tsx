@@ -42,7 +42,7 @@ export default function ChatList() {
   }, []);
   return (
     <Card
-      className="relative flex mx-2 h-[calc(100vh-7.8rem)] feedRight"
+      className="relative flex mx-2 h-[calc(100vh-7.8rem)] "
       ref={chatRef}
     >
       {receiverId && isSender ? (

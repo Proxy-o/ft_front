@@ -44,7 +44,7 @@ const Actions = ({
                   <Button
                     onClick={() => {
                       setTimeout(() => {
-                        toast.error("Your opponent has left the game");
+                        toast.error("Your opponent has left the games");
                         leaveGame();
                       }, 3000);
                       handleStartGame(

@@ -460,9 +460,10 @@ class LeaveGame(APIView):
         user = User.objects.get(username=username)
         game = Game.objects.filter(Q(user1=user) | Q(user2=user) | Q(
             user3=user) | Q(user4=user)).filter(winner=None).last()
-        game_id = game.id
         if not game:
             return Response({'error': 'No ongoing game found'}, status=status.HTTP_204_NO_CONTENT)
+        game_id = game.id
+        
         if game.type == 'two':
             game.user1.status = "online"
             game.user1.save()

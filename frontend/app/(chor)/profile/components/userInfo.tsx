@@ -7,7 +7,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { User } from "@/lib/types";
-import { Activity, Clock, Users } from "lucide-react";
+import { Activity, Clock, TrendingUp, Users } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import EditProfile from "./editProfile";
 import ProfileAvatar from "./profileAvatar";
@@ -21,7 +21,6 @@ import useUnBlock from "@/app/(chor)/friends/hooks/useUnBlockUser";
 import useAcceptFriend from "@/app/(chor)/friends/hooks/useAcceptFriend";
 import useLogout from "@/app/(auth)/login/hooks/useLogout";
 import useReject from "../../friends/hooks/useDeclineReq";
-import useSendInvitation from "../../game/hooks/invitations/useSendInvitation";
 import useInvitationSocket from "@/app/(chor)/game/hooks/sockets/useInvitationSocket";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -50,7 +49,6 @@ export default function UserInfo({
   const { mutate: reject } = useReject();
   const { data: friends, isSuccess } = useGetFriends(current_user_id);
   const { mutate: logout } = useLogout();
-  const { mutate: invite } = useSendInvitation();
   const { handelSendInvitation } = useInvitationSocket();
   const router = useRouter();
 
@@ -171,7 +169,24 @@ export default function UserInfo({
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-        </div>
+          {/* score */}
+          <TooltipProvider delayDuration={0}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="flex flex-col justify-center items-center ">
+                  <TrendingUp className="mb-2" />
+                  <p className="text-sm md:text-m">
+                    {user.score}
+                  </p>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Score</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+              
+                  </div>
         <div className="flex justify-around items-center space-x-3 overflow-x-auto">
           {canEdit ? (
             <Button
@@ -246,10 +261,6 @@ export default function UserInfo({
                     className="mt-6 w-full"
                     variant="outline"
                     onClick={() => {
-                      invite({
-                        userid: id,
-                        gameType: "two",
-                      });
                       handelSendInvitation(id, "two");
                       router.push("/game/oneVone");
                     }}

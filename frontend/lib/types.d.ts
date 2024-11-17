@@ -7,6 +7,7 @@ export type User = {
   password?: string;
   avatar?: string;
   status?: string;
+  score?: number;
   date_joined?: string;
   has_unread_messages?: boolean;
   otp_active?: boolean;

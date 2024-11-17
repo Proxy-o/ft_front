@@ -141,10 +141,6 @@ export default function ChatCard({
             className="h-30 hover:scale-90 transition-all"
             onClick={(e) => {
               e.preventDefault();
-              invite({
-                userid: receiverId,
-                gameType: "two",
-              });
               handelSendInvitation(receiverId, "two");
               router.push("/game/oneVone");
             }}
