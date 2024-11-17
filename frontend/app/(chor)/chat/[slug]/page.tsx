@@ -9,10 +9,7 @@ export default function Page({ params }: { params: { slug: string } }) {
     if (sender && params.slug === sender.id) {
         return <div>You cant chat with yourself</div>;
     }
-    // if (isLoading || resIsLoading) {
-    //     return <div>Loading...</div>;
-    // }
-    else if (isSender || isReceiver) {
+    else if (isSender && isReceiver) {
         return (
             <ChatCard receiver={receiver} sender={sender} />
         );
