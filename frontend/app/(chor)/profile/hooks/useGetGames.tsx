@@ -19,7 +19,7 @@ export default function useGetGames(id: string) {
     queryFn: ({ pageParam }) => fetchGames({id, pageParam }),
     initialPageParam: `1`,
     getNextPageParam: (lastPage) => {
-      if (lastPage.next) {
+      if (lastPage && lastPage.next) {
         return lastPage.next.split("=").pop();
       }
       return false;
