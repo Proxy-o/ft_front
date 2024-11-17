@@ -26,7 +26,7 @@ export default function RegisterForm() {
       className="flex flex-col items-center justify-center h-screen"
       action={() => register({ username, email, password })}
     >
-      <Card className="w-full max-w-md overflow-auto m-2">
+      <Card className="w-full max-w-md overflow-auto m-2 scrollbar scrollbar-thumb-primary/20 scrollbar-w-2">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl">Register</CardTitle>
           <CardDescription>Enter your credentials to register</CardDescription>

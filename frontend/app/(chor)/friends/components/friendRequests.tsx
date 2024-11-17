@@ -36,7 +36,7 @@ export default function FriendRequests() {
           Friends
         </Link> */}
         {reqCount !== 0 ? (
-          <div className="mt-1 overflow-auto md:scrollbar scrollbar-thumb-primary/10 scrollbar-w-2 no-scrollbar">
+          <div className="mt-1 overflow-auto md:scrollbar scrollbar-thumb-primary/20 scrollbar-w-2 no-scrollbar">
             {filteredData.map(
               ({ id, from_user }: { id: string; from_user: User }) => (
                 <div
