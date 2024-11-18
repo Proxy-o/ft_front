@@ -113,7 +113,7 @@ const Canvas = ({
         0,
         Math.PI * 2
       );
-      ctx.fillStyle = "#FFFFFF";
+      ctx.fillStyle = "#FFEA00";
       ctx.fill();
       ctx.closePath();
     };
