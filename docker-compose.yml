@@ -10,13 +10,11 @@ services:
       - "443:443"
     networks:
       - mynetwork
-    volumes:
-      - ./log_nginx:/var/log/nginx
     depends_on:
       - backend
     environment:
       - VAULT_API_ADDR=http://vault:8200
-    restart: always
+    restart: on-failure
 
   backend:
     container_name: backend
@@ -36,7 +34,7 @@ services:
         condition: service_healthy
     environment:
       - VAULT_API_ADDR=http://vault:8200
-    restart: always
+    restart: on-failure
 
   db:
     container_name: postgres
@@ -50,7 +48,7 @@ services:
     networks:
       - mynetwork
       - vault_network
-    restart: always
+    restart: on-failure
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 15s
@@ -74,7 +72,7 @@ services:
       - /app/node_modules # Ensure node_modules is not overwritten by host
     networks:
       - mynetwork
-    restart: always
+    restart: on-failure
 
   vault:
     container_name: vault
@@ -95,7 +93,7 @@ services:
       timeout: 5s
       retries: 5
       start_period: 30s
-    restart: always
+    restart: on-failure
 
 networks:
   mynetwork:

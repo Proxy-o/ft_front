@@ -6,7 +6,7 @@ set -e
 source $(pwd)/tools/vars.sh
 
 # create necessary directories
-mkdir -p postgres_data log_nginx $VAULTDIR/{file,config,policies} $VAULTDIR/cre/{backend,frontend,database,vault}
+mkdir -p postgres_data $VAULTDIR/{file,config,policies} $VAULTDIR/cre/{backend,frontend,database,vault}
 
 # generate/overwrite the frontend env file
 echo -e "\

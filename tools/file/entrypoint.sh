@@ -48,7 +48,7 @@ vault_client server -config=/vault/config/conf.hcl &
 
 # Wait for Vault to be ready
 echo "Waiting for Vault to be ready..."
-while vault status | grep -q 'connection refused'; do
+while vault status | grep -qs 'connection refused'; do
   sleep 5
 done
 
@@ -101,7 +101,7 @@ for client in $VAULT_CLIENTS; do
 done
 
 # Initialize secrets if not already done
-if ! vault kv get secret/init_done | grep -q initialized; then
+if ! vault kv get secret/init_done | grep -qs initialized; then
   echo "Vault initialization detected as incomplete. Initializing secrets..."  
   ./vault/file/init_secrets.sh
 else
