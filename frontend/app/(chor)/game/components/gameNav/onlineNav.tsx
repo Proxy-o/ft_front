@@ -21,7 +21,7 @@ const OnlineNav = ({
       >
         <div className="text-4xl">Online Games</div>
         <div
-          className={` flex flex-col md:flex-row w-full h-fit top-0 z-30 flex-wrap items-center md:items-start justify-center gap-2`}
+          className={` flex flex-col md:flex-row w-full h-fit top-0 z-30 flex-wrap items-center md:items-start justify-center gap-4`}
         >
           <div className="rounded-md flex flex-col items-center justify-center">
             <Link href="/game/oneVone">
