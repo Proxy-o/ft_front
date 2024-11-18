@@ -1,4 +1,4 @@
-RUNDIR = ./postgres_data ./log_nginx ./vault_data
+RUNDIR = ./postgres_data ./vault_data
 
 
 all: build up

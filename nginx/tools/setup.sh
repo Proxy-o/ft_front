@@ -47,13 +47,13 @@ wget https://raw.githubusercontent.com/SpiderLabs/ModSecurity/v3/master/modsecur
 # Enable ModSecurity
 append_or_replace /etc/nginx/modsec/modsecurity.conf "SecRuleEngine" "SecRuleEngine On"
 # Enable logging
-append_or_replace /etc/nginx/modsec/modsecurity.conf "SecAuditEngine" "SecAuditEngine On"
-append_or_replace /etc/nginx/modsec/modsecurity.conf "SecAuditLogRelevantStatus" "SecAuditLogRelevantStatus \"^(?:5|4(?!04))\""
-append_or_replace /etc/nginx/modsec/modsecurity.conf "SecAuditLogParts" "SecAuditLogParts ABIJDEFHZ"
-append_or_replace /etc/nginx/modsec/modsecurity.conf "SecAuditLogType" "SecAuditLogType Serial"
-append_or_replace /etc/nginx/modsec/modsecurity.conf "SecAuditLog" "SecAuditLog /var/log/nginx/modsec_audit.log"
+# append_or_replace /etc/nginx/modsec/modsecurity.conf "SecAuditEngine" "SecAuditEngine On"
+# append_or_replace /etc/nginx/modsec/modsecurity.conf "SecAuditLogRelevantStatus" "SecAuditLogRelevantStatus \"^(?:5|4(?!04))\""
+# append_or_replace /etc/nginx/modsec/modsecurity.conf "SecAuditLogParts" "SecAuditLogParts ABIJDEFHZ"
+# append_or_replace /etc/nginx/modsec/modsecurity.conf "SecAuditLogType" "SecAuditLogType Serial"
+# append_or_replace /etc/nginx/modsec/modsecurity.conf "SecAuditLog" "SecAuditLog /var/log/nginx/modsec_audit.log"
 # Set the debug log level (0-9)
-append_or_replace /etc/nginx/modsec/modsecurity.conf "SecDebugLog" "SecDebugLog /var/log/nginx/modsec_debug.log"
+# append_or_replace /etc/nginx/modsec/modsecurity.conf "SecDebugLog" "SecDebugLog /var/log/nginx/modsec_debug.log"
 append_or_replace /etc/nginx/modsec/modsecurity.conf "SecDebugLogLevel" "SecDebugLogLevel 3"
 # Set Strict rules: block SQLi, XSS, etc.
 echo "SecRule ARGS \"@rx (select|union|insert|delete|drop|alter)\" \"id:1001,phase:2,deny,status:403,msg:'SQL Injection Detected'\"" >> /etc/nginx/modsec/modsecurity.conf
