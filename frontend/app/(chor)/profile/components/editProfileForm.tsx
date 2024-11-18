@@ -87,12 +87,8 @@ export default function EditProfileForm({ user, path }: { user: User, path?:stri
                 id="email"
                 placeholder="Enter your email"
                 type="email"
-                onChange={(e) =>
-                  setUserInfo({
-                    ...userInfo,
-                    email: e.target.value,
-                  })
-                }
+                disabled
+                className="cursor-not-allowed "
               />
             </div>
           </div>
