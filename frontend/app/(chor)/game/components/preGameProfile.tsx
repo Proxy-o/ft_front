@@ -46,7 +46,7 @@ const ScoreProfile = ({
   number,
   alias,
 }: {
-  avatar: string;
+  avatar?: string;
   side?: string;
   number?: number;
   alias?: string;
@@ -62,7 +62,7 @@ const ScoreProfile = ({
                   {avatar !== "none" && (
                     <AvatarImage src={avatar} alt="profile image" />
                   )}
-                  {avatar === "local" ? (
+                  {!avatar ? (
                     <AvatarFallback className=" hover:cursor-default rounded-sm w-10 h-10 text-sm font-bold text-center">
                       {alias?.slice(0, 2) || "Player " + "1"}
                     </AvatarFallback>
@@ -92,7 +92,7 @@ const ScoreProfile = ({
                   {avatar !== "none" && (
                     <AvatarImage src={avatar} alt="profile image" />
                   )}
-                  {avatar === "local" ? (
+                  {!avatar ? (
                     <AvatarFallback className="hover:cursor-default rounded-sm  text-sm font-bold text-center">
                       {alias?.slice(0, 2) || "Player " + "2"}
                     </AvatarFallback>

@@ -24,7 +24,7 @@ export default function Page() {
         className={`flex flex-col rounded-lg p-4 w-full items-center justify-center min-h-[280px] md:h-[280px]
       ${
         mode == "online"
-          ? "h-[550px] transition-all duration-500 ease-in-out"
+          ? "h-[370px] transition-all duration-500 ease-in-out"
           : "h-[370px] transition-all duration-500 ease-in-out overflow-hidden"
       }`}
       >

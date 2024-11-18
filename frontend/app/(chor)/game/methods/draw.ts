@@ -20,14 +20,15 @@ function draw(canvasParams: canvasParams, ctx: CanvasRenderingContext2D) {
       80,
       80
     );
+
     ctx.arc(
       newBallPositionRef.current.x,
       newBallPositionRef.current.y,
-      ballRadius / 2,
+      (ballRadius - 5) / 2,
       0,
       Math.PI * 2
     );
-    ctx.fillStyle = "#FFFFFF";
+    ctx.fillStyle = "#FFEA00";
     ctx.fill();
     ctx.closePath();
   };
@@ -118,7 +119,7 @@ function drawFour(canvasParams: canvasParamsFour) {
       0,
       Math.PI * 2
     );
-    ctx.fillStyle = "#FFFFFF";
+    ctx.fillStyle = "#FFEA00";
     ctx.fill();
     ctx.closePath();
   };

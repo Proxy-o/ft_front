@@ -33,7 +33,7 @@ const LocalTournamentBoard = ({
         <div className="w-full h-fit py-2 flex flex-row items-center gap-4 bg-yellow-400/20 rounded-lg">
           <div className="w-full h-16 rounded-md justify-center items-center flex flex-row animate-getBigger animate-biggerSmaller gap-4">
             <div className="h-full w-fit bg-primary flex justify-center items-center bg-gray-700 rounded-md">
-              <ScoreProfile avatar="local" side="left" number={semi1Winner} alias={playerAlias[semi1Winner - 1]} />
+              <ScoreProfile  side="left" number={semi1Winner} alias={playerAlias[semi1Winner - 1]} />
             </div>
             <span className="text-white text-4xl font-bold">{finalScore1}</span>
           </div>
@@ -45,7 +45,7 @@ const LocalTournamentBoard = ({
           <div className="w-full h-16 rounded-md justify-center items-center flex flex-row animate-getBigger animate-biggerSmaller gap-4">
             <span className="text-white text-4xl font-bold">{finalScore2}</span>
             <div className="h-full w-fit bg-primary flex justify-center items-center bg-gray-700 rounded-md">
-              <ScoreProfile avatar="local" side="right" number={semi2Winner} alias={playerAlias[semi2Winner - 1]} />
+              <ScoreProfile  side="right" number={semi2Winner} alias={playerAlias[semi2Winner - 1]} />
             </div>
           </div>
         </div>
@@ -59,7 +59,7 @@ const LocalTournamentBoard = ({
             >
               <div className="w-fit h-16 rounded-md justify-center items-center flex flex-row animate-getBigger animate-biggerSmaller gap-4 ">
                 <div className="h-full w-fit bg-primary flex justify-center items-center bg-gray-700 rounded-md">
-                  <ScoreProfile avatar="local" side="left" number={1} alias={playerAlias[0]} />
+                  <ScoreProfile  side="left" number={1} alias={playerAlias[0]} />
                 </div>
                 <span className="text-white text-4xl font-bold">{score1}</span>
               </div>
@@ -69,7 +69,7 @@ const LocalTournamentBoard = ({
               <div className="w-fit h-16  scale-50 sm:scale-100 rounded-md justify-center items-center flex flex-row animate-getBigger animate-biggerSmaller gap-4">
                 <span className="text-white text-4xl font-bold">{score2}</span>
                 <div className="h-full w-fit bg-primary flex justify-center items-center bg-gray-700 rounded-md">
-                  <ScoreProfile avatar="local" side="right" number={2} alias={playerAlias[1]} />
+                  <ScoreProfile  side="right" number={2} alias={playerAlias[1]} />
                 </div>
               </div>
             </div>
@@ -81,7 +81,7 @@ const LocalTournamentBoard = ({
             >
               <div className="w-fit h-16 rounded-md justify-center items-center flex flex-row animate-getBigger animate-biggerSmaller gap-4">
                 <div className="h-full w-full bg-primary flex justify-center items-center bg-gray-700 rounded-md">
-                  <ScoreProfile avatar="local" side="left" number={3} alias={playerAlias[2]} />
+                  <ScoreProfile  side="left" number={3} alias={playerAlias[2]} />
                 </div>
                 <span className="text-white text-4xl font-bold">{score3}</span>
               </div>
@@ -91,7 +91,7 @@ const LocalTournamentBoard = ({
               <div className="w-fit h-16 rounded-md justify-center items-center flex flex-row animate-getBigger animate-biggerSmaller gap-4">
                 <span className="text-white text-4xl font-bold">{score4}</span>
                 <div className="h-full w-full bg-primary flex justify-center items-center bg-gray-700 rounded-md">
-                  <ScoreProfile avatar="local" side="right" number={4} alias={playerAlias[3]} />
+                  <ScoreProfile  side="right" number={4} alias={playerAlias[3]} />
                 </div>
               </div>
             </div>
