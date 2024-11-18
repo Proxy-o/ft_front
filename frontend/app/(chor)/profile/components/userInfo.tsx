@@ -24,6 +24,7 @@ import useReject from "../../friends/hooks/useDeclineReq";
 import useInvitationSocket from "@/app/(chor)/game/hooks/sockets/useInvitationSocket";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
+import useSendInvitation from "../../game/hooks/invitations/useSendInvitation";
 
 export default function UserInfo({
   user,
@@ -46,6 +47,7 @@ export default function UserInfo({
   const { mutate: unBlock } = useUnBlock();
   const { data: friendReq } = useGetFrdReq();
   const { mutate: acceptFriend } = useAcceptFriend();
+  const {mutate: invite} = useSendInvitation();
   const { mutate: reject } = useReject();
   const { data: friends, isSuccess } = useGetFriends(current_user_id);
   const { mutate: logout } = useLogout();
@@ -261,7 +263,10 @@ export default function UserInfo({
                     className="mt-6 w-full"
                     variant="outline"
                     onClick={() => {
-                      handelSendInvitation(id, "two");
+                      invite({
+                        userid: id,
+                        gameType: "two",
+                      });
                       router.push("/game/oneVone");
                     }}
                   >

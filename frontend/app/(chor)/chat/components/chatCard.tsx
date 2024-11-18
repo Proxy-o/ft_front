@@ -18,6 +18,7 @@ import { cn } from "@/lib/utils";
 import useInvitationSocket from "../../game/hooks/sockets/useInvitationSocket";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import useSendInvitation from "../../game/hooks/invitations/useSendInvitation";
 
 export default function ChatCard({
   receiver,
@@ -33,7 +34,7 @@ export default function ChatCard({
   const { handelSendInvitation } = useInvitationSocket();
   const router = useRouter();
   const [isBlocked, setIsBlocked] = useState(false);
-
+  const { mutate: invite } = useSendInvitation();
   const [hasMore, setHasMore] = useState(true);
   const [message, setMessage] = useState("");
   const [msgLength, setMsgLength] = useState(0);
@@ -149,7 +150,10 @@ export default function ChatCard({
             className="h-30 hover:scale-90 transition-all"
             onClick={(e) => {
               e.preventDefault();
-              handelSendInvitation(receiverId, "two");
+                 invite({
+                userid: receiverId,
+                gameType: "two",
+              });
               router.push("/game/oneVone");
             }}
           />
