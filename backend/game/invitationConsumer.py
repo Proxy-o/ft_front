@@ -17,14 +17,14 @@ class InvitationConsumer(WebsocketConsumer):
 
     def connect(self):
         self.user = self.scope['user']
-        print("connecting in invitation consumer")
+        # print("connecting in invitation consumer")
         if self.user.is_anonymous:
-            print("User not authenticated")
+            # print("User not authenticated")
             self.close(401)
             return
         self.user_inbox = f'inbox_{self.user.username}'
         self.accept()
-        print("connected in invitation consumer")
+        # print("connected in invitation consumer")
 
         if self.user.is_authenticated:
             async_to_sync(self.channel_layer.group_add)(

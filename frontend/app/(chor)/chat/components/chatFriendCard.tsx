@@ -20,8 +20,8 @@ export default function ChatFriendCard({
     router.push(`/profile/${friend.id}`);
   };
   return (
-    <div className="flex p-2  rounded-sm  bg-black/80 hover:bg-black/30 my-1 w-full ">
-      <div className="flex flex-1 ">
+    <div className="relative flex p-2  rounded-sm  bg-black/80 hover:bg-black/30 my-1 w-full ">
+      <div className="flex flex-1 min-w-0">
         <Avatar className="rounded-full mr-2 relative">
           <div
             className={cn(
@@ -43,7 +43,7 @@ export default function ChatFriendCard({
           </AvatarFallback>
         </Avatar>
 
-        <p className="text-center flex items-center mr-2 w-full  overflow-clip ">
+        <p className="text-center flex items-center mr-2  text-ellipsis whitespace-nowrap	overflow-hidden">
           {friend.username}
         </p>
       </div>

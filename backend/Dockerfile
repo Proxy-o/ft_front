@@ -25,10 +25,5 @@ RUN pip install -r requirements.txt
 # Copy the rest of the application code
 COPY . .
 
-# Expose the port server is running on
-EXPOSE 8000
-
-COPY ./create_users.sh /app/
-RUN chmod +x /app/create_users.sh
 # Start the application from run_app.sh
 CMD ["sh", "run_app.sh"]

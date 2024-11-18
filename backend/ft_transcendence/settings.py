@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'rest_framework',
     'daphne',  # new
     'django.contrib.staticfiles',
     # newly added
@@ -192,7 +191,7 @@ CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
 ]
 
-CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_CREDENTIALS = False
 # CORS_ORIGIN_ALLOW_ALL = True
 
 # for live reload in development

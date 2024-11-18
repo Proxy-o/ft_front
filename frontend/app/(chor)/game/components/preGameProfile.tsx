@@ -63,7 +63,7 @@ const ScoreProfile = ({
                     <AvatarImage src={avatar} alt="profile image" />
                   )}
                   {avatar === "local" ? (
-                    <AvatarFallback className=" hover:cursor-default rounded-sm w-10 h-10 text-sm font-bold ">
+                    <AvatarFallback className=" hover:cursor-default rounded-sm w-10 h-10 text-sm font-bold text-center">
                       {alias?.slice(0, 2) || "Player " + "1"}
                     </AvatarFallback>
                   ) : (
@@ -93,7 +93,7 @@ const ScoreProfile = ({
                     <AvatarImage src={avatar} alt="profile image" />
                   )}
                   {avatar === "local" ? (
-                    <AvatarFallback className="hover:cursor-default rounded-sm  text-sm font-bold ">
+                    <AvatarFallback className="hover:cursor-default rounded-sm  text-sm font-bold text-center">
                       {alias?.slice(0, 2) || "Player " + "2"}
                     </AvatarFallback>
                   ) : (

@@ -132,7 +132,7 @@ export default function Nav() {
     const sender = invitationLastMessage?.user;
 
     if (parsedMessage) {
-      console.log(parsedMessage);
+      // console.log(parsedMessage);
       const message = parsedMessage.split(" ");
       if (message[0] === "/notif") {
         if (!path.startsWith("/game")) {

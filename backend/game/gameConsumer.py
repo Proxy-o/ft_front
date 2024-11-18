@@ -511,14 +511,14 @@ class GameConsumer(WebsocketConsumer):
         )
 
     def handle_user_left_game(self, split):
-        print("Handling user left game")
-        print(split)
+        # print("Handling user left game")
+        # print(split)
         user1 = split[1]
         user2 = split[2]
         user3 = split[3]
         user4 = split[4]
         
-        print(user1, user2, user3, user4)
+        # print(user1, user2, user3, user4)
         # async_to_sync(self.channel_layer.group_send)(
         #     self.game_group,
         #     {

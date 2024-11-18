@@ -564,7 +564,7 @@ const Canvas = ({
         } else {
           winner = team1;
         }
-        console.log("winner", winner);
+        // console.log("winner", winner);
         if (username === winner[0] || username === winner[1]) {
           setState("win");
         } else {

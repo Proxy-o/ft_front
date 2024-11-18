@@ -8,7 +8,7 @@ async function fetchGlobalState() {
     return [];
   }
   const response = await axiosInstance.get(`/game/globalstates`);
-  console.log(response.data);
+  // console.log(response.data);
   return response.data;
 }
 
