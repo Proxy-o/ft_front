@@ -131,7 +131,7 @@ class ChatConsumer(WebsocketConsumer):
 
             if len(target_msg) > 1000 or len(target_msg) < 1 :
                 self.send(json.dumps({
-                    'type': 'blocked',
+                    'type': 'toLong',
                     'target': target_id,
                     'message': "Message must be between 1 and 1000 characters",
                 }))

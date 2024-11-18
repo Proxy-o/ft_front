@@ -17,6 +17,7 @@ import useChatSocket from "../../game/hooks/sockets/useChatSocket";
 import { cn } from "@/lib/utils";
 import useInvitationSocket from "../../game/hooks/sockets/useInvitationSocket";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function ChatCard({
   receiver,
@@ -68,6 +69,15 @@ export default function ChatCard({
     ) {
       setIsBlocked(true);
     }
+    else if (
+      lastJsonMessage && (lastJsonMessage as { type: string }).type === "toLong")
+    {
+      toast.error("Message is too long");
+    } 
+    else {
+      setIsBlocked(false);
+    }
+
   }, [lastMessage, queryClient, senderId, receiverId, lastJsonMessage]);
 
   useEffect(() => {
@@ -203,8 +213,9 @@ export default function ChatCard({
             </Button>
           </>
         ) : (
+
           <h1 className="w-full text-center bg-primary/30 rounded-lg h-full">
-            {(lastJsonMessage as { message: string })?.message}{" "}
+            {(lastJsonMessage as { message: string })?.message}
           </h1>
         )}
       </div>
