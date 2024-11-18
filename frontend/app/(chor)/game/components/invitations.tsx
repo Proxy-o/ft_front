@@ -17,7 +17,7 @@ import useAcceptInvitation from "../hooks/invitations/useAccepteInvitation";
 const Invitations = ({ mode }: { mode: string }) => {
   const { newNotif } = useInvitationSocket();
   const { data: user } = useGetUser("0");
-  const user_id = user?.id; // todo: replace cookie user_id with user.id
+  const user_id = user?.id; 
   const router = useRouter();
   let invitationsData = useGetInvitations(user_id || "0");
   const { mutate: declineMutation } = useDeclineInvitation();

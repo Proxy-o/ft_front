@@ -53,7 +53,6 @@ class InvitationConsumer(WebsocketConsumer):
         elif command == '/decline':
             self.handle_decline(split)
 
-# todo: check if user is friend with sender     done, to be tested
     def disconnect(self, close_code):
         if self.user.is_authenticated:
             async_to_sync(self.channel_layer.group_discard)(

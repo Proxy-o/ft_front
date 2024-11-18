@@ -21,7 +21,6 @@ import useUnBlock from "@/app/(chor)/friends/hooks/useUnBlockUser";
 import useAcceptFriend from "@/app/(chor)/friends/hooks/useAcceptFriend";
 import useLogout from "@/app/(auth)/login/hooks/useLogout";
 import useReject from "../../friends/hooks/useDeclineReq";
-import useInvitationSocket from "@/app/(chor)/game/hooks/sockets/useInvitationSocket";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import useSendInvitation from "../../game/hooks/invitations/useSendInvitation";
@@ -51,7 +50,6 @@ export default function UserInfo({
   const { mutate: reject } = useReject();
   const { data: friends, isSuccess } = useGetFriends(current_user_id);
   const { mutate: logout } = useLogout();
-  const { handelSendInvitation } = useInvitationSocket();
   const router = useRouter();
 
   const id = user.id;
@@ -118,8 +116,8 @@ export default function UserInfo({
       </div>
       <div className=" flex-1 md:px-3">
         <div className="text-2xl font-bold mt-4 md:mt-0">{user.username}</div>
-        <div className="flex justify-around items-center w-full mt-3 ">
-          <TooltipProvider delayDuration={0}>
+       <div className="flex justify-around items-center w-full mt-3 ">
+         {!canEdit && <TooltipProvider delayDuration={0}>
             <Tooltip delayDuration={0}>
               <TooltipTrigger asChild>
                 <div className="flex flex-col justify-center items-center ">
@@ -142,7 +140,7 @@ export default function UserInfo({
                 <p>{user.status}</p>
               </TooltipContent>
             </Tooltip>
-          </TooltipProvider>
+          </TooltipProvider>}
           <TooltipProvider delayDuration={0}>
             <Tooltip>
               <TooltipTrigger asChild>
