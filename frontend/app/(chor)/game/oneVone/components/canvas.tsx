@@ -255,6 +255,7 @@ const Canvas = ({
 
       changeScoreOnline(
         canvasParams,
+        ctx,
         newAngleRef,
         handleChangeBallDirection,
         handleEnemyScore,
@@ -364,7 +365,7 @@ const Canvas = ({
       } else if (message[0] === "/time") {
         if (message[2] !== leftUser.current?.username) {
           changeTime(parseInt(message[1]));
-          enemyLeftGameRef.current = false; // todo: tournament forfeit status
+          enemyLeftGameRef.current = false;
         }
       } else if (message[0] === "/surrender") {
         if (message[1] !== leftUser.current?.username) {

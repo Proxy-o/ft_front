@@ -3,6 +3,7 @@ import { canvasParams, canvasParamsFour } from "../types";
 
 function changeScoreOnline(
   canvasParams: canvasParams,
+  ctx: CanvasRenderingContext2D,
   newAngleRef: React.MutableRefObject<number>,
   handleChangeBallDirection: (
     x: number,
@@ -21,6 +22,9 @@ function changeScoreOnline(
     newBallPositionRef.current.x = canvas.width / 2;
     newBallPositionRef.current.y = canvas.height / 2;
     newAngleRef.current = 100;
+    ctx.beginPath();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.closePath();
     handleChangeBallDirection(
       newBallPositionRef.current.x,
       newBallPositionRef.current.y,

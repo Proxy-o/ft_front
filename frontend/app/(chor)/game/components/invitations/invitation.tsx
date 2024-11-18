@@ -5,14 +5,11 @@ import useAcceptInvitation from "../../hooks/invitations/useAccepteInvitation";
 import useDeclineInvitation from "../../hooks/invitations/useDeclineMutation";
 import { usePathname, useRouter } from "next/navigation";
 import { t_Invitation } from "@/lib/types";
-import useAcceptInvitationTournament from "../../hooks/invitations/useAccepteInvitationTournament";
 import { useState } from "react";
 
 const Invitation = ({ invitation }: { invitation: t_Invitation }) => {
   const { mutate: declineMutation } = useDeclineInvitation();
   const { mutate: acceptInvitationMutation } = useAcceptInvitation();
-  const { mutate: acceptInvitationTournamentMutation } =
-    useAcceptInvitationTournament();
   const router = useRouter();
   const path = usePathname();
 
@@ -42,8 +39,7 @@ const Invitation = ({ invitation }: { invitation: t_Invitation }) => {
 
         <div className="flex flex-row justify-end items-center gap-2">
           {path == "/game/oneVone" ||
-          path == "/game/twoVtwo" ||
-          path == "/game/tournament" ? (
+          path == "/game/twoVtwo" ? (
             <>
               <Button
                 className={`${
@@ -51,9 +47,7 @@ const Invitation = ({ invitation }: { invitation: t_Invitation }) => {
                 }`}
                 size={"xs"}
                 onClick={() => {
-                  invitation.type == "tournament"
-                    ? acceptInvitationTournamentMutation(invitation.id)
-                    : acceptInvitationMutation(invitation.id);
+                  acceptInvitationMutation(invitation.id);
                   disableButton();
                 }}
               >
@@ -80,13 +74,10 @@ const Invitation = ({ invitation }: { invitation: t_Invitation }) => {
               onClick={() => {
                 invitation.type == "two" && router.push("/game/oneVone");
                 invitation.type == "four" && router.push("/game/twoVtwo");
-                invitation.type == "tournament" &&
-                  router.push("/game/tournament");
               }}
             >
               {invitation.type == "two" && "1 VS 1"}
               {invitation.type == "four" && "2 VS 2"}
-              {invitation.type == "tournament" && "Tournament"}
             </Button>
           )}
         </div>
